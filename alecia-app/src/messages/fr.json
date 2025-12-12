@@ -32,8 +32,8 @@
     "titlePart1": "Vos ambitions,",
     "titlePart2": "notre engagement",
     "subtitle": "Conseil en fusion-acquisition pour PME et ETI. Valorisation €5M-€50M. Cession, acquisition, levée de fonds.",
-    "ctaSeller": "Vous êtes cédant",
-    "ctaBuyer": "Vous êtes acquéreur"
+    "ctaSeller": "Je souhaite céder mon entreprise",
+    "ctaBuyer": "Je souhaite acquérir une entreprise"
   },
   "stats": {
     "operations": "Opérations",
@@ -106,7 +106,14 @@
     "description": "Obtenez une première estimation gratuite basée sur les multiples de votre secteur. Notre outil utilise les données de transactions comparables pour vous donner un ordre de grandeur.",
     "benefit1": "Estimation en 30 secondes",
     "benefit2": "Basée sur les multiples sectoriels",
-    "benefit3": "100% confidentiel"
+    "benefit3": "100% confidentiel",
+    "labelTurnover": "Chiffre d'affaires",
+    "labelEbitda": "EBITDA"
+  },
+  "notFound": {
+    "title": "Page non trouvée",
+    "description": "Désolé, la page que vous recherchez n'existe pas ou a été déplacée.",
+    "backButton": "Retour à l'accueil"
   },
   "cta": {
     "titlePart1": "Prêt à concrétiser",

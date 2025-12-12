@@ -16,6 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Calculator, ArrowRight, CheckCircle2, Loader2, TrendingUp } from "lucide-react";
 import { SECTORS } from "@/lib/db/schema";
 import { formatCurrency } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 type Step = "form" | "calculating" | "result" | "capture";
 
@@ -40,6 +41,7 @@ const sectorMultiples: Record<string, { low: number; mid: number; high: number }
 };
 
 export function ValuationEstimator() {
+  const t = useTranslations("valuation");
   const [step, setStep] = useState<Step>("form");
   const [formData, setFormData] = useState({
     revenue: "",
@@ -51,7 +53,7 @@ export function ValuationEstimator() {
   const [result, setResult] = useState<ValuationResult | null>(null);
 
   const calculateValuation = () => {
-    const ebitda = parseFloat(formData.ebitda) * 1000000; // Convert to actual value
+    const ebitda = parseFloat(formData.ebitda) * 1000; // Convert K€ to actual value
     const multiples = sectorMultiples[formData.sector] || { low: 4, mid: 5, high: 6 };
 
     return {
@@ -118,7 +120,7 @@ export function ValuationEstimator() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label className="text-[var(--foreground)]">
-                    Chiffre d&apos;affaires (M€)
+                    {t("labelTurnover")} (k€)
                   </Label>
                   <Input
                     type="number"
@@ -126,14 +128,14 @@ export function ValuationEstimator() {
                     min="0"
                     value={formData.revenue}
                     onChange={(e) => setFormData({ ...formData, revenue: e.target.value })}
-                    placeholder="Ex: 10"
+                    placeholder="Ex: 2000"
                     required
                     className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label className="text-[var(--foreground)]">
-                    EBITDA (M€)
+                    {t("labelEbitda")} (k€)
                   </Label>
                   <Input
                     type="number"
@@ -141,7 +143,7 @@ export function ValuationEstimator() {
                     min="0"
                     value={formData.ebitda}
                     onChange={(e) => setFormData({ ...formData, ebitda: e.target.value })}
-                    placeholder="Ex: 1.5"
+                    placeholder="Ex: 500"
                     required
                     className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]"
                   />

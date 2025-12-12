@@ -32,8 +32,8 @@
     "titlePart1": "Your ambitions,",
     "titlePart2": "our commitment",
     "subtitle": "M&A advisory for SMEs and mid-caps. Valuation €5M-€50M. Sell-side, buy-side, fundraising.",
-    "ctaSeller": "I'm selling",
-    "ctaBuyer": "I'm acquiring"
+    "ctaSeller": "I want to sell my business",
+    "ctaBuyer": "I want to acquire a business"
   },
   "stats": {
     "operations": "Transactions",
@@ -106,7 +106,14 @@
     "description": "Get a free initial estimate based on your sector multiples. Our tool uses comparable transaction data to give you an order of magnitude.",
     "benefit1": "Estimate in 30 seconds",
     "benefit2": "Based on sector multiples",
-    "benefit3": "100% confidential"
+    "benefit3": "100% confidential",
+    "labelTurnover": "Revenue",
+    "labelEbitda": "EBITDA"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "Sorry, the page you are looking for does not exist or has been moved.",
+    "backButton": "Back to home"
   },
   "cta": {
     "titlePart1": "Ready to make",

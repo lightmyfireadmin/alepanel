@@ -8,73 +8,7 @@ export const metadata: Metadata = {
     "Découvrez l'équipe alecia. Associés fondateurs et analystes experts en fusion-acquisition pour PME et ETI.",
 };
 
-// Team data with local asset paths
-const teamMembers = [
-  {
-    id: "1",
-    slug: "gregory-colin",
-    name: "Grégory Colin",
-    role: "Associé fondateur",
-    photo: "/assets/Equipe_Alecia/GC_1_-_cropped_p1080.jpg",
-    linkedinUrl: "https://www.linkedin.com/in/gregorycolin/",
-  },
-  {
-    id: "2",
-    slug: "christophe-berthon",
-    name: "Christophe Berthon",
-    role: "Associé fondateur",
-    photo: "/assets/Equipe_Alecia/CB_1_-_cropped_-_alt_p1080.jpg",
-    linkedinUrl: "https://www.linkedin.com/in/christophe-berthon-843924118/",
-  },
-  {
-    id: "3",
-    slug: "martin-egasse",
-    name: "Martin Egasse",
-    role: "Associé fondateur",
-    photo: "/assets/Equipe_Alecia/ME_2_-_cropped_-_alt_p1080.jpg",
-    linkedinUrl: "https://www.linkedin.com/in/martinegasse/",
-  },
-  {
-    id: "4",
-    slug: "tristan-cossec",
-    name: "Tristan Cossec",
-    role: "Associé fondateur",
-    photo: "/assets/Equipe_Alecia/TC_2_p1080.jpg",
-    linkedinUrl: "https://www.linkedin.com/in/tristan-cossec-3b5a0247/",
-  },
-  {
-    id: "5",
-    slug: "serge-de-fay",
-    name: "Serge de Faÿ",
-    role: "Associé fondateur",
-    photo: "/assets/Equipe_Alecia/SF_2_p1080.jpg",
-    linkedinUrl: "https://www.linkedin.com/in/serge-de-fa%C3%BF-09713555/",
-  },
-  {
-    id: "6",
-    slug: "jerome-berthiau",
-    name: "Jérôme Berthiau",
-    role: "Associé fondateur",
-    photo: "/assets/Equipe_Alecia/JB_1_-_cropped_-_alt_p1080.jpg",
-    linkedinUrl: "https://www.linkedin.com/in/jeromeberthiau/",
-  },
-  {
-    id: "7",
-    slug: "louise-pini",
-    name: "Louise Pini",
-    role: "Analyste",
-    photo: "/assets/Equipe_Alecia/LP__2__-_cropped.jpg",
-    linkedinUrl: "https://www.linkedin.com/in/louise-p-184b7a160/",
-  },
-  {
-    id: "8",
-    slug: "mickael-furet",
-    name: "Mickael Furet",
-    role: "Analyste",
-    photo: "/assets/Equipe_Alecia/MF_p1080.jpg",
-    linkedinUrl: "https://www.linkedin.com/in/mickael-furet/",
-  },
-];
+import { teamMembers } from "@/lib/data";
 
 export default function EquipePage() {
   return (

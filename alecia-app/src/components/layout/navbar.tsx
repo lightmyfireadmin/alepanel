@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -62,9 +63,13 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] rounded-lg" aria-label="alecia - Accueil">
-            <span className="text-2xl font-bold text-[var(--foreground)] tracking-tight">
-              alecia
-            </span>
+            <Image
+              src="/assets/alecia_logo.svg"
+              alt="alecia"
+              width={100}
+              height={32}
+              className="h-8 w-auto text-[var(--foreground)]"
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -130,9 +135,9 @@ export function Navbar() {
               aria-label={mounted && resolvedTheme === "dark" ? "Passer en mode clair" : "Passer en mode sombre"}
             >
               {mounted && resolvedTheme === "dark" ? (
-                <Sun className="w-4 h-4" aria-hidden="true" />
-              ) : (
                 <Moon className="w-4 h-4" aria-hidden="true" />
+              ) : (
+                <Sun className="w-4 h-4" aria-hidden="true" />
               )}
             </button>
 
@@ -217,9 +222,9 @@ export function Navbar() {
                     aria-label={mounted && resolvedTheme === "dark" ? "Passer en mode clair" : "Passer en mode sombre"}
                   >
                     {mounted && resolvedTheme === "dark" ? (
-                      <Sun className="w-5 h-5" aria-hidden="true" />
-                    ) : (
                       <Moon className="w-5 h-5" aria-hidden="true" />
+                    ) : (
+                      <Sun className="w-5 h-5" aria-hidden="true" />
                     )}
                     {mounted && resolvedTheme === "dark" ? "Mode clair" : "Mode sombre"}
                   </button>

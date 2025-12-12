@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, CheckCircle2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
@@ -20,6 +21,9 @@ export function ContactForm() {
     company: "",
     message: "",
   });
+
+  const t = useTranslations("contact.form");
+  const tBtn = useTranslations("common");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,14 +40,14 @@ export function ContactForm() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Une erreur s'est produite");
+        throw new Error(data.error || t("error"));
       }
 
       setFormState("success");
       setFormData({ firstName: "", lastName: "", email: "", company: "", message: "" });
     } catch (error) {
       setFormState("error");
-      setErrorMessage(error instanceof Error ? error.message : "Une erreur s'est produite");
+      setErrorMessage(error instanceof Error ? error.message : t("error"));
     }
   };
 
@@ -55,17 +59,17 @@ export function ContactForm() {
             <CheckCircle2 className="w-8 h-8 text-emerald-400" />
           </div>
           <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">
-            Message envoyé !
+            {t("success")}
           </h3>
           <p className="text-[var(--foreground-muted)] mb-6">
-            Nous vous recontacterons dans les plus brefs délais.
+            {t("successMessage")}
           </p>
           <Button 
             variant="outline" 
             onClick={() => setFormState("idle")}
             className="border-[var(--border)]"
           >
-            Envoyer un autre message
+            {t("submit")}
           </Button>
         </CardContent>
       </Card>
@@ -76,7 +80,7 @@ export function ContactForm() {
     <Card className="bg-[var(--card)] border-[var(--border)]">
       <CardHeader>
         <CardTitle className="text-[var(--foreground)] font-[family-name:var(--font-playfair)]">
-          Envoyez-nous un message
+          {t("title") || "Envoyez-nous un message"}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -84,7 +88,7 @@ export function ContactForm() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="firstName" className="text-[var(--foreground)]">
-                Prénom *
+                {t("firstName")} *
               </Label>
               <Input
                 id="firstName"
@@ -98,7 +102,7 @@ export function ContactForm() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="lastName" className="text-[var(--foreground)]">
-                Nom *
+                {t("lastName")} *
               </Label>
               <Input
                 id="lastName"
@@ -113,7 +117,7 @@ export function ContactForm() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="email" className="text-[var(--foreground)]">
-              Email *
+              {t("email")} *
             </Label>
             <Input
               id="email"
@@ -128,20 +132,20 @@ export function ContactForm() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="company" className="text-[var(--foreground)]">
-              Entreprise
+              {t("company")}
             </Label>
             <Input
               id="company"
               value={formData.company}
               onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-              placeholder="Nom de votre entreprise"
+              placeholder="Entreprise SAS"
               disabled={formState === "submitting"}
               className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]"
             />
           </div>
           <div className="space-y-2">
             <Label htmlFor="message" className="text-[var(--foreground)]">
-              Message *
+              {t("message")} *
             </Label>
             <Textarea
               id="message"
@@ -170,7 +174,7 @@ export function ContactForm() {
                 Envoi en cours...
               </>
             ) : (
-              "Envoyer"
+              t("submit")
             )}
           </Button>
           <p className="text-xs text-[var(--foreground-muted)] text-center">

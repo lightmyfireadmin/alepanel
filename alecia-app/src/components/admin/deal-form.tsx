@@ -60,18 +60,25 @@ export function DealForm({ mode, initialData = {} }: DealFormProps) {
     setSubmitSuccess(false);
 
     try {
-      // TODO: Replace with actual server action when implemented
-      console.log("Form submitted with validated data:", data);
-
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      setSubmitSuccess(true);
-      
-      setTimeout(() => {
-        router.push("/admin/deals");
-        router.refresh();
-      }, 500);
+      if (mode === "create") {
+         // Import dynamically to avoid client-side bundling issues if any (though calling server action directly is fine usually)
+         const { createDeal } = await import("@/app/actions/deals");
+         const result = await createDeal(data);
+         
+         if (!result.success) {
+            throw new Error(result.error);
+         }
+         
+         setSubmitSuccess(true);
+         setTimeout(() => {
+            router.push("/admin/deals");
+            router.refresh();
+         }, 1000);
+      } else {
+         // TODO: Implement updateDeal
+         console.log("Update not implemented yet");
+         setSubmitSuccess(true);
+      }
     } catch (error) {
       setSubmitError(
         error instanceof Error ? error.message : "Une erreur est survenue"
