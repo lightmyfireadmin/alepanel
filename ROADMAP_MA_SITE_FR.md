@@ -49,7 +49,7 @@ Ce plan s’appuie sur le rapport **« Optimisation Site Web M&A PME_ETI France 
 - **Privacy by design** : chiffrer en transit, purge/suppression des leads inactifs, registre de traitements, bannières LCB-FT.
 
 ### Phase 6 — Performance, SEO & analytics (Semaines 9-10)
-- **Core Web Vitals** : optimisation images (next/image), prefetch critique, lazy loading, respect de `prefers-reduced-motion` et bascule vers transitions CSS/animations désactivées sur mobile low-end (viser INP < 100 ms, tout en restant sous le seuil « good » de 200 ms; FPS > 50).
+- **Core Web Vitals** : optimisation images (next/image), prefetch critique, lazy loading, respect de `prefers-reduced-motion` et bascule vers transitions CSS/animations désactivées sur mobile low-end (viser INP < 150 ms, bien sous le seuil « good » de 200 ms; FPS > 50).
 - **SEO technique** : métadonnées par page, balisage Schema.org (Organization, BreadcrumbList, Article, FinancialService/Service, Offer pour les tombstones), sitemap/robots, hreflang fr/en (next-intl).
 - **Analytics RGPD** : Matomo (self-host ou cloud EU) + tableaux de bord funnel (cédant vs acquéreur) et conversion formulaire.
 - **Monitoring** : logs/alerts sur formulaires (rate limiting existant à ajuster), sécurité headers (CSP, HSTS, referrer-policy).
