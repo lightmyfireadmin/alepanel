@@ -35,6 +35,18 @@ const stats = [
   { value: 4, label: "Bureaux en France" },
 ];
 
+// Team members from Equipe_Alecia.md
+const teamMembers = [
+  { name: "Grégory Colin", initials: "GC", role: "Associé fondateur" },
+  { name: "Christophe Berthon", initials: "CB", role: "Associé fondateur" },
+  { name: "Martin Egasse", initials: "ME", role: "Associé fondateur" },
+  { name: "Tristan Cossec", initials: "TC", role: "Associé fondateur" },
+  { name: "Serge de Faÿ", initials: "SF", role: "Associé fondateur" },
+  { name: "Jérôme Berthiau", initials: "JB", role: "Associé fondateur" },
+  { name: "Louise Pini", initials: "LP", role: "Analyste" },
+  { name: "Mickael Furet", initials: "MF", role: "Analyste" },
+];
+
 export default function Home() {
   return (
     <>
@@ -134,6 +146,59 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* Plus qu'un simple prestataire Section */}
+        <section className="py-24 px-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+              >
+                <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl font-semibold mb-6">
+                  Plus qu&apos;un simple <span className="text-gradient-gold">prestataire</span>
+                </h2>
+                <p className="text-[var(--foreground-muted)] text-lg leading-relaxed mb-6">
+                  Vos décisions stratégiques nécessitent plus qu&apos;un simple accompagnement. 
+                  Chez alecia, nous nous engageons à vos côtés à chaque étape, avec la même 
+                  détermination qu&apos;un entrepreneur investi dans sa propre réussite.
+                </p>
+                <p className="text-[var(--foreground-muted)] text-lg leading-relaxed">
+                  Vos opérations sont menées avec soin par des associés dédiés, qui orchestrent 
+                  la construction des informations clés, identifient les acquéreurs, investisseurs 
+                  ou financeurs, et coordonnent l&apos;ensemble des conseils impliqués.
+                </p>
+              </motion.div>
+              
+              {/* Team Avatars Grid */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="grid grid-cols-4 gap-4"
+              >
+                {teamMembers.map((member, idx) => (
+                  <motion.div
+                    key={member.name}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: idx * 0.1 }}
+                    className="aspect-square rounded-lg overflow-hidden bg-[var(--card)] border border-[var(--border)] group cursor-pointer"
+                  >
+                    <div className="w-full h-full bg-gradient-to-br from-[var(--accent)]/20 to-[var(--accent)]/5 flex items-center justify-center">
+                      <span className="text-xl font-semibold text-[var(--accent)]">
+                        {member.initials}
+                      </span>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
 
         {/* Expertises Section */}
         <section className="py-24 px-6">

@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, timestamp, integer, boolean } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, timestamp, integer, boolean, jsonb, date } from "drizzle-orm/pg-core";
 
 // =============================================================================
 // USERS TABLE - Admin authentication
@@ -120,6 +120,135 @@ export const teamMembers = pgTable("team_members", {
 });
 
 // =============================================================================
+// COMPANIES TABLE - Linked to Pappers API
+// =============================================================================
+export const companies = pgTable("companies", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  
+  // Identity
+  name: text("name").notNull(),
+  siren: text("siren").unique(),
+  
+  // Details
+  address: text("address"),
+  sector: text("sector"),
+  
+  // Financial data (JSONB for revenue/EBITDA)
+  financialData: jsonb("financial_data").$type<{
+    revenue?: number;
+    ebitda?: number;
+    employees?: number;
+    year?: number;
+  }>(),
+  
+  // Media
+  logoUrl: text("logo_url"),
+  
+  // Timestamps
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// =============================================================================
+// CONTACTS TABLE - CRM
+// =============================================================================
+export const contacts = pgTable("contacts", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  
+  // Identity
+  name: text("name").notNull(),
+  email: text("email"),
+  phone: text("phone"),
+  role: text("role"),
+  
+  // Company relation
+  companyId: uuid("company_id").references(() => companies.id),
+  
+  // CRM data
+  notes: text("notes"),
+  tags: text("tags").array(), // ["Investisseur", "Cédant", etc.]
+  
+  // Timestamps
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// =============================================================================
+// PROJECTS TABLE - Interactive timeline
+// =============================================================================
+export const projects = pgTable("projects", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  
+  // Identity
+  title: text("title").notNull(),
+  
+  // Kanban status
+  status: text("status").notNull().default("Lead"),
+  // Statuses: "Lead", "Due Diligence", "Closing", "Closed"
+  
+  // Relations
+  clientId: uuid("client_id").references(() => contacts.id),
+  
+  // Timeline
+  startDate: date("start_date"),
+  targetCloseDate: date("target_close_date"),
+  
+  // Description
+  description: text("description"),
+  
+  // Display
+  displayOrder: integer("display_order").default(0),
+  
+  // Timestamps
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// =============================================================================
+// PROJECT EVENTS TABLE - Timeline details
+// =============================================================================
+export const projectEvents = pgTable("project_events", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  
+  // Project relation
+  projectId: uuid("project_id").references(() => projects.id).notNull(),
+  
+  // Event details
+  type: text("type").notNull(), // "Meeting", "Document", "Milestone", "Note"
+  date: date("date").notNull(),
+  description: text("description"),
+  
+  // Optional file attachment
+  fileUrl: text("file_url"),
+  
+  // Timestamps
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// =============================================================================
+// DOCUMENTS TABLE - Data Room / Magic Links
+// =============================================================================
+export const documents = pgTable("documents", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  
+  // File info
+  name: text("name").notNull(),
+  url: text("url").notNull(), // Vercel Blob URL
+  mimeType: text("mime_type"),
+  
+  // Project relation (optional)
+  projectId: uuid("project_id").references(() => projects.id),
+  
+  // Access control
+  isConfidential: boolean("is_confidential").default(true),
+  accessToken: text("access_token").unique(), // For magic links
+  
+  // Timestamps
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// =============================================================================
 // TYPE EXPORTS
 // =============================================================================
 export type User = typeof users.$inferSelect;
@@ -133,6 +262,21 @@ export type NewPost = typeof posts.$inferInsert;
 
 export type TeamMember = typeof teamMembers.$inferSelect;
 export type NewTeamMember = typeof teamMembers.$inferInsert;
+
+export type Company = typeof companies.$inferSelect;
+export type NewCompany = typeof companies.$inferInsert;
+
+export type Contact = typeof contacts.$inferSelect;
+export type NewContact = typeof contacts.$inferInsert;
+
+export type Project = typeof projects.$inferSelect;
+export type NewProject = typeof projects.$inferInsert;
+
+export type ProjectEvent = typeof projectEvents.$inferSelect;
+export type NewProjectEvent = typeof projectEvents.$inferInsert;
+
+export type Document = typeof documents.$inferSelect;
+export type NewDocument = typeof documents.$inferInsert;
 
 // =============================================================================
 // ENUMS (for reference/validation)
@@ -170,3 +314,20 @@ export const MANDATE_TYPES = ["Cession", "Acquisition", "Levée de fonds"] as co
 export const POST_CATEGORIES = ["Communiqué", "Article", "Revue de presse"] as const;
 
 export const TEAM_ROLES = ["Associé fondateur", "Associé", "Directeur", "Manager", "Analyste"] as const;
+
+// New Business OS enums
+export const PROJECT_STATUSES = ["Lead", "Due Diligence", "Closing", "Closed"] as const;
+
+export const PROJECT_EVENT_TYPES = ["Meeting", "Document", "Milestone", "Note"] as const;
+
+export const CONTACT_TAGS = [
+  "Investisseur",
+  "Cédant",
+  "Acquéreur",
+  "Conseil juridique",
+  "Conseil fiscal",
+  "Banque",
+  "Family Office",
+  "Fonds PE",
+] as const;
+

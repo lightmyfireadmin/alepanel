@@ -11,13 +11,20 @@ import {
   Users,
   LogOut,
   Menu,
+  FolderKanban,
+  Contact2,
+  FileStack,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
+import { VoiceNoteRecorder } from "@/components/admin";
 
 const adminNavItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/admin/projects", label: "Projets", icon: FolderKanban },
   { href: "/admin/deals", label: "Opérations", icon: Briefcase },
+  { href: "/admin/crm", label: "CRM", icon: Contact2 },
+  { href: "/admin/documents", label: "Documents", icon: FileStack },
   { href: "/admin/news", label: "Actualités", icon: Newspaper },
   { href: "/admin/team", label: "Équipe", icon: Users },
 ];
@@ -108,6 +115,10 @@ export default function AdminLayout({
       <main className="lg:pl-64">
         <div className="p-6 lg:p-8">{children}</div>
       </main>
+
+      {/* Voice Note Recorder FAB (Mobile only) */}
+      <VoiceNoteRecorder />
     </div>
   );
 }
+

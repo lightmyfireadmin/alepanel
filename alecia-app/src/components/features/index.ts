@@ -5,3 +5,4 @@ export { DealFilter } from "./deal-filter";
 export { ValuationEstimator } from "./valuation-estimator";
 export { RegionalMap } from "./regional-map";
 export { NewsletterForm } from "./newsletter-form";
+export { ProjectTimeline } from "./ProjectTimeline";
