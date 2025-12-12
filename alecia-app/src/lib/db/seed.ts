@@ -27,6 +27,8 @@ function determineMandateType(text: string): "Cession" | "Acquisition" | "Levée
   return "Cession"; // default
 }
 
+type MandateType = "Cession" | "Acquisition" | "Levée de fonds";
+
 // Parse Opérations_alecia.md
 async function parseDeals() {
   const filePath = path.join(process.cwd(), "..", "www.alecia.fr", "Opérations_alecia.md");
@@ -51,7 +53,7 @@ async function parseDeals() {
         
         // Parse subsequent lines for details
         let sector = "";
-        let mandateType = "Cession" as const;
+        let mandateType: MandateType = "Cession";
         let year = 2024;
         let region = "";
         let acquirerName = "";
@@ -79,7 +81,7 @@ async function parseDeals() {
           
           // Mandate type
           if (detailLine === "Cession" || detailLine === "AcquisitioN" || detailLine === "Levée de fonds") {
-            mandateType = detailLine === "AcquisitioN" ? "Acquisition" : detailLine as typeof mandateType;
+            mandateType = detailLine === "AcquisitioN" ? "Acquisition" : detailLine as MandateType;
           }
           
           // Year
@@ -248,9 +250,8 @@ async function seed() {
     console.log("👤 Creating admin user...");
     const passwordHash = await bcrypt.hash("testing", 10);
     
-    const existingUser = await db.select().from(users).where(
-      (u: any) => u.email === "c.berthon@alecia.fr"
-    );
+    const existingUsers = await db.select().from(users);
+    const existingUser = existingUsers.filter(u => u.email === "c.berthon@alecia.fr");
     
     if (existingUser.length === 0) {
       await db.insert(users).values({
