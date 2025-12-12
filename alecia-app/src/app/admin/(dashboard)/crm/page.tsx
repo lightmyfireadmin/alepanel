@@ -4,12 +4,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
   Plus, Search, Building2, Users as UsersIcon, 
-  Phone, Mail, Tag, MoreVertical, Filter, UserPlus 
+  Phone, Mail, Tag, MoreVertical, Filter, UserPlus, FileSpreadsheet
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { CONTACT_TAGS } from "@/lib/db/schema";
 import { CompanyEnrichment } from "@/components/admin";
+import ExcelJS from "exceljs";
 
 // Mock contacts data
 const mockContacts = [
@@ -43,6 +44,89 @@ export default function CRMPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
+  // Export to Excel function
+  const handleExportToExcel = async () => {
+    const workbook = new ExcelJS.Workbook();
+    workbook.creator = "Alecia";
+    workbook.created = new Date();
+
+    if (activeTab === "contacts") {
+      // Export contacts
+      const worksheet = workbook.addWorksheet("Contacts");
+      
+      // Add header row
+      worksheet.columns = [
+        { header: "Nom", key: "name", width: 25 },
+        { header: "Email", key: "email", width: 30 },
+        { header: "Téléphone", key: "phone", width: 20 },
+        { header: "Fonction", key: "role", width: 20 },
+        { header: "Entreprise", key: "company", width: 25 },
+        { header: "Tags", key: "tags", width: 30 },
+      ];
+
+      // Style header row
+      worksheet.getRow(1).font = { bold: true };
+      worksheet.getRow(1).fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "FFD4AF37" }, // Gold color
+      };
+
+      // Add data rows
+      filteredContacts.forEach((contact) => {
+        worksheet.addRow({
+          name: contact.name,
+          email: contact.email,
+          phone: contact.phone,
+          role: contact.role,
+          company: contact.company,
+          tags: contact.tags.join(", "),
+        });
+      });
+    } else {
+      // Export companies
+      const worksheet = workbook.addWorksheet("Entreprises");
+      
+      // Add header row
+      worksheet.columns = [
+        { header: "Entreprise", key: "name", width: 30 },
+        { header: "SIREN", key: "siren", width: 15 },
+        { header: "Secteur", key: "sector", width: 35 },
+        { header: "CA (€)", key: "revenue", width: 15 },
+      ];
+
+      // Style header row
+      worksheet.getRow(1).font = { bold: true };
+      worksheet.getRow(1).fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "FFD4AF37" }, // Gold color
+      };
+
+      // Add data rows
+      filteredCompanies.forEach((company) => {
+        worksheet.addRow({
+          name: company.name,
+          siren: company.siren,
+          sector: company.sector,
+          revenue: company.revenue || "",
+        });
+      });
+    }
+
+    // Generate Excel file and download
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `alecia-${activeTab}-${new Date().toISOString().split("T")[0]}.xlsx`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const filteredContacts = mockContacts.filter((contact) => {
     const matchesSearch = contact.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          contact.company.toLowerCase().includes(searchQuery.toLowerCase());
@@ -61,16 +145,26 @@ export default function CRMPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-[var(--foreground)] font-[family-name:var(--font-playfair)]">
-            CRM
+            Carnet d'adresses
           </h1>
           <p className="text-[var(--foreground-muted)] mt-1">
             Gestion des contacts et entreprises
           </p>
         </div>
-        <Button className="btn-gold gap-2">
-          <Plus className="w-4 h-4" />
-          {activeTab === "contacts" ? "Nouveau contact" : "Nouvelle entreprise"}
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            className="gap-2 border-[var(--border)] hover:bg-[var(--background-tertiary)]"
+            onClick={handleExportToExcel}
+          >
+            <FileSpreadsheet className="w-4 h-4" />
+            Exporter Excel
+          </Button>
+          <Button className="btn-gold gap-2">
+            <Plus className="w-4 h-4" />
+            {activeTab === "contacts" ? "Nouveau contact" : "Nouvelle entreprise"}
+          </Button>
+        </div>
       </div>
 
       {/* Two Column Layout */}

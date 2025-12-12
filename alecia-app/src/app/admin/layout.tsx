@@ -22,14 +22,19 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState, useEffect } from "react";
 import { VoiceNoteRecorder } from "@/components/admin";
 
-const adminNavItems = [
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+// PILOTAGE: Business OS - Private internal tools
+const pilotageNavItems = [
+  { href: "/admin", label: "Tableau de bord", icon: LayoutDashboard },
   { href: "/admin/projects", label: "Projets", icon: FolderKanban },
-  { href: "/admin/deals", label: "Opérations", icon: Briefcase },
-  { href: "/admin/crm", label: "CRM", icon: Contact2 },
-  { href: "/admin/documents", label: "Documents", icon: FileStack },
-  { href: "/admin/news", label: "Actualités", icon: Newspaper },
+  { href: "/admin/crm", label: "Carnet d'adresses", icon: Contact2 },
+  { href: "/admin/documents", label: "Data Room", icon: FileStack },
+];
+
+// SITE INTERNET: Public CMS - Management of alecia.fr
+const siteInternetNavItems = [
+  { href: "/admin/deals", label: "Portefeuille", icon: Briefcase },
   { href: "/admin/team", label: "Équipe", icon: Users },
+  { href: "/admin/news", label: "Actualités", icon: Newspaper },
 ];
 
 function Sidebar({ onItemClick }: { onItemClick?: () => void }) {
@@ -46,25 +51,60 @@ function Sidebar({ onItemClick }: { onItemClick?: () => void }) {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-1">
-        {adminNavItems.map((item) => {
-          const isActive = pathname === item.href;
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={onItemClick}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                isActive
-                  ? "bg-[var(--accent)]/10 text-[var(--accent)]"
-                  : "text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:bg-[var(--background-tertiary)]"
-              }`}
-            >
-              <item.icon className="w-5 h-5" />
-              {item.label}
-            </Link>
-          );
-        })}
+      <nav className="flex-1 p-4 space-y-6 overflow-y-auto">
+        {/* PILOTAGE Section */}
+        <div>
+          <h3 className="px-4 mb-2 text-xs font-semibold uppercase tracking-wider text-[var(--foreground-muted)]">
+            Pilotage
+          </h3>
+          <div className="space-y-1">
+            {pilotageNavItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={onItemClick}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                    isActive
+                      ? "bg-[var(--accent)]/10 text-[var(--accent)]"
+                      : "text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:bg-[var(--background-tertiary)]"
+                  }`}
+                >
+                  <item.icon className="w-5 h-5" />
+                  {item.label}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* SITE INTERNET Section */}
+        <div>
+          <h3 className="px-4 mb-2 text-xs font-semibold uppercase tracking-wider text-[var(--foreground-muted)]">
+            Site Internet
+          </h3>
+          <div className="space-y-1">
+            {siteInternetNavItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={onItemClick}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                    isActive
+                      ? "bg-[var(--accent)]/10 text-[var(--accent)]"
+                      : "text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:bg-[var(--background-tertiary)]"
+                  }`}
+                >
+                  <item.icon className="w-5 h-5" />
+                  {item.label}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
       </nav>
 
       {/* Footer */}
