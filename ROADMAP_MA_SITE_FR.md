@@ -1,9 +1,9 @@
-# Feuille de route multi-phases pour faire du site Alecia la référence M&A PME-ETI en France (2025)
+# Feuille de route multiphases pour faire du site Alecia la référence M&A PME-ETI en France (2025)
 
 Ce plan s’appuie sur le rapport **« Optimisation Site Web M&A PME_ETI France »**, l’audit rapide du code actuel (Next.js 16, Tailwind v4, pages publiques `/`, `/expertises`, `/operations` avec filtres mock, `/equipe`, `/actualites`, `/contact`, `/mentions-legales`, `/politique-de-confidentialite`, `/nous-rejoindre`) et l’architecture annoncée dans le README (NextAuth, Drizzle/PostgreSQL, Vercel Blob, next-intl). Objectif : aligner parfaitement l’expérience, le wording, la conformité et les capacités techniques avec les standards M&A français 2025.
 
 ## Synthèse du gap actuel
-- **Contenus/IA** : navigation déjà proche du sitemap cible mais données d’opérations mock (`mockDeals`) et biographies limitées. Pas de pages sectorielles dédiées ni d’études de cas détaillées.
+- **Contenus/IA** : navigation déjà proche du sitemap cible mais données d’opérations mock (`mockDeals` dans `src/lib/data.ts`) et biographies limitées. Pas de pages sectorielles dédiées ni d’études de cas détaillées.
 - **Dual funnel** : CTA différenciés cédant/acquéreur présents sur le hero, mais pas de parcours complet (formulaires, scoring, nurturing).
 - **Compliance** : pages Mentions légales et Politique de confidentialité existent, mais les mentions AMF/ORIAS, médiation et CMP cookies RGPD ne sont pas explicitement gérées dans le code.
 - **Stack & intégrations** : CRM/VDR/Deal Flow non raccordés ; contact form envoie vers `/api/contact` sans hub CRM. Données transactions statiques, pas de moteur de recherche avancé (AJAX) ni d’espace investisseur.
@@ -31,7 +31,7 @@ Ce plan s’appuie sur le rapport **« Optimisation Site Web M&A PME_ETI France 
 - **Accessibilité & micro-interactions** : focus states, contrasts WCAG AA, animation légère via framer-motion existant.
 
 ### Phase 3 — Deal Engine & données (Semaines 5-7)
-- **Modèle de données** : remplacer `mockDeals` par tables/migrations `deals`, `sectors`, `industries`, `offices`, `testimonials`; prévoir champs rôle, type (MBO/OBO/LBO), taille, année, zone, statut confidentialité.
+- **Modèle de données** : remplacer `mockDeals` par tables/migrations `deals`, `sectors`, `industries`, `offices`, `testimonials`; prévoir champs rôle, type (MBO/OBO/LBO), taille, année, zone, statut confidentialité, avec FK `deals.sector_id` → `sectors.id`, `deals.office_id` → `offices.id`, `testimonials.deal_id` → `deals.id`.
 - **CMS / back-office** : utiliser Drizzle + Next admin existant pour CRUD (upload logos en Vercel Blob, rich text pour cas clients).
 - **Moteur de recherche** : filtrage AJAX (secteur, type, rôle, année, région, taille) avec URL state, pagination et exports PDF/CSV.
 - **Espace investisseur** : route protégée (NextAuth) listant teasers publics, lien VDR par dossier, demande d’accès/NDAs.
@@ -45,11 +45,11 @@ Ce plan s’appuie sur le rapport **« Optimisation Site Web M&A PME_ETI France 
 ### Phase 5 — Conformité FR & RGPD (Semaines 8-9 en parallèle)
 - **Mentions légales complètes** : enrichir page avec RCS, TVA, ORIAS/AMF, association agréée, médiateur, hébergeur, directeur de publication.
 - **Disclaimers risques** : bandeaux/footers sur pages opportunités et espace investisseur (perte en capital, illiquidité).
-- **Cookies/CMP** : intégrer Axeptio/Didomi (refus par défaut, granularité stats/marketing/tiers).
+- **Cookies/CMP** : intégrer Axeptio/Didomi (analytics/marketing en opt-in explicite, essentiels uniquement en charge par défaut, granularité stats/marketing/tiers).
 - **Privacy by design** : chiffrer en transit, purge/suppression des leads inactifs, registre de traitements, bannières LCB-FT.
 
 ### Phase 6 — Performance, SEO & analytics (Semaines 9-10)
-- **Core Web Vitals** : optimisation images (next/image), prefetch critique, lazy loading, réduction framer-motion si mobile low-end.
+- **Core Web Vitals** : optimisation images (next/image), prefetch critique, lazy loading, respect de `prefers-reduced-motion` et bascule vers transitions CSS/animations désactivées sur mobile low-end (INP < 200 ms, FPS > 50).
 - **SEO technique** : métadonnées par page, balisage Schema.org (Organization, BreadcrumbList, Article, FinancialService, Eventual Deal), sitemap/robots, hreflang fr/en (next-intl).
 - **Analytics RGPD** : Matomo (self-host ou cloud EU) + tableaux de bord funnel (cédant vs acquéreur) et conversion formulaire.
 - **Monitoring** : logs/alerts sur formulaires (rate limiting existant à ajuster), sécurité headers (CSP, HSTS, referrer-policy).
