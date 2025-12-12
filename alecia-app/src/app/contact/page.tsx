@@ -3,6 +3,7 @@ import { ContactForm } from "@/components/features";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { MapPin, Mail } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: "Contact | Nous contacter",
@@ -12,28 +13,34 @@ export const metadata: Metadata = {
 
 const offices = [
   {
-    name: "Île-de-France",
+    id: "idf",
+    nameKey: "officesIdf" as const,
     city: "Paris",
-    image: "https://cdn.prod.website-files.com/65cc8a57baba85b21d14d806/6671f1a584be578e430426a2_Paris%20-%20compressed.jpg",
+    image: "/assets/Contact_Alecia/paris_compressed.jpg",
   },
   {
-    name: "Sud Est",
+    id: "sudEst",
+    nameKey: "officesSudEst" as const,
     city: "Nice",
-    image: "https://cdn.prod.website-files.com/65cc8a57baba85b21d14d806/6671f1a6435ea537433f7da0_Nice%20-%20compressed.jpg",
+    image: "/assets/Contact_Alecia/nice_compressed.jpg",
   },
   {
-    name: "Auvergne Rhône-Alpes",
+    id: "aura",
+    nameKey: "officesAura" as const,
     city: "Lyon",
-    image: "https://cdn.prod.website-files.com/65cc8a57baba85b21d14d806/6671f067bb37caba791399b4_lyon%20-%20compressed.jpg",
+    image: "/assets/Contact_Alecia/lyon_compressed.jpg",
   },
   {
-    name: "Grand Ouest",
+    id: "grandOuest",
+    nameKey: "officesGrandOuest" as const,
     city: "Nantes",
-    image: "https://cdn.prod.website-files.com/65cc8a57baba85b21d14d806/6671f1a7bc2a5f426546faa2_Grand%20Ouest%20-%20compressed.jpg",
+    image: "/assets/Contact_Alecia/grand_ouest_compressed.jpg",
   },
 ];
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const t = await getTranslations("contact");
+
   return (
     <>
       <Navbar />
@@ -43,12 +50,10 @@ export default function ContactPage() {
         <section className="py-16 px-6">
           <div className="max-w-6xl mx-auto text-center">
             <h1 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl font-semibold mb-4">
-              Contactez-nous
+              {t("title")}
             </h1>
             <p className="text-[var(--foreground-muted)] max-w-2xl mx-auto text-lg">
-              Vous êtes dirigeant, actionnaire ou investisseur ?
-              <br />
-              Contactez-nous pour toute information sur nos services.
+              {t("subtitle")}
             </p>
           </div>
         </section>
@@ -64,7 +69,7 @@ export default function ContactPage() {
               <div className="space-y-8">
                 <div>
                   <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-semibold mb-4 text-[var(--foreground)]">
-                    Informations
+                    {t("offices")}
                   </h2>
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
@@ -81,16 +86,16 @@ export default function ContactPage() {
 
                 <div>
                   <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-semibold mb-4 text-[var(--foreground)]">
-                    Nos bureaux
+                    {t("offices")}
                   </h2>
                   <div className="grid grid-cols-2 gap-4">
                     {offices.map((office) => (
                       <div
-                        key={office.name}
+                        key={office.id}
                         className="p-4 bg-[var(--background-secondary)] rounded-lg border border-[var(--border)]"
                       >
                         <h3 className="text-[var(--foreground)] font-semibold mb-1">
-                          {office.name}
+                          {t(office.nameKey)}
                         </h3>
                         <div className="flex items-center gap-2 text-sm text-[var(--foreground-muted)]">
                           <MapPin className="w-4 h-4" />
@@ -108,13 +113,10 @@ export default function ContactPage() {
         {/* Office Images */}
         <section className="py-16 px-6">
           <div className="max-w-6xl mx-auto">
-            <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-semibold mb-8 text-center text-[var(--foreground)]">
-              Découvrez notre ancrage multi-régional
-            </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {offices.map((office) => (
                 <div
-                  key={office.name}
+                  key={office.id}
                   className="relative aspect-[4/3] rounded-lg overflow-hidden group"
                 >
                   <Image
@@ -126,7 +128,7 @@ export default function ContactPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <p className="text-white font-semibold">{office.name}</p>
+                    <p className="text-white font-semibold">{t(office.nameKey)}</p>
                     <p className="text-white/70 text-sm">{office.city}</p>
                   </div>
                 </div>

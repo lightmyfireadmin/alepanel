@@ -64,6 +64,10 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
+      <head>
+        {/* Lordicon animated icons */}
+        <script src="https://cdn.lordicon.com/lordicon.js" async />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} antialiased bg-[var(--background)] text-[var(--foreground)]`}
       >

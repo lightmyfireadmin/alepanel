@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkRateLimit, getClientIdentifier, rateLimitConfigs } from "@/lib/rate-limit";
+import { logger } from "@/lib/logger";
 
 export async function POST(request: NextRequest) {
   try {
@@ -37,7 +38,7 @@ export async function POST(request: NextRequest) {
     // - Mailchimp, Resend, or other email marketing service
     // - Store in Supabase/database for own mailing list
     
-    console.log("Newsletter subscription:", {
+    logger.info("Newsletter subscription", {
       email,
       timestamp: new Date().toISOString(),
     });
@@ -47,7 +48,7 @@ export async function POST(request: NextRequest) {
       message: "Inscription réussie ! Vous recevrez bientôt nos actualités.",
     });
   } catch (error) {
-    console.error("Newsletter error:", error);
+    logger.error("Newsletter error", error);
     return NextResponse.json(
       { error: "Une erreur s'est produite. Veuillez réessayer." },
       { status: 500 }

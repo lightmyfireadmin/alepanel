@@ -27,22 +27,27 @@ export function AnimatedCounter({
     if (!isInView || hasAnimated.current) return;
     hasAnimated.current = true;
 
-    const start = 0;
-    const end = to;
-    const incrementTime = (duration * 1000) / end;
-    let current = start;
+    const startTime = performance.now();
+    const durationMs = duration * 1000;
 
-    const timer = setInterval(() => {
-      current += Math.ceil(end / 50);
-      if (current >= end) {
-        setCount(end);
-        clearInterval(timer);
+    // Easing function for smooth deceleration
+    const easeOutQuart = (t: number) => 1 - Math.pow(1 - t, 4);
+
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / durationMs, 1);
+      const easedProgress = easeOutQuart(progress);
+      
+      setCount(Math.floor(easedProgress * to));
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
       } else {
-        setCount(current);
+        setCount(to);
       }
-    }, incrementTime * 50);
+    };
 
-    return () => clearInterval(timer);
+    requestAnimationFrame(animate);
   }, [isInView, to, duration]);
 
   return (

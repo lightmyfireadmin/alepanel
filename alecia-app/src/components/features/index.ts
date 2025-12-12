@@ -7,3 +7,5 @@ export { RegionalMap } from "./regional-map";
 export { NewsletterForm } from "./newsletter-form";
 export { ProjectTimeline } from "./ProjectTimeline";
 export { ContactForm } from "./contact-form";
+export { HeroBackground } from "./hero-background";
+export { ExpertiseCard } from "./expertise-card";

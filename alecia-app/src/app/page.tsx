@@ -3,10 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Navbar, Footer } from "@/components/layout";
-import { AnimatedCounter, RegionalMap, ValuationEstimator } from "@/components/features";
+import { AnimatedCounter, RegionalMap, ValuationEstimator, HeroBackground, ExpertiseCard } from "@/components/features";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, Building2, TrendingUp, Users } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 // Team members - names are not translated
@@ -29,19 +29,19 @@ export default function Home() {
       id: "cession",
       title: t("expertises.cession.title"),
       description: t("expertises.cession.description"),
-      icon: Building2,
+      iconType: "cession" as const,
     },
     {
       id: "levee-de-fonds",
       title: t("expertises.fundraising.title"),
       description: t("expertises.fundraising.description"),
-      icon: TrendingUp,
+      iconType: "fundraising" as const,
     },
     {
       id: "acquisition",
       title: t("expertises.acquisition.title"),
       description: t("expertises.acquisition.description"),
-      icon: Users,
+      iconType: "acquisition" as const,
     },
   ];
 
@@ -58,8 +58,8 @@ export default function Home() {
       <main id="main-content" className="min-h-screen bg-[var(--background)]">
         {/* Hero Section */}
         <section className="relative flex flex-col items-center justify-center min-h-[90vh] px-6 py-20 pt-32 text-center overflow-hidden">
-          {/* Background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--accent)]/5 via-transparent to-transparent" />
+          {/* Enhanced Background */}
+          <HeroBackground showParticles={true} />
           
           {/* Content */}
           <motion.div 
@@ -215,33 +215,16 @@ export default function Home() {
               </p>
             </motion.div>
             
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-3 gap-8">
               {expertises.map((expertise, idx) => (
-                <motion.div
+                <ExpertiseCard
                   key={expertise.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.1 }}
-                >
-                  <Link href={`/expertises#${expertise.id}`}>
-                    <Card className="card-hover h-full bg-[var(--card)] border-[var(--border)] group cursor-pointer">
-                      <CardHeader>
-                        <div className="w-12 h-12 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center mb-4 group-hover:bg-[var(--accent)]/20 transition-colors">
-                          <expertise.icon className="w-6 h-6 text-[var(--accent)]" />
-                        </div>
-                        <CardTitle className="text-[var(--foreground)] font-[family-name:var(--font-playfair)] text-xl group-hover:text-[var(--accent)] transition-colors">
-                          {expertise.title}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <CardDescription className="text-[var(--foreground-muted)] text-base">
-                          {expertise.description}
-                        </CardDescription>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                </motion.div>
+                  id={expertise.id}
+                  title={expertise.title}
+                  description={expertise.description}
+                  iconType={expertise.iconType}
+                  index={idx}
+                />
               ))}
             </div>
 

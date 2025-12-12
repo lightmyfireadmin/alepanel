@@ -2,7 +2,14 @@
   "common": {
     "contact": "Contact",
     "learnMore": "En savoir plus",
-    "seeAll": "Voir tout"
+    "seeAll": "Voir tout",
+    "apply": "Postuler",
+    "back": "Retour",
+    "loading": "Chargement...",
+    "send": "Envoyer",
+    "subscribe": "S'inscrire",
+    "search": "Rechercher",
+    "noResults": "Aucun résultat"
   },
   "nav": {
     "home": "Accueil",
@@ -45,15 +52,45 @@
     "discoverCta": "Découvrir nos expertises",
     "cession": {
       "title": "Cession & transmission",
-      "description": "La cession de votre entreprise est un moment décisif, qui requiert une préparation et une exécution irréprochables."
+      "description": "La cession de votre entreprise est un moment décisif, qui requiert une préparation et une exécution irréprochables.",
+      "longDescription": "La cession de votre entreprise est un moment décisif, qui requiert une préparation et une exécution irréprochables. alecia vous accompagne pour sécuriser l'opération, défendre vos intérêts et maximiser la valeur de votre entreprise, dans le respect de votre histoire et de vos collaborateurs.",
+      "step1Title": "Préparation",
+      "step1Desc": "Étude réaliste et transparente de la valeur de votre entreprise, mise en place d'une stratégie de vente.",
+      "step2Title": "Identification d'acheteurs",
+      "step2Desc": "Ciblage et approche discrète des acquéreurs potentiels grâce à notre réseau extensif.",
+      "step3Title": "Négociation et closing",
+      "step3Desc": "Assistance dans toutes les phases de la négociation jusqu'à la conclusion de la vente.",
+      "challenge1": "Garantir la confidentialité des échanges",
+      "challenge2": "Préparer une documentation adaptée aux attentes des acheteurs",
+      "challenge3": "Optimiser la valorisation, négocier et faire entendre vos conditions"
     },
     "fundraising": {
       "title": "Levée de fonds & financement",
-      "description": "Que ce soit pour financer votre croissance ou restructurer votre capital, nous vous accompagnons."
+      "description": "Que ce soit pour financer votre croissance ou restructurer votre capital, nous vous accompagnons.",
+      "longDescription": "Que ce soit pour financer votre croissance, investir dans de nouveaux projets, restructurer votre capital ou réaliser votre patrimoine, alecia vous offre un conseil expert en levée de fonds, adapté à vos besoins spécifiques.",
+      "step1Title": "Stratégie de financement",
+      "step1Desc": "Élaboration de stratégies innovantes, faisant appel à des instruments dilutifs ou non.",
+      "step2Title": "Accès à un réseau étendu",
+      "step2Desc": "Nous animons un vaste réseau d'investisseurs et d'institutions financières.",
+      "step3Title": "Structuration et négociation",
+      "step3Desc": "Assistance dans la structuration des opérations et négociation des meilleures conditions.",
+      "challenge1": "Identifier la meilleure combinaison de sources de financement",
+      "challenge2": "Préparer une documentation convaincante",
+      "challenge3": "Négocier des conditions favorables, alignées avec votre stratégie"
     },
     "acquisition": {
       "title": "Acquisition",
-      "description": "L'acquisition d'une entreprise est un levier stratégique majeur pour accélérer la croissance."
+      "description": "L'acquisition d'une entreprise est un levier stratégique majeur pour accélérer la croissance.",
+      "longDescription": "L'acquisition d'une entreprise est un levier stratégique majeur pour accélérer la croissance de votre société. Nous vous guidons à travers ce processus complexe avec une expertise et une méthodologie éprouvées.",
+      "step1Title": "Analyse et évaluation",
+      "step1Desc": "Identification précise des cibles, évaluation de leur valeur et compatibilité stratégique.",
+      "step2Title": "Négociation et structuration",
+      "step2Desc": "Accompagnement dans les négociations pour optimiser les conditions financières.",
+      "step3Title": "Intégration post-acquisition",
+      "step3Desc": "Conseils stratégiques pour une intégration fluide et efficace.",
+      "challenge1": "Identifier la cible idéale pour votre projet de croissance",
+      "challenge2": "Évaluer correctement la valeur de l'entreprise cible",
+      "challenge3": "Structurer une acquisition sécurisée et équilibrée"
     }
   },
   "regional": {
@@ -87,7 +124,8 @@
     "allSectors": "Tous les secteurs",
     "allRegions": "Toutes les régions",
     "allYears": "Toutes les années",
-    "allTypes": "Tous les types"
+    "allTypes": "Tous les types",
+    "noResults": "Aucune opération trouvée"
   },
   "team": {
     "title": "Notre équipe",
@@ -107,12 +145,65 @@
     "officesSudEst": "Bureau Sud Est",
     "officesGrandOuest": "Bureau Grand Ouest",
     "officesAura": "Bureau Auvergne Rhône-Alpes",
-    "officesIdf": "Bureau Île-de-France"
+    "officesIdf": "Bureau Île-de-France",
+    "form": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Email",
+      "company": "Entreprise (optionnel)",
+      "message": "Message",
+      "submit": "Envoyer le message",
+      "sending": "Envoi en cours...",
+      "success": "Message envoyé !",
+      "successMessage": "Nous vous recontacterons rapidement.",
+      "error": "Une erreur s'est produite. Veuillez réessayer."
+    }
+  },
+  "news": {
+    "title": "Actualités",
+    "subtitle": "Les dernières nouvelles et communiqués de presse d'alecia",
+    "categories": {
+      "communique": "Communiqué",
+      "article": "Article",
+      "pressReview": "Revue de presse"
+    },
+    "readMore": "Lire la suite",
+    "newsletter": {
+      "title": "Restez informé",
+      "subtitle": "Abonnez-vous à notre newsletter pour recevoir nos dernières actualités.",
+      "placeholder": "Votre email",
+      "button": "S'abonner"
+    }
+  },
+  "careers": {
+    "tagline": "Carrières",
+    "title": "Rejoignez l'aventure alecia",
+    "subtitle": "Nous recherchons des talents passionnés par les opérations de haut de bilan et le conseil aux entrepreneurs.",
+    "whyJoinTitle": "Pourquoi nous rejoindre ?",
+    "values": {
+      "teamwork": "Esprit d'équipe",
+      "teamworkDesc": "Une collaboration étroite entre associés et analystes sur chaque projet.",
+      "growth": "Développement",
+      "growthDesc": "Des responsabilités croissantes et un accompagnement personnalisé.",
+      "balance": "Qualité de vie",
+      "balanceDesc": "Un équilibre travail-vie personnelle respecté et des bureaux modernes."
+    },
+    "openPositions": "Postes ouverts",
+    "spontaneous": {
+      "title": "Candidature spontanée",
+      "subtitle": "Aucune offre ne correspond à votre profil ? Envoyez-nous votre candidature spontanée, nous sommes toujours à la recherche de nouveaux talents.",
+      "button": "Envoyer ma candidature"
+    },
+    "profileLabel": "Profil recherché :",
+    "applyButton": "Postuler"
   },
   "footer": {
     "legalNotice": "Mentions légales",
     "privacy": "Politique de confidentialité",
     "copyright": "© {year} alecia. Tous droits réservés.",
-    "adminLogin": "Administration"
+    "adminLogin": "Administration",
+    "services": "Services",
+    "company": "Entreprise",
+    "followUs": "Suivez-nous"
   }
 }

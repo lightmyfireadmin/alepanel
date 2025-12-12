@@ -359,14 +359,20 @@ DELETE FROM team_members WHERE id = $1;
 
 **Purpose**: Main landing page with hero, stats, and CTAs.
 
-| Section        | Features                          |
-| -------------- | --------------------------------- |
-| Hero           | Animated headline, CTA buttons    |
-| Stats Counter  | Animated counters for key metrics |
-| Expertises     | Service cards with icons          |
-| Regional Map   | Interactive office locations      |
-| Valuation Tool | Free company valuation estimator  |
-| Team Preview   | Featured team members             |
+| Section        | Features                                  |
+| -------------- | ----------------------------------------- |
+| Hero           | Animated headline, particles, gradient bg |
+| Stats Counter  | Smooth 2s animation with easeOut easing   |
+| Expertises     | Lordicon animated icons, gradient accent  |
+| Regional Map   | Accurate France SVG with office markers   |
+| Valuation Tool | Free company valuation estimator          |
+| Team Preview   | Featured team members with avatars        |
+
+**New Components**:
+
+- `HeroBackground` - Animated particles, grid pattern, logo watermark
+- `ExpertiseCard` - Lordicon icons with hover effects
+- `AnimatedCounter` - requestAnimationFrame with easeOutQuart
 
 **i18n**: Full French/English support with cookie-based locale switching.
 
@@ -528,23 +534,36 @@ TypeScript strict mode
 
 ---
 
-## Component Library
-
 ### Features (`components/features/`)
 
-| Component        | Purpose                |
-| ---------------- | ---------------------- |
-| `CommandPalette` | ⌘K search modal        |
-| `ContactForm`    | Validated contact form |
-| `NewsletterForm` | Email subscription     |
-| `ScrollToTop`    | Floating scroll button |
-| `CookieBanner`   | GDPR consent           |
-| `Breadcrumbs`    | Navigation trail       |
+| Component            | Purpose                                     |
+| -------------------- | ------------------------------------------- |
+| `HeroBackground`     | Animated particles, grid, gradient overlays |
+| `ExpertiseCard`      | Lordicon icons with hover effects           |
+| `AnimatedCounter`    | Smooth RAF-based counter with easing        |
+| `RegionalMap`        | Accurate France SVG with office markers     |
+| `CommandPalette`     | ⌘K search modal                             |
+| `ContactForm`        | Validated contact form                      |
+| `NewsletterForm`     | Email subscription                          |
+| `ScrollToTop`        | Floating scroll button                      |
+| `CookieBanner`       | GDPR consent                                |
+| `Breadcrumbs`        | Navigation trail                            |
+| `ValuationEstimator` | Company valuation calculator                |
 
 ### UI (`components/ui/`)
 
 | Component       | Purpose              |
 | --------------- | -------------------- |
+| `AnimatedIcon`  | Lordicon wrapper     |
 | `ToastProvider` | Global notifications |
 | `Skeletons`     | Loading placeholders |
 | `Loading`       | Spinner and progress |
+
+### Utilities (`lib/`)
+
+| Utility      | File                | Description               |
+| ------------ | ------------------- | ------------------------- |
+| `unsplash`   | `lib/unsplash.ts`   | Unsplash API with caching |
+| `logger`     | `lib/logger.ts`     | Structured logging        |
+| `csv-export` | `lib/csv-export.ts` | Export data to CSV        |
+| `rate-limit` | `lib/rate-limit.ts` | Request throttling        |

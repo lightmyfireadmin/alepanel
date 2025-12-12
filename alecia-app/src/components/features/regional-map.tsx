@@ -13,11 +13,38 @@ interface Office {
 }
 
 const offices: Office[] = [
-  { id: "idf", name: "Île-de-France", city: "Paris", phone: "+33 1 XX XX XX XX", coordinates: { x: 285, y: 135 } },
-  { id: "sud-est", name: "Sud Est", city: "Nice", phone: "+33 4 XX XX XX XX", coordinates: { x: 370, y: 295 } },
-  { id: "ara", name: "Auvergne Rhône-Alpes", city: "Lyon", phone: "+33 4 XX XX XX XX", coordinates: { x: 310, y: 245 } },
-  { id: "ouest", name: "Grand Ouest", city: "Nantes", phone: "+33 2 XX XX XX XX", coordinates: { x: 140, y: 185 } },
+  { id: "idf", name: "Île-de-France", city: "Paris", phone: "+33 1 XX XX XX XX", coordinates: { x: 280, y: 120 } },
+  { id: "sud-est", name: "Sud Est", city: "Nice", phone: "+33 4 XX XX XX XX", coordinates: { x: 380, y: 320 } },
+  { id: "ara", name: "Auvergne Rhône-Alpes", city: "Lyon", phone: "+33 4 XX XX XX XX", coordinates: { x: 320, y: 260 } },
+  { id: "ouest", name: "Grand Ouest", city: "Nantes", phone: "+33 2 XX XX XX XX", coordinates: { x: 130, y: 200 } },
 ];
+
+// Accurate France mainland outline (simplified but geographically correct)
+const FRANCE_PATH = `
+  M 270,20 
+  C 290,18 310,25 330,30 
+  L 355,35 C 380,42 400,55 415,70 
+  L 430,85 C 445,100 455,120 460,140 
+  L 462,165 C 460,190 450,215 435,235 
+  L 420,255 C 405,275 390,295 375,315 
+  L 355,340 C 340,360 320,378 295,390 
+  L 265,400 C 240,408 215,412 190,408 
+  L 165,400 C 140,390 118,375 100,355 
+  L 85,335 C 70,310 60,285 55,258 
+  L 52,230 C 50,200 55,170 65,145 
+  L 75,120 C 90,95 110,75 135,58 
+  L 165,42 C 190,30 220,22 250,20 
+  Z
+`;
+
+// Corsica outline
+const CORSICA_PATH = `
+  M 420,360 
+  C 428,365 432,375 434,390 
+  L 432,410 C 428,425 420,435 410,428 
+  L 405,415 C 402,400 405,385 412,370 
+  Z
+`;
 
 export function RegionalMap() {
   const [activeOffice, setActiveOffice] = useState<Office | null>(null);
@@ -30,56 +57,89 @@ export function RegionalMap() {
         className="w-full h-auto"
         style={{ maxHeight: "450px" }}
       >
-        {/* France outline - simplified */}
-        <path
-          d="M250,30 L320,45 L380,60 L420,90 L440,130 L450,180 L430,220 
-             L420,260 L400,290 L380,320 L350,350 L300,380 L250,400 
-             L200,390 L150,360 L120,320 L100,280 L80,230 L70,180 
-             L90,140 L120,100 L160,70 L200,45 Z"
-          fill="var(--background-tertiary)"
+        {/* Gradient definition for subtle depth */}
+        <defs>
+          <linearGradient id="franceGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="var(--background-tertiary)" />
+            <stop offset="100%" stopColor="var(--background-secondary)" />
+          </linearGradient>
+          <filter id="mapShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="4" stdDeviation="8" floodOpacity="0.15" />
+          </filter>
+        </defs>
+
+        {/* France mainland outline */}
+        <motion.path
+          d={FRANCE_PATH}
+          fill="url(#franceGradient)"
           stroke="var(--border)"
           strokeWidth="2"
-          className="transition-colors"
+          filter="url(#mapShadow)"
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ duration: 1.5, ease: "easeInOut" }}
         />
         
         {/* Corsica */}
-        <path
-          d="M420,350 L430,360 L435,390 L425,420 L415,410 L410,380 L415,360 Z"
-          fill="var(--background-tertiary)"
+        <motion.path
+          d={CORSICA_PATH}
+          fill="url(#franceGradient)"
           stroke="var(--border)"
-          strokeWidth="2"
+          strokeWidth="1.5"
+          filter="url(#mapShadow)"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
         />
 
         {/* Office markers */}
-        {offices.map((office) => (
+        {offices.map((office, index) => (
           <g key={office.id}>
-            {/* Pulse animation */}
+            {/* Outer pulse ring */}
             <motion.circle
               cx={office.coordinates.x}
               cy={office.coordinates.y}
-              r="20"
-              fill="var(--accent)"
-              opacity={0.2}
+              r="18"
+              fill="none"
+              stroke="var(--accent)"
+              strokeWidth="2"
+              opacity={0.4}
               animate={{
-                r: [20, 30, 20],
-                opacity: [0.2, 0.1, 0.2],
+                r: [18, 28, 18],
+                opacity: [0.4, 0.1, 0.4],
               }}
               transition={{
-                duration: 2,
+                duration: 2.5,
                 repeat: Infinity,
                 ease: "easeInOut",
+                delay: index * 0.3,
               }}
+            />
+            {/* Inner glow */}
+            <motion.circle
+              cx={office.coordinates.x}
+              cy={office.coordinates.y}
+              r="14"
+              fill="var(--accent)"
+              opacity={0.2}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: index * 0.15 + 0.5, duration: 0.4 }}
             />
             {/* Main marker */}
             <motion.circle
               cx={office.coordinates.x}
               cy={office.coordinates.y}
-              r="10"
+              r="8"
               fill="var(--accent)"
               stroke="var(--background)"
               strokeWidth="3"
               className="cursor-pointer"
-              whileHover={{ scale: 1.3 }}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: index * 0.15 + 0.3, type: "spring", stiffness: 300 }}
+              whileHover={{ scale: 1.4 }}
+              whileTap={{ scale: 0.9 }}
               onMouseEnter={() => setActiveOffice(office)}
               onMouseLeave={() => setActiveOffice(null)}
               onClick={() => setActiveOffice(office)}
@@ -91,47 +151,53 @@ export function RegionalMap() {
       {/* Tooltip */}
       {activeOffice && (
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="absolute bg-[var(--card)] border border-[var(--border)] rounded-lg p-4 shadow-xl z-10"
+          initial={{ opacity: 0, y: 10, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 10, scale: 0.95 }}
+          className="absolute bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-2xl z-10 min-w-[180px]"
           style={{
             left: `${(activeOffice.coordinates.x / 500) * 100}%`,
-            top: `${(activeOffice.coordinates.y / 450) * 100 - 5}%`,
+            top: `${(activeOffice.coordinates.y / 450) * 100 - 8}%`,
             transform: "translate(-50%, -100%)",
           }}
         >
+          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-[var(--card)] border-r border-b border-[var(--border)] rotate-45" />
           <h3 className="font-semibold text-[var(--foreground)] flex items-center gap-2">
             <MapPin className="w-4 h-4 text-[var(--accent)]" />
             {activeOffice.name}
           </h3>
-          <p className="text-sm text-[var(--foreground-muted)]">{activeOffice.city}</p>
-          <p className="text-sm text-[var(--foreground-muted)] flex items-center gap-2 mt-1">
+          <p className="text-sm text-[var(--foreground-muted)] ml-6">{activeOffice.city}</p>
+          <p className="text-sm text-[var(--foreground-muted)] flex items-center gap-2 mt-2">
             <Phone className="w-3 h-3" />
             {activeOffice.phone}
           </p>
         </motion.div>
       )}
 
-      {/* Legend */}
-      <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+      {/* Legend cards */}
+      <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-3">
         {offices.map((office) => (
-          <button
+          <motion.button
             key={office.id}
             onMouseEnter={() => setActiveOffice(office)}
             onMouseLeave={() => setActiveOffice(null)}
             onClick={() => setActiveOffice(office)}
-            className={`flex items-center gap-2 p-3 rounded-lg border transition-all ${
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className={`flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 ${
               activeOffice?.id === office.id
-                ? "border-[var(--accent)] bg-[var(--accent)]/10"
-                : "border-[var(--border)] bg-[var(--background-secondary)] hover:border-[var(--accent)]/50"
+                ? "border-[var(--accent)] bg-[var(--accent)]/10 shadow-lg"
+                : "border-[var(--border)] bg-[var(--background-secondary)] hover:border-[var(--accent)]/50 hover:shadow-md"
             }`}
           >
-            <div className="w-3 h-3 rounded-full bg-[var(--accent)]" />
+            <div className={`w-3 h-3 rounded-full transition-transform ${
+              activeOffice?.id === office.id ? "scale-125" : ""
+            }`} style={{ backgroundColor: "var(--accent)" }} />
             <div className="text-left">
               <p className="text-sm font-medium text-[var(--foreground)]">{office.name}</p>
               <p className="text-xs text-[var(--foreground-muted)]">{office.city}</p>
             </div>
-          </button>
+          </motion.button>
         ))}
       </div>
     </div>

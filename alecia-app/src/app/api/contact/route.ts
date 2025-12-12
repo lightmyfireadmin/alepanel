@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkRateLimit, getClientIdentifier, rateLimitConfigs } from "@/lib/rate-limit";
+import { logger } from "@/lib/logger";
 
 export async function POST(request: NextRequest) {
   try {
@@ -45,7 +46,7 @@ export async function POST(request: NextRequest) {
     // - CRM (HubSpot, Salesforce, etc.)
     // - Supabase leads table
     
-    console.log("Contact form submission:", {
+    logger.info("Contact form submission", {
       firstName,
       lastName,
       email,
@@ -60,7 +61,7 @@ export async function POST(request: NextRequest) {
       message: "Votre message a bien été envoyé. Nous vous recontacterons rapidement.",
     });
   } catch (error) {
-    console.error("Contact form error:", error);
+    logger.error("Contact form error", error);
     return NextResponse.json(
       { error: "Une erreur s'est produite. Veuillez réessayer." },
       { status: 500 }

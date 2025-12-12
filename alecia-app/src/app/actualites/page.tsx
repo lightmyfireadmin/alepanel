@@ -19,7 +19,7 @@ const posts = [
     slug: "safe-groupe-acquiert-dogs-security",
     title: "alecia conseille SAFE GROUPE dans le cadre de l'acquisition de Dogs Security",
     excerpt: "Acteur majeur de la sécurité globale en France, SAFE GROUPE poursuit sa stratégie de développement en annonçant l'acquisition de Dogs Security. Cette opération lui permet de renforcer son maillage territorial avec un nouveau bureau en Île-de-France.",
-    coverImage: "https://cdn.prod.website-files.com/660ec81a224042420ed56e8f/675bf30a11fd4fb91c7a0179_Illustration.jpg",
+    coverImage: "/assets/Actualites_Alecia/illustration.jpg",
     category: "Communiqué",
     publishedAt: "2024-12-12",
   },
