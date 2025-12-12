@@ -60,11 +60,11 @@ Ce plan s’appuie sur le rapport **« Optimisation Site Web M&A PME_ETI France 
 - **Process** : checklists déploiement (préprod/staging), revue de contenus légaux trimestrielle, rotation secrets (AUTH_SECRET, tokens VDR/CRM).
 
 ## Décisions clés à trancher en amont
-1) **CRM cible** (Pipedrive/HubSpot vs DealCloud) pour structurer les webhooks et les champs leads.  
-2) **VDR** choisie et mode d’auth (SSO ou liens magiques par dossier).  
-3) **Positionnement visuel** : institutionnel « forteresse » vs boutique « growth » (influence palette/ton of voice).  
-4) **Périmètre du portail investisseur** : simple teaser wall vs mini data-room.  
-5) **CMP** : Axeptio (FR, UX) vs Didomi (entreprise).  
+- **CRM cible** (Pipedrive/HubSpot vs DealCloud) pour structurer les webhooks et les champs leads.  
+- **VDR** choisie et mode d’auth (SSO ou liens magiques par dossier).  
+- **Positionnement visuel** : institutionnel « forteresse » vs boutique « growth » (influence palette/ton of voice).  
+- **Périmètre du portail investisseur** : simple teaser wall vs mini data-room.  
+- **CMP** : Axeptio (FR, UX) vs Didomi (entreprise).  
 
 ## Livrables attendus par phase (résumé)
 - **P0** : brief brand, liste légale complète, backlog SEO mots-clés.  
