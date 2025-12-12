@@ -1,0 +1,68 @@
+{
+  "common": {
+    "contact": "Contact",
+    "learnMore": "Learn more",
+    "seeAll": "See all"
+  },
+  "nav": {
+    "home": "Home",
+    "expertises": "Expertise",
+    "operations": "Transactions",
+    "team": "Team",
+    "news": "News",
+    "careers": "Careers",
+    "contact": "Contact"
+  },
+  "hero": {
+    "title": "Your ambitions, our commitment",
+    "subtitle": "M&A advisory for SMEs and mid-caps. Valuation €5M-€50M.",
+    "ctaSeller": "I'm selling",
+    "ctaBuyer": "I'm acquiring"
+  },
+  "expertises": {
+    "title": "Our expertise",
+    "cession": {
+      "title": "Divestiture & Transmission",
+      "description": "Selling your business is a decisive moment that requires flawless preparation and execution."
+    },
+    "fundraising": {
+      "title": "Fundraising & Financing",
+      "description": "Whether to finance your growth, invest in new projects, or restructure your capital."
+    },
+    "acquisition": {
+      "title": "Acquisition",
+      "description": "Acquiring a company is a major strategic lever to accelerate your company's growth."
+    }
+  },
+  "operations": {
+    "title": "Transactions",
+    "subtitle": "Discover a selection of transactions led by our partners and directors",
+    "filterSector": "Sector",
+    "filterRegion": "Region",
+    "filterYear": "Year",
+    "filterType": "Mandate type",
+    "allSectors": "All sectors",
+    "allRegions": "All regions",
+    "allYears": "All years",
+    "allTypes": "All types"
+  },
+  "team": {
+    "title": "Our team",
+    "subtitle": "The variety of our backgrounds and expertise is alecia's strength"
+  },
+  "contact": {
+    "title": "Contact us",
+    "subtitle": "Are you a business owner, shareholder, or investor? Contact us for more information.",
+    "offices": "Offices",
+    "officesSudEst": "South-East Office",
+    "officesGrandOuest": "West Office",
+    "officesAura": "Auvergne Rhône-Alpes Office",
+    "officesIdf": "Paris Office"
+  },
+  "footer": {
+    "legalNotice": "Legal notice",
+    "privacy": "Privacy policy",
+    "copyright": "© {year} alecia. All rights reserved.",
+    "adminLogin": "Admin"
+  }
+}

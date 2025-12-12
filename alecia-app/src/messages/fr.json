@@ -1,0 +1,68 @@
+{
+  "common": {
+    "contact": "Contact",
+    "learnMore": "En savoir plus",
+    "seeAll": "Voir tout"
+  },
+  "nav": {
+    "home": "Accueil",
+    "expertises": "Expertises",
+    "operations": "Opérations",
+    "team": "Équipe",
+    "news": "Actualités",
+    "careers": "Nous rejoindre",
+    "contact": "Contact"
+  },
+  "hero": {
+    "title": "Vos ambitions, notre engagement",
+    "subtitle": "Conseil en fusion-acquisition pour PME et ETI. Valorisation €5M-€50M.",
+    "ctaSeller": "Vous êtes cédant",
+    "ctaBuyer": "Vous êtes acquéreur"
+  },
+  "expertises": {
+    "title": "Nos expertises",
+    "cession": {
+      "title": "Cession & transmission",
+      "description": "La cession de votre entreprise est un moment décisif, qui requiert une préparation et une exécution irréprochables."
+    },
+    "fundraising": {
+      "title": "Levée de fonds & financement",
+      "description": "Que ce soit pour financer votre croissance, investir dans de nouveaux projets, restructurer votre capital."
+    },
+    "acquisition": {
+      "title": "Acquisition",
+      "description": "L'acquisition d'une entreprise est un levier stratégique majeur pour accélérer la croissance de votre société."
+    }
+  },
+  "operations": {
+    "title": "Opérations",
+    "subtitle": "Découvrez un extrait des opérations accompagnées par nos associés et directeurs",
+    "filterSector": "Secteur",
+    "filterRegion": "Région",
+    "filterYear": "Année",
+    "filterType": "Type de mandat",
+    "allSectors": "Tous les secteurs",
+    "allRegions": "Toutes les régions",
+    "allYears": "Toutes les années",
+    "allTypes": "Tous les types"
+  },
+  "team": {
+    "title": "Notre équipe",
+    "subtitle": "La variété de nos parcours et de nos expertises fait la richesse d'alecia"
+  },
+  "contact": {
+    "title": "Contactez-nous",
+    "subtitle": "Vous êtes dirigeant, actionnaire ou investisseur ? Contactez-nous pour toute information.",
+    "offices": "Bureaux",
+    "officesSudEst": "Bureau Sud Est",
+    "officesGrandOuest": "Bureau Grand Ouest",
+    "officesAura": "Bureau Auvergne Rhône-Alpes",
+    "officesIdf": "Bureau Île-de-France"
+  },
+  "footer": {
+    "legalNotice": "Mentions légales",
+    "privacy": "Politique de confidentialité",
+    "copyright": "© {year} alecia. Tous droits réservés.",
+    "adminLogin": "Administration"
+  }
+}
