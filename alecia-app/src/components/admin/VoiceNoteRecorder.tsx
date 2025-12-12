@@ -1,42 +1,150 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mic, X, Square, Check } from "lucide-react";
+import { Mic, X, Square, Check, Loader2, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { uploadVoiceNote } from "@/lib/actions/voice-notes";
+
+interface VoiceNoteRecorderProps {
+  projectId?: string;
+  contactId?: string;
+  onRecorded?: (voiceNoteId: string, blobUrl: string) => void;
+}
 
 /**
  * VoiceNoteRecorder - Floating Action Button (FAB)
  * 
- * UI Skeleton for voice recording feature.
- * Future integration: OpenAI Whisper for transcription.
+ * Records audio and uploads to Vercel Blob storage.
+ * Requirement: Voice notes must be stored in cloud storage,
+ * NOT in local filesystem (Vercel is serverless/ephemeral).
  */
-export function VoiceNoteRecorder() {
+export function VoiceNoteRecorder({ projectId, contactId, onRecorded }: VoiceNoteRecorderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
+  const [error, setError] = useState<string | null>(null);
+  
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const timerIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const startRecording = () => {
-    setIsRecording(true);
-    // Mock timer - in real app, use actual audio recording
-    const interval = setInterval(() => {
-      setRecordingTime((t) => t + 1);
-    }, 1000);
+  const startRecording = useCallback(async () => {
+    setError(null);
     
-    // Store interval ID for cleanup
-    (window as unknown as { recordingInterval?: NodeJS.Timeout }).recordingInterval = interval;
-  };
+    try {
+      // Request microphone access
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+        }
+      });
+      
+      // Create MediaRecorder with webm format (widely supported)
+      const mediaRecorder = new MediaRecorder(stream, {
+        mimeType: "audio/webm;codecs=opus",
+      });
+      
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+      
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+      
+      mediaRecorder.start(1000); // Collect data every second
+      setIsRecording(true);
+      
+      // Start timer
+      timerIntervalRef.current = setInterval(() => {
+        setRecordingTime((t) => t + 1);
+      }, 1000);
+      
+    } catch (err) {
+      console.error("[VoiceRecorder] Error accessing microphone:", err);
+      setError("Impossible d'accéder au microphone");
+    }
+  }, []);
 
-  const stopRecording = () => {
+  const stopRecording = useCallback(() => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
+      mediaRecorderRef.current.stop();
+      
+      // Stop all tracks
+      mediaRecorderRef.current.stream.getTracks().forEach((track) => track.stop());
+    }
+    
+    // Clear timer
+    if (timerIntervalRef.current) {
+      clearInterval(timerIntervalRef.current);
+      timerIntervalRef.current = null;
+    }
+    
     setIsRecording(false);
+  }, []);
+
+  const cancelRecording = useCallback(() => {
+    stopRecording();
     setRecordingTime(0);
+    audioChunksRef.current = [];
+    setError(null);
+  }, [stopRecording]);
+
+  const saveRecording = useCallback(async () => {
+    stopRecording();
     
-    const interval = (window as unknown as { recordingInterval?: NodeJS.Timeout }).recordingInterval;
-    if (interval) clearInterval(interval);
+    // Wait a moment for final data to be collected
+    await new Promise((resolve) => setTimeout(resolve, 100));
     
-    // In real app: send audio to Whisper API for transcription
-    console.log("Recording stopped - would send to Whisper API");
-  };
+    if (audioChunksRef.current.length === 0) {
+      setError("Aucun enregistrement à sauvegarder");
+      return;
+    }
+    
+    setIsUploading(true);
+    setError(null);
+    
+    try {
+      // Create blob from chunks
+      const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
+      
+      // Create FormData for server action
+      const formData = new FormData();
+      formData.append("audio", audioBlob);
+      formData.append("duration", recordingTime.toString());
+      
+      if (projectId) {
+        formData.append("projectId", projectId);
+      }
+      if (contactId) {
+        formData.append("contactId", contactId);
+      }
+      
+      // Upload to Vercel Blob via server action
+      const result = await uploadVoiceNote(formData);
+      
+      if (result.success && result.voiceNoteId && result.blobUrl) {
+        console.log("[VoiceRecorder] Uploaded successfully:", result.blobUrl);
+        onRecorded?.(result.voiceNoteId, result.blobUrl);
+        setIsOpen(false);
+        setRecordingTime(0);
+        audioChunksRef.current = [];
+      } else {
+        setError(result.error || "Échec du téléversement");
+      }
+      
+    } catch (err) {
+      console.error("[VoiceRecorder] Upload error:", err);
+      setError("Erreur lors du téléversement");
+    } finally {
+      setIsUploading(false);
+    }
+  }, [stopRecording, recordingTime, projectId, contactId, onRecorded]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -52,6 +160,7 @@ export function VoiceNoteRecorder() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(true)}
+        aria-label="Enregistrer une note vocale"
       >
         <Mic className="w-6 h-6" />
       </motion.button>
@@ -64,7 +173,7 @@ export function VoiceNoteRecorder() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end justify-center md:items-center p-4"
-            onClick={() => !isRecording && setIsOpen(false)}
+            onClick={() => !isRecording && !isUploading && setIsOpen(false)}
           >
             <motion.div
               initial={{ y: 100, opacity: 0 }}
@@ -79,9 +188,9 @@ export function VoiceNoteRecorder() {
                   Note vocale
                 </h3>
                 <button
-                  onClick={() => !isRecording && setIsOpen(false)}
+                  onClick={() => !isRecording && !isUploading && setIsOpen(false)}
                   className="p-2 rounded-full hover:bg-[var(--background-tertiary)] text-[var(--foreground-muted)]"
-                  disabled={isRecording}
+                  disabled={isRecording || isUploading}
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -93,14 +202,20 @@ export function VoiceNoteRecorder() {
                 <div className="relative">
                   <motion.div
                     className={`w-20 h-20 rounded-full flex items-center justify-center ${
-                      isRecording
-                        ? "bg-red-500"
-                        : "bg-[var(--accent)]"
+                      isUploading
+                        ? "bg-blue-500"
+                        : isRecording
+                          ? "bg-red-500"
+                          : "bg-[var(--accent)]"
                     }`}
                     animate={isRecording ? { scale: [1, 1.1, 1] } : {}}
                     transition={{ repeat: Infinity, duration: 1 }}
                   >
-                    <Mic className="w-8 h-8 text-white" />
+                    {isUploading ? (
+                      <Loader2 className="w-8 h-8 text-white animate-spin" />
+                    ) : (
+                      <Mic className="w-8 h-8 text-white" />
+                    )}
                   </motion.div>
                   
                   {/* Pulse rings when recording */}
@@ -128,15 +243,25 @@ export function VoiceNoteRecorder() {
                 </p>
                 
                 <p className="mt-2 text-sm text-[var(--foreground-muted)]">
-                  {isRecording 
-                    ? "Enregistrement en cours..." 
-                    : "Appuyez pour enregistrer"}
+                  {isUploading
+                    ? "Téléversement en cours..."
+                    : isRecording
+                      ? "Enregistrement en cours..."
+                      : "Appuyez pour enregistrer"}
                 </p>
+
+                {/* Error Message */}
+                {error && (
+                  <div className="mt-3 flex items-center gap-2 text-red-400 text-sm">
+                    <AlertCircle className="w-4 h-4" />
+                    <span>{error}</span>
+                  </div>
+                )}
               </div>
 
               {/* Controls */}
               <div className="flex gap-3">
-                {!isRecording ? (
+                {!isRecording && !isUploading ? (
                   <Button
                     className="flex-1 btn-gold gap-2"
                     onClick={startRecording}
@@ -144,22 +269,27 @@ export function VoiceNoteRecorder() {
                     <Mic className="w-4 h-4" />
                     Commencer
                   </Button>
+                ) : isUploading ? (
+                  <Button
+                    className="flex-1"
+                    disabled
+                  >
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Envoi...
+                  </Button>
                 ) : (
                   <>
                     <Button
                       variant="outline"
                       className="flex-1 border-red-500 text-red-400 hover:bg-red-500/10"
-                      onClick={stopRecording}
+                      onClick={cancelRecording}
                     >
                       <Square className="w-4 h-4 mr-2" />
                       Annuler
                     </Button>
                     <Button
                       className="flex-1 bg-emerald-600 hover:bg-emerald-700 gap-2"
-                      onClick={() => {
-                        stopRecording();
-                        setIsOpen(false);
-                      }}
+                      onClick={saveRecording}
                     >
                       <Check className="w-4 h-4" />
                       Sauvegarder
@@ -170,7 +300,11 @@ export function VoiceNoteRecorder() {
 
               {/* Info */}
               <p className="mt-4 text-xs text-center text-[var(--foreground-muted)]">
-                Transcription automatique via IA (bientôt disponible)
+                Stockage cloud sécurisé (Vercel Blob)
+                <br />
+                <span className="text-[var(--accent)]">
+                  Transcription IA bientôt disponible
+                </span>
               </p>
             </motion.div>
           </motion.div>

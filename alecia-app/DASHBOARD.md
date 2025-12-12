@@ -6,6 +6,20 @@ The Alecia Admin Dashboard is a comprehensive Business Operating System for mana
 
 ---
 
+## Audit Status (December 2025)
+
+| Category      | Status      | Notes                    |
+| ------------- | ----------- | ------------------------ |
+| Build         | ✅ Passing  | 27 routes, no errors     |
+| Security      | ✅ Strong   | Dual auth, rate limiting |
+| TypeScript    | ✅ Strict   | All types inferred       |
+| i18n          | ✅ Complete | FR/EN 200 keys           |
+| Accessibility | ✅ Good     | ARIA, focus states       |
+
+See [AUDIT_REPORT.md](./AUDIT_REPORT.md) for full details.
+
+---
+
 ## Authentication
 
 ### `/admin/login`

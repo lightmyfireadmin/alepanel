@@ -1,56 +1,38 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useTransition } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Building2, Search, Loader2, Check, MapPin, Users, TrendingUp } from "lucide-react";
+import { Building2, Search, Loader2, Check, MapPin, Users, TrendingUp, AlertCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-
-// Mock Pappers API responses (French company registry)
-const MOCK_COMPANIES = [
-  {
-    siren: "123456789",
-    name: "TechCorp Solutions SAS",
-    address: "15 Rue de la Paix, 75002 Paris",
-    sector: "Technologies & logiciels",
-    employees: 45,
-    revenue: 8500000,
-    ebitda: 1200000,
-    year: 2024,
-  },
-  {
-    siren: "987654321",
-    name: "MediSanté France",
-    address: "8 Avenue des Champs-Élysées, 75008 Paris",
-    sector: "Santé",
-    employees: 120,
-    revenue: 25000000,
-    ebitda: 3500000,
-    year: 2024,
-  },
-  {
-    siren: "456789123",
-    name: "Industries du Nord SAS",
-    address: "Zone Industrielle, 59000 Lille",
-    sector: "Industries",
-    employees: 85,
-    revenue: 12000000,
-    ebitda: 1800000,
-    year: 2024,
-  },
-];
+import { 
+  enrichCompany, 
+  searchCompanies,
+  type EnrichedCompanyData 
+} from "@/lib/actions/company-enrichment";
 
 interface CompanyEnrichmentProps {
-  onCompanySelect?: (company: typeof MOCK_COMPANIES[0]) => void;
+  onCompanySelect?: (company: EnrichedCompanyData) => void;
   className?: string;
 }
 
+/**
+ * CompanyEnrichment - Database-First Company Lookup
+ * 
+ * CRITICAL: Implements Database-First strategy for cost control.
+ * - Checks DB cache before any external API call
+ * - Manual trigger ONLY (button click, not on load)
+ * - Stores enriched data with isEnriched = true
+ */
 export function CompanyEnrichment({ onCompanySelect, className }: CompanyEnrichmentProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCompany, setSelectedCompany] = useState<typeof MOCK_COMPANIES[0] | null>(null);
+  const [selectedCompany, setSelectedCompany] = useState<EnrichedCompanyData | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
   // Debounced search
   const [debouncedQuery, setDebouncedQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<EnrichedCompanyData[]>([]);
   
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -59,24 +41,60 @@ export function CompanyEnrichment({ onCompanySelect, className }: CompanyEnrichm
     return () => clearTimeout(timeout);
   }, [searchQuery]);
 
+  // Search cached companies when query changes
+  useEffect(() => {
+    if (debouncedQuery.length >= 2) {
+      startTransition(async () => {
+        const results = await searchCompanies(debouncedQuery);
+        setSearchResults(results);
+      });
+    } else {
+      setSearchResults([]);
+    }
+  }, [debouncedQuery]);
+
   // Compute isSearching as derived state
   const isSearching = searchQuery !== debouncedQuery && searchQuery.length >= 2;
 
-  // Compute results based on debounced query
-  const results = useMemo(() => {
-    if (!debouncedQuery || debouncedQuery.length < 2) {
-      return [];
-    }
-    return MOCK_COMPANIES.filter(
-      (c) =>
-        c.siren.includes(debouncedQuery) ||
-        c.name.toLowerCase().includes(debouncedQuery.toLowerCase())
-    );
-  }, [debouncedQuery]);
+  // Check if query looks like a SIREN number
+  const isSirenQuery = useMemo(() => {
+    return /^\d{9}$/.test(searchQuery.trim());
+  }, [searchQuery]);
 
-  const handleSelect = (company: typeof MOCK_COMPANIES[0]) => {
+  /**
+   * Handle enrichment - MANUAL TRIGGER ONLY
+   * This is the only way to call the external API.
+   */
+  const handleEnrich = async () => {
+    if (!isSirenQuery) {
+      setError("Veuillez entrer un numéro SIREN valide (9 chiffres)");
+      return;
+    }
+
+    setError(null);
+    
+    startTransition(async () => {
+      const result = await enrichCompany(searchQuery.trim());
+      
+      if (result.success && result.data) {
+        setSelectedCompany(result.data);
+        setSearchQuery("");
+        
+        if (result.fromCache) {
+          console.log("[CompanyEnrichment] Loaded from cache (no API call)");
+        } else {
+          console.log("[CompanyEnrichment] Fetched from API and cached");
+        }
+      } else {
+        setError(result.error || "Entreprise non trouvée");
+      }
+    });
+  };
+
+  const handleSelect = (company: EnrichedCompanyData) => {
     setSelectedCompany(company);
     setSearchQuery("");
+    setSearchResults([]);
     onCompanySelect?.(company);
   };
 
@@ -104,24 +122,46 @@ export function CompanyEnrichment({ onCompanySelect, className }: CompanyEnrichm
             type="text"
             placeholder="Rechercher par SIREN ou nom..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setError(null);
+            }}
             className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] focus:outline-none focus:border-[var(--accent)]"
           />
-          {isSearching && (
+          {(isSearching || isPending) && (
             <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--accent)] animate-spin" />
           )}
         </div>
 
-        {/* Search Results */}
+        {/* SIREN Enrichment Button - Manual trigger only */}
+        {isSirenQuery && !isPending && (
+          <Button
+            onClick={handleEnrich}
+            className="w-full btn-gold gap-2"
+          >
+            <Search className="w-4 h-4" />
+            Enrichir le SIREN {searchQuery}
+          </Button>
+        )}
+
+        {/* Error Message */}
+        {error && (
+          <div className="flex items-center gap-2 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            {error}
+          </div>
+        )}
+
+        {/* Search Results from Cache */}
         <AnimatePresence>
-          {results.length > 0 && (
+          {searchResults.length > 0 && !selectedCompany && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               className="border border-[var(--border)] rounded-lg overflow-hidden bg-[var(--background-secondary)]"
             >
-              {results.map((company) => (
+              {searchResults.map((company) => (
                 <button
                   key={company.siren}
                   onClick={() => handleSelect(company)}
@@ -138,6 +178,11 @@ export function CompanyEnrichment({ onCompanySelect, className }: CompanyEnrichm
                       SIREN: {company.siren} • {company.sector}
                     </p>
                   </div>
+                  {company.isEnriched && (
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs">
+                      Enrichi
+                    </span>
+                  )}
                 </button>
               ))}
             </motion.div>
@@ -164,7 +209,7 @@ export function CompanyEnrichment({ onCompanySelect, className }: CompanyEnrichm
                 </div>
                 <span className="px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-medium flex items-center gap-1">
                   <Check className="w-3 h-3" />
-                  Vérifié
+                  {selectedCompany.isEnriched ? "Enrichi" : "Vérifié"}
                 </span>
               </div>
 
@@ -196,7 +241,11 @@ export function CompanyEnrichment({ onCompanySelect, className }: CompanyEnrichm
                 >
                   Modifier
                 </Button>
-                <Button size="sm" className="flex-1 btn-gold">
+                <Button 
+                  size="sm" 
+                  className="flex-1 btn-gold"
+                  onClick={() => onCompanySelect?.(selectedCompany)}
+                >
                   Enregistrer
                 </Button>
               </div>
@@ -205,11 +254,13 @@ export function CompanyEnrichment({ onCompanySelect, className }: CompanyEnrichm
         </AnimatePresence>
 
         {/* Hint text */}
-        {!selectedCompany && results.length === 0 && (
+        {!selectedCompany && searchResults.length === 0 && !isSirenQuery && (
           <p className="text-xs text-center text-[var(--foreground-muted)]">
             Recherchez par numéro SIREN ou nom d&apos;entreprise
             <br />
-            <span className="text-[var(--accent)]">Données Pappers (simulation)</span>
+            <span className="text-[var(--accent)]">
+              Données en cache + enrichissement à la demande
+            </span>
           </p>
         )}
       </CardContent>

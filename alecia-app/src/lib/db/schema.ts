@@ -144,6 +144,10 @@ export const companies = pgTable("companies", {
   // Media
   logoUrl: text("logo_url"),
   
+  // Enrichment tracking (cost control)
+  isEnriched: boolean("is_enriched").default(false),
+  lastEnrichedAt: timestamp("last_enriched_at"),
+  
   // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -249,6 +253,73 @@ export const documents = pgTable("documents", {
 });
 
 // =============================================================================
+// WEATHER CACHE TABLE - Max 2 API calls per day (Cost Control)
+// =============================================================================
+export const weatherCache = pgTable("weather_cache", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  locationKey: text("location_key").unique().notNull(), // e.g., "Paris,FR"
+  data: jsonb("data").$type<{
+    temp: number;
+    description: string;
+    icon: string;
+    humidity?: number;
+    windSpeed?: number;
+  }>(),
+  fetchedAt: timestamp("fetched_at").defaultNow(),
+});
+
+// =============================================================================
+// BUYER CRITERIA TABLE - For Deal Matchmaker SQL matching
+// =============================================================================
+export const buyerCriteria = pgTable("buyer_criteria", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  
+  // Linked to contact (buyer/investor)
+  contactId: uuid("contact_id").references(() => contacts.id).notNull(),
+  
+  // Target preferences
+  targetSectors: text("target_sectors").array(),
+  targetRegions: text("target_regions").array(),
+  
+  // Financial range preferences
+  minRevenue: integer("min_revenue"), // in euros
+  maxRevenue: integer("max_revenue"),
+  minEbitda: integer("min_ebitda"),
+  maxEbitda: integer("max_ebitda"),
+  
+  // Additional preferences
+  notes: text("notes"),
+  
+  // Timestamps
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// =============================================================================
+// VOICE NOTES TABLE - Stored in Vercel Blob
+// =============================================================================
+export const voiceNotes = pgTable("voice_notes", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  
+  // Relations (optional - can be linked to project or contact)
+  projectId: uuid("project_id").references(() => projects.id),
+  contactId: uuid("contact_id").references(() => contacts.id),
+  
+  // Storage
+  blobUrl: text("blob_url").notNull(), // Vercel Blob URL
+  
+  // Metadata
+  durationSeconds: integer("duration_seconds"),
+  transcription: text("transcription"), // Future: Whisper API
+  
+  // User who recorded
+  recordedBy: uuid("recorded_by").references(() => users.id),
+  
+  // Timestamps
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// =============================================================================
 // TYPE EXPORTS
 // =============================================================================
 export type User = typeof users.$inferSelect;
@@ -277,6 +348,15 @@ export type NewProjectEvent = typeof projectEvents.$inferInsert;
 
 export type Document = typeof documents.$inferSelect;
 export type NewDocument = typeof documents.$inferInsert;
+
+export type WeatherCache = typeof weatherCache.$inferSelect;
+export type NewWeatherCache = typeof weatherCache.$inferInsert;
+
+export type BuyerCriteria = typeof buyerCriteria.$inferSelect;
+export type NewBuyerCriteria = typeof buyerCriteria.$inferInsert;
+
+export type VoiceNote = typeof voiceNotes.$inferSelect;
+export type NewVoiceNote = typeof voiceNotes.$inferInsert;
 
 // =============================================================================
 // ENUMS (for reference/validation)

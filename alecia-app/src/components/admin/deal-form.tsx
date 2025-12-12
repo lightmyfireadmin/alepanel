@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,56 +17,74 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2, AlertCircle, CheckCircle } from "lucide-react";
 import { SECTORS, REGIONS, MANDATE_TYPES } from "@/lib/db/schema";
+import { dealSchema, type DealFormData } from "@/lib/validations/forms";
 
 interface DealFormProps {
   mode: "create" | "edit";
-  initialData?: {
-    id?: string;
-    clientName?: string;
-    clientLogo?: string;
-    acquirerName?: string;
-    acquirerLogo?: string;
-    sector?: string;
-    region?: string;
-    year?: number;
-    mandateType?: string;
-    description?: string;
-    isPriorExperience?: boolean;
-  };
+  initialData?: Partial<DealFormData> & { id?: string };
 }
 
 export function DealForm({ mode, initialData = {} }: DealFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    clientName: initialData.clientName || "",
-    clientLogo: initialData.clientLogo || "",
-    acquirerName: initialData.acquirerName || "",
-    acquirerLogo: initialData.acquirerLogo || "",
-    sector: initialData.sector || "",
-    region: initialData.region || "",
-    year: initialData.year || new Date().getFullYear(),
-    mandateType: initialData.mandateType || "",
-    description: initialData.description || "",
-    isPriorExperience: initialData.isPriorExperience || false,
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<DealFormData>({
+    resolver: zodResolver(dealSchema),
+    defaultValues: {
+      clientName: initialData.clientName || "",
+      clientLogo: initialData.clientLogo || "",
+      acquirerName: initialData.acquirerName || "",
+      acquirerLogo: initialData.acquirerLogo || "",
+      sector: initialData.sector as typeof SECTORS[number] | undefined,
+      region: initialData.region as typeof REGIONS[number] | "" | undefined,
+      year: initialData.year || new Date().getFullYear(),
+      mandateType: initialData.mandateType as typeof MANDATE_TYPES[number] | undefined,
+      description: initialData.description || "",
+      isPriorExperience: initialData.isPriorExperience || false,
+    },
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: DealFormData) => {
     setIsLoading(true);
+    setSubmitError(null);
+    setSubmitSuccess(false);
 
-    // TODO: Implement actual API call when DB is connected
-    console.log("Form submitted:", formData);
+    try {
+      // TODO: Replace with actual server action when implemented
+      console.log("Form submitted with validated data:", data);
 
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Simulate API delay
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    setIsLoading(false);
-    router.push("/admin/deals");
-    router.refresh();
+      setSubmitSuccess(true);
+      
+      setTimeout(() => {
+        router.push("/admin/deals");
+        router.refresh();
+      }, 500);
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error ? error.message : "Une erreur est survenue"
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  // Watch values for controlled selects
+  const sectorValue = watch("sector");
+  const regionValue = watch("region");
+  const mandateTypeValue = watch("mandateType");
 
   return (
     <div className="space-y-6">
@@ -87,7 +107,22 @@ export function DealForm({ mode, initialData = {} }: DealFormProps) {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit}>
+      {/* Success/Error Messages */}
+      {submitSuccess && (
+        <div className="flex items-center gap-2 p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+          <CheckCircle className="w-5 h-5" />
+          <span>Opération enregistrée avec succès !</span>
+        </div>
+      )}
+
+      {submitError && (
+        <div className="flex items-center gap-2 p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400">
+          <AlertCircle className="w-5 h-5" />
+          <span>{submitError}</span>
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Client Info */}
           <Card className="bg-[var(--card)] border-[var(--border)]">
@@ -101,14 +136,15 @@ export function DealForm({ mode, initialData = {} }: DealFormProps) {
                 </Label>
                 <Input
                   id="clientName"
-                  value={formData.clientName}
-                  onChange={(e) =>
-                    setFormData({ ...formData, clientName: e.target.value })
-                  }
-                  required
+                  {...register("clientName")}
                   placeholder="Ex: SAFE GROUPE"
-                  className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]"
+                  className={`bg-[var(--input)] border-[var(--border)] text-[var(--foreground)] ${
+                    errors.clientName ? "border-red-500" : ""
+                  }`}
                 />
+                {errors.clientName && (
+                  <p className="text-red-400 text-sm">{errors.clientName.message}</p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="clientLogo" className="text-[var(--foreground)]">
@@ -116,13 +152,15 @@ export function DealForm({ mode, initialData = {} }: DealFormProps) {
                 </Label>
                 <Input
                   id="clientLogo"
-                  value={formData.clientLogo}
-                  onChange={(e) =>
-                    setFormData({ ...formData, clientLogo: e.target.value })
-                  }
+                  {...register("clientLogo")}
                   placeholder="https://..."
-                  className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]"
+                  className={`bg-[var(--input)] border-[var(--border)] text-[var(--foreground)] ${
+                    errors.clientLogo ? "border-red-500" : ""
+                  }`}
                 />
+                {errors.clientLogo && (
+                  <p className="text-red-400 text-sm">{errors.clientLogo.message}</p>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -139,10 +177,7 @@ export function DealForm({ mode, initialData = {} }: DealFormProps) {
                 </Label>
                 <Input
                   id="acquirerName"
-                  value={formData.acquirerName}
-                  onChange={(e) =>
-                    setFormData({ ...formData, acquirerName: e.target.value })
-                  }
+                  {...register("acquirerName")}
                   placeholder="Ex: Dogs Security"
                   className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]"
                 />
@@ -153,10 +188,7 @@ export function DealForm({ mode, initialData = {} }: DealFormProps) {
                 </Label>
                 <Input
                   id="acquirerLogo"
-                  value={formData.acquirerLogo}
-                  onChange={(e) =>
-                    setFormData({ ...formData, acquirerLogo: e.target.value })
-                  }
+                  {...register("acquirerLogo")}
                   placeholder="https://..."
                   className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]"
                 />
@@ -173,12 +205,12 @@ export function DealForm({ mode, initialData = {} }: DealFormProps) {
               <div className="space-y-2">
                 <Label className="text-[var(--foreground)]">Secteur *</Label>
                 <Select
-                  value={formData.sector}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, sector: value })
-                  }
+                  value={sectorValue}
+                  onValueChange={(value) => setValue("sector", value as typeof SECTORS[number])}
                 >
-                  <SelectTrigger className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]">
+                  <SelectTrigger className={`bg-[var(--input)] border-[var(--border)] text-[var(--foreground)] ${
+                    errors.sector ? "border-red-500" : ""
+                  }`}>
                     <SelectValue placeholder="Sélectionner un secteur" />
                   </SelectTrigger>
                   <SelectContent className="bg-[var(--background-secondary)] border-[var(--border)]">
@@ -189,14 +221,15 @@ export function DealForm({ mode, initialData = {} }: DealFormProps) {
                     ))}
                   </SelectContent>
                 </Select>
+                {errors.sector && (
+                  <p className="text-red-400 text-sm">{errors.sector.message}</p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label className="text-[var(--foreground)]">Région</Label>
                 <Select
-                  value={formData.region}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, region: value })
-                  }
+                  value={regionValue || ""}
+                  onValueChange={(value) => setValue("region", value as typeof REGIONS[number] | "")}
                 >
                   <SelectTrigger className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]">
                     <SelectValue placeholder="Sélectionner une région" />
@@ -215,25 +248,26 @@ export function DealForm({ mode, initialData = {} }: DealFormProps) {
                   <Label className="text-[var(--foreground)]">Année *</Label>
                   <Input
                     type="number"
-                    value={formData.year}
-                    onChange={(e) =>
-                      setFormData({ ...formData, year: parseInt(e.target.value) })
-                    }
+                    {...register("year", { valueAsNumber: true })}
                     min={2000}
                     max={new Date().getFullYear()}
-                    required
-                    className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]"
+                    className={`bg-[var(--input)] border-[var(--border)] text-[var(--foreground)] ${
+                      errors.year ? "border-red-500" : ""
+                    }`}
                   />
+                  {errors.year && (
+                    <p className="text-red-400 text-sm">{errors.year.message}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label className="text-[var(--foreground)]">Type de mandat *</Label>
                   <Select
-                    value={formData.mandateType}
-                    onValueChange={(value) =>
-                      setFormData({ ...formData, mandateType: value })
-                    }
+                    value={mandateTypeValue}
+                    onValueChange={(value) => setValue("mandateType", value as typeof MANDATE_TYPES[number])}
                   >
-                    <SelectTrigger className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]">
+                    <SelectTrigger className={`bg-[var(--input)] border-[var(--border)] text-[var(--foreground)] ${
+                      errors.mandateType ? "border-red-500" : ""
+                    }`}>
                       <SelectValue placeholder="Sélectionner" />
                     </SelectTrigger>
                     <SelectContent className="bg-[var(--background-secondary)] border-[var(--border)]">
@@ -244,6 +278,9 @@ export function DealForm({ mode, initialData = {} }: DealFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  {errors.mandateType && (
+                    <p className="text-red-400 text-sm">{errors.mandateType.message}</p>
+                  )}
                 </div>
               </div>
             </CardContent>
@@ -261,10 +298,7 @@ export function DealForm({ mode, initialData = {} }: DealFormProps) {
                 </Label>
                 <Textarea
                   id="description"
-                  value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
+                  {...register("description")}
                   rows={4}
                   placeholder="Décrivez l'opération..."
                   className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)] resize-none"
@@ -274,10 +308,7 @@ export function DealForm({ mode, initialData = {} }: DealFormProps) {
                 <input
                   type="checkbox"
                   id="isPriorExperience"
-                  checked={formData.isPriorExperience}
-                  onChange={(e) =>
-                    setFormData({ ...formData, isPriorExperience: e.target.checked })
-                  }
+                  {...register("isPriorExperience")}
                   className="rounded"
                 />
                 <Label htmlFor="isPriorExperience" className="text-[var(--foreground-muted)]">
