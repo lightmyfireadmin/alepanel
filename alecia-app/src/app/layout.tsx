@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Playfair_Display } from "next/font/google";
 import { SkipToMain } from "@/components/layout";
+import { Providers } from "@/components/Providers";
+import { getMessages, getLocale } from "next-intl/server";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -52,19 +54,25 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
-    <html lang="fr" className="dark">
+    <html lang={locale} suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} antialiased bg-[var(--background)] text-[var(--foreground)]`}
       >
-        <SkipToMain />
-        {children}
+        <Providers locale={locale} messages={messages}>
+          <SkipToMain />
+          {children}
+        </Providers>
       </body>
     </html>
   );
 }
+

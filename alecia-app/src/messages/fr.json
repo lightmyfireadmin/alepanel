@@ -11,28 +11,71 @@
     "team": "Équipe",
     "news": "Actualités",
     "careers": "Nous rejoindre",
-    "contact": "Contact"
+    "contact": "Contact",
+    "cession": "Cession & transmission",
+    "fundraising": "Levée de fonds",
+    "acquisition": "Acquisition",
+    "lightMode": "Mode clair",
+    "darkMode": "Mode sombre",
+    "switchToEnglish": "English",
+    "switchToFrench": "Français"
   },
   "hero": {
-    "title": "Vos ambitions, notre engagement",
-    "subtitle": "Conseil en fusion-acquisition pour PME et ETI. Valorisation €5M-€50M.",
+    "tagline": "Conseil en fusion-acquisition",
+    "titlePart1": "Vos ambitions,",
+    "titlePart2": "notre engagement",
+    "subtitle": "Conseil en fusion-acquisition pour PME et ETI. Valorisation €5M-€50M. Cession, acquisition, levée de fonds.",
     "ctaSeller": "Vous êtes cédant",
     "ctaBuyer": "Vous êtes acquéreur"
   },
+  "stats": {
+    "operations": "Opérations",
+    "experts": "Associés experts",
+    "offices": "Bureaux en France"
+  },
+  "provider": {
+    "titlePart1": "Plus qu'un simple",
+    "titlePart2": "prestataire",
+    "paragraph1": "Vos décisions stratégiques nécessitent plus qu'un simple accompagnement. Chez alecia, nous nous engageons à vos côtés à chaque étape, avec la même détermination qu'un entrepreneur investi dans sa propre réussite.",
+    "paragraph2": "Vos opérations sont menées avec soin par des associés dédiés, qui orchestrent la construction des informations clés, identifient les acquéreurs, investisseurs ou financeurs, et coordonnent l'ensemble des conseils impliqués."
+  },
   "expertises": {
     "title": "Nos expertises",
+    "subtitle": "Vos projets méritent plus qu'une simple expertise. Avec une expérience pointue dans les transactions et opérations financières.",
+    "discoverCta": "Découvrir nos expertises",
     "cession": {
       "title": "Cession & transmission",
       "description": "La cession de votre entreprise est un moment décisif, qui requiert une préparation et une exécution irréprochables."
     },
     "fundraising": {
       "title": "Levée de fonds & financement",
-      "description": "Que ce soit pour financer votre croissance, investir dans de nouveaux projets, restructurer votre capital."
+      "description": "Que ce soit pour financer votre croissance ou restructurer votre capital, nous vous accompagnons."
     },
     "acquisition": {
       "title": "Acquisition",
-      "description": "L'acquisition d'une entreprise est un levier stratégique majeur pour accélérer la croissance de votre société."
+      "description": "L'acquisition d'une entreprise est un levier stratégique majeur pour accélérer la croissance."
     }
+  },
+  "regional": {
+    "titlePart1": "Un ancrage",
+    "titlePart2": "régional",
+    "titlePart3": "fort",
+    "subtitle": "Notre présence multi-régionale et nos parcours entrepreneuriaux nous permettent de comprendre les enjeux et la réalité du quotidien des dirigeants."
+  },
+  "valuation": {
+    "titlePart1": "Quelle est la",
+    "titlePart2": "valeur",
+    "titlePart3": "de votre entreprise ?",
+    "description": "Obtenez une première estimation gratuite basée sur les multiples de votre secteur. Notre outil utilise les données de transactions comparables pour vous donner un ordre de grandeur.",
+    "benefit1": "Estimation en 30 secondes",
+    "benefit2": "Basée sur les multiples sectoriels",
+    "benefit3": "100% confidentiel"
+  },
+  "cta": {
+    "titlePart1": "Prêt à concrétiser",
+    "titlePart2": "votre projet",
+    "subtitle": "Contactez l'un de nos associés pour une première discussion confidentielle.",
+    "button": "Prendre contact"
   },
   "operations": {
     "title": "Opérations",
@@ -48,7 +91,14 @@
   },
   "team": {
     "title": "Notre équipe",
-    "subtitle": "La variété de nos parcours et de nos expertises fait la richesse d'alecia"
+    "subtitle": "La variété de nos parcours et de nos expertises fait la richesse d'alecia",
+    "hiringTitle": "Nous recrutons",
+    "hiringSubtitle": "Rejoignez une équipe dynamique et participez à des opérations passionnantes.",
+    "hiringCta": "Voir nos offres d'emploi",
+    "roles": {
+      "foundingPartner": "Associé fondateur",
+      "analyst": "Analyste"
+    }
   },
   "contact": {
     "title": "Contactez-nous",

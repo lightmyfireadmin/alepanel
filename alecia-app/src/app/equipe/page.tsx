@@ -8,14 +8,14 @@ export const metadata: Metadata = {
     "Découvrez l'équipe alecia. Associés fondateurs et analystes experts en fusion-acquisition pour PME et ETI.",
 };
 
-// Mock data - Replace with DB queries when Neon is connected
+// Team data with local asset paths
 const teamMembers = [
   {
     id: "1",
     slug: "gregory-colin",
     name: "Grégory Colin",
     role: "Associé fondateur",
-    photo: "https://cdn.prod.website-files.com/660ec81a224042420ed56e8f/670cc822259a93423363d2a5_GC%201%20-%20cropped.jpg",
+    photo: "/assets/Equipe_Alecia/GC_1_-_cropped_p1080.jpg",
     linkedinUrl: "https://www.linkedin.com/in/gregorycolin/",
   },
   {
@@ -23,7 +23,7 @@ const teamMembers = [
     slug: "christophe-berthon",
     name: "Christophe Berthon",
     role: "Associé fondateur",
-    photo: "https://cdn.prod.website-files.com/660ec81a224042420ed56e8f/670cc818526b707d50632ca0_CB%201%20-%20cropped%20-%20alt.jpg",
+    photo: "/assets/Equipe_Alecia/CB_1_-_cropped_-_alt_p1080.jpg",
     linkedinUrl: "https://www.linkedin.com/in/christophe-berthon-843924118/",
   },
   {
@@ -31,7 +31,7 @@ const teamMembers = [
     slug: "martin-egasse",
     name: "Martin Egasse",
     role: "Associé fondateur",
-    photo: "https://cdn.prod.website-files.com/660ec81a224042420ed56e8f/670cc80c259a93423363c243_ME%202%20-%20cropped%20-%20alt.jpg",
+    photo: "/assets/Equipe_Alecia/ME_2_-_cropped_-_alt_p1080.jpg",
     linkedinUrl: "https://www.linkedin.com/in/martinegasse/",
   },
   {
@@ -39,7 +39,7 @@ const teamMembers = [
     slug: "tristan-cossec",
     name: "Tristan Cossec",
     role: "Associé fondateur",
-    photo: "https://cdn.prod.website-files.com/660ec81a224042420ed56e8f/670cc7ff3679607f0341d0c9_TC%202.jpg",
+    photo: "/assets/Equipe_Alecia/TC_2_p1080.jpg",
     linkedinUrl: "https://www.linkedin.com/in/tristan-cossec-3b5a0247/",
   },
   {
@@ -47,7 +47,7 @@ const teamMembers = [
     slug: "serge-de-fay",
     name: "Serge de Faÿ",
     role: "Associé fondateur",
-    photo: "https://cdn.prod.website-files.com/660ec81a224042420ed56e8f/670cbe6a458eb6b182fd1324_SF%202.jpg",
+    photo: "/assets/Equipe_Alecia/SF_2_p1080.jpg",
     linkedinUrl: "https://www.linkedin.com/in/serge-de-fa%C3%BF-09713555/",
   },
   {
@@ -55,7 +55,7 @@ const teamMembers = [
     slug: "jerome-berthiau",
     name: "Jérôme Berthiau",
     role: "Associé fondateur",
-    photo: "https://cdn.prod.website-files.com/660ec81a224042420ed56e8f/670cbe16c830e982d28ac035_JB%201%20-%20cropped%20-%20alt.jpg",
+    photo: "/assets/Equipe_Alecia/JB_1_-_cropped_-_alt_p1080.jpg",
     linkedinUrl: "https://www.linkedin.com/in/jeromeberthiau/",
   },
   {
@@ -63,7 +63,7 @@ const teamMembers = [
     slug: "louise-pini",
     name: "Louise Pini",
     role: "Analyste",
-    photo: "https://cdn.prod.website-files.com/660ec81a224042420ed56e8f/670cbdffb4676b7f1dd5e9ba_LP%20(2)%20-%20cropped.jpg",
+    photo: "/assets/Equipe_Alecia/LP__2__-_cropped.jpg",
     linkedinUrl: "https://www.linkedin.com/in/louise-p-184b7a160/",
   },
   {
@@ -71,7 +71,7 @@ const teamMembers = [
     slug: "mickael-furet",
     name: "Mickael Furet",
     role: "Analyste",
-    photo: "https://cdn.prod.website-files.com/660ec81a224042420ed56e8f/670cbdcc49a653633445696e_MF.jpg",
+    photo: "/assets/Equipe_Alecia/MF_p1080.jpg",
     linkedinUrl: "https://www.linkedin.com/in/mickael-furet/",
   },
 ];

@@ -1,12 +1,8 @@
 import { Navbar, Footer } from "@/components/layout";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ContactForm } from "@/components/features";
 import Image from "next/image";
 import type { Metadata } from "next";
-import { MapPin, Phone, Mail } from "lucide-react";
+import { MapPin, Mail } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Contact | Nous contacter",
@@ -18,25 +14,21 @@ const offices = [
   {
     name: "Île-de-France",
     city: "Paris",
-    phone: "+33 1 XX XX XX XX",
     image: "https://cdn.prod.website-files.com/65cc8a57baba85b21d14d806/6671f1a584be578e430426a2_Paris%20-%20compressed.jpg",
   },
   {
     name: "Sud Est",
     city: "Nice",
-    phone: "+33 4 XX XX XX XX",
     image: "https://cdn.prod.website-files.com/65cc8a57baba85b21d14d806/6671f1a6435ea537433f7da0_Nice%20-%20compressed.jpg",
   },
   {
     name: "Auvergne Rhône-Alpes",
     city: "Lyon",
-    phone: "+33 4 XX XX XX XX",
     image: "https://cdn.prod.website-files.com/65cc8a57baba85b21d14d806/6671f067bb37caba791399b4_lyon%20-%20compressed.jpg",
   },
   {
     name: "Grand Ouest",
     city: "Nantes",
-    phone: "+33 2 XX XX XX XX",
     image: "https://cdn.prod.website-files.com/65cc8a57baba85b21d14d806/6671f1a7bc2a5f426546faa2_Grand%20Ouest%20-%20compressed.jpg",
   },
 ];
@@ -66,81 +58,7 @@ export default function ContactPage() {
           <div className="max-w-6xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-12">
               {/* Contact Form */}
-              <Card className="bg-[var(--card)] border-[var(--border)]">
-                <CardHeader>
-                  <CardTitle className="text-[var(--foreground)] font-[family-name:var(--font-playfair)]">
-                    Envoyez-nous un message
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <form className="space-y-6">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="firstName" className="text-[var(--foreground)]">
-                          Prénom
-                        </Label>
-                        <Input
-                          id="firstName"
-                          placeholder="Jean"
-                          className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="lastName" className="text-[var(--foreground)]">
-                          Nom
-                        </Label>
-                        <Input
-                          id="lastName"
-                          placeholder="Dupont"
-                          className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]"
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email" className="text-[var(--foreground)]">
-                        Email
-                      </Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="jean.dupont@entreprise.fr"
-                        className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="company" className="text-[var(--foreground)]">
-                        Entreprise
-                      </Label>
-                      <Input
-                        id="company"
-                        placeholder="Nom de votre entreprise"
-                        className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="message" className="text-[var(--foreground)]">
-                        Message
-                      </Label>
-                      <Textarea
-                        id="message"
-                        placeholder="Décrivez votre projet..."
-                        rows={5}
-                        className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)] resize-none"
-                      />
-                    </div>
-                    <Button type="submit" className="btn-gold w-full rounded-lg">
-                      Envoyer
-                    </Button>
-                    <p className="text-xs text-[var(--foreground-muted)] text-center">
-                      En soumettant ce formulaire, vous acceptez notre{" "}
-                      <a href="/politique-de-confidentialite" className="underline">
-                        politique de confidentialité
-                      </a>
-                      .
-                    </p>
-                  </form>
-                </CardContent>
-              </Card>
+              <ContactForm />
 
               {/* Contact Info */}
               <div className="space-y-8">
@@ -171,18 +89,12 @@ export default function ContactPage() {
                         key={office.name}
                         className="p-4 bg-[var(--background-secondary)] rounded-lg border border-[var(--border)]"
                       >
-                        <h3 className="text-[var(--foreground)] font-semibold mb-2">
+                        <h3 className="text-[var(--foreground)] font-semibold mb-1">
                           {office.name}
                         </h3>
-                        <div className="space-y-1 text-sm text-[var(--foreground-muted)]">
-                          <div className="flex items-center gap-2">
-                            <MapPin className="w-4 h-4" />
-                            {office.city}
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Phone className="w-4 h-4" />
-                            {office.phone}
-                          </div>
+                        <div className="flex items-center gap-2 text-sm text-[var(--foreground-muted)]">
+                          <MapPin className="w-4 h-4" />
+                          {office.city}
                         </div>
                       </div>
                     ))}

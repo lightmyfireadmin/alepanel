@@ -350,3 +350,201 @@ DELETE FROM team_members WHERE id = $1;
 | `NEXTAUTH_SECRET`       | Session encryption key      |
 | `NEXTAUTH_URL`          | Base URL for auth callbacks |
 | `BLOB_READ_WRITE_TOKEN` | Vercel Blob storage token   |
+
+---
+
+## Public Website Pages
+
+### `/` - Home Page
+
+**Purpose**: Main landing page with hero, stats, and CTAs.
+
+| Section        | Features                          |
+| -------------- | --------------------------------- |
+| Hero           | Animated headline, CTA buttons    |
+| Stats Counter  | Animated counters for key metrics |
+| Expertises     | Service cards with icons          |
+| Regional Map   | Interactive office locations      |
+| Valuation Tool | Free company valuation estimator  |
+| Team Preview   | Featured team members             |
+
+**i18n**: Full French/English support with cookie-based locale switching.
+
+---
+
+### `/expertises` - Services Page
+
+**Purpose**: Detailed service descriptions for M&A offerings.
+
+| Section        | Features                             |
+| -------------- | ------------------------------------ |
+| Service Cards  | Cession, Levée de fonds, Acquisition |
+| Process Steps  | Numbered workflow for each service   |
+| Key Challenges | Bullet points with checkmarks        |
+
+---
+
+### `/operations` - Deal History
+
+**Purpose**: Completed M&A operations showcase.
+
+| Feature          | Description                        |
+| ---------------- | ---------------------------------- |
+| Deal Grid        | Cards with client/acquirer logos   |
+| Filters          | Sector, Region, Year, Mandate Type |
+| Prior Experience | Asterisk indicator for past deals  |
+
+---
+
+### `/equipe` - Team Page
+
+**Purpose**: Team member profiles and bios.
+
+| Feature    | Description                    |
+| ---------- | ------------------------------ |
+| Team Grid  | Photo cards with name and role |
+| LinkedIn   | Direct profile links           |
+| Hiring CTA | Link to careers page           |
+
+---
+
+### `/actualites` - News/Blog
+
+**Purpose**: Press releases and articles.
+
+| Feature      | Description                          |
+| ------------ | ------------------------------------ |
+| Article Grid | Cover images, titles, excerpts       |
+| Categories   | Communiqué, Article, Revue de presse |
+| Newsletter   | Subscription form                    |
+
+---
+
+### `/contact` - Contact Page
+
+**Purpose**: Contact form and office information.
+
+| Feature      | Description                        |
+| ------------ | ---------------------------------- |
+| Contact Form | Validated form with API submission |
+| Office Grid  | Regional office locations          |
+| Privacy Link | GDPR consent notice                |
+
+**API**: `POST /api/contact` - Form submission with validation.
+
+---
+
+### `/nous-rejoindre` - Careers Page
+
+**Purpose**: Job listings and company culture.
+
+| Section         | Features                         |
+| --------------- | -------------------------------- |
+| Values          | Team icons with descriptions     |
+| Open Positions  | Job cards with requirements      |
+| Spontaneous App | CTA for unsolicited applications |
+
+---
+
+## UX/UI Enhancements
+
+### Theme System
+
+| Feature          | Description                         |
+| ---------------- | ----------------------------------- |
+| Day/Night Toggle | Sun/Moon button in Navbar and Admin |
+| CSS Variables    | Full light/dark color palette       |
+| Persistence      | Theme saved via next-themes         |
+
+### Internationalization (i18n)
+
+| Feature           | Description                                    |
+| ----------------- | ---------------------------------------------- |
+| Cookie-based      | `NEXT_LOCALE` cookie for persistence           |
+| Languages         | French (default), English                      |
+| Translation Files | `src/messages/fr.json`, `en.json`              |
+| Components        | Navbar, Home page, forms use `useTranslations` |
+
+### Accessibility
+
+| Feature          | Description                           |
+| ---------------- | ------------------------------------- |
+| Skip-to-Content  | Hidden link for keyboard navigation   |
+| ARIA Labels      | All interactive elements labeled      |
+| Focus Indicators | Visible focus rings on all clickables |
+| Screen Reader    | Semantic HTML structure               |
+
+### New Components
+
+| Component       | Purpose                                     |
+| --------------- | ------------------------------------------- |
+| `ScrollToTop`   | Floating button, appears after 400px scroll |
+| `CookieBanner`  | GDPR consent with localStorage persistence  |
+| `ToastProvider` | Global notification system (4 types)        |
+| `Breadcrumbs`   | Navigation trail for nested pages           |
+| `ContactForm`   | Validated form with loading/success states  |
+| `Skeletons`     | Loading placeholders for grids              |
+
+### Error Handling
+
+| Page         | Description                             |
+| ------------ | --------------------------------------- |
+| `/not-found` | Custom 404 with branding and navigation |
+| Error toasts | User-friendly error messages            |
+
+---
+
+## Build Information
+
+```
+Next.js 16.0.10 (Turbopack)
+25 Routes (23 dynamic, 2 static)
+TypeScript strict mode
+```
+
+**Static Routes**: `/robots.txt`, `/sitemap.xml`
+
+**Dynamic Routes**: All pages (i18n middleware)
+
+---
+
+## API Endpoints
+
+| Endpoint                  | Method   | Purpose                 | Rate Limit |
+| ------------------------- | -------- | ----------------------- | ---------- |
+| `/api/auth/[...nextauth]` | GET/POST | Authentication          | -          |
+| `/api/contact`            | POST     | Contact form submission | 5/min      |
+| `/api/newsletter`         | POST     | Newsletter subscription | 3/min      |
+
+---
+
+## Utilities & Hooks
+
+| Utility            | File                            | Description                  |
+| ------------------ | ------------------------------- | ---------------------------- |
+| CSV Export         | `lib/csv-export.ts`             | Export data to CSV files     |
+| Rate Limiter       | `lib/rate-limit.ts`             | In-memory request throttling |
+| Keyboard Shortcuts | `hooks/useKeyboardShortcuts.ts` | Global keyboard handler      |
+
+---
+
+## Component Library
+
+### Features (`components/features/`)
+
+| Component        | Purpose                |
+| ---------------- | ---------------------- |
+| `CommandPalette` | ⌘K search modal        |
+| `ContactForm`    | Validated contact form |
+| `NewsletterForm` | Email subscription     |
+| `ScrollToTop`    | Floating scroll button |
+| `CookieBanner`   | GDPR consent           |
+| `Breadcrumbs`    | Navigation trail       |
+
+### UI (`components/ui/`)
+
+| Component       | Purpose              |
+| --------------- | -------------------- |
+| `ToastProvider` | Global notifications |
+| `Skeletons`     | Loading placeholders |
+| `Loading`       | Spinner and progress |

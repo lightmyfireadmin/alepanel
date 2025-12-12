@@ -7,47 +7,50 @@ import { AnimatedCounter, RegionalMap, ValuationEstimator } from "@/components/f
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Building2, TrendingUp, Users } from "lucide-react";
+import { useTranslations } from "next-intl";
 
-const expertises = [
-  {
-    id: "cession",
-    title: "Cession & transmission",
-    description: "La cession de votre entreprise est un moment décisif, qui requiert une préparation et une exécution irréprochables.",
-    icon: Building2,
-  },
-  {
-    id: "levee-de-fonds",
-    title: "Levée de fonds & financement",
-    description: "Que ce soit pour financer votre croissance ou restructurer votre capital, nous vous accompagnons.",
-    icon: TrendingUp,
-  },
-  {
-    id: "acquisition",
-    title: "Acquisition",
-    description: "L'acquisition d'une entreprise est un levier stratégique majeur pour accélérer la croissance.",
-    icon: Users,
-  },
-];
-
-const stats = [
-  { value: 50, suffix: "+", label: "Opérations" },
-  { value: 8, label: "Associés experts" },
-  { value: 4, label: "Bureaux en France" },
-];
-
-// Team members from Equipe_Alecia.md
+// Team members - names are not translated
 const teamMembers = [
-  { name: "Grégory Colin", initials: "GC", role: "Associé fondateur" },
-  { name: "Christophe Berthon", initials: "CB", role: "Associé fondateur" },
-  { name: "Martin Egasse", initials: "ME", role: "Associé fondateur" },
-  { name: "Tristan Cossec", initials: "TC", role: "Associé fondateur" },
-  { name: "Serge de Faÿ", initials: "SF", role: "Associé fondateur" },
-  { name: "Jérôme Berthiau", initials: "JB", role: "Associé fondateur" },
-  { name: "Louise Pini", initials: "LP", role: "Analyste" },
-  { name: "Mickael Furet", initials: "MF", role: "Analyste" },
+  { name: "Grégory Colin", initials: "GC" },
+  { name: "Christophe Berthon", initials: "CB" },
+  { name: "Martin Egasse", initials: "ME" },
+  { name: "Tristan Cossec", initials: "TC" },
+  { name: "Serge de Faÿ", initials: "SF" },
+  { name: "Jérôme Berthiau", initials: "JB" },
+  { name: "Louise Pini", initials: "LP" },
+  { name: "Mickael Furet", initials: "MF" },
 ];
 
 export default function Home() {
+  const t = useTranslations();
+
+  const expertises = [
+    {
+      id: "cession",
+      title: t("expertises.cession.title"),
+      description: t("expertises.cession.description"),
+      icon: Building2,
+    },
+    {
+      id: "levee-de-fonds",
+      title: t("expertises.fundraising.title"),
+      description: t("expertises.fundraising.description"),
+      icon: TrendingUp,
+    },
+    {
+      id: "acquisition",
+      title: t("expertises.acquisition.title"),
+      description: t("expertises.acquisition.description"),
+      icon: Users,
+    },
+  ];
+
+  const stats = [
+    { value: 50, suffix: "+", label: t("stats.operations") },
+    { value: 8, label: t("stats.experts") },
+    { value: 4, label: t("stats.offices") },
+  ];
+
   return (
     <>
       <Navbar />
@@ -66,17 +69,16 @@ export default function Home() {
             className="relative z-10 max-w-4xl mx-auto"
           >
             <p className="text-[var(--accent)] font-medium tracking-widest uppercase mb-4 text-sm">
-              Conseil en fusion-acquisition
+              {t("hero.tagline")}
             </p>
             
             <h1 className="font-[family-name:var(--font-playfair)] text-5xl md:text-7xl font-semibold text-[var(--foreground)] mb-6 leading-tight">
-              Vos ambitions,{" "}
-              <span className="text-gradient-gold">notre engagement</span>
+              {t("hero.titlePart1")}{" "}
+              <span className="text-gradient-gold">{t("hero.titlePart2")}</span>
             </h1>
             
             <p className="text-xl text-[var(--foreground-muted)] max-w-2xl mx-auto mb-10">
-              Conseil en fusion-acquisition pour PME et ETI. Valorisation €5M-€50M. 
-              Cession, acquisition, levée de fonds.
+              {t("hero.subtitle")}
             </p>
             
             {/* Dual CTA */}
@@ -87,7 +89,7 @@ export default function Home() {
                 asChild
               >
                 <Link href="/contact?type=cedant">
-                  Vous êtes cédant
+                  {t("hero.ctaSeller")}
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>
               </Button>
@@ -98,7 +100,7 @@ export default function Home() {
                 asChild
               >
                 <Link href="/contact?type=acquereur">
-                  Vous êtes acquéreur
+                  {t("hero.ctaBuyer")}
                 </Link>
               </Button>
             </div>
@@ -157,17 +159,13 @@ export default function Home() {
                 viewport={{ once: true }}
               >
                 <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl font-semibold mb-6">
-                  Plus qu&apos;un simple <span className="text-gradient-gold">prestataire</span>
+                  {t("provider.titlePart1")} <span className="text-gradient-gold">{t("provider.titlePart2")}</span>
                 </h2>
                 <p className="text-[var(--foreground-muted)] text-lg leading-relaxed mb-6">
-                  Vos décisions stratégiques nécessitent plus qu&apos;un simple accompagnement. 
-                  Chez alecia, nous nous engageons à vos côtés à chaque étape, avec la même 
-                  détermination qu&apos;un entrepreneur investi dans sa propre réussite.
+                  {t("provider.paragraph1")}
                 </p>
                 <p className="text-[var(--foreground-muted)] text-lg leading-relaxed">
-                  Vos opérations sont menées avec soin par des associés dédiés, qui orchestrent 
-                  la construction des informations clés, identifient les acquéreurs, investisseurs 
-                  ou financeurs, et coordonnent l&apos;ensemble des conseils impliqués.
+                  {t("provider.paragraph2")}
                 </p>
               </motion.div>
               
@@ -210,10 +208,10 @@ export default function Home() {
               className="text-center mb-16"
             >
               <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl font-semibold mb-4">
-                Nos expertises
+                {t("expertises.title")}
               </h2>
               <p className="text-[var(--foreground-muted)] text-lg max-w-2xl mx-auto">
-                Vos projets méritent plus qu&apos;une simple expertise. Avec une expérience pointue dans les transactions et opérations financières.
+                {t("expertises.subtitle")}
               </p>
             </motion.div>
             
@@ -255,7 +253,7 @@ export default function Home() {
             >
               <Button variant="outline" size="lg" asChild className="border-[var(--border)] hover:border-[var(--accent)]">
                 <Link href="/expertises">
-                  Découvrir nos expertises
+                  {t("expertises.discoverCta")}
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </Link>
               </Button>
@@ -273,10 +271,10 @@ export default function Home() {
               className="text-center mb-12"
             >
               <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl font-semibold mb-4">
-                Un ancrage <span className="text-gradient-gold">régional</span> fort
+                {t("regional.titlePart1")} <span className="text-gradient-gold">{t("regional.titlePart2")}</span> {t("regional.titlePart3")}
               </h2>
               <p className="text-[var(--foreground-muted)] text-lg max-w-2xl mx-auto">
-                Notre présence multi-régionale et nos parcours entrepreneuriaux nous permettent de comprendre les enjeux et la réalité du quotidien des dirigeants.
+                {t("regional.subtitle")}
               </p>
             </motion.div>
             <RegionalMap />
@@ -293,23 +291,23 @@ export default function Home() {
                 viewport={{ once: true }}
               >
                 <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl font-semibold mb-6">
-                  Quelle est la <span className="text-gradient-gold">valeur</span> de votre entreprise ?
+                  {t("valuation.titlePart1")} <span className="text-gradient-gold">{t("valuation.titlePart2")}</span> {t("valuation.titlePart3")}
                 </h2>
                 <p className="text-[var(--foreground-muted)] text-lg mb-6">
-                  Obtenez une première estimation gratuite basée sur les multiples de votre secteur. Notre outil utilise les données de transactions comparables pour vous donner un ordre de grandeur.
+                  {t("valuation.description")}
                 </p>
                 <ul className="space-y-3 text-[var(--foreground-muted)]">
                   <li className="flex items-center gap-2">
                     <span className="w-2 h-2 bg-[var(--accent)] rounded-full" />
-                    Estimation en 30 secondes
+                    {t("valuation.benefit1")}
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="w-2 h-2 bg-[var(--accent)] rounded-full" />
-                    Basée sur les multiples sectoriels
+                    {t("valuation.benefit2")}
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="w-2 h-2 bg-[var(--accent)] rounded-full" />
-                    100% confidentiel
+                    {t("valuation.benefit3")}
                   </li>
                 </ul>
               </motion.div>
@@ -333,14 +331,14 @@ export default function Home() {
               viewport={{ once: true }}
             >
               <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl font-semibold mb-6">
-                Prêt à concrétiser <span className="text-gradient-gold">votre projet</span> ?
+                {t("cta.titlePart1")} <span className="text-gradient-gold">{t("cta.titlePart2")}</span> ?
               </h2>
               <p className="text-[var(--foreground-muted)] text-lg mb-10 max-w-2xl mx-auto">
-                Contactez l&apos;un de nos associés pour une première discussion confidentielle.
+                {t("cta.subtitle")}
               </p>
               <Button size="lg" className="btn-gold text-lg px-10 py-6 rounded-xl" asChild>
                 <Link href="/contact">
-                  Prendre contact
+                  {t("cta.button")}
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>
               </Button>

@@ -11,28 +11,71 @@
     "team": "Team",
     "news": "News",
     "careers": "Careers",
-    "contact": "Contact"
+    "contact": "Contact",
+    "cession": "Divestiture & Succession",
+    "fundraising": "Fundraising",
+    "acquisition": "Acquisition",
+    "lightMode": "Light mode",
+    "darkMode": "Dark mode",
+    "switchToEnglish": "English",
+    "switchToFrench": "Français"
   },
   "hero": {
-    "title": "Your ambitions, our commitment",
-    "subtitle": "M&A advisory for SMEs and mid-caps. Valuation €5M-€50M.",
+    "tagline": "M&A Advisory",
+    "titlePart1": "Your ambitions,",
+    "titlePart2": "our commitment",
+    "subtitle": "M&A advisory for SMEs and mid-caps. Valuation €5M-€50M. Sell-side, buy-side, fundraising.",
     "ctaSeller": "I'm selling",
     "ctaBuyer": "I'm acquiring"
   },
+  "stats": {
+    "operations": "Transactions",
+    "experts": "Expert partners",
+    "offices": "Offices in France"
+  },
+  "provider": {
+    "titlePart1": "More than a",
+    "titlePart2": "service provider",
+    "paragraph1": "Your strategic decisions require more than simple support. At alecia, we stand by your side at every stage, with the same determination as an entrepreneur invested in their own success.",
+    "paragraph2": "Your transactions are handled with care by dedicated partners who orchestrate the construction of key information, identify buyers, investors or lenders, and coordinate all advisors involved."
+  },
   "expertises": {
     "title": "Our expertise",
+    "subtitle": "Your projects deserve more than standard advice. With deep experience in financial transactions and operations.",
+    "discoverCta": "Discover our expertise",
     "cession": {
-      "title": "Divestiture & Transmission",
+      "title": "Divestiture & Succession",
       "description": "Selling your business is a decisive moment that requires flawless preparation and execution."
     },
     "fundraising": {
       "title": "Fundraising & Financing",
-      "description": "Whether to finance your growth, invest in new projects, or restructure your capital."
+      "description": "Whether to finance your growth or restructure your capital, we support you."
     },
     "acquisition": {
       "title": "Acquisition",
-      "description": "Acquiring a company is a major strategic lever to accelerate your company's growth."
+      "description": "Acquiring a company is a major strategic lever to accelerate growth."
     }
+  },
+  "regional": {
+    "titlePart1": "A strong",
+    "titlePart2": "regional",
+    "titlePart3": "presence",
+    "subtitle": "Our multi-regional presence and entrepreneurial backgrounds enable us to understand the challenges and daily reality of business leaders."
+  },
+  "valuation": {
+    "titlePart1": "What is the",
+    "titlePart2": "value",
+    "titlePart3": "of your company?",
+    "description": "Get a free initial estimate based on your sector multiples. Our tool uses comparable transaction data to give you an order of magnitude.",
+    "benefit1": "Estimate in 30 seconds",
+    "benefit2": "Based on sector multiples",
+    "benefit3": "100% confidential"
+  },
+  "cta": {
+    "titlePart1": "Ready to make",
+    "titlePart2": "your project",
+    "subtitle": "Contact one of our partners for an initial confidential discussion.",
+    "button": "Get in touch"
   },
   "operations": {
     "title": "Transactions",
@@ -48,7 +91,14 @@
   },
   "team": {
     "title": "Our team",
-    "subtitle": "The variety of our backgrounds and expertise is alecia's strength"
+    "subtitle": "The variety of our backgrounds and expertise is alecia's strength",
+    "hiringTitle": "We're hiring",
+    "hiringSubtitle": "Join a dynamic team and participate in exciting transactions.",
+    "hiringCta": "View job openings",
+    "roles": {
+      "foundingPartner": "Founding Partner",
+      "analyst": "Analyst"
+    }
   },
   "contact": {
     "title": "Contact us",

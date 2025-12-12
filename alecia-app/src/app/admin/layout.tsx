@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
+import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import {
   LayoutDashboard,
@@ -14,9 +15,11 @@ import {
   FolderKanban,
   Contact2,
   FileStack,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { VoiceNoteRecorder } from "@/components/admin";
 
 const adminNavItems = [
@@ -85,6 +88,12 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -108,7 +117,15 @@ export default function AdminLayout({
             <Sidebar onItemClick={() => setIsOpen(false)} />
           </SheetContent>
         </Sheet>
-        <span className="text-lg font-bold text-[var(--foreground)]">alecia</span>
+        <span className="flex-1 text-lg font-bold text-[var(--foreground)]">alecia</span>
+        {/* Theme Toggle */}
+        <button
+          onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+          className="p-2 text-[var(--foreground-muted)] hover:text-[var(--foreground)]"
+          aria-label={resolvedTheme === "dark" ? "Passer en mode clair" : "Passer en mode sombre"}
+        >
+          {mounted && resolvedTheme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+        </button>
       </header>
 
       {/* Main Content */}
