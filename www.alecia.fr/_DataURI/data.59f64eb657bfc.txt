@@ -1,0 +1,1 @@
+chrome-extension://ihljmnfgkkmoikgkdkjejbkpdpbmcgeh/dist/content_script.bundle.js

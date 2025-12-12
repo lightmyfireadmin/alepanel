@@ -1,0 +1,1 @@
+chrome-extension://ihljmnfgkkmoikgkdkjejbkpdpbmcgeh/js/lib/selector/css-selector-generator.js

@@ -1,0 +1,1 @@
+chrome-extension://edibdbjcniadpccecjdfdjjppcpchdlm/data/js/embedsHandler.js
