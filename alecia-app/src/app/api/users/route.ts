@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 
+// Public endpoint for login page - returns only necessary user info for authentication
 export async function GET() {
   try {
     const allUsers = await db.select({

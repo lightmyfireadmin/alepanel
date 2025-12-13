@@ -128,7 +128,7 @@ export default function AdminLoginPage() {
                   <p className="text-sm text-amber-600 text-center">Aucun utilisateur trouvé</p>
                 </div>
               ) : (
-                <Select value={selectedEmail} onValueChange={setSelectedEmail} required>
+                <Select value={selectedEmail} onValueChange={setSelectedEmail}>
                   <SelectTrigger 
                     id="user"
                     className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)] h-11 focus:border-[var(--accent)] focus:ring-[var(--accent)]/20 w-full"
