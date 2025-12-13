@@ -63,7 +63,7 @@ export function RegionalMap() {
   const getTooltipStyle = useCallback((office: Office) => {
     return {
       left: office.position.left,
-      top: `calc(${office.position.top} - 85px)`,
+      top: `calc(${office.position.top} - 90px)`,
       transform: "translateX(-50%)",
     };
   }, []);
@@ -71,7 +71,7 @@ export function RegionalMap() {
   return (
     <div className="relative w-full max-w-2xl mx-auto">
       {/* Map Container */}
-      <div className="relative w-full aspect-square max-h-[500px]">
+      <div className="relative w-full aspect-[1000/960] max-h-[500px]">
         {/* Accurate France SVG from Simplemaps */}
         <svg
           viewBox="0 0 1000 960"
