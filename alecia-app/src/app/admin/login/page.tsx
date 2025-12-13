@@ -1,21 +1,49 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, Shield } from "lucide-react";
 import Image from "next/image";
 
+type User = {
+  id: string;
+  name: string;
+  email: string;
+};
+
 export default function AdminLoginPage() {
-  const [email, setEmail] = useState("");
+  const [users, setUsers] = useState<User[]>([]);
+  const [selectedEmail, setSelectedEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isFetchingUsers, setIsFetchingUsers] = useState(true);
   const router = useRouter();
+
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const response = await fetch("/api/users");
+        if (response.ok) {
+          const data = await response.json();
+          setUsers(data);
+        } else {
+          setError("Impossible de charger les utilisateurs");
+        }
+      } catch {
+        setError("Erreur lors du chargement des utilisateurs");
+      } finally {
+        setIsFetchingUsers(false);
+      }
+    }
+    fetchUsers();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,13 +52,13 @@ export default function AdminLoginPage() {
 
     try {
       const result = await signIn("credentials", {
-        email,
+        email: selectedEmail,
         password,
         redirect: false,
       });
 
       if (result?.error) {
-        setError("Email ou mot de passe incorrect");
+        setError("Utilisateur ou mot de passe incorrect");
       } else {
         router.push("/admin");
         router.refresh();
@@ -82,18 +110,30 @@ export default function AdminLoginPage() {
         <CardContent className="pt-4">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-[var(--foreground)] text-sm font-medium">
-                Email
+              <Label htmlFor="user" className="text-[var(--foreground)] text-sm font-medium">
+                Utilisateur
               </Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@alecia.fr"
-                required
-                className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)] h-11 focus:border-[var(--accent)] focus:ring-[var(--accent)]/20"
-              />
+              {isFetchingUsers ? (
+                <div className="flex items-center justify-center h-11 border border-[var(--border)] rounded-md bg-[var(--input)]">
+                  <Loader2 className="h-4 w-4 animate-spin text-[var(--foreground-muted)]" />
+                </div>
+              ) : (
+                <Select value={selectedEmail} onValueChange={setSelectedEmail} required>
+                  <SelectTrigger 
+                    id="user"
+                    className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)] h-11 focus:border-[var(--accent)] focus:ring-[var(--accent)]/20 w-full"
+                  >
+                    <SelectValue placeholder="Sélectionnez un utilisateur" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {users.map((user) => (
+                      <SelectItem key={user.id} value={user.email}>
+                        {user.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="password" className="text-[var(--foreground)] text-sm font-medium">
