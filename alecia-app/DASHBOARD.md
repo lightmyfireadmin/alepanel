@@ -26,15 +26,16 @@ See [AUDIT_REPORT.md](./AUDIT_REPORT.md) for full details.
 
 **Purpose**: Secure access to the admin dashboard.
 
-| Feature              | Description                                |
-| -------------------- | ------------------------------------------ |
-| Email/Password login | Standard credentials authentication        |
-| Session persistence  | NextAuth.js session management             |
-| Protected routes     | Middleware redirects unauthenticated users |
+| Feature                  | Description                                |
+| ------------------------ | ------------------------------------------ |
+| User dropdown selection  | Select user by name from dropdown list     |
+| Password authentication  | Standard credentials authentication        |
+| Session persistence      | NextAuth.js session management             |
+| Protected routes         | Middleware redirects unauthenticated users |
 
 **Database Operations**:
 
-- `SELECT` from `users` table to verify credentials
+- `SELECT` from `users` table to populate dropdown and verify credentials
 - Session token stored in browser
 
 ---
