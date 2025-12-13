@@ -7,7 +7,7 @@
 
 import { db } from "@/lib/db";
 import { posts } from "@/lib/db/schema";
-import { eq, desc, sql } from "drizzle-orm";
+import { eq, desc, sql, and } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 
@@ -113,8 +113,10 @@ export async function getPostsByCategory(category: string) {
     const categoryPosts = await db
       .select()
       .from(posts)
-      .where(eq(posts.category, category))
-      .where(eq(posts.isPublished, true))
+      .where(and(
+        eq(posts.category, category),
+        eq(posts.isPublished, true)
+      ))
       .orderBy(desc(posts.publishedAt));
     
     return categoryPosts;

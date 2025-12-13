@@ -7,7 +7,7 @@
 
 import { db } from "@/lib/db";
 import { projects, projectEvents, contacts } from "@/lib/db/schema";
-import { eq, desc, asc, sql } from "drizzle-orm";
+import { eq, desc, asc, sql, ne } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 
@@ -268,7 +268,7 @@ export async function getActiveProjectCount() {
     const [result] = await db
       .select({ count: sql<number>`count(*)::int` })
       .from(projects)
-      .where(sql`${projects.status} != 'Closed'`);
+      .where(ne(projects.status, "Closed"));
     
     return result?.count || 0;
   } catch (error) {

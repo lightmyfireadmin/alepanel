@@ -80,6 +80,8 @@ export async function getContactsByTag(tag: string) {
       return [];
     }
     
+    // Using SQL template for PostgreSQL array contains check
+    // This checks if the tag exists in the tags array
     const taggedContacts = await db
       .select({
         contact: contacts,
@@ -87,7 +89,7 @@ export async function getContactsByTag(tag: string) {
       })
       .from(contacts)
       .leftJoin(companies, eq(companies.id, contacts.companyId))
-      .where(sql`${tag} = ANY(${contacts.tags})`)
+      .where(sql`${tag}::text = ANY(${contacts.tags})`)
       .orderBy(contacts.name);
     
     return taggedContacts.map(row => ({
