@@ -2,20 +2,13 @@ import { Suspense } from "react";
 import { Navbar, Footer } from "@/components/layout";
 import { DealCard, DealFilter } from "@/components/features";
 import type { Metadata } from "next";
+import { getFilteredDeals, getDealFilterOptions } from "@/lib/actions/deals";
 
 export const metadata: Metadata = {
   title: "Opérations | Nos transactions",
   description:
     "Découvrez les opérations de fusion-acquisition accompagnées par alecia. Cessions, acquisitions, levées de fonds pour PME et ETI.",
 };
-
-import { mockDeals } from "@/lib/data";
-
-// Get unique filter options from actual data
-const years = [...new Set(mockDeals.map((d) => d.year))].sort((a, b) => b - a);
-const availableSectors = [...new Set(mockDeals.map((d) => d.sector))].sort();
-const availableRegions = [...new Set(mockDeals.map((d) => d.region))].sort();
-const availableTypes = [...new Set(mockDeals.map((d) => d.mandateType))].sort();
 
 interface OperationsPageProps {
   searchParams: Promise<{
@@ -29,21 +22,17 @@ interface OperationsPageProps {
 export default async function OperationsPage({ searchParams }: OperationsPageProps) {
   const params = await searchParams;
   
+  // Get filter options from database
+  const filterOptions = await getDealFilterOptions();
+  const { sectors: availableSectors, regions: availableRegions, years, mandateTypes: availableTypes } = filterOptions;
+  
   // Filter deals based on search params
-  let filteredDeals = mockDeals;
-
-  if (params.sector) {
-    filteredDeals = filteredDeals.filter((d) => d.sector === params.sector);
-  }
-  if (params.region) {
-    filteredDeals = filteredDeals.filter((d) => d.region === params.region);
-  }
-  if (params.year) {
-    filteredDeals = filteredDeals.filter((d) => d.year === parseInt(params.year!));
-  }
-  if (params.type) {
-    filteredDeals = filteredDeals.filter((d) => d.mandateType === params.type);
-  }
+  const filteredDeals = await getFilteredDeals({
+    sector: params.sector,
+    region: params.region,
+    year: params.year ? parseInt(params.year) : undefined,
+    mandateType: params.type,
+  });
 
   return (
     <>
