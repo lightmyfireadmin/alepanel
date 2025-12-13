@@ -205,10 +205,13 @@ export function RegionalMap() {
                 <MapPin className="w-4 h-4 text-[var(--accent)] flex-shrink-0" />
                 <span>{activeOffice.name}</span>
               </h3>
-              <p className="text-sm text-[var(--foreground-muted)] ml-6 mt-0.5">{activeOffice.city}</p>
-              <p className="text-sm text-[var(--foreground-muted)] flex items-center gap-2 mt-2 ml-6">
-                <Phone className="w-3.5 h-3.5 flex-shrink-0" />
-                {activeOffice.phone}
+              <p className="text-sm text-[var(--foreground-muted)] flex items-center gap-2 mt-0.5">
+                <span className="w-4 h-4 flex-shrink-0" />
+                <span>{activeOffice.city}</span>
+              </p>
+              <p className="text-sm text-[var(--foreground-muted)] flex items-center gap-2 mt-2">
+                <Phone className="w-4 h-4 text-[var(--accent)] flex-shrink-0" />
+                <span>{activeOffice.phone}</span>
               </p>
             </motion.div>
           )}
