@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
+import { getAllPublishedPosts } from "@/lib/actions/posts";
 
 export const metadata: Metadata = {
   title: "Actualités | Communiqués et articles",
@@ -12,20 +13,18 @@ export const metadata: Metadata = {
     "Suivez les actualités alecia. Communiqués de presse, articles et revues de presse sur le M&A pour PME et ETI.",
 };
 
-// Mock data - Replace with DB queries when Neon is connected
-const posts = [
-  {
-    id: "1",
-    slug: "safe-groupe-acquiert-dogs-security",
-    title: "alecia conseille SAFE GROUPE dans le cadre de l'acquisition de Dogs Security",
-    excerpt: "Acteur majeur de la sécurité globale en France, SAFE GROUPE poursuit sa stratégie de développement en annonçant l'acquisition de Dogs Security. Cette opération lui permet de renforcer son maillage territorial avec un nouveau bureau en Île-de-France.",
-    coverImage: "/assets/Actualites_Alecia/illustration.jpg",
-    category: "Communiqué",
-    publishedAt: "2024-12-12",
-  },
-];
-
-export default function ActualitesPage() {
+export default async function ActualitesPage() {
+  const posts = await getAllPublishedPosts();
+  
+  const postsWithData = posts.map(post => ({
+    id: post.id,
+    slug: post.slug,
+    title: post.titleFr,
+    excerpt: post.excerpt || "",
+    coverImage: post.coverImage || "/assets/Actualites_Alecia/illustration.jpg",
+    category: post.category || "Article",
+    publishedAt: post.publishedAt?.toISOString().split('T')[0] || "",
+  }));
   return (
     <>
       <Navbar />
@@ -49,9 +48,9 @@ export default function ActualitesPage() {
         {/* Posts Grid */}
         <section className="py-8 px-6 pb-24">
           <div className="max-w-6xl mx-auto">
-            {posts.length > 0 ? (
+            {postsWithData.length > 0 ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {posts.map((post) => (
+                {postsWithData.map((post) => (
                   <Link key={post.id} href={`/actualites/${post.slug}`}>
                     <Card className="card-hover h-full bg-[var(--card)] border-[var(--border)] overflow-hidden group">
                       {/* Cover Image */}
