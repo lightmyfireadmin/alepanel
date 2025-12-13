@@ -48,6 +48,12 @@ export default function AdminLoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    
+    if (!selectedEmail) {
+      setError("Veuillez sélectionner un utilisateur");
+      return;
+    }
+    
     setIsLoading(true);
 
     try {
@@ -116,6 +122,10 @@ export default function AdminLoginPage() {
               {isFetchingUsers ? (
                 <div className="flex items-center justify-center h-11 border border-[var(--border)] rounded-md bg-[var(--input)]">
                   <Loader2 className="h-4 w-4 animate-spin text-[var(--foreground-muted)]" />
+                </div>
+              ) : users.length === 0 ? (
+                <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/30">
+                  <p className="text-sm text-amber-600 text-center">Aucun utilisateur trouvé</p>
                 </div>
               ) : (
                 <Select value={selectedEmail} onValueChange={setSelectedEmail} required>
