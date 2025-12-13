@@ -34,9 +34,11 @@ export default function AdminLoginPage() {
           const data = await response.json();
           setUsers(data);
         } else {
+          console.error("Failed to fetch users:", response.status);
           setError("Impossible de charger les utilisateurs");
         }
-      } catch {
+      } catch (error) {
+        console.error("Error fetching users:", error);
         setError("Erreur lors du chargement des utilisateurs");
       } finally {
         setIsFetchingUsers(false);
@@ -69,7 +71,8 @@ export default function AdminLoginPage() {
         router.push("/admin");
         router.refresh();
       }
-    } catch {
+    } catch (error) {
+      console.error("Sign in error:", error);
       setError("Une erreur est survenue");
     } finally {
       setIsLoading(false);
