@@ -4,7 +4,7 @@ export const teamMembers = [
     slug: "gregory-colin",
     name: "Grégory Colin",
     role: "Associé fondateur",
-    photo: "/assets/Equipe_Alecia/GC_1_-_cropped_p1080.jpg",
+    photo: "/assets/Equipe_Alecia/GC_1_-_cropped_p800.jpg",
     linkedinUrl: "https://www.linkedin.com/in/gregorycolin/",
   },
   {
@@ -12,7 +12,7 @@ export const teamMembers = [
     slug: "christophe-berthon",
     name: "Christophe Berthon",
     role: "Associé fondateur",
-    photo: "/assets/Equipe_Alecia/CB_1_-_cropped_-_alt_p1080.jpg",
+    photo: "/assets/Equipe_Alecia/CB_1_-_cropped_-_alt_p800.jpg",
     linkedinUrl: "https://www.linkedin.com/in/christophe-berthon-843924118/",
   },
   {
@@ -20,7 +20,7 @@ export const teamMembers = [
     slug: "martin-egasse",
     name: "Martin Egasse",
     role: "Associé fondateur",
-    photo: "/assets/Equipe_Alecia/ME_2_-_cropped_-_alt_p1080.jpg",
+    photo: "/assets/Equipe_Alecia/ME_2_-_cropped_-_alt_p800.jpg",
     linkedinUrl: "https://www.linkedin.com/in/martinegasse/",
   },
   {
@@ -28,7 +28,7 @@ export const teamMembers = [
     slug: "tristan-cossec",
     name: "Tristan Cossec",
     role: "Associé fondateur",
-    photo: "/assets/Equipe_Alecia/TC_2_p1080.jpg",
+    photo: "/assets/Equipe_Alecia/TC_2_p800.jpg",
     linkedinUrl: "https://www.linkedin.com/in/tristan-cossec-3b5a0247/",
   },
   {
@@ -36,7 +36,7 @@ export const teamMembers = [
     slug: "serge-de-fay",
     name: "Serge de Faÿ",
     role: "Associé fondateur",
-    photo: "/assets/Equipe_Alecia/SF_2_p1080.jpg",
+    photo: "/assets/Equipe_Alecia/SF_2_p800.jpg",
     linkedinUrl: "https://www.linkedin.com/in/serge-de-fa%C3%BF-09713555/",
   },
   {
@@ -44,7 +44,7 @@ export const teamMembers = [
     slug: "jerome-berthiau",
     name: "Jérôme Berthiau",
     role: "Associé fondateur",
-    photo: "/assets/Equipe_Alecia/JB_1_-_cropped_-_alt_p1080.jpg",
+    photo: "/assets/Equipe_Alecia/JB_1_-_cropped_-_alt_p800.jpg",
     linkedinUrl: "https://www.linkedin.com/in/jeromeberthiau/",
   },
   {
@@ -60,7 +60,7 @@ export const teamMembers = [
     slug: "mickael-furet",
     name: "Mickael Furet",
     role: "Analyste",
-    photo: "/assets/Equipe_Alecia/MF_p1080.jpg",
+    photo: "/assets/Equipe_Alecia/MF_p800.jpg",
     linkedinUrl: "https://www.linkedin.com/in/mickael-furet/",
   },
 ];
@@ -171,3 +171,132 @@ export const mockDeals = [
     isPriorExperience: true,
   },
 ];
+
+// Sector verticals with investment thesis (Phase 1 - Roadmap #19-20)
+export const mockSectors = [
+  {
+    id: "1",
+    slug: "technologies-logiciels",
+    nameFr: "Technologies & logiciels",
+    nameEn: "Technology & Software",
+    descriptionFr: "Accompagnement des éditeurs de logiciels, ESN, et entreprises tech dans leurs opérations de croissance externe et transmission.",
+    descriptionEn: "Supporting software publishers, IT services companies, and tech businesses in their external growth and transmission operations.",
+    investmentThesisFr: "Le secteur technologique français connaît une consolidation accélérée. Les multiples de valorisation restent attractifs pour les PME rentables, avec un intérêt croissant des fonds de Private Equity pour le modèle SaaS récurrent. Notre expertise couvre l'ensemble du spectre, des éditeurs traditionnels aux pure players cloud.",
+    investmentThesisEn: "The French technology sector is experiencing accelerated consolidation. Valuation multiples remain attractive for profitable SMEs, with growing Private Equity interest in the recurring SaaS model.",
+    iconType: "technology",
+    referentPartner: "gregory-colin",
+  },
+  {
+    id: "2",
+    slug: "distribution-services-b2b",
+    nameFr: "Distribution & services B2B",
+    nameEn: "B2B Distribution & Services",
+    descriptionFr: "Conseil en cession et acquisition pour les acteurs de la distribution professionnelle et des services aux entreprises.",
+    descriptionEn: "M&A advisory for professional distribution and B2B services companies.",
+    investmentThesisFr: "Le marché B2B français offre des opportunités de consolidation significatives, notamment dans la distribution spécialisée et les services à forte valeur ajoutée. Les acquéreurs privilégient les entreprises avec une récurrence de revenus et une forte fidélisation client.",
+    investmentThesisEn: "The French B2B market offers significant consolidation opportunities, particularly in specialized distribution and high value-added services.",
+    iconType: "building",
+    referentPartner: "christophe-berthon",
+  },
+  {
+    id: "3",
+    slug: "distribution-services-b2c",
+    nameFr: "Distribution & services B2C",
+    nameEn: "B2C Distribution & Services",
+    descriptionFr: "Accompagnement des enseignes retail, franchises et acteurs du commerce de détail dans leurs projets de transmission.",
+    descriptionEn: "Supporting retail chains, franchises, and retail businesses in their transmission projects.",
+    investmentThesisFr: "La transformation digitale du retail crée des opportunités pour les enseignes omnicanales. Les réseaux de franchise restent très recherchés pour leur modèle scalable et leur rentabilité récurrente.",
+    investmentThesisEn: "The digital transformation of retail creates opportunities for omnichannel retailers. Franchise networks remain highly sought after for their scalable model.",
+    iconType: "shopping",
+    referentPartner: "martin-egasse",
+  },
+  {
+    id: "4",
+    slug: "sante",
+    nameFr: "Santé",
+    nameEn: "Healthcare",
+    descriptionFr: "Expertise M&A dans le secteur de la santé : cliniques, laboratoires, medtech, et services de santé.",
+    descriptionEn: "M&A expertise in healthcare: clinics, laboratories, medtech, and health services.",
+    investmentThesisFr: "Le secteur de la santé français est en pleine mutation avec la consolidation des laboratoires d'analyses, le développement des medtech et la restructuration du parc des cliniques privées. Les investisseurs recherchent des actifs défensifs avec une visibilité long terme.",
+    investmentThesisEn: "The French healthcare sector is undergoing significant transformation with laboratory consolidation, medtech development, and private clinic restructuring.",
+    iconType: "health",
+    referentPartner: "tristan-cossec",
+  },
+  {
+    id: "5",
+    slug: "immobilier-construction",
+    nameFr: "Immobilier & construction",
+    nameEn: "Real Estate & Construction",
+    descriptionFr: "Conseil en M&A pour promoteurs, entreprises de BTP, et acteurs de l'immobilier professionnel.",
+    descriptionEn: "M&A advisory for developers, construction companies, and commercial real estate players.",
+    investmentThesisFr: "Malgré les cycles immobiliers, les entreprises de construction spécialisées et les promoteurs régionaux bien positionnés restent attractifs. La transition énergétique ouvre de nouvelles opportunités dans la rénovation et la construction durable.",
+    investmentThesisEn: "Despite real estate cycles, specialized construction companies and well-positioned regional developers remain attractive.",
+    iconType: "construction",
+    referentPartner: "serge-de-fay",
+  },
+  {
+    id: "6",
+    slug: "industries",
+    nameFr: "Industries",
+    nameEn: "Manufacturing & Industry",
+    descriptionFr: "Accompagnement des ETI industrielles, sous-traitants et équipementiers dans leurs opérations stratégiques.",
+    descriptionEn: "Supporting industrial mid-caps, subcontractors, and equipment manufacturers in their strategic operations.",
+    investmentThesisFr: "L'industrie française fait face à des enjeux de transmission générationnelle et de consolidation sectorielle. Les acquéreurs recherchent des savoir-faire différenciants, des positions de marché défendables et des capacités d'export.",
+    investmentThesisEn: "French industry faces generational transmission and sector consolidation challenges. Buyers seek differentiating know-how and defensible market positions.",
+    iconType: "industry",
+    referentPartner: "jerome-berthiau",
+  },
+  {
+    id: "7",
+    slug: "services-financiers-assurance",
+    nameFr: "Services financiers & assurance",
+    nameEn: "Financial Services & Insurance",
+    descriptionFr: "Expertise sectorielle pour courtiers, CGP, fintech et acteurs de l'assurance.",
+    descriptionEn: "Sector expertise for brokers, wealth managers, fintech, and insurance players.",
+    investmentThesisFr: "Le secteur financier connaît une consolidation intense, alimentée par la pression réglementaire et la digitalisation. Les cabinets de courtage et de gestion de patrimoine avec une base clients fidèle sont particulièrement recherchés.",
+    investmentThesisEn: "The financial sector is experiencing intense consolidation, driven by regulatory pressure and digitalization.",
+    iconType: "finance",
+    referentPartner: "gregory-colin",
+  },
+  {
+    id: "8",
+    slug: "agroalimentaire",
+    nameFr: "Agroalimentaire",
+    nameEn: "Food & Agriculture",
+    descriptionFr: "Conseil M&A pour l'industrie agroalimentaire, de la production à la distribution.",
+    descriptionEn: "M&A advisory for the agri-food industry, from production to distribution.",
+    investmentThesisFr: "L'agroalimentaire français bénéficie d'un terroir reconnu mondialement. Les tendances bio, local et premium créent des opportunités de build-up pour les groupes souhaitant accélérer leur développement.",
+    investmentThesisEn: "French agri-food benefits from globally recognized terroir. Organic, local, and premium trends create build-up opportunities.",
+    iconType: "food",
+    referentPartner: "christophe-berthon",
+  },
+  {
+    id: "9",
+    slug: "energie-environnement",
+    nameFr: "Énergie & environnement",
+    nameEn: "Energy & Environment",
+    descriptionFr: "Accompagnement des acteurs de la transition énergétique et des services environnementaux.",
+    descriptionEn: "Supporting energy transition players and environmental services companies.",
+    investmentThesisFr: "La transition énergétique génère une dynamique M&A exceptionnelle. Les énergies renouvelables, l'efficacité énergétique et l'économie circulaire attirent des capitaux massifs et des valorisations premium.",
+    investmentThesisEn: "The energy transition is generating exceptional M&A momentum. Renewable energy, energy efficiency, and circular economy attract massive capital.",
+    iconType: "energy",
+    referentPartner: "martin-egasse",
+  },
+];
+
+// Enhanced team members with bios (Phase 1 - Roadmap #22)
+export const teamMembersEnhanced = teamMembers.map((member) => ({
+  ...member,
+  bioFr: `${member.name} est ${member.role} chez alecia. Fort d'une expérience significative en conseil en fusion-acquisition, il accompagne les dirigeants de PME et ETI dans leurs opérations de transmission, acquisition et levée de fonds.`,
+  bioEn: `${member.name} is a ${member.role} at alecia. With significant experience in M&A advisory, they support SME and mid-cap executives in their transmission, acquisition, and fundraising operations.`,
+  sectorsExpertise: member.id === "1" ? ["technologies-logiciels", "services-financiers-assurance"] 
+    : member.id === "2" ? ["distribution-services-b2b", "agroalimentaire"]
+    : member.id === "3" ? ["distribution-services-b2c", "energie-environnement"]
+    : member.id === "4" ? ["sante"]
+    : member.id === "5" ? ["immobilier-construction"]
+    : member.id === "6" ? ["industries"]
+    : [],
+  transactions: mockDeals
+    .filter((_, idx) => idx % 8 === parseInt(member.id) - 1)
+    .map((d) => d.slug),
+}));

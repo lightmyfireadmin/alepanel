@@ -46,7 +46,8 @@ export default function Home() {
 
   const stats = [
     { value: 50, suffix: "+", label: t("stats.operations") },
-    { value: 8, label: t("stats.experts") },
+    { value: 500, suffix: "", label: t("stats.cumulativeValue"), prefix: "€" },
+    { value: 75, suffix: "+", label: t("stats.yearsExperience") },
     { value: 4, label: t("stats.offices") },
   ];
 
@@ -87,7 +88,7 @@ export default function Home() {
                 className="btn-gold text-lg px-8 py-6 rounded-xl"
                 asChild
               >
-                <Link href="/contact?type=cedant">
+                <Link href="/ceder">
                   {t("hero.ctaSeller")}
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>
@@ -98,7 +99,7 @@ export default function Home() {
                 className="text-lg px-8 py-6 rounded-xl border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--background-secondary)] hover:border-[var(--accent)]"
                 asChild
               >
-                <Link href="/contact?type=acquereur">
+                <Link href="/acquerir">
                   {t("hero.ctaBuyer")}
                 </Link>
               </Button>
@@ -115,7 +116,7 @@ export default function Home() {
             <motion.div
               animate={{ y: [0, 8, 0] }}
               transition={{ repeat: Infinity, duration: 1.5 }}
-              className="w-6 h-10 border-2 border-[var(--border)] rounded-full flex items-start justify-center p-2"
+              className="w-6 h-10 border-2 border-[var(--foreground-muted)] dark:border-[var(--foreground-faint)] rounded-full flex items-start justify-center p-2"
             >
               <div className="w-1.5 h-1.5 bg-[var(--accent)] rounded-full" />
             </motion.div>
@@ -123,21 +124,22 @@ export default function Home() {
         </section>
 
         {/* Stats Section */}
-        <section className="py-20 px-6 bg-[var(--background-secondary)]">
+        <section className="py-12 px-6 bg-[var(--background-secondary)]">
           <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
               {stats.map((stat, idx) => (
                 <motion.div 
                   key={idx}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: idx * 0.1 }}
-                  className="p-6"
+                  transition={{ delay: idx * 0.05 }}
+                  className="p-4"
                 >
-                  <p className="text-5xl md:text-6xl font-bold text-gradient-gold mb-2">
+                  <p className="text-4xl md:text-5xl font-bold text-gradient-gold mb-2 tabular-nums">
                     <AnimatedCounter 
                       to={stat.value} 
+                      prefix={"prefix" in stat ? (stat as { prefix?: string }).prefix : undefined}
                       suffix={stat.suffix}
                     />
                   </p>

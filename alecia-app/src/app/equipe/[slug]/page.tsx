@@ -2,9 +2,11 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Navbar, Footer } from "@/components/layout";
-import { teamMembers } from "@/lib/data";
-import { Linkedin, ArrowLeft, Mail } from "lucide-react";
+import { DealCard } from "@/components/features";
+import { teamMembersEnhanced, mockDeals, mockSectors } from "@/lib/data";
+import { Linkedin, ArrowLeft, Mail, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -12,23 +14,39 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
-  const member = teamMembers.find((m) => m.slug === slug);
+  const member = teamMembersEnhanced.find((m) => m.slug === slug);
   
   if (!member) return { title: "Membre non trouvé" };
 
   return {
     title: `${member.name} - ${member.role} | alecia`,
-    description: `Découvrez le profil de ${member.name}, ${member.role} chez alecia.`,
+    description: `Découvrez le profil de ${member.name}, ${member.role} chez alecia. Expertise en fusion-acquisition pour PME et ETI.`,
   };
+}
+
+export async function generateStaticParams() {
+  return teamMembersEnhanced.map((member) => ({
+    slug: member.slug,
+  }));
 }
 
 export default async function TeamMemberPage({ params }: PageProps) {
   const { slug } = await params;
-  const member = teamMembers.find((m) => m.slug === slug);
+  const member = teamMembersEnhanced.find((m) => m.slug === slug);
 
   if (!member) {
     notFound();
   }
+
+  // Get sectors this member is expert in
+  const memberSectors = mockSectors.filter((s) => 
+    member.sectorsExpertise?.includes(s.slug)
+  );
+
+  // Get deals associated with this member
+  const memberDeals = mockDeals.filter((d) => 
+    member.transactions?.includes(d.slug)
+  );
 
   return (
     <>
@@ -72,7 +90,6 @@ export default async function TeamMemberPage({ params }: PageProps) {
                     </a>
                   </Button>
                 )}
-                {/* Email placeholder if we had email in data */}
                 <Button asChild className="btn-gold w-full">
                   <Link href="/contact">
                     <Mail className="w-4 h-4 mr-2" />
@@ -83,7 +100,7 @@ export default async function TeamMemberPage({ params }: PageProps) {
             </div>
 
             {/* Content */}
-            <div className="space-y-6">
+            <div className="space-y-8">
               <div>
                 <h1 className="font-[family-name:var(--font-playfair)] text-4xl font-bold text-[var(--foreground)] mb-2">
                   {member.name}
@@ -93,21 +110,77 @@ export default async function TeamMemberPage({ params }: PageProps) {
                 </p>
               </div>
 
-              <div className="prose prose-lg dark:prose-invert max-w-none text-[var(--foreground-muted)]">
-                <p>
-                  Ici devrait figurer la bio détaillée de {member.name}. 
-                  (Contenu à récupérer depuis le site original ou à rédiger).
+              {/* Bio */}
+              <div className="prose prose-lg dark:prose-invert max-w-none">
+                <p className="text-[var(--foreground-muted)] text-lg leading-relaxed">
+                  {member.bioFr}
                 </p>
-                <p>
-                  Expertise principale : Fusion-Acquisition, Conseil stratégique...
-                </p>
-                <h3>Parcours</h3>
-                <ul>
-                  <li>Expérience précédente 1</li>
-                  <li>Expérience précédente 2</li>
-                  <li>Formation</li>
-                </ul>
               </div>
+
+              {/* Sector Expertise */}
+              {memberSectors.length > 0 && (
+                <div>
+                  <h2 className="font-[family-name:var(--font-playfair)] text-xl font-semibold mb-4 text-[var(--foreground)]">
+                    Expertises sectorielles
+                  </h2>
+                  <div className="flex flex-wrap gap-2">
+                    {memberSectors.map((sector) => (
+                      <Link key={sector.id} href={`/secteurs/${sector.slug}`}>
+                        <Badge 
+                          variant="outline" 
+                          className="bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent)]/30 hover:bg-[var(--accent)]/20 transition-colors px-3 py-1"
+                        >
+                          {sector.nameFr}
+                        </Badge>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Associated Transactions */}
+              {memberDeals.length > 0 && (
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="font-[family-name:var(--font-playfair)] text-xl font-semibold text-[var(--foreground)]">
+                      Opérations associées
+                    </h2>
+                    <Link 
+                      href="/operations"
+                      className="text-[var(--accent)] hover:underline text-sm flex items-center gap-1"
+                    >
+                      Toutes les opérations
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </div>
+                  <div className="grid gap-4">
+                    {memberDeals.slice(0, 3).map((deal) => (
+                      <Link 
+                        key={deal.id} 
+                        href={`/operations/${deal.slug}`}
+                        className="flex items-center justify-between p-4 bg-[var(--card)] rounded-lg border border-[var(--border)] hover:border-[var(--accent)]/50 transition-colors group"
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className="w-10 h-10 rounded-lg bg-[var(--background-tertiary)] flex items-center justify-center">
+                            <span className="text-sm font-bold text-[var(--foreground-muted)]">
+                              {deal.clientName.charAt(0)}
+                            </span>
+                          </div>
+                          <div>
+                            <p className="font-medium text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors">
+                              {deal.clientName}
+                            </p>
+                            <p className="text-sm text-[var(--foreground-muted)]">
+                              {deal.mandateType} • {deal.year}
+                            </p>
+                          </div>
+                        </div>
+                        <ArrowRight className="w-4 h-4 text-[var(--foreground-muted)] group-hover:text-[var(--accent)] transition-colors" />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

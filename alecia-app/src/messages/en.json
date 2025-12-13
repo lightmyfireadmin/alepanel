@@ -14,6 +14,7 @@
   "nav": {
     "home": "Home",
     "expertises": "Expertise",
+    "secteurs": "Sectors",
     "operations": "Transactions",
     "team": "Team",
     "news": "News",
@@ -27,6 +28,11 @@
     "switchToEnglish": "English",
     "switchToFrench": "Français"
   },
+  "mobileCta": {
+    "call": "Call",
+    "email": "Email",
+    "whatsapp": "WhatsApp"
+  },
   "hero": {
     "tagline": "M&A Advisory",
     "titlePart1": "Your ambitions,",
@@ -38,7 +44,9 @@
   "stats": {
     "operations": "Transactions",
     "experts": "Expert partners",
-    "offices": "Offices in France"
+    "offices": "Offices in France",
+    "cumulativeValue": "M€ cumulative value",
+    "yearsExperience": "Years combined experience"
   },
   "provider": {
     "titlePart1": "More than a",

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { useTheme } from "next-themes";
@@ -17,6 +18,9 @@ import {
   FileStack,
   Sun,
   Moon,
+  Settings,
+  Building2,
+  UserPlus,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState, useEffect } from "react";
@@ -34,7 +38,10 @@ const pilotageNavItems = [
 const siteInternetNavItems = [
   { href: "/admin/deals", label: "Portefeuille", icon: Briefcase },
   { href: "/admin/team", label: "Équipe", icon: Users },
+  { href: "/admin/sectors", label: "Secteurs", icon: Building2 },
   { href: "/admin/news", label: "Actualités", icon: Newspaper },
+  { href: "/admin/careers", label: "Recrutement", icon: UserPlus },
+  { href: "/admin/settings", label: "Paramètres", icon: Settings },
 ];
 
 function Sidebar({ onItemClick }: { onItemClick?: () => void }) {
@@ -44,8 +51,21 @@ function Sidebar({ onItemClick }: { onItemClick?: () => void }) {
     <div className="flex flex-col h-full">
       {/* Logo */}
       <div className="p-6 border-b border-[var(--border)]">
-        <Link href="/" className="text-2xl font-bold text-[var(--foreground)]">
-          alecia
+        <Link href="/" className="block">
+          <Image
+            src="/assets/alecia_logo_blue.svg"
+            alt="alecia"
+            width={100}
+            height={32}
+            className="h-8 w-auto dark:hidden"
+          />
+          <Image
+            src="/assets/alecia_logo.svg"
+            alt="alecia"
+            width={100}
+            height={32}
+            className="h-8 w-auto hidden dark:block"
+          />
         </Link>
         <p className="text-xs text-[var(--foreground-muted)] mt-1">Administration</p>
       </div>
@@ -165,7 +185,22 @@ export default function AdminLayout({
             <Sidebar onItemClick={() => setIsOpen(false)} />
           </SheetContent>
         </Sheet>
-        <span className="flex-1 text-lg font-bold text-[var(--foreground)]">alecia</span>
+        <span className="flex-1">
+          <Image
+            src="/assets/alecia_logo_blue.svg"
+            alt="alecia"
+            width={80}
+            height={26}
+            className="h-6 w-auto dark:hidden"
+          />
+          <Image
+            src="/assets/alecia_logo.svg"
+            alt="alecia"
+            width={80}
+            height={26}
+            className="h-6 w-auto hidden dark:block"
+          />
+        </span>
         {/* Theme Toggle */}
         <button
           onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}

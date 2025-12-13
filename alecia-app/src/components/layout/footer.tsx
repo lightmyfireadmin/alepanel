@@ -37,12 +37,20 @@ export function Footer() {
               className="inline-block mb-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] rounded-lg"
               aria-label="alecia - Retour à l'accueil"
             >
+              {/* Light mode: blue logo, Dark mode: white logo */}
+              <Image
+                src="/assets/alecia_logo_blue.svg"
+                alt="alecia"
+                width={100}
+                height={32}
+                className="h-8 w-auto dark:hidden"
+              />
               <Image
                 src="/assets/alecia_logo.svg"
                 alt="alecia"
                 width={100}
                 height={32}
-                className="h-8 w-auto"
+                className="h-8 w-auto hidden dark:block"
               />
             </Link>
             <p className="text-sm text-[var(--foreground-muted)] mb-4 max-w-xs">

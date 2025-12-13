@@ -9,3 +9,8 @@ export { ProjectTimeline } from "./ProjectTimeline";
 export { ContactForm } from "./contact-form";
 export { HeroBackground } from "./hero-background";
 export { ExpertiseCard } from "./expertise-card";
+export { RoleBadge } from "./role-badge";
+export { MobileStickyFooter } from "./mobile-sticky-footer";
+export { SellerForm } from "./seller-form";
+export { BuyerForm } from "./buyer-form";
+export { CookieBanner } from "./cookie-banner";

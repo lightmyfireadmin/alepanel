@@ -11,8 +11,11 @@ export const metadata: Metadata = {
 
 import { mockDeals } from "@/lib/data";
 
-// Get unique years for filter
+// Get unique filter options from actual data
 const years = [...new Set(mockDeals.map((d) => d.year))].sort((a, b) => b - a);
+const availableSectors = [...new Set(mockDeals.map((d) => d.sector))].sort();
+const availableRegions = [...new Set(mockDeals.map((d) => d.region))].sort();
+const availableTypes = [...new Set(mockDeals.map((d) => d.mandateType))].sort();
 
 interface OperationsPageProps {
   searchParams: Promise<{
@@ -72,6 +75,9 @@ export default async function OperationsPage({ searchParams }: OperationsPagePro
                 currentYear={params.year}
                 currentType={params.type}
                 years={years}
+                availableSectors={availableSectors}
+                availableRegions={availableRegions}
+                availableTypes={availableTypes}
               />
             </Suspense>
           </div>

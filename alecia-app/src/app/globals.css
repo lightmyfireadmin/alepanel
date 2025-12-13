@@ -36,7 +36,7 @@
   --popover-foreground: #0f172a;
 
   /* Semantic colors */
-  --primary: #02265B;
+  --primary: #02265B; /* Alecia brand navy */
   --primary-foreground: #f8fafc;
   --secondary: #f1f5f9;
   --secondary-foreground: #0f172a;
@@ -77,7 +77,7 @@
   /* Foreground/Text colors */
   --foreground: #f1f5f9; /* slate-100 */
   --foreground-muted: #94a3b8; /* slate-400 */
-  --foreground-faint: #64748b; /* slate-500 */
+  --foreground-faint: #94a3b8; /* slate-400 - lighter for dark mode visibility */
 
   /* Accent colors - Gold */
   --accent: #f59e0b; /* amber-500 */
@@ -359,6 +359,19 @@ h6 {
 ::selection {
   background: rgba(245, 158, 11, 0.3);
   color: var(--foreground);
+}
+
+/* =============================================================================
+   SMOOTH SCROLLING & ANCHOR OFFSETS
+   ============================================================================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Offset anchors by navbar height to prevent content from hiding behind fixed header */
+[id] {
+  scroll-margin-top: 100px;
 }
 
 

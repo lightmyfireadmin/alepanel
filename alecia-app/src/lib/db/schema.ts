@@ -52,6 +52,20 @@ export const deals = pgTable("deals", {
   isConfidential: boolean("is_confidential").default(false),
   isPriorExperience: boolean("is_prior_experience").default(false), // Operations with *
   
+  // Enhanced case study content (Phase 1 - Roadmap #25)
+  context: text("context"), // Context of the operation
+  intervention: text("intervention"), // Our intervention details
+  result: text("result"), // Results obtained
+  testimonialText: text("testimonial_text"), // Client verbatim
+  testimonialAuthor: text("testimonial_author"), // Testimonial author
+  roleType: text("role_type"), // "Conseil vendeur" | "Conseil acquéreur" | "Conseil levée"
+  dealSize: text("deal_size"), // Value range bracket
+  keyMetrics: jsonb("key_metrics").$type<{
+    multiple?: number;
+    duration?: string;
+    approachedBuyers?: number;
+  }>(),
+  
   // Display
   displayOrder: integer("display_order").default(0),
   
@@ -110,6 +124,10 @@ export const teamMembers = pgTable("team_members", {
   // Contact
   linkedinUrl: text("linkedin_url"),
   email: text("email"),
+  
+  // Expertise (Phase 1 - Roadmap #22)
+  sectorsExpertise: text("sectors_expertise").array(), // Array of sector slugs
+  transactions: text("transactions").array(), // Array of deal slugs
   
   // Display
   displayOrder: integer("display_order").default(0),
@@ -320,6 +338,85 @@ export const voiceNotes = pgTable("voice_notes", {
 });
 
 // =============================================================================
+// SECTORS TABLE - Sector verticals (Phase 1 - Roadmap #44)
+// =============================================================================
+export const sectors = pgTable("sectors", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  slug: text("slug").unique().notNull(),
+  
+  // Multilingual content
+  nameFr: text("name_fr").notNull(),
+  nameEn: text("name_en"),
+  descriptionFr: text("description_fr"),
+  descriptionEn: text("description_en"),
+  investmentThesisFr: text("investment_thesis_fr"),
+  investmentThesisEn: text("investment_thesis_en"),
+  
+  // UI
+  iconType: text("icon_type"), // For selecting appropriate icon
+  
+  // Relations
+  referentPartnerId: uuid("referent_partner_id").references(() => teamMembers.id),
+  
+  // Display
+  displayOrder: integer("display_order").default(0),
+  
+  // Timestamps
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// =============================================================================
+// OFFICES TABLE - Regional offices (Phase 1 - Roadmap #44)
+// =============================================================================
+export const officesTable = pgTable("offices", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  
+  // Identity
+  name: text("name").notNull(),
+  city: text("city").notNull(),
+  region: text("region").notNull(),
+  
+  // Location
+  address: text("address"),
+  phone: text("phone"),
+  latitude: text("latitude"),
+  longitude: text("longitude"),
+  
+  // Media
+  imageUrl: text("image_url"),
+  
+  // Display
+  displayOrder: integer("display_order").default(0),
+  
+  // Timestamps
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// =============================================================================
+// TESTIMONIALS TABLE - Client verbatims (Phase 1 - Roadmap #44)
+// =============================================================================
+export const testimonials = pgTable("testimonials", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  
+  // Relations
+  dealId: uuid("deal_id").references(() => deals.id),
+  
+  // Content
+  authorName: text("author_name").notNull(),
+  authorRole: text("author_role"),
+  authorCompany: text("author_company"),
+  content: text("content").notNull(),
+  rating: integer("rating"), // 1-5 stars
+  
+  // Publishing
+  isPublished: boolean("is_published").default(false),
+  
+  // Timestamps
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// =============================================================================
 // TYPE EXPORTS
 // =============================================================================
 export type User = typeof users.$inferSelect;
@@ -357,6 +454,15 @@ export type NewBuyerCriteria = typeof buyerCriteria.$inferInsert;
 
 export type VoiceNote = typeof voiceNotes.$inferSelect;
 export type NewVoiceNote = typeof voiceNotes.$inferInsert;
+
+export type Sector = typeof sectors.$inferSelect;
+export type NewSector = typeof sectors.$inferInsert;
+
+export type Office = typeof officesTable.$inferSelect;
+export type NewOffice = typeof officesTable.$inferInsert;
+
+export type Testimonial = typeof testimonials.$inferSelect;
+export type NewTestimonial = typeof testimonials.$inferInsert;
 
 // =============================================================================
 // ENUMS (for reference/validation)

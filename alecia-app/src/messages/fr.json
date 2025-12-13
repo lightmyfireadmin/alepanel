@@ -14,6 +14,7 @@
   "nav": {
     "home": "Accueil",
     "expertises": "Expertises",
+    "secteurs": "Secteurs",
     "operations": "Opérations",
     "team": "Équipe",
     "news": "Actualités",
@@ -27,18 +28,25 @@
     "switchToEnglish": "English",
     "switchToFrench": "Français"
   },
+  "mobileCta": {
+    "call": "Appeler",
+    "email": "Email",
+    "whatsapp": "WhatsApp"
+  },
   "hero": {
     "tagline": "Conseil en fusion-acquisition",
     "titlePart1": "Vos ambitions,",
     "titlePart2": "notre engagement",
     "subtitle": "Conseil en fusion-acquisition pour PME et ETI. Valorisation €5M-€50M. Cession, acquisition, levée de fonds.",
-    "ctaSeller": "Je souhaite céder mon entreprise",
-    "ctaBuyer": "Je souhaite acquérir une entreprise"
+    "ctaSeller": "Vous cherchez à céder",
+    "ctaBuyer": "Vous cherchez à investir"
   },
   "stats": {
     "operations": "Opérations",
     "experts": "Associés experts",
-    "offices": "Bureaux en France"
+    "offices": "Bureaux en France",
+    "cumulativeValue": "M€ de valeur cumulée",
+    "yearsExperience": "Années d'expérience cumulée"
   },
   "provider": {
     "titlePart1": "Plus qu'un simple",

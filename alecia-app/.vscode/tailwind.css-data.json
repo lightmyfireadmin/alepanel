@@ -1,0 +1,37 @@
+{
+  "version": 1.1,
+  "atDirectives": [
+    {
+      "name": "@tailwind",
+      "description": "Use the @tailwind directive to insert Tailwind's base, components, utilities, and variants styles into your CSS."
+    },
+    {
+      "name": "@apply",
+      "description": "Use @apply to inline any existing utility classes into your own custom CSS."
+    },
+    {
+      "name": "@layer",
+      "description": "Use @layer to define custom styles within Tailwind's layer system."
+    },
+    {
+      "name": "@config",
+      "description": "Use @config to specify which config file Tailwind should use when compiling this CSS file."
+    },
+    {
+      "name": "@theme",
+      "description": "Tailwind CSS v4: Use @theme to define design tokens and theme variables."
+    },
+    {
+      "name": "@custom-variant",
+      "description": "Tailwind CSS v4: Use @custom-variant to define custom variants."
+    },
+    {
+      "name": "@plugin",
+      "description": "Tailwind CSS v4: Use @plugin to load Tailwind plugins."
+    },
+    {
+      "name": "@source",
+      "description": "Tailwind CSS v4: Use @source to specify content sources."
+    }
+  ]
+}

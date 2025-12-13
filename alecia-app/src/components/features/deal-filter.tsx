@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
-import { SECTORS, REGIONS, MANDATE_TYPES } from "@/lib/db/schema";
 
 interface DealFilterProps {
   currentSector?: string;
@@ -19,6 +18,9 @@ interface DealFilterProps {
   currentYear?: string;
   currentType?: string;
   years: number[];
+  availableSectors: string[];
+  availableRegions: string[];
+  availableTypes: string[];
 }
 
 export function DealFilter({
@@ -27,6 +29,9 @@ export function DealFilter({
   currentYear,
   currentType,
   years,
+  availableSectors,
+  availableRegions,
+  availableTypes,
 }: DealFilterProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -65,7 +70,7 @@ export function DealFilter({
           </SelectTrigger>
           <SelectContent className="bg-[var(--background-secondary)] border-[var(--border)]">
             <SelectItem value="all">Tous les secteurs</SelectItem>
-            {SECTORS.map((sector) => (
+            {availableSectors.map((sector) => (
               <SelectItem key={sector} value={sector}>
                 {sector}
               </SelectItem>
@@ -83,7 +88,7 @@ export function DealFilter({
           </SelectTrigger>
           <SelectContent className="bg-[var(--background-secondary)] border-[var(--border)]">
             <SelectItem value="all">Toutes les régions</SelectItem>
-            {REGIONS.map((region) => (
+            {availableRegions.map((region) => (
               <SelectItem key={region} value={region}>
                 {region}
               </SelectItem>
@@ -119,7 +124,7 @@ export function DealFilter({
           </SelectTrigger>
           <SelectContent className="bg-[var(--background-secondary)] border-[var(--border)]">
             <SelectItem value="all">Tous les types</SelectItem>
-            {MANDATE_TYPES.map((type) => (
+            {availableTypes.map((type) => (
               <SelectItem key={type} value={type}>
                 {type}
               </SelectItem>
