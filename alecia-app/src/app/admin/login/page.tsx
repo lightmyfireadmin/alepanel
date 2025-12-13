@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2 } from "lucide-react";
+import { Loader2, Shield } from "lucide-react";
+import Image from "next/image";
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
@@ -42,23 +43,46 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[var(--background)] flex items-center justify-center px-4">
-      <Card className="w-full max-w-md bg-[var(--card)] border-[var(--border)]">
-        <CardHeader className="text-center">
-          <div className="text-3xl font-bold text-[var(--foreground)] mb-2">
-            alecia
+    <main className="min-h-screen bg-[var(--background)] flex items-center justify-center px-4 relative overflow-hidden">
+      {/* Background decorations */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[var(--accent)]/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[var(--accent)]/3 rounded-full blur-3xl" />
+        <div 
+          className="absolute inset-0 opacity-[0.02]"
+          style={{
+            backgroundImage: `linear-gradient(var(--foreground) 1px, transparent 1px),
+                             linear-gradient(90deg, var(--foreground) 1px, transparent 1px)`,
+            backgroundSize: "60px 60px",
+          }}
+        />
+      </div>
+
+      <Card className="w-full max-w-md bg-[var(--card)] border-[var(--border)] shadow-2xl relative z-10">
+        <CardHeader className="text-center pb-2">
+          <div className="flex justify-center mb-4">
+            <Image
+              src="/assets/alecia_logo.svg"
+              alt="alecia"
+              width={120}
+              height={40}
+              className="h-10 w-auto"
+            />
           </div>
-          <CardTitle className="text-[var(--foreground)] font-[family-name:var(--font-playfair)]">
-            Administration
-          </CardTitle>
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <Shield className="w-5 h-5 text-[var(--accent)]" />
+            <CardTitle className="text-[var(--foreground)] font-[family-name:var(--font-playfair)] text-xl">
+              Administration
+            </CardTitle>
+          </div>
           <CardDescription className="text-[var(--foreground-muted)]">
             Connectez-vous pour accéder au tableau de bord
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <CardContent className="pt-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-[var(--foreground)]">
+              <Label htmlFor="email" className="text-[var(--foreground)] text-sm font-medium">
                 Email
               </Label>
               <Input
@@ -68,11 +92,11 @@ export default function AdminLoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@alecia.fr"
                 required
-                className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]"
+                className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)] h-11 focus:border-[var(--accent)] focus:ring-[var(--accent)]/20"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-[var(--foreground)]">
+              <Label htmlFor="password" className="text-[var(--foreground)] text-sm font-medium">
                 Mot de passe
               </Label>
               <Input
@@ -82,18 +106,20 @@ export default function AdminLoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]"
+                className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)] h-11 focus:border-[var(--accent)] focus:ring-[var(--accent)]/20"
               />
             </div>
 
             {error && (
-              <p className="text-sm text-red-500 text-center">{error}</p>
+              <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/30">
+                <p className="text-sm text-red-500 text-center">{error}</p>
+              </div>
             )}
 
             <Button
               type="submit"
               disabled={isLoading}
-              className="btn-gold w-full rounded-lg"
+              className="btn-gold w-full rounded-lg h-11 text-base font-semibold"
             >
               {isLoading ? (
                 <>
@@ -110,3 +136,4 @@ export default function AdminLoginPage() {
     </main>
   );
 }
+

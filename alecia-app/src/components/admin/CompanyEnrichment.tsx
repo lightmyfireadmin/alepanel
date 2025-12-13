@@ -42,6 +42,7 @@ export function CompanyEnrichment({ onCompanySelect, className }: CompanyEnrichm
   }, [searchQuery]);
 
   // Search cached companies when query changes
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     if (debouncedQuery.length >= 2) {
       startTransition(async () => {

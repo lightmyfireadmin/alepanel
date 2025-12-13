@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Navbar, Footer } from "@/components/layout";
 import { AnimatedCounter, RegionalMap, ValuationEstimator, HeroBackground, ExpertiseCard } from "@/components/features";
 import { motion } from "framer-motion";

@@ -180,7 +180,7 @@ interface PdfTeaserProps {
   description?: string;
 }
 
-export function PdfTeaser({ projectId, projectTitle, sector, description }: PdfTeaserProps) {
+export function PdfTeaser({ projectId: _projectId, projectTitle, sector, description }: PdfTeaserProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
 

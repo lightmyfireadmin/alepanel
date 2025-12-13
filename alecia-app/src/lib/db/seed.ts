@@ -19,14 +19,6 @@ function extractSlug(url: string): string {
   return match ? match[1] : "";
 }
 
-// Helper to determine mandate type from text
-function determineMandateType(text: string): "Cession" | "Acquisition" | "Levée de fonds" {
-  if (text.includes("Cession")) return "Cession";
-  if (text.includes("AcquisitioN")) return "Acquisition";
-  if (text.includes("Levée de fonds")) return "Levée de fonds";
-  return "Cession"; // default
-}
-
 type MandateType = "Cession" | "Acquisition" | "Levée de fonds";
 
 // Parse Opérations_alecia.md
@@ -59,7 +51,7 @@ async function parseDeals() {
         let acquirerName = "";
         let isPriorExperience = false;
         let clientLogo = "";
-        let acquirerLogo = "";
+        const acquirerLogo = "";
         
         // Look ahead for details (next 100 lines)
         for (let j = i + 1; j < Math.min(i + 100, lines.length); j++) {

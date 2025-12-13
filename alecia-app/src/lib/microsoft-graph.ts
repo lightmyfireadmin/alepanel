@@ -51,9 +51,9 @@ interface CalendarEvent {
  * @returns Array of calendar events
  */
 export async function getCalendarEvents(
-  accessToken: string,
-  startDate: string,
-  endDate: string
+  _accessToken: string,
+  _startDate: string,
+  _endDate: string
 ): Promise<CalendarEvent[]> {
   // TODO: Implement Microsoft Graph API call
   // Example endpoint: GET /me/calendar/calendarView?startDateTime={start}&endDateTime={end}

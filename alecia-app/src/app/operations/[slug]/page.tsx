@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import { Navbar, Footer } from "@/components/layout";
 import { mockDeals } from "@/lib/data";
@@ -91,11 +90,11 @@ export default async function OperationDetail({ params }: PageProps) {
             {/* Content Placeholder */}
             <div className="prose prose-lg dark:prose-invert max-w-none text-[var(--foreground-muted)] pt-8">
               <p>
-                Description détaillée de l'opération pour <strong>{deal.clientName}</strong>.
+                Description détaillée de l&apos;opération pour <strong>{deal.clientName}</strong>.
                 Alicia a accompagné les actionnaires dans cette opération de {deal.mandateType.toLowerCase()}.
               </p>
               <p>
-                Enjeux de l'opération, rôle d'Alecia, résultat...
+                Enjeux de l&apos;opération, rôle d&apos;Alecia, résultat...
               </p>
             </div>
           </div>

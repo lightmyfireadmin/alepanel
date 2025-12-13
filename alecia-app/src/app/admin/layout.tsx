@@ -127,13 +127,21 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
+  // Fix hydration mismatch for theme
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Skip sidebar layout for login page - render login fullscreen
+  if (pathname === "/admin/login") {
+    return <>{children}</>;
+  }
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -178,4 +186,5 @@ export default function AdminLayout({
     </div>
   );
 }
+
 

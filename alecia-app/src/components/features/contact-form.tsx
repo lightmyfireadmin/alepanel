@@ -23,7 +23,6 @@ export function ContactForm() {
   });
 
   const t = useTranslations("contact.form");
-  const tBtn = useTranslations("common");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -13,10 +13,10 @@ interface Office {
 }
 
 const offices: Office[] = [
-  { id: "idf", name: "Île-de-France", city: "Paris", phone: "+33 1 XX XX XX XX", coordinates: { x: 280, y: 120 } },
-  { id: "sud-est", name: "Sud Est", city: "Nice", phone: "+33 4 XX XX XX XX", coordinates: { x: 380, y: 320 } },
-  { id: "ara", name: "Auvergne Rhône-Alpes", city: "Lyon", phone: "+33 4 XX XX XX XX", coordinates: { x: 320, y: 260 } },
-  { id: "ouest", name: "Grand Ouest", city: "Nantes", phone: "+33 2 XX XX XX XX", coordinates: { x: 130, y: 200 } },
+  { id: "idf", name: "Île-de-France", city: "Paris", phone: "Nous contacter", coordinates: { x: 280, y: 120 } },
+  { id: "sud-est", name: "Sud Est", city: "Nice", phone: "Nous contacter", coordinates: { x: 380, y: 320 } },
+  { id: "ara", name: "Auvergne Rhône-Alpes", city: "Lyon", phone: "Nous contacter", coordinates: { x: 320, y: 260 } },
+  { id: "ouest", name: "Grand Ouest", city: "Nantes", phone: "Nous contacter", coordinates: { x: 130, y: 200 } },
 ];
 
 // Accurate France mainland outline (simplified but geographically correct)

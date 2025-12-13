@@ -59,6 +59,11 @@ export default function SudoPanel() {
     hasValue: boolean;
   }>>([]);
 
+  const loadEnvKeys = async () => {
+    const keys = await getEnvKeys();
+    setEnvKeys(keys);
+  };
+
   // Check authentication on mount
   useEffect(() => {
     checkSudoSession().then((isAuth) => {
@@ -127,11 +132,6 @@ export default function SudoPanel() {
     if (!confirm("PURGE ALL CACHES?")) return;
     const result = await purgeAllCaches();
     setCacheMessage(result.message);
-  };
-
-  const loadEnvKeys = async () => {
-    const keys = await getEnvKeys();
-    setEnvKeys(keys);
   };
 
   if (loading) {

@@ -145,7 +145,7 @@ export default function CRMPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-[var(--foreground)] font-[family-name:var(--font-playfair)]">
-            Carnet d'adresses
+            Carnet d&apos;adresses
           </h1>
           <p className="text-[var(--foreground-muted)] mt-1">
             Gestion des contacts et entreprises

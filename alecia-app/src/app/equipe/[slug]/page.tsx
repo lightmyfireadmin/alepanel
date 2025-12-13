@@ -38,7 +38,7 @@ export default async function TeamMemberPage({ params }: PageProps) {
           <Button asChild variant="ghost" className="mb-8 pl-0 hover:bg-transparent hover:text-[var(--accent)] text-[var(--foreground-muted)]">
             <Link href="/equipe">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Retour à l'équipe
+              Retour à l&apos;équipe
             </Link>
           </Button>
           

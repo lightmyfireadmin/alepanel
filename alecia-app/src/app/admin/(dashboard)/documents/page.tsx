@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
   Upload, FileText, Image, File, Link2, 
-  Lock, Unlock, Trash2, Copy, Check, Download
+  Lock, Unlock, Trash2, Check, Download
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState, useCallback } from "react";

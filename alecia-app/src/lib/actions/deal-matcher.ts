@@ -13,7 +13,7 @@
 
 import { db } from "@/lib/db";
 import { contacts, companies, buyerCriteria } from "@/lib/db/schema";
-import { eq, and, or, gte, lte, sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 export interface MatchCriteria {
   sector: string;
