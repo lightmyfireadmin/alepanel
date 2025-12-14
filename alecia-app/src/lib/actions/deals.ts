@@ -221,10 +221,10 @@ export async function getDealFilterOptions() {
       })
       .from(deals);
     
-    const sectors = [...new Set(result.map(r => r.sector).filter(Boolean))].sort();
-    const regions = [...new Set(result.map(r => r.region).filter(Boolean))].sort();
+    const sectors = [...new Set(result.map(r => r.sector).filter((s): s is string => Boolean(s)))].sort();
+    const regions = [...new Set(result.map(r => r.region).filter((s): s is string => Boolean(s)))].sort();
     const years = [...new Set(result.map(r => r.year))].sort((a, b) => b - a);
-    const mandateTypes = [...new Set(result.map(r => r.mandateType).filter(Boolean))].sort();
+    const mandateTypes = [...new Set(result.map(r => r.mandateType).filter((s): s is string => Boolean(s)))].sort();
     
     return { sectors, regions, years, mandateTypes };
   } catch (error) {

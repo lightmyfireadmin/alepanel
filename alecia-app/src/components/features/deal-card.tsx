@@ -15,7 +15,7 @@ interface DealCardProps {
   year: number;
   mandateType: string;
   region?: string | null;
-  isPriorExperience?: boolean;
+  isPriorExperience?: boolean | null;
 }
 
 const mandateColors: Record<string, string> = {
