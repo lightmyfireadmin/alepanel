@@ -7,9 +7,12 @@
 
 import { db } from "@/lib/db";
 import { posts } from "@/lib/db/schema";
-import { eq, desc, sql, and } from "drizzle-orm";
+import { eq, desc, sql, and, inArray } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { normalizeSlug } from "@/lib/posts-utils";
+
+const ACTUALITES_PREFIX = "actualites/";
 
 export interface PostFormData {
   slug: string;
@@ -66,16 +69,31 @@ export async function getAllPosts() {
 
 /**
  * Get a single post by slug
- */
+  */
 export async function getPostBySlug(slug: string) {
   try {
-    const [post] = await db
+    const normalized = normalizeSlug(slug);
+    const candidates = [normalized, slug];
+    if (normalized) {
+      candidates.push(`${ACTUALITES_PREFIX}${normalized}`);
+    }
+    const uniqueCandidates: string[] = [];
+    for (const candidate of candidates) {
+      if (candidate && !uniqueCandidates.includes(candidate)) {
+        uniqueCandidates.push(candidate);
+      }
+    }
+
+    if (uniqueCandidates.length === 0) {
+      return null;
+    }
+
+    const results = await db
       .select()
       .from(posts)
-      .where(eq(posts.slug, slug))
-      .limit(1);
-    
-    return post || null;
+      .where(inArray(posts.slug, uniqueCandidates));
+
+    return results[0] || null;
   } catch (error) {
     console.error("[Posts] Error fetching post:", error);
     return null;

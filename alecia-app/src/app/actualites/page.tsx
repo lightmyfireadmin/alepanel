@@ -6,6 +6,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
 import { getAllPublishedPosts } from "@/lib/actions/posts";
+import { normalizeCoverImage, normalizeSlug } from "@/lib/posts-utils";
 
 export const metadata: Metadata = {
   title: "Actualités | Communiqués et articles",
@@ -16,15 +17,17 @@ export const metadata: Metadata = {
 export default async function ActualitesPage() {
   const posts = await getAllPublishedPosts();
   
-  const postsWithData = posts.map(post => ({
-    id: post.id,
-    slug: post.slug,
-    title: post.titleFr,
-    excerpt: post.excerpt || "",
-    coverImage: post.coverImage || "/assets/Actualites_Alecia/illustration.jpg",
-    category: post.category || "Article",
-    publishedAt: post.publishedAt?.toISOString().split('T')[0] || "",
-  }));
+  const postsWithData = posts.map(post => {
+    return {
+      id: post.id,
+      slug: normalizeSlug(post.slug),
+      title: post.titleFr,
+      excerpt: post.excerpt || "",
+      coverImage: normalizeCoverImage(post.coverImage),
+      category: post.category || "Article",
+      publishedAt: post.publishedAt?.toISOString().split('T')[0] || "",
+    };
+  });
   return (
     <>
       <Navbar />
