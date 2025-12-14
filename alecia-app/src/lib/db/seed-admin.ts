@@ -15,31 +15,51 @@ async function seedAdmin() {
   const NAME = "Christophe Berthon";
   const TEAM_SLUG = "christophe-berthon";
 
-  // 1. Update Team Member email and ensure photo exists
-  console.log(`Updating team member ${TEAM_SLUG} email and photo...`);
-  // Using a professional abstract avatar or the real one if we had it. 
-  // For now using a high quality Unsplash portrait that fits the professional theme.
-  const AVATAR_URL = "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=256&h=256";
+  // 1. Ensure Team Member exists and update photo
+  console.log(`Checking team member ${TEAM_SLUG}...`);
   
-  await db
-    .update(teamMembers)
-    .set({ 
-      email: EMAIL,
-      photo: AVATAR_URL // Force a photo for the admin user so dropdown looks good
-    })
-    .where(eq(teamMembers.slug, TEAM_SLUG));
+  const teamMember = await db.query.teamMembers.findFirst({
+    where: eq(teamMembers.slug, TEAM_SLUG)
+  });
+
+  // Using a professional abstract avatar or the real one if we had it. 
+  const AVATAR_URL = "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=256&h=256";
+
+  if (teamMember) {
+    console.log(`Updating team member ${TEAM_SLUG} email and photo...`);
+    await db
+      .update(teamMembers)
+      .set({ 
+        email: EMAIL,
+        photo: AVATAR_URL // Force a photo for the admin user so dropdown looks good
+      })
+      .where(eq(teamMembers.slug, TEAM_SLUG));
+  } else {
+    console.log(`⚠️ Team member ${TEAM_SLUG} not found. Creating minimal entry...`);
+    await db.insert(teamMembers).values({
+        slug: TEAM_SLUG,
+        name: NAME,
+        role: "Partner", // Default role
+        email: EMAIL,
+        photo: AVATAR_URL,
+        isActive: true,
+        displayOrder: 0
+    });
+  }
 
   // 2. Manage Users
   console.log("Cleaning up users...");
   await db.delete(users); // Remove all users (including 'admin@alecia.fr')
 
   console.log(`Creating user ${EMAIL}...`);
+  // Use ALREADY HASHED password if provided in env, otherwise hash the default one
+  // But standard flow is: env var is plain text password.
   const defaultPwd = process.env.NEW_USER_PWD || "alecia2024";
   
   console.log("🔐 SETTING ADMIN PASSWORD TO:", defaultPwd);
   console.log("   (Please use this password to log in)");
 
-  const passwordHash = await bcrypt.hash(defaultPwd, 10); // Default password
+  const passwordHash = await bcrypt.hash(defaultPwd, 10);
 
   await db.insert(users).values({
     email: EMAIL,
