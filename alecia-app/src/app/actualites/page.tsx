@@ -6,22 +6,12 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
 import { getAllPublishedPosts } from "@/lib/actions/posts";
+import { normalizeCoverImage, normalizeSlug } from "@/lib/posts-utils";
 
 export const metadata: Metadata = {
   title: "Actualités | Communiqués et articles",
   description:
     "Suivez les actualités alecia. Communiqués de presse, articles et revues de presse sur le M&A pour PME et ETI.",
-};
-
-const normalizeSlug = (slug?: string | null) =>
-  (slug || "").replace(/^\/+/, "").replace(/^actualites\//, "");
-
-const normalizeCoverImage = (src?: string | null) => {
-  if (!src) return "/assets/Actualites_Alecia/illustration.jpg";
-  const trimmed = src.trim();
-  if (!trimmed) return "/assets/Actualites_Alecia/illustration.jpg";
-  const withPrefix = trimmed.startsWith("http") || trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
-  return withPrefix || "/assets/Actualites_Alecia/illustration.jpg";
 };
 
 export default async function ActualitesPage() {

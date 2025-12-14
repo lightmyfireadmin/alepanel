@@ -10,6 +10,7 @@ import { posts } from "@/lib/db/schema";
 import { eq, desc, sql, and } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { normalizeSlug } from "@/lib/posts-utils";
 
 export interface PostFormData {
   slug: string;
@@ -23,9 +24,6 @@ export interface PostFormData {
   publishedAt?: Date | null;
   isPublished?: boolean;
 }
-
-const normalizeSlug = (slug: string) =>
-  slug.replace(/^\/+/, "").replace(/^actualites\//, "");
 
 /**
  * Get all published posts (for public display)
