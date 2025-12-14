@@ -1,6 +1,7 @@
 import { Navbar, Footer } from "@/components/layout";
 import { TeamCard } from "@/components/features";
 import type { Metadata } from "next";
+import { getAllTeamMembers } from "@/lib/actions/team";
 
 export const metadata: Metadata = {
   title: "Équipe | Nos associés et experts",
@@ -8,9 +9,8 @@ export const metadata: Metadata = {
     "Découvrez l'équipe alecia. Associés fondateurs et analystes experts en fusion-acquisition pour PME et ETI.",
 };
 
-import { teamMembers } from "@/lib/data";
-
-export default function EquipePage() {
+export default async function EquipePage() {
+  const teamMembers = await getAllTeamMembers();
   return (
     <>
       <Navbar />

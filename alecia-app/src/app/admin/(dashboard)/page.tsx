@@ -2,25 +2,34 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Briefcase, Newspaper, Users, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { getDealStats, getRecentDeals } from "@/lib/actions/deals";
+import { getPostCount } from "@/lib/actions/posts";
+import { getTeamMemberCount } from "@/lib/actions/team";
 
 export const metadata: Metadata = {
   title: "Admin Dashboard",
 };
 
-// Mock stats - Replace with actual DB queries
-const stats = [
-  { label: "Opérations", value: 50, icon: Briefcase, href: "/admin/deals", change: "+2 ce mois" },
-  { label: "Articles", value: 1, icon: Newspaper, href: "/admin/news", change: "1 brouillon" },
-  { label: "Membres", value: 8, icon: Users, href: "/admin/team", change: "Tous actifs" },
-];
+export default async function AdminDashboard() {
+  // Fetch stats from database
+  const [dealCount, postCount, teamCount, recentDealsData] = await Promise.all([
+    getDealStats(),
+    getPostCount(),
+    getTeamMemberCount(),
+    getRecentDeals(3),
+  ]);
 
-const recentDeals = [
-  { name: "SAFE GROUPE / Dogs Security", type: "Acquisition", date: "2024" },
-  { name: "Signes / La/Ba Architectes", type: "Cession", date: "2024" },
-  { name: "XRL Consulting / BPCE", type: "Levée de fonds", date: "2023" },
-];
+  const stats = [
+    { label: "Opérations", value: dealCount, icon: Briefcase, href: "/admin/deals", change: `${dealCount} au total` },
+    { label: "Articles", value: postCount, icon: Newspaper, href: "/admin/news", change: `${postCount} au total` },
+    { label: "Membres", value: teamCount, icon: Users, href: "/admin/team", change: "Tous actifs" },
+  ];
 
-export default function AdminDashboard() {
+  const recentDeals = recentDealsData.map(deal => ({
+    name: `${deal.clientName} / ${deal.acquirerName || "N/A"}`,
+    type: deal.mandateType,
+    date: deal.year.toString(),
+  }));
   return (
     <div className="space-y-8">
       {/* Header */}
