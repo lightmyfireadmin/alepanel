@@ -1,7 +1,7 @@
 
 import { db } from "./index";
 import { posts, jobOffers } from "./schema";
-import { sql } from "drizzle-orm";
+
 
 const newsItems = [
     {
@@ -9,7 +9,7 @@ const newsItems = [
         slug: "safe-groupe-acquisition-dogs-security",
         contentFr: "Acteur majeur de la sécurité globale en France, SAFE GROUPE poursuit sa stratégie de développement en annonçant l’acquisition de Dogs Security. Cette opération lui permet de renforcer son maillage territorial avec un nouveau bureau en Île-de-France.\n\nL'équipe d'Alecia est fière d'avoir accompagné les dirigeants dans cette étape clé de leur croissance externe.",
         category: "Communiqué" as const,
-        coverImage: "https://cdn.prod.website-files.com/660ec81a224042420ed56e8f/675bf30a11fd4fb91c7a0179_Illustration.jpg",
+        coverImage: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3",
         isPublished: true,
         publishedAt: new Date("2024-12-14"),
         titleEn: "alecia advises SAFE GROUPE on the acquisition of Dogs Security",

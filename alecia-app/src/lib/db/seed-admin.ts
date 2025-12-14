@@ -15,11 +15,18 @@ async function seedAdmin() {
   const NAME = "Christophe Berthon";
   const TEAM_SLUG = "christophe-berthon";
 
-  // 1. Update Team Member email
-  console.log(`Updating team member ${TEAM_SLUG} email...`);
+  // 1. Update Team Member email and ensure photo exists
+  console.log(`Updating team member ${TEAM_SLUG} email and photo...`);
+  // Using a professional abstract avatar or the real one if we had it. 
+  // For now using a high quality Unsplash portrait that fits the professional theme.
+  const AVATAR_URL = "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=256&h=256";
+  
   await db
     .update(teamMembers)
-    .set({ email: EMAIL })
+    .set({ 
+      email: EMAIL,
+      photo: AVATAR_URL // Force a photo for the admin user so dropdown looks good
+    })
     .where(eq(teamMembers.slug, TEAM_SLUG));
 
   // 2. Manage Users
@@ -28,6 +35,10 @@ async function seedAdmin() {
 
   console.log(`Creating user ${EMAIL}...`);
   const defaultPwd = process.env.NEW_USER_PWD || "alecia2024";
+  
+  console.log("🔐 SETTING ADMIN PASSWORD TO:", defaultPwd);
+  console.log("   (Please use this password to log in)");
+
   const passwordHash = await bcrypt.hash(defaultPwd, 10); // Default password
 
   await db.insert(users).values({

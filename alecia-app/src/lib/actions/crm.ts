@@ -7,7 +7,7 @@
 
 import { db } from "@/lib/db";
 import { contacts, companies } from "@/lib/db/schema";
-import { eq, desc, sql, like, or, and } from "drizzle-orm";
+import { eq, sql, like, or } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 

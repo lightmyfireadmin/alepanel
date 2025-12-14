@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { UserPlus, Tag, Building2, Star, Loader2, RefreshCw } from "lucide-react";
@@ -49,7 +49,7 @@ export function DealMatchmaker({
   const [error, setError] = useState<string | null>(null);
 
   // Fetch matching investors
-  const fetchMatches = async () => {
+  const fetchMatches = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     
@@ -85,11 +85,11 @@ export function DealMatchmaker({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [dealSector, dealTags, dealRegion, dealRevenue, dealEbitda]);
 
   useEffect(() => {
     fetchMatches();
-  }, [dealSector, dealRegion, dealRevenue, dealEbitda, dealTags.join(",")]);
+  }, [fetchMatches]);
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return "text-emerald-400";

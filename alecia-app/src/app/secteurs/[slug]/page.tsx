@@ -2,11 +2,11 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { Navbar, Footer } from "@/components/layout";
-import { DealCard, RoleBadge, SectorFaq } from "@/components/features";
+import { DealCard, SectorFaq } from "@/components/features";
 import { mockSectors, mockDeals, teamMembers } from "@/lib/data";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, ArrowRight, Linkedin, Cpu, Building2, ShoppingBag, HeartPulse, Home, Factory, PiggyBank, Wheat, Leaf, ChevronDown } from "lucide-react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { ArrowLeft, ArrowRight, Linkedin, Cpu, Building2, ShoppingBag, HeartPulse, Home, Factory, PiggyBank, Wheat, Leaf } from "lucide-react";
 
 interface PageProps {
   params: Promise<{ slug: string }>;

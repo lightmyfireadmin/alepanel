@@ -55,6 +55,9 @@ export async function getCalendarEvents(
   _startDate: string,
   _endDate: string
 ): Promise<CalendarEvent[]> {
+  void _accessToken;
+  void _startDate;
+  void _endDate;
   // TODO: Implement Microsoft Graph API call
   // Example endpoint: GET /me/calendar/calendarView?startDateTime={start}&endDateTime={end}
   

@@ -5,6 +5,16 @@ import { users } from "./db/schema";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 
+interface UserWithFlags {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  mustChangePassword: boolean;
+  hasSeenOnboarding: boolean;
+}
+
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     Credentials({
@@ -67,18 +77,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
-        token.role = (user as { role?: string }).role;
-        token.mustChangePassword = (user as any).mustChangePassword;
-        token.hasSeenOnboarding = (user as any).hasSeenOnboarding;
+        const u = user as unknown as UserWithFlags;
+        token.id = u.id;
+        token.role = u.role;
+        token.mustChangePassword = u.mustChangePassword;
+        token.hasSeenOnboarding = u.hasSeenOnboarding;
       }
       return token;
     },
     async session({ session, token }) {
       if (token && session.user) {
         session.user.id = token.id as string;
-        (session.user as { role?: string }).role = token.role as string;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (session.user as any).role = token.role as string;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (session.user as any).mustChangePassword = token.mustChangePassword as boolean;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (session.user as any).hasSeenOnboarding = token.hasSeenOnboarding as boolean;
       }
       return session;

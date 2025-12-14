@@ -16,13 +16,17 @@ export function OnboardingManager() {
   const [showTour, setShowTour] = useState(false);
   const [tourStep, setTourStep] = useState(0);
 
-  // Cast to any to access new fields until types are globally extended
-  const mustChange = (session?.user as any)?.mustChangePassword;
-  const hasSeen = (session?.user as any)?.hasSeenOnboarding;
+  interface ExtendedUser {
+    mustChangePassword?: boolean;
+    hasSeenOnboarding?: boolean;
+  }
+  const mustChange = (session?.user as unknown as ExtendedUser)?.mustChangePassword;
+  const hasSeen = (session?.user as unknown as ExtendedUser)?.hasSeenOnboarding;
 
   useEffect(() => {
     // If user is logged in, no password change needed, and hasn't seen onboarding -> Show Tour
     if (session?.user && mustChange === false && hasSeen === false) {
+       // eslint-disable-next-line react-hooks/set-state-in-effect
        setShowTour(true);
     }
   }, [session, mustChange, hasSeen]);

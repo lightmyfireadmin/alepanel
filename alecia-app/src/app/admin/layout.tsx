@@ -153,8 +153,8 @@ export default function AdminLayout({
   const [mounted, setMounted] = useState(false);
 
   // Fix hydration mismatch for theme
-  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 

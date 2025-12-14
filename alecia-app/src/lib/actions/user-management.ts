@@ -5,7 +5,7 @@ import { users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import bcrypt from "bcryptjs";
-import { revalidatePath } from "next/cache";
+
 
 export async function changePassword(newPassword: string) {
   const session = await auth();

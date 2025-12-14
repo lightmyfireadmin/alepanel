@@ -59,9 +59,20 @@ src/
 └── messages/         # i18n translation files
 ```
 
+## Features
+
+- **Authentication**: Secure admin login with NextAuth.js.
+- **Content Management**: Full CRUD for Deals, News, and Team members.
+- **CRM**: Manage Companies and Contacts with enrichment capabilities.
+- **Project Management**: Kanban-style project tracking with timeline events.
+- **Data Room**: Secure document sharing via Vercel Blob.
+- **Deal Matchmaker**: SQL-based matching of buyer criteria with deals.
+- **Localization**: Native support for French and English content.
+
 ## Documentation
 
 - [Dashboard Features](./DASHBOARD.md) - Detailed page-by-page documentation
+- [Data Tables & Schema](./NEON_DATA_TABLES.md) - Database schema documentation
 - [Audit Report](./AUDIT_REPORT.md) - Codebase audit findings
 
 ## Scripts

@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
+
 import { Navbar, Footer } from "@/components/layout";
 import { RoleBadge, DealDetailLogo } from "@/components/features";
 import { getDealBySlug, getAllDeals } from "@/lib/actions/deals";
-import { ArrowLeft, Building2, MapPin, Calendar, Users, Clock, Quote, ArrowRight } from "lucide-react";
+import { ArrowLeft, Building2, MapPin, Users, Clock, Quote, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

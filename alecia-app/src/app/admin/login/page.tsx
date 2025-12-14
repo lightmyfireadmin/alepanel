@@ -8,8 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Shield } from "lucide-react";
+import { Loader2, Shield, ArrowLeft } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 type User = {
   id: string;
@@ -95,6 +96,14 @@ export default function AdminLoginPage() {
           }}
         />
       </div>
+
+      {/* Back Button */}
+      <Link 
+        href="/"
+        className="absolute top-6 left-6 z-50 p-2 rounded-full bg-[var(--card)]/50 border border-[var(--border)] text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:bg-[var(--card)] transition-colors backdrop-blur-sm"
+      >
+        <ArrowLeft className="w-5 h-5" />
+      </Link>
 
       <Card className="w-full max-w-md bg-[var(--card)] border-[var(--border)] shadow-2xl relative z-10">
         <CardHeader className="text-center pb-2">

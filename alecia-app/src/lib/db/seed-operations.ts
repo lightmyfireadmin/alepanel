@@ -1,7 +1,7 @@
 
 import { db } from "./index";
 import { deals } from "./schema";
-import { sql } from "drizzle-orm";
+
 
 interface OperationData {
   slug: string;
@@ -629,11 +629,11 @@ function generateContext(deal: OperationData): string {
   return contexts[Math.floor(Math.random() * contexts.length)];
 }
 
-function generateIntervention(deal: OperationData): string {
+function generateIntervention(_deal: OperationData): string { // eslint-disable-line @typescript-eslint/no-unused-vars
   return "alecia a accompagné les dirigeants tout au long du processus : structuration de l'opération, valorisation, identification et approche des contreparties, négociation et coordination des due diligences jusqu'au closing.";
 }
 
-function generateResult(deal: OperationData): string {
+function generateResult(_deal: OperationData): string { // eslint-disable-line @typescript-eslint/no-unused-vars
   return "L'opération a été conclue dans des conditions optimales, permettant aux actionnaires de réaliser leur projet dans le respect de leurs objectifs financiers et de pérennité de l'entreprise.";
 }
 

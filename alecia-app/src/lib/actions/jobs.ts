@@ -3,7 +3,7 @@
 
 import { db } from "@/lib/db";
 import { jobOffers } from "@/lib/db/schema";
-import { desc, eq, and } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { cache } from "react";
 
 export const getJobOffers = cache(async () => {

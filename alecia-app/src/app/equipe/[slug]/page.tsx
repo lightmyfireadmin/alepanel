@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Navbar, Footer } from "@/components/layout";
-import { DealCard } from "@/components/features";
+
 import { teamMembersEnhanced, mockDeals, mockSectors } from "@/lib/data";
 import { Linkedin, ArrowLeft, Mail, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
