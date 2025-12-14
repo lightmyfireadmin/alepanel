@@ -63,7 +63,7 @@ export function RegionalMap() {
   const getTooltipStyle = useCallback((office: Office) => {
     return {
       left: office.position.left,
-      top: `calc(${office.position.top} - 85px)`,
+      top: `calc(${office.position.top} - 90px)`,
       transform: "translateX(-50%)",
     };
   }, []);
@@ -71,7 +71,7 @@ export function RegionalMap() {
   return (
     <div className="relative w-full max-w-2xl mx-auto">
       {/* Map Container */}
-      <div className="relative w-full aspect-square max-h-[500px]">
+      <div className="relative w-full aspect-[1000/960] max-h-[500px]">
         {/* Accurate France SVG from Simplemaps */}
         <svg
           viewBox="0 0 1000 960"
@@ -205,10 +205,12 @@ export function RegionalMap() {
                 <MapPin className="w-4 h-4 text-[var(--accent)] flex-shrink-0" />
                 <span>{activeOffice.name}</span>
               </h3>
-              <p className="text-sm text-[var(--foreground-muted)] ml-6 mt-0.5">{activeOffice.city}</p>
-              <p className="text-sm text-[var(--foreground-muted)] flex items-center gap-2 mt-2 ml-6">
-                <Phone className="w-3.5 h-3.5 flex-shrink-0" />
-                {activeOffice.phone}
+              <p className="text-sm text-[var(--foreground-muted)] mt-0.5 pl-6">
+                {activeOffice.city}
+              </p>
+              <p className="text-sm text-[var(--foreground-muted)] flex items-center gap-2 mt-2">
+                <Phone className="w-4 h-4 text-[var(--accent)] flex-shrink-0" />
+                <span>{activeOffice.phone}</span>
               </p>
             </motion.div>
           )}
