@@ -67,19 +67,17 @@ export async function getAllPosts() {
 
 /**
  * Get a single post by slug
- */
+  */
 export async function getPostBySlug(slug: string) {
   try {
     const normalized = normalizeSlug(slug);
-    const candidates = Array.from(
-      new Set([
-        normalized,
-        slug,
-        normalized ? `actualites/${normalized}` : "",
-      ].filter(Boolean))
-    );
+    const candidates = [normalized, slug];
+    if (normalized) {
+      candidates.push(`actualites/${normalized}`);
+    }
+    const uniqueCandidates = Array.from(new Set(candidates.filter(Boolean)));
 
-    for (const candidate of candidates) {
+    for (const candidate of uniqueCandidates) {
       const [post] = await db
         .select()
         .from(posts)

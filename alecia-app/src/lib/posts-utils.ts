@@ -6,5 +6,5 @@ export const normalizeCoverImage = (src?: string | null) => {
   const trimmed = src.trim();
   if (!trimmed) return "/assets/Actualites_Alecia/illustration.jpg";
   const withPrefix = trimmed.startsWith("http") || trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
-  return withPrefix || "/assets/Actualites_Alecia/illustration.jpg";
+  return withPrefix;
 };

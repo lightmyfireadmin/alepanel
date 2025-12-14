@@ -18,10 +18,9 @@ export default async function ActualitesPage() {
   const posts = await getAllPublishedPosts();
   
   const postsWithData = posts.map(post => {
-    const slug = normalizeSlug(post.slug);
     return {
       id: post.id,
-      slug: slug || post.slug,
+      slug: normalizeSlug(post.slug),
       title: post.titleFr,
       excerpt: post.excerpt || "",
       coverImage: normalizeCoverImage(post.coverImage),
