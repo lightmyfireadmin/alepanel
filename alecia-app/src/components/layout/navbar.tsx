@@ -158,7 +158,7 @@ export function Navbar() {
               aria-label={locale === "fr" ? "Switch to English" : "Passer en français"}
             >
               <Globe className="w-4 h-4" aria-hidden="true" />
-              {locale.toUpperCase()}
+              {locale === "fr" ? "EN" : "FR"}
             </button>
 
             {/* CTA Button */}

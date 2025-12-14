@@ -15,6 +15,7 @@ type User = {
   id: string;
   name: string;
   email: string;
+  image?: string;
 };
 
 export default function AdminLoginPage() {
@@ -141,7 +142,23 @@ export default function AdminLoginPage() {
                   <SelectContent>
                     {users.map((user) => (
                       <SelectItem key={user.id} value={user.email}>
-                        {user.name}
+                        <div className="flex items-center gap-2">
+                           {user.image ? (
+                            <div className="relative w-6 h-6 rounded-full overflow-hidden">
+                              <Image 
+                                src={user.image} 
+                                alt={user.name}
+                                fill
+                                className="object-cover"
+                              />
+                            </div>
+                           ) : (
+                            <div className="w-6 h-6 rounded-full bg-[var(--accent)] flex items-center justify-center text-xs text-white">
+                              {user.name.charAt(0)}
+                            </div>
+                           )}
+                           <span>{user.name}</span>
+                        </div>
                       </SelectItem>
                     ))}
                   </SelectContent>

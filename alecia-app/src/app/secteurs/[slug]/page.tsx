@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { Navbar, Footer } from "@/components/layout";
-import { DealCard, RoleBadge } from "@/components/features";
+import { DealCard, RoleBadge, SectorFaq } from "@/components/features";
 import { mockSectors, mockDeals, teamMembers } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -210,42 +210,7 @@ export default async function SectorPage({ params }: PageProps) {
               Questions fréquentes
             </h2>
             <div className="space-y-4">
-              <details className="group p-4 bg-[var(--card)] rounded-lg border border-[var(--border)]">
-                <summary className="flex items-center justify-between cursor-pointer list-none">
-                  <span className="font-medium text-[var(--foreground)]">
-                    Quels sont les multiples de valorisation dans ce secteur ?
-                  </span>
-                  <ChevronDown className="w-5 h-5 text-[var(--foreground-muted)] transition-transform group-open:rotate-180" />
-                </summary>
-                <p className="mt-4 text-[var(--foreground-muted)]">
-                  Les multiples varient selon la taille, la rentabilité et les perspectives de croissance de l&apos;entreprise. 
-                  Contactez-nous pour une analyse personnalisée de votre situation.
-                </p>
-              </details>
-              <details className="group p-4 bg-[var(--card)] rounded-lg border border-[var(--border)]">
-                <summary className="flex items-center justify-between cursor-pointer list-none">
-                  <span className="font-medium text-[var(--foreground)]">
-                    Quelle est la durée moyenne d&apos;une opération de cession ?
-                  </span>
-                  <ChevronDown className="w-5 h-5 text-[var(--foreground-muted)] transition-transform group-open:rotate-180" />
-                </summary>
-                <p className="mt-4 text-[var(--foreground-muted)]">
-                  Une opération de cession prend généralement entre 6 et 12 mois, selon la complexité du dossier 
-                  et les conditions de marché.
-                </p>
-              </details>
-              <details className="group p-4 bg-[var(--card)] rounded-lg border border-[var(--border)]">
-                <summary className="flex items-center justify-between cursor-pointer list-none">
-                  <span className="font-medium text-[var(--foreground)]">
-                    Accompagnez-vous également les acquisitions ?
-                  </span>
-                  <ChevronDown className="w-5 h-5 text-[var(--foreground-muted)] transition-transform group-open:rotate-180" />
-                </summary>
-                <p className="mt-4 text-[var(--foreground-muted)]">
-                  Oui, nous accompagnons aussi bien les cédants que les acquéreurs dans leurs projets de croissance externe, 
-                  que ce soit pour des acquisitions unitaires ou des stratégies de build-up.
-                </p>
-              </details>
+              <SectorFaq />
             </div>
           </section>
 

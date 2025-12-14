@@ -15,7 +15,7 @@ export function AnimatedCounter({
   to,
   prefix = "",
   suffix = "",
-  duration = 0.8,
+  duration = 2.5,
   className = "",
 }: AnimatedCounterProps) {
   const [count, setCount] = useState(0);

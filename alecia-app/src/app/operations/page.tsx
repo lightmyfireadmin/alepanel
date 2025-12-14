@@ -23,7 +23,12 @@ export default async function OperationsPage({ searchParams }: OperationsPagePro
   const params = await searchParams;
   
   // Get filter options from database
-  const filterOptions = await getDealFilterOptions();
+  const filterOptions = await getDealFilterOptions({
+    sector: params.sector,
+    region: params.region,
+    year: params.year ? parseInt(params.year) : undefined,
+    mandateType: params.type,
+  });
   const { sectors: availableSectors, regions: availableRegions, years, mandateTypes: availableTypes } = filterOptions;
   
   // Filter deals based on search params

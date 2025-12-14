@@ -3,3 +3,4 @@ export { VoiceNoteRecorder } from "./VoiceNoteRecorder";
 export { CompanyEnrichment } from "./CompanyEnrichment";
 export { DealMatchmaker } from "./DealMatchmaker";
 export { PdfTeaser } from "./PdfTeaser";
+export { OnboardingManager } from "./onboarding-manager";

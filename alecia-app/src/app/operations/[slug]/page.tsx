@@ -2,9 +2,9 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { Navbar, Footer } from "@/components/layout";
-import { RoleBadge } from "@/components/features";
-import { mockDeals, teamMembers } from "@/lib/data";
-import { ArrowLeft, Building2, MapPin, Calendar, Tag, Users, Clock, TrendingUp, Quote, ArrowRight } from "lucide-react";
+import { RoleBadge, DealDetailLogo } from "@/components/features";
+import { getDealBySlug, getAllDeals } from "@/lib/actions/deals";
+import { ArrowLeft, Building2, MapPin, Calendar, Users, Clock, Quote, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,24 +13,9 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-// Enhanced deal data with case study content (mock until DB migration in Phase 3)
-const enhancedDeals = mockDeals.map((deal) => ({
-  ...deal,
-  context: `Dans un contexte de consolidation sectorielle, les actionnaires de ${deal.clientName} ont souhaité explorer les options stratégiques pour leur entreprise, leader régional dans son segment.`,
-  intervention: `alecia a accompagné les dirigeants tout au long du processus : structuration de l'opération, valorisation, identification et approche des contreparties, négociation et coordination des due diligences jusqu'au closing.`,
-  result: `L'opération a été conclue dans des conditions optimales, permettant aux actionnaires de réaliser leur projet dans le respect de leurs objectifs financiers et de pérennité de l'entreprise.`,
-  testimonialText: deal.isPriorExperience ? null : "L'équipe alecia nous a accompagnés avec professionnalisme et réactivité. Leur connaissance du marché et leur réseau nous ont permis de trouver le partenaire idéal.",
-  testimonialAuthor: deal.isPriorExperience ? null : "Dirigeant, " + deal.clientName,
-  roleType: deal.mandateType === "Cession" ? "Conseil vendeur" : deal.mandateType === "Acquisition" ? "Conseil acquéreur" : "Conseil levée",
-  keyMetrics: {
-    duration: deal.year >= 2023 ? "6 mois" : "8 mois",
-    approachedBuyers: deal.mandateType === "Cession" ? Math.floor(Math.random() * 20) + 10 : null,
-  },
-}));
-
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
-  const deal = enhancedDeals.find((d) => d.slug === slug);
+  const deal = await getDealBySlug(slug);
   
   if (!deal) return { title: "Opération non trouvée" };
 
@@ -41,21 +26,23 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 export async function generateStaticParams() {
-  return mockDeals.map((deal) => ({
+  const deals = await getAllDeals();
+  return deals.map((deal) => ({
     slug: deal.slug,
   }));
 }
 
 export default async function OperationDetail({ params }: PageProps) {
   const { slug } = await params;
-  const deal = enhancedDeals.find((d) => d.slug === slug);
+  const deal = await getDealBySlug(slug);
 
   if (!deal) {
     notFound();
   }
 
-  // Get related deals in same sector
-  const relatedDeals = enhancedDeals
+  // Get related deals in same sector (fetching all for now and filtering - optimization for later)
+  const allDeals = await getAllDeals();
+  const relatedDeals = allDeals
     .filter((d) => d.sector === deal.sector && d.id !== deal.id)
     .slice(0, 2);
 
@@ -100,41 +87,23 @@ export default async function OperationDetail({ params }: PageProps) {
             {/* Logos Section */}
             <div className="flex items-center gap-6 py-6">
               {/* Client Logo */}
-              <div className="w-24 h-24 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center overflow-hidden">
-                {deal.clientLogo ? (
-                  <Image
-                    src={deal.clientLogo}
-                    alt={deal.clientName}
-                    width={64}
-                    height={64}
-                    className="object-contain"
-                  />
-                ) : (
-                  <span className="text-3xl font-bold text-[var(--foreground-muted)]">
-                    {deal.clientName.charAt(0)}
-                  </span>
-                )}
-              </div>
+              <DealDetailLogo
+                name={deal.clientName}
+                logoUrl={deal.clientLogo}
+                size={64}
+                className="w-24 h-24"
+              />
 
               {deal.acquirerName && (
                 <>
                   <div className="text-3xl text-[var(--foreground-faint)]">→</div>
                   {/* Acquirer Logo */}
-                  <div className="w-24 h-24 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center overflow-hidden">
-                    {deal.acquirerLogo ? (
-                      <Image
-                        src={deal.acquirerLogo}
-                        alt={deal.acquirerName}
-                        width={64}
-                        height={64}
-                        className="object-contain"
-                      />
-                    ) : (
-                      <span className="text-3xl font-bold text-[var(--foreground-muted)]">
-                        {deal.acquirerName.charAt(0)}
-                      </span>
-                    )}
-                  </div>
+                  <DealDetailLogo
+                    name={deal.acquirerName}
+                    logoUrl={deal.acquirerLogo}
+                    size={64}
+                    className="w-24 h-24"
+                  />
                 </>
               )}
             </div>

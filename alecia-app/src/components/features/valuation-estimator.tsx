@@ -91,8 +91,8 @@ export function ValuationEstimator() {
 
   return (
     <Card className="bg-[var(--card)] border-[var(--border)] overflow-hidden">
-      <CardHeader className="bg-gradient-to-r from-[var(--accent)]/10 to-transparent">
-        <div className="flex items-center gap-3">
+      <CardHeader className="bg-gradient-to-r from-[var(--accent)]/10 to-transparent p-0">
+        <div className="flex items-center gap-3 p-6">
           <div className="w-12 h-12 rounded-xl bg-[var(--accent)]/20 flex items-center justify-center">
             <Calculator className="w-6 h-6 text-[var(--accent)]" />
           </div>
@@ -112,7 +112,8 @@ export function ValuationEstimator() {
             <motion.form
               key="form"
               initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ amount: 0.5, once: true }}
               exit={{ opacity: 0, x: 20 }}
               onSubmit={handleSubmit}
               className="space-y-4"

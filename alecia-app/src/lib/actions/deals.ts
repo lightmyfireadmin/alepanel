@@ -88,16 +88,16 @@ export async function getFilteredDeals(filters: {
     
     const conditions = [];
     
-    if (filters.sector) {
+    if (filters.sector && filters.sector !== 'all') {
       conditions.push(eq(deals.sector, filters.sector));
     }
-    if (filters.region) {
+    if (filters.region && filters.region !== 'all') {
       conditions.push(eq(deals.region, filters.region));
     }
     if (filters.year) {
       conditions.push(eq(deals.year, filters.year));
     }
-    if (filters.mandateType) {
+    if (filters.mandateType && filters.mandateType !== 'all') {
       conditions.push(eq(deals.mandateType, filters.mandateType));
     }
     
@@ -210,22 +210,45 @@ export async function deleteDeal(id: string): Promise<{ success: boolean; error?
 /**
  * Get unique filter options from existing deals
  */
-export async function getDealFilterOptions() {
+export async function getDealFilterOptions(filters?: {
+  sector?: string;
+  region?: string;
+  year?: number;
+  mandateType?: string;
+}) {
   try {
-    const result = await db
-      .select({
-        sector: deals.sector,
-        region: deals.region,
-        year: deals.year,
-        mandateType: deals.mandateType,
-      })
-      .from(deals);
+    // Helper to get conditions excluding specific key
+    const conditions = (excludeKey: string) => {
+      const conds = [];
+      if (excludeKey !== 'sector' && filters?.sector && filters.sector !== 'all') conds.push(eq(deals.sector, filters.sector));
+      if (excludeKey !== 'region' && filters?.region && filters.region !== 'all') conds.push(eq(deals.region, filters.region));
+      if (excludeKey !== 'year' && filters?.year) conds.push(eq(deals.year, filters.year));
+      if (excludeKey !== 'mandateType' && filters?.mandateType && filters.mandateType !== 'all') conds.push(eq(deals.mandateType, filters.mandateType));
+      return conds.length > 0 ? and(...conds) : undefined;
+    };
+
+    const [sectorsResult, regionsResult, yearsResult, typesResult] = await Promise.all([
+      // Get sectors based on other filters
+      db.select({ val: deals.sector }).from(deals).where(conditions('sector')).groupBy(deals.sector),
+      // Get regions based on other filters
+      db.select({ val: deals.region }).from(deals).where(conditions('region')).groupBy(deals.region),
+      // Get years based on other filters
+      db.select({ val: deals.year }).from(deals).where(conditions('year')).groupBy(deals.year),
+      // Get types based on other filters
+      db.select({ val: deals.mandateType }).from(deals).where(conditions('mandateType')).groupBy(deals.mandateType),
+    ]);
+
+    const sectors = sectorsResult.map(r => r.val).filter((s): s is string => Boolean(s)).sort();
+    const regions = regionsResult.map(r => r.val).filter((s): s is string => Boolean(s)).sort();
+    const years = yearsResult.map(r => r.val).sort((a, b) => b - a);
+    const mandateTypes = typesResult.map(r => r.val).filter((s): s is string => Boolean(s)).sort();
     
-    const sectors = [...new Set(result.map(r => r.sector).filter((s): s is string => Boolean(s)))].sort();
-    const regions = [...new Set(result.map(r => r.region).filter((s): s is string => Boolean(s)))].sort();
-    const years = [...new Set(result.map(r => r.year))].sort((a, b) => b - a);
-    const mandateTypes = [...new Set(result.map(r => r.mandateType).filter((s): s is string => Boolean(s)))].sort();
-    
+    console.log('[Deals Debug] Filters:', filters);
+    console.log('[Deals Debug] Sectors:', sectors.length, sectors);
+    console.log('[Deals Debug] Regions:', regions.length, regions);
+    console.log('[Deals Debug] Years:', years.length, years);
+    console.log('[Deals Debug] Types:', mandateTypes.length, mandateTypes);
+
     return { sectors, regions, years, mandateTypes };
   } catch (error) {
     console.error("[Deals] Error fetching filter options:", error);

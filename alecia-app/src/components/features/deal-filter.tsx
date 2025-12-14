@@ -59,13 +59,15 @@ export function DealFilter({
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="flex flex-wrap justify-center gap-3">
         {/* Sector Filter */}
         <Select
           value={currentSector || "all"}
           onValueChange={(value) => updateFilter("sector", value)}
+          // @ts-expect-error - modal prop is missing in the type but works in runtime
+          modal={false}
         >
-          <SelectTrigger className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]">
+          <SelectTrigger className="w-[180px] bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]">
             <SelectValue placeholder="Secteur" />
           </SelectTrigger>
           <SelectContent className="bg-[var(--background-secondary)] border-[var(--border)]">
@@ -82,8 +84,10 @@ export function DealFilter({
         <Select
           value={currentRegion || "all"}
           onValueChange={(value) => updateFilter("region", value)}
+          // @ts-expect-error - modal prop is missing in the type but works in runtime
+          modal={false}
         >
-          <SelectTrigger className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]">
+          <SelectTrigger className="w-[180px] bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]">
             <SelectValue placeholder="Région" />
           </SelectTrigger>
           <SelectContent className="bg-[var(--background-secondary)] border-[var(--border)]">
@@ -100,8 +104,10 @@ export function DealFilter({
         <Select
           value={currentYear || "all"}
           onValueChange={(value) => updateFilter("year", value)}
+          // @ts-expect-error - modal prop is missing in the type but works in runtime
+          modal={false}
         >
-          <SelectTrigger className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]">
+          <SelectTrigger className="w-[180px] bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]">
             <SelectValue placeholder="Année" />
           </SelectTrigger>
           <SelectContent className="bg-[var(--background-secondary)] border-[var(--border)]">
@@ -118,8 +124,10 @@ export function DealFilter({
         <Select
           value={currentType || "all"}
           onValueChange={(value) => updateFilter("type", value)}
+          // @ts-expect-error - modal prop is missing in the type but works in runtime
+          modal={false}
         >
-          <SelectTrigger className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]">
+          <SelectTrigger className="w-[180px] bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]">
             <SelectValue placeholder="Type" />
           </SelectTrigger>
           <SelectContent className="bg-[var(--background-secondary)] border-[var(--border)]">

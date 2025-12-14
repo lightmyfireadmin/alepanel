@@ -37,7 +37,7 @@
     "tagline": "Conseil en fusion-acquisition",
     "titlePart1": "Vos ambitions,",
     "titlePart2": "notre engagement",
-    "subtitle": "Conseil en fusion-acquisition pour PME et ETI. Valorisation €5M-€50M. Cession, acquisition, levée de fonds.",
+    "subtitle": "Partenaire de confiance des dirigeants de PME et ETI pour leurs opérations de haut de bilan : Cession, Acquisition, Finance. Une expertise pointue et un engagement total à vos côtés.",
     "ctaSeller": "Vous cherchez à céder",
     "ctaBuyer": "Vous cherchez à investir"
   },
@@ -193,7 +193,20 @@
   "careers": {
     "tagline": "Carrières",
     "title": "Rejoignez l'aventure alecia",
-    "subtitle": "Nous recherchons des talents passionnés par les opérations de haut de bilan et le conseil aux entrepreneurs.",
+    "subtitle": "Notre force réside dans nos talents et notre façon d'opérer. Nous accordons une importance capitale à l'attraction, au développement et à la rétention des collaborateurs les plus compatibles avec notre état d'esprit et nos ambitions. Nous rejoindre signifie adhérer pleinement à une équipe qui valorise l'excellence, le respect et l'amélioration continue et travailler dans un environnement stimulant et bienveillant.",
+    "vision": {
+      "tagline": "Honnêteté — Excellence — Humilité",
+      "title": "Notre vision",
+      "p1": "Nous sommes fiers d'opérer en région et d'apporter notre savoir-faire aux écosystèmes locaux.",
+      "p2": "Notre exigence professionnelle nous pousse à faire continuellement progresser notre approche et notre engagement pour les PME et ETI françaises.",
+      "p3": "Cette fusion d'un savoir-faire de pointe avec une approche décentralisée permet à nos équipes de bénéficier d'une formation et d'une pratique professionnelle aux plus hauts standards, tout en jouissant d'un cadre de vie serein.",
+      "p4": "Nous offrons également la possibilité aux profils expérimentés d'ouvrir de nouveaux bureaux et s'approprier la mission de faire rayonner alecia au plus près de nos territoires."
+    },
+    "invest": {
+      "title": "Investir dans votre avenir",
+      "p1": "Nous nous engageons à investir dans le développement de nos collaborateurs, à travers des programmes de formation sur mesure, des opportunités de mentorat, et une culture d'excellence centrée sur l'amélioration continue.",
+      "p2": "Chez alecia, chaque membre de l'équipe est encouragé à innover et à contribuer activement à notre mission commune. Nous recherchons des collaborateurs animés par l'envie d'apprendre et de progresser, et nous valorisons la diversité des talents et des perspectives, en nous assurant que chaque voix est entendue et que chaque idée a la possibilité de prospérer."
+    },
     "whyJoinTitle": "Pourquoi nous rejoindre ?",
     "values": {
       "teamwork": "Esprit d'équipe",

@@ -1,0 +1,5 @@
+# HTTrack Website Copier Cookie File
+# This file format is compatible with Netscape cookies
+.www.alecia.fr	TRUE	/	FALSE	1999999999	_cfuvid	hOT7dCpfXmuHzNTdpTEYVVQR.8AWgev7UR90onD9L8s-1765687713924-0.0.1.1-604800000
+www.alecia.fr	TRUE	/	FALSE	1999999999	SameSite	None
+

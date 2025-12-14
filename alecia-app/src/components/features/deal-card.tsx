@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -36,15 +38,19 @@ export function DealCard({
   region,
   isPriorExperience = false,
 }: DealCardProps) {
+  const [clientLogoError, setClientLogoError] = useState(false);
+  const [acquirerLogoError, setAcquirerLogoError] = useState(false);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
+      viewport={{ amount: 0.5, once: true }}
       transition={{ duration: 0.4 }}
+      className="group h-full"
     >
-      <Link href={`/operations/${slug}`}>
-        <div className="card-hover group relative bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden p-6">
+      <Link href={`/operations/${slug}`} className="block h-full">
+        <div className="card-hover group relative bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden p-6 h-full flex flex-col">
           {/* Year Badge */}
           <div className="absolute top-4 right-4 text-sm text-[var(--foreground-muted)]">
             {year}
@@ -54,14 +60,15 @@ export function DealCard({
           {/* Logos Section */}
           <div className="flex items-center gap-4 mb-6">
             {/* Client Logo */}
-            <div className="w-16 h-16 rounded-lg bg-white/5 border border-[var(--border)] flex items-center justify-center overflow-hidden">
-              {clientLogo ? (
+            <div className="w-16 h-16 rounded-lg bg-white border border-[var(--border)] flex items-center justify-center overflow-hidden shrink-0">
+              {clientLogo && clientLogo.length > 0 && !clientLogoError ? (
                 <Image
                   src={clientLogo}
                   alt={clientName}
                   width={48}
                   height={48}
                   className="object-contain"
+                  onError={() => setClientLogoError(true)}
                 />
               ) : (
                 <span className="text-lg font-bold text-[var(--foreground-muted)]">
@@ -75,14 +82,15 @@ export function DealCard({
               <>
                 <div className="text-[var(--foreground-faint)]">→</div>
                 {/* Acquirer Logo */}
-                <div className="w-16 h-16 rounded-lg bg-white/5 border border-[var(--border)] flex items-center justify-center overflow-hidden">
-                  {acquirerLogo ? (
+                <div className="w-16 h-16 rounded-lg bg-white border border-[var(--border)] flex items-center justify-center overflow-hidden shrink-0">
+                  {acquirerLogo && acquirerLogo.length > 0 && !acquirerLogoError ? (
                     <Image
                       src={acquirerLogo}
                       alt={acquirerName}
                       width={48}
                       height={48}
                       className="object-contain"
+                      onError={() => setAcquirerLogoError(true)}
                     />
                   ) : (
                     <span className="text-lg font-bold text-[var(--foreground-muted)]">
@@ -95,17 +103,19 @@ export function DealCard({
           </div>
 
           {/* Deal Info */}
-          <h3 className="text-lg font-semibold text-[var(--foreground)] mb-1 group-hover:text-[var(--accent)] transition-colors">
-            {clientName}
-          </h3>
-          {acquirerName && (
-            <p className="text-sm text-[var(--foreground-muted)] mb-3">
-              → {acquirerName}
-            </p>
-          )}
+          <div className="mb-4 flex-grow">
+            <h3 className="text-lg font-semibold text-[var(--foreground)] mb-1 group-hover:text-[var(--accent)] transition-colors">
+              {clientName}
+            </h3>
+            {acquirerName && (
+              <p className="text-sm text-[var(--foreground-muted)]">
+                → {acquirerName}
+              </p>
+            )}
+          </div>
 
           {/* Tags */}
-          <div className="flex flex-wrap gap-2 mt-4">
+          <div className="flex flex-wrap gap-2 mt-auto">
             <Badge
               variant="outline"
               className={mandateColors[mandateType] || "bg-gray-500/20 text-gray-400"}

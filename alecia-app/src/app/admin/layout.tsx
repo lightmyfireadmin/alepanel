@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState, useEffect } from "react";
-import { VoiceNoteRecorder } from "@/components/admin";
+import { VoiceNoteRecorder, OnboardingManager } from "@/components/admin";
 
 // PILOTAGE: Business OS - Private internal tools
 const pilotageNavItems = [
@@ -165,6 +165,7 @@ export default function AdminLayout({
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
+      <OnboardingManager />
       {/* Desktop Sidebar */}
       <aside className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:flex lg:w-64 lg:flex-col bg-[var(--background-secondary)] border-r border-[var(--border)]">
         <Sidebar />

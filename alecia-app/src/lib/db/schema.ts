@@ -9,6 +9,8 @@ export const users = pgTable("users", {
   passwordHash: text("password_hash").notNull(),
   name: text("name").notNull(),
   role: text("role").default("admin"),
+  mustChangePassword: boolean("must_change_password").default(false),
+  hasSeenOnboarding: boolean("has_seen_onboarding").default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -417,6 +419,33 @@ export const testimonials = pgTable("testimonials", {
 });
 
 // =============================================================================
+// JOB OFFERS TABLE
+// =============================================================================
+export const jobOffers = pgTable("job_offers", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  slug: text("slug").unique().notNull(),
+  
+  // Job details
+  title: text("title").notNull(),
+  type: text("type").notNull(), // 'Stage/alternance', 'CDI'
+  location: text("location").notNull(),
+  description: text("description"),
+  requirements: text("requirements").array(),
+  
+  // Contact/Application
+  contactEmail: text("contact_email"),
+  pdfUrl: text("pdf_url"),
+  
+  // Display
+  isPublished: boolean("is_published").default(true),
+  displayOrder: integer("display_order").default(0),
+  
+  // Timestamps
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// =============================================================================
 // TYPE EXPORTS
 // =============================================================================
 export type User = typeof users.$inferSelect;
@@ -463,6 +492,9 @@ export type NewOffice = typeof officesTable.$inferInsert;
 
 export type Testimonial = typeof testimonials.$inferSelect;
 export type NewTestimonial = typeof testimonials.$inferInsert;
+
+export type JobOffer = typeof jobOffers.$inferSelect;
+export type NewJobOffer = typeof jobOffers.$inferInsert;
 
 // =============================================================================
 // ENUMS (for reference/validation)

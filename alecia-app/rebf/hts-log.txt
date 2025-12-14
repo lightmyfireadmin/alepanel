@@ -1,0 +1,55 @@
+HTTrack3.49-2 launched on Sun, 14 Dec 2025 05:44:21 at https://www.alecia.fr/operations
+(httrack https://www.alecia.fr/operations )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+05:44:25	Warning: 	HTML file (610 bytes) retransferred due to lack of cache: https://www.alecia.fr/
+05:45:32	Warning: 	Retry after error 502 (Bad Gateway) at link https://www.alecia.fr/ (from https://www.alecia.fr/operations)
+05:45:32	Warning: 	HTML file (610 bytes) retransferred due to lack of cache: https://www.alecia.fr/
+05:45:33	Warning: 	Retry after error 502 (Bad Gateway) at link https://www.alecia.fr/operations/keller-williams (from https://www.alecia.fr/operations)
+05:45:33	Warning: 	Retry after error 502 (Bad Gateway) at link https://www.alecia.fr/operations/capelli (from https://www.alecia.fr/operations)
+05:45:33	Warning: 	Retry after error 502 (Bad Gateway) at link https://www.alecia.fr/operations/kfc (from https://www.alecia.fr/operations)
+05:45:34	Error: 	"Not Found" (404) at link https://www.alecia.fr/operations-logos/banque-populaire-rives-de-paris (from https://www.alecia.fr/operations)
+05:45:34	Warning: 	Retry after error 502 (Bad Gateway) at link https://www.alecia.fr/operations-logos/caisse-depargne-bretagne-pays-de-loire (from https://www.alecia.fr/operations)
+05:46:17	Error: 	"Not Found" (404) at link https://www.alecia.fr/operations-logos/bnp-paribas (from https://www.alecia.fr/operations)
+05:46:17	Error: 	"Not Found" (404) at link https://www.alecia.fr/operations-logos/pool-bancaire (from https://www.alecia.fr/operations)
+05:46:17	Warning: 	Retry after error 502 (Bad Gateway) at link https://www.alecia.fr/operations-logos/bpi-france (from https://www.alecia.fr/operations)
+05:46:18	Warning: 	Retry after error 502 (Bad Gateway) at link https://www.alecia.fr/operations-logos/apax-partners (from https://www.alecia.fr/operations)
+05:46:18	Warning: 	Retry after error 502 (Bad Gateway) at link https://www.alecia.fr/operations-logos/cipres (from https://www.alecia.fr/operations)
+05:46:20	Error: 	"Not Found" (404) at link https://www.alecia.fr/operations-logos/french-food-capital (from https://www.alecia.fr/operations)
+05:46:20	Warning: 	Retry after error 502 (Bad Gateway) at link https://www.alecia.fr/operations-logos/finorpa (from https://www.alecia.fr/operations)
+05:47:03	Warning: 	Retry after error 502 (Bad Gateway) at link https://www.alecia.fr/operations-logos/generis-capital-partners (from https://www.alecia.fr/operations)
+05:47:03	Warning: 	Retry after error 502 (Bad Gateway) at link https://www.alecia.fr/operations-logos/logo-copy-4 (from https://www.alecia.fr/operations)
+05:47:03	Error: 	"Not Found" (404) at link https://www.alecia.fr/operations-logos/logo-copy-3 (from https://www.alecia.fr/operations)
+05:47:03	Error: 	"Not Found" (404) at link https://www.alecia.fr/operations-logos/logo-copy-2 (from https://www.alecia.fr/operations)
+05:47:03	Error: 	"Not Found" (404) at link https://www.alecia.fr/operations-logos/logo-copy (from https://www.alecia.fr/operations)
+05:47:03	Error: 	"Not Found" (404) at link https://www.alecia.fr/operations-logos/logo (from https://www.alecia.fr/operations)
+05:47:03	Warning: 	Retry after error 502 (Bad Gateway) at link https://www.alecia.fr/ (from https://www.alecia.fr/operations)
+05:47:03	Warning: 	HTML file (610 bytes) retransferred due to lack of cache: https://www.alecia.fr/
+05:47:04	Warning: 	Retry after error 502 (Bad Gateway) at link https://www.alecia.fr/operations/keller-williams (from https://www.alecia.fr/operations)
+05:47:04	Warning: 	Retry after error 502 (Bad Gateway) at link https://www.alecia.fr/operations/capelli (from https://www.alecia.fr/operations)
+05:47:47	Warning: 	Retry after error 502 (Bad Gateway) at link https://www.alecia.fr/operations/kfc (from https://www.alecia.fr/operations)
+05:47:47	Warning: 	Retry after error 502 (Bad Gateway) at link https://www.alecia.fr/operations-logos/caisse-depargne-bretagne-pays-de-loire (from https://www.alecia.fr/operations)
+05:47:48	Warning: 	Retry after error 502 (Bad Gateway) at link https://www.alecia.fr/operations-logos/bpi-france (from https://www.alecia.fr/operations)
+05:47:48	Warning: 	Retry after error 502 (Bad Gateway) at link https://www.alecia.fr/operations-logos/apax-partners (from https://www.alecia.fr/operations)
+05:48:31	Warning: 	Retry after error 502 (Bad Gateway) at link https://www.alecia.fr/operations-logos/cipres (from https://www.alecia.fr/operations)
+05:48:32	Warning: 	Retry after error 502 (Bad Gateway) at link https://www.alecia.fr/operations-logos/finorpa (from https://www.alecia.fr/operations)
+05:48:33	Warning: 	Retry after error 502 (Bad Gateway) at link https://www.alecia.fr/operations-logos/generis-capital-partners (from https://www.alecia.fr/operations)
+05:48:33	Warning: 	Retry after error 502 (Bad Gateway) at link https://www.alecia.fr/operations-logos/logo-copy-4 (from https://www.alecia.fr/operations)
+05:49:16	Error: 	"Bad Gateway" (502) after 2 retries at link https://www.alecia.fr/ (from https://www.alecia.fr/operations)
+05:49:16	Error: 	"Bad Gateway" (502) after 2 retries at link https://www.alecia.fr/operations/keller-williams (from https://www.alecia.fr/operations)
+05:49:16	Error: 	"Bad Gateway" (502) after 2 retries at link https://www.alecia.fr/operations/capelli (from https://www.alecia.fr/operations)
+05:49:16	Error: 	"Bad Gateway" (502) after 2 retries at link https://www.alecia.fr/operations/kfc (from https://www.alecia.fr/operations)
+05:49:16	Error: 	"Bad Gateway" (502) after 2 retries at link https://www.alecia.fr/operations-logos/caisse-depargne-bretagne-pays-de-loire (from https://www.alecia.fr/operations)
+05:49:16	Error: 	"Bad Gateway" (502) after 2 retries at link https://www.alecia.fr/operations-logos/bpi-france (from https://www.alecia.fr/operations)
+05:49:16	Error: 	"Bad Gateway" (502) after 2 retries at link https://www.alecia.fr/operations-logos/apax-partners (from https://www.alecia.fr/operations)
+05:49:16	Error: 	"Bad Gateway" (502) after 2 retries at link https://www.alecia.fr/operations-logos/cipres (from https://www.alecia.fr/operations)
+05:49:16	Error: 	"Bad Gateway" (502) after 2 retries at link https://www.alecia.fr/operations-logos/finorpa (from https://www.alecia.fr/operations)
+05:49:16	Error: 	"Bad Gateway" (502) after 2 retries at link https://www.alecia.fr/operations-logos/generis-capital-partners (from https://www.alecia.fr/operations)
+05:49:16	Error: 	"Bad Gateway" (502) after 2 retries at link https://www.alecia.fr/operations-logos/logo-copy-4 (from https://www.alecia.fr/operations)
+
+HTTrack Website Copier/3.49-2 mirror complete in 4 minutes 55 seconds : 94 links scanned, 52 files written (758769 bytes overall), 52 files updated [278300 bytes received at 943 bytes/sec], 797035 bytes transferred using HTTP compression in 61 files, ratio 26%, 3.6 requests per connection
+(19 errors, 25 warnings, 0 messages)

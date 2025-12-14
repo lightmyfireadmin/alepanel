@@ -12,5 +12,7 @@ export { ExpertiseCard } from "./expertise-card";
 export { RoleBadge } from "./role-badge";
 export { MobileStickyFooter } from "./mobile-sticky-footer";
 export { SellerForm } from "./seller-form";
+export { SectorFaq } from "./sector-faq";
 export { BuyerForm } from "./buyer-form";
+export { DealDetailLogo } from "./deal-detail-logo";
 export { CookieBanner } from "./cookie-banner";

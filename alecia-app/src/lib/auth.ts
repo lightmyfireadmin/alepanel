@@ -39,6 +39,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             email: user[0].email,
             name: user[0].name,
             role: user[0].role,
+            mustChangePassword: user[0].mustChangePassword,
+            hasSeenOnboarding: user[0].hasSeenOnboarding,
           };
         }
 
@@ -53,6 +55,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           email: user[0].email,
           name: user[0].name,
           role: user[0].role,
+          mustChangePassword: user[0].mustChangePassword,
+          hasSeenOnboarding: user[0].hasSeenOnboarding,
         };
       },
     }),
@@ -65,6 +69,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (user) {
         token.id = user.id;
         token.role = (user as { role?: string }).role;
+        token.mustChangePassword = (user as any).mustChangePassword;
+        token.hasSeenOnboarding = (user as any).hasSeenOnboarding;
       }
       return token;
     },
@@ -72,6 +78,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (token && session.user) {
         session.user.id = token.id as string;
         (session.user as { role?: string }).role = token.role as string;
+        (session.user as any).mustChangePassword = token.mustChangePassword as boolean;
+        (session.user as any).hasSeenOnboarding = token.hasSeenOnboarding as boolean;
       }
       return session;
     },

@@ -5,19 +5,20 @@ import { Navbar, Footer } from "@/components/layout";
 import { AnimatedCounter, RegionalMap, ValuationEstimator, HeroBackground, ExpertiseCard } from "@/components/features";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 // Team members - names are not translated
 const teamMembers = [
-  { name: "Grégory Colin", initials: "GC" },
-  { name: "Christophe Berthon", initials: "CB" },
-  { name: "Martin Egasse", initials: "ME" },
-  { name: "Tristan Cossec", initials: "TC" },
-  { name: "Serge de Faÿ", initials: "SF" },
-  { name: "Jérôme Berthiau", initials: "JB" },
-  { name: "Louise Pini", initials: "LP" },
-  { name: "Mickael Furet", initials: "MF" },
+  { name: "Grégory Colin", initials: "GC", photo: "/assets/Equipe_Alecia/GC_1_-_cropped_p800.jpg" },
+  { name: "Christophe Berthon", initials: "CB", photo: "/assets/Equipe_Alecia/CB_1_-_cropped_-_alt_p800.jpg" },
+  { name: "Martin Egasse", initials: "ME", photo: "/assets/Equipe_Alecia/ME_2_-_cropped_-_alt_p800.jpg" },
+  { name: "Tristan Cossec", initials: "TC", photo: "/assets/Equipe_Alecia/TC_2_p800.jpg" },
+  { name: "Serge de Faÿ", initials: "SF", photo: "/assets/Equipe_Alecia/SF_2_p800.jpg" },
+  { name: "Jérôme Berthiau", initials: "JB", photo: "/assets/Equipe_Alecia/JB_1_-_cropped_-_alt_p800.jpg" },
+  { name: "Louise Pini", initials: "LP", photo: "/assets/Equipe_Alecia/LP__2__-_cropped.jpg" },
+  { name: "Mickael Furet", initials: "MF", photo: "/assets/Equipe_Alecia/MF_p800.jpg" },
 ];
 
 export default function Home() {
@@ -106,19 +107,39 @@ export default function Home() {
             </div>
           </motion.div>
 
-          {/* Scroll indicator */}
+          {/* Scroll indicator - enhanced with chevrons */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1, duration: 0.5 }}
-            className="absolute bottom-10 left-1/2 -translate-x-1/2"
+            className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
           >
+            <motion.span 
+              className="text-xs text-[var(--foreground-muted)] uppercase tracking-widest"
+              animate={{ opacity: [0.5, 0.8, 0.5] }}
+              transition={{ repeat: Infinity, duration: 2 }}
+            >
+              Scroll
+            </motion.span>
             <motion.div
               animate={{ y: [0, 8, 0] }}
               transition={{ repeat: Infinity, duration: 1.5 }}
               className="w-6 h-10 border-2 border-[var(--foreground-muted)] dark:border-[var(--foreground-faint)] rounded-full flex items-start justify-center p-2"
             >
-              <div className="w-1.5 h-1.5 bg-[var(--accent)] rounded-full" />
+              <motion.div 
+                className="w-1.5 h-1.5 bg-[var(--accent)] rounded-full"
+                animate={{ y: [0, 10, 0] }}
+                transition={{ repeat: Infinity, duration: 1.5 }}
+              />
+            </motion.div>
+            <motion.div
+              animate={{ y: [0, 4, 0], opacity: [0.4, 0.8, 0.4] }}
+              transition={{ repeat: Infinity, duration: 1.5, delay: 0.2 }}
+              className="flex flex-col items-center -mt-1"
+            >
+              <svg width="12" height="8" viewBox="0 0 12 8" fill="none" className="text-[var(--accent)]">
+                <path d="M1 1L6 6L11 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
             </motion.div>
           </motion.div>
         </section>
@@ -126,7 +147,7 @@ export default function Home() {
         {/* Stats Section */}
         <section className="py-12 px-6 bg-[var(--background-secondary)]">
           <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               {stats.map((stat, idx) => (
                 <motion.div 
                   key={idx}
@@ -184,13 +205,22 @@ export default function Home() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: idx * 0.1 }}
-                    className="aspect-square rounded-lg overflow-hidden bg-[var(--card)] border border-[var(--border)] group cursor-pointer"
+                    className="aspect-square rounded-lg overflow-hidden bg-[var(--card)] border border-[var(--border)] group cursor-pointer relative"
                   >
-                    <div className="w-full h-full bg-gradient-to-br from-[var(--accent)]/20 to-[var(--accent)]/5 flex items-center justify-center">
-                      <span className="text-xl font-semibold text-[var(--accent)]">
-                        {member.initials}
-                      </span>
-                    </div>
+                    {member.photo ? (
+                      <Image
+                        src={member.photo}
+                        alt={member.name}
+                        fill
+                        className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-[var(--accent)]/20 to-[var(--accent)]/5 flex items-center justify-center">
+                        <span className="text-xl font-semibold text-[var(--accent)]">
+                          {member.initials}
+                        </span>
+                      </div>
+                    )}
                   </motion.div>
                 ))}
               </motion.div>
