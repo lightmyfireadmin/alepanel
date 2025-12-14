@@ -88,7 +88,7 @@ export async function getPostBySlug(slug: string) {
       .from(posts)
       .where(inArray(posts.slug, uniqueCandidates));
 
-    return results.find((post) => uniqueCandidates.includes(post.slug)) || null;
+    return results[0] || null;
   } catch (error) {
     console.error("[Posts] Error fetching post:", error);
     return null;
