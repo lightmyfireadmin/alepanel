@@ -14,6 +14,12 @@ interface UserWithFlags {
   hasSeenOnboarding: boolean;
 }
 
+type SessionUpdate = {
+  role?: string;
+  mustChangePassword?: boolean;
+  hasSeenOnboarding?: boolean;
+};
+
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
@@ -84,7 +90,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.hasSeenOnboarding = u.hasSeenOnboarding;
       }
       if (trigger === "update" && session) {
-        const sessionData = session as Record<string, unknown>;
+        const sessionData = session as SessionUpdate;
         if (typeof sessionData.role === "string") {
           token.role = sessionData.role;
         }

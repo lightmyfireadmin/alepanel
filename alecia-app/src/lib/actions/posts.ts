@@ -77,7 +77,12 @@ export async function getPostBySlug(slug: string) {
     if (normalized) {
       candidates.push(`${ACTUALITES_PREFIX}${normalized}`);
     }
-    const uniqueCandidates = Array.from(new Set(candidates.filter(Boolean)));
+    const uniqueCandidates: string[] = [];
+    for (const candidate of candidates) {
+      if (candidate && !uniqueCandidates.includes(candidate)) {
+        uniqueCandidates.push(candidate);
+      }
+    }
 
     if (uniqueCandidates.length === 0) {
       return null;
