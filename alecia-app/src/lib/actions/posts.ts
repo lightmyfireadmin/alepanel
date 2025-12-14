@@ -12,6 +12,8 @@ import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { normalizeSlug } from "@/lib/posts-utils";
 
+const ACTUALITES_PREFIX = "actualites/";
+
 export interface PostFormData {
   slug: string;
   titleFr: string;
@@ -73,7 +75,7 @@ export async function getPostBySlug(slug: string) {
     const normalized = normalizeSlug(slug);
     const candidates = [normalized, slug];
     if (normalized) {
-      candidates.push(`actualites/${normalized}`);
+      candidates.push(`${ACTUALITES_PREFIX}${normalized}`);
     }
     const uniqueCandidates = Array.from(new Set(candidates.filter(Boolean)));
 

@@ -12,6 +12,7 @@ import { Rocket, Shield, LayoutDashboard, Settings } from "lucide-react";
 export function OnboardingManager() {
   const { data: session, update } = useSession();
   const [pwd, setPwd] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showTour, setShowTour] = useState(false);
   const [tourStep, setTourStep] = useState(0);
@@ -33,10 +34,14 @@ export function OnboardingManager() {
 
   const handleChangePwd = async () => {
     if (pwd.length < 6) return;
+    setError("");
     setLoading(true);
     const result = await changePassword(pwd);
     if (result?.success) {
       await update({ mustChangePassword: false }); // Refresh session to get updated flags
+      setPwd("");
+    } else {
+      setError(result?.error || "Impossible de mettre à jour le mot de passe");
     }
     setLoading(false);
   };
@@ -77,11 +82,14 @@ export function OnboardingManager() {
               />
             </div>
           </div>
+          {error && (
+            <p className="text-sm text-red-500 px-1">{error}</p>
+          )}
           <DialogFooter>
              <Button onClick={handleChangePwd} disabled={loading || pwd.length < 6} className="w-full">
                {loading ? "Mise à jour..." : "Définir mon mot de passe"}
              </Button>
-          </DialogFooter>
+           </DialogFooter>
         </DialogContent>
       </Dialog>
     );
