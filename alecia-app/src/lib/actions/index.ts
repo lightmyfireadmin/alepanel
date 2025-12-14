@@ -120,6 +120,7 @@ export {
 
 // Company Enrichment (already existed)
 export {
-  enrichCompanyBySiren,
-  type CompanyEnrichmentData,
+  enrichCompany,
+  checkEnrichedCompany,
+  type EnrichedCompanyData,
 } from "./company-enrichment";
