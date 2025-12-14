@@ -13,18 +13,32 @@ export const metadata: Metadata = {
     "Suivez les actualités alecia. Communiqués de presse, articles et revues de presse sur le M&A pour PME et ETI.",
 };
 
+const normalizeSlug = (slug?: string | null) =>
+  (slug || "").replace(/^\/+/, "").replace(/^actualites\//, "");
+
+const normalizeCoverImage = (src?: string | null) => {
+  if (!src) return "/assets/Actualites_Alecia/illustration.jpg";
+  const trimmed = src.trim();
+  if (!trimmed) return "/assets/Actualites_Alecia/illustration.jpg";
+  const withPrefix = trimmed.startsWith("http") || trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+  return withPrefix || "/assets/Actualites_Alecia/illustration.jpg";
+};
+
 export default async function ActualitesPage() {
   const posts = await getAllPublishedPosts();
   
-  const postsWithData = posts.map(post => ({
-    id: post.id,
-    slug: post.slug,
-    title: post.titleFr,
-    excerpt: post.excerpt || "",
-    coverImage: post.coverImage || "/assets/Actualites_Alecia/illustration.jpg",
-    category: post.category || "Article",
-    publishedAt: post.publishedAt?.toISOString().split('T')[0] || "",
-  }));
+  const postsWithData = posts.map(post => {
+    const slug = normalizeSlug(post.slug);
+    return {
+      id: post.id,
+      slug: slug || post.slug,
+      title: post.titleFr,
+      excerpt: post.excerpt || "",
+      coverImage: normalizeCoverImage(post.coverImage),
+      category: post.category || "Article",
+      publishedAt: post.publishedAt?.toISOString().split('T')[0] || "",
+    };
+  });
   return (
     <>
       <Navbar />

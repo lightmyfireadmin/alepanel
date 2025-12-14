@@ -7,12 +7,23 @@ import { ArrowLeft, Calendar, FileText } from "lucide-react";
 import { getPostBySlug } from "@/lib/actions/posts";
 import type { Metadata } from "next";
 
+const normalizeSlug = (slug?: string | null) =>
+  (slug || "").replace(/^\/+/, "").replace(/^actualites\//, "");
+
+const normalizeCoverImage = (src?: string | null) => {
+  if (!src) return "/assets/Actualites_Alecia/illustration.jpg";
+  const trimmed = src.trim();
+  if (!trimmed) return "/assets/Actualites_Alecia/illustration.jpg";
+  const withPrefix = trimmed.startsWith("http") || trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+  return withPrefix || "/assets/Actualites_Alecia/illustration.jpg";
+};
+
 interface PageProps {
   params: { slug: string };
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const post = await getPostBySlug(params.slug);
+  const post = await getPostBySlug(normalizeSlug(params.slug));
 
   if (!post) {
     return {
@@ -24,17 +35,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: `${post.titleFr} | Alecia`,
     description: post.excerpt || post.contentFr.substring(0, 160),
     openGraph: {
-      images: post.coverImage ? [post.coverImage] : [],
+      images: post.coverImage ? [normalizeCoverImage(post.coverImage)] : [],
     },
   };
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
-  const post = await getPostBySlug(params.slug);
+  const post = await getPostBySlug(normalizeSlug(params.slug));
 
   if (!post || !post.isPublished) {
     notFound();
   }
+  const coverImage = normalizeCoverImage(post.coverImage);
 
   return (
     <>
@@ -44,9 +56,9 @@ export default async function BlogPostPage({ params }: PageProps) {
         {/* Hero Section */}
         <section className="relative h-[400px] w-full mb-12">
           <div className="absolute inset-0 bg-black/40 z-10" />
-          {post.coverImage && (
+          {coverImage && (
             <Image
-              src={post.coverImage}
+              src={coverImage}
               alt={post.titleFr}
               fill
               className="object-cover"

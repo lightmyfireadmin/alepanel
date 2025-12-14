@@ -24,6 +24,9 @@ export interface PostFormData {
   isPublished?: boolean;
 }
 
+const normalizeSlug = (slug: string) =>
+  slug.replace(/^\/+/, "").replace(/^actualites\//, "");
+
 /**
  * Get all published posts (for public display)
  */
@@ -69,13 +72,27 @@ export async function getAllPosts() {
  */
 export async function getPostBySlug(slug: string) {
   try {
-    const [post] = await db
-      .select()
-      .from(posts)
-      .where(eq(posts.slug, slug))
-      .limit(1);
-    
-    return post || null;
+    const normalized = normalizeSlug(slug);
+    const candidates = Array.from(
+      new Set([
+        normalized,
+        slug,
+        normalized ? `actualites/${normalized}` : "",
+      ].filter(Boolean))
+    );
+
+    for (const candidate of candidates) {
+      const [post] = await db
+        .select()
+        .from(posts)
+        .where(eq(posts.slug, candidate))
+        .limit(1);
+
+      if (post) {
+        return post;
+      }
+    }
+    return null;
   } catch (error) {
     console.error("[Posts] Error fetching post:", error);
     return null;

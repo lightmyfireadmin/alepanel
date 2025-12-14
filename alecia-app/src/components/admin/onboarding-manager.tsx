@@ -34,8 +34,10 @@ export function OnboardingManager() {
   const handleChangePwd = async () => {
     if (pwd.length < 6) return;
     setLoading(true);
-    await changePassword(pwd);
-    await update(); // Refresh session to get updated flags
+    const result = await changePassword(pwd);
+    if (result?.success) {
+      await update({ mustChangePassword: false }); // Refresh session to get updated flags
+    }
     setLoading(false);
   };
 

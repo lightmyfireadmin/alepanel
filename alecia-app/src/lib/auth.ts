@@ -75,13 +75,25 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: "/admin/login",
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         const u = user as unknown as UserWithFlags;
         token.id = u.id;
         token.role = u.role;
         token.mustChangePassword = u.mustChangePassword;
         token.hasSeenOnboarding = u.hasSeenOnboarding;
+      }
+      if (trigger === "update" && session) {
+        const sessionData = session as Record<string, unknown>;
+        if (typeof sessionData.role === "string") {
+          token.role = sessionData.role;
+        }
+        if (typeof sessionData.mustChangePassword === "boolean") {
+          token.mustChangePassword = sessionData.mustChangePassword;
+        }
+        if (typeof sessionData.hasSeenOnboarding === "boolean") {
+          token.hasSeenOnboarding = sessionData.hasSeenOnboarding;
+        }
       }
       return token;
     },

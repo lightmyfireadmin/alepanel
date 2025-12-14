@@ -22,8 +22,7 @@ async function seedAdmin() {
     where: eq(teamMembers.slug, TEAM_SLUG)
   });
 
-  // Using a professional abstract avatar or the real one if we had it. 
-  const AVATAR_URL = "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=256&h=256";
+  const AVATAR_URL = "/assets/Equipe_Alecia/CB_1_-_cropped_-_alt_p800.jpg";
 
   if (teamMember) {
     console.log(`Updating team member ${TEAM_SLUG} email and photo...`);
