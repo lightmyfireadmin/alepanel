@@ -51,36 +51,51 @@ interface CalendarEvent {
  * @returns Array of calendar events
  */
 export async function getCalendarEvents(
-  _accessToken: string,
-  _startDate: string,
-  _endDate: string
+  accessToken: string,
+  startDate: string,
+  endDate: string
 ): Promise<CalendarEvent[]> {
-  void _accessToken;
-  void _startDate;
-  void _endDate;
-  // TODO: Implement Microsoft Graph API call
-  // Example endpoint: GET /me/calendar/calendarView?startDateTime={start}&endDateTime={end}
-  
-  console.warn("Microsoft Graph integration not yet implemented");
-  
-  // Mock data for now
-  return [
-    {
-      id: "1",
-      subject: "Réunion Due Diligence - Projet Alpha",
-      start: {
-        dateTime: new Date().toISOString(),
-        timeZone: "Europe/Paris",
-      },
-      end: {
-        dateTime: new Date(Date.now() + 3600000).toISOString(),
-        timeZone: "Europe/Paris",
-      },
-      location: {
-        displayName: "Salle de réunion 1",
-      },
-    },
-  ];
+  if (!accessToken) {
+    throw new Error("Access token is required");
+  }
+
+  const queryParams = new URLSearchParams({
+    startDateTime: startDate,
+    endDateTime: endDate,
+  });
+
+  try {
+    const response = await fetch(
+      `https://graph.microsoft.com/v1.0/me/calendar/calendarView?${queryParams.toString()}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+          // Prefer header can be used to set timezone if needed
+          // "Prefer": 'outlook.timezone="UTC"'
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`Error fetching calendar events: ${response.status} ${response.statusText}`, errorText);
+      throw new Error(`Failed to fetch calendar events: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+
+    // Validate that data.value is an array
+    if (!data || !Array.isArray(data.value)) {
+      console.error("Invalid response format from Microsoft Graph API", data);
+      throw new Error("Invalid response format from Microsoft Graph API");
+    }
+
+    return data.value as CalendarEvent[];
+  } catch (error) {
+    console.error("Error in getCalendarEvents:", error);
+    throw error;
+  }
 }
 
 /**
