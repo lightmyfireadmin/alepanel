@@ -8,6 +8,8 @@
  * Documentation: https://learn.microsoft.com/en-us/graph/overview
  */
 
+import { logger } from "./logger";
+
 // TODO: Add Microsoft Graph SDK
 // npm install @microsoft/microsoft-graph-client @azure/msal-node
 
@@ -51,36 +53,42 @@ interface CalendarEvent {
  * @returns Array of calendar events
  */
 export async function getCalendarEvents(
-  _accessToken: string,
-  _startDate: string,
-  _endDate: string
+  accessToken: string,
+  startDate: string,
+  endDate: string
 ): Promise<CalendarEvent[]> {
-  void _accessToken;
-  void _startDate;
-  void _endDate;
-  // TODO: Implement Microsoft Graph API call
-  // Example endpoint: GET /me/calendar/calendarView?startDateTime={start}&endDateTime={end}
-  
-  console.warn("Microsoft Graph integration not yet implemented");
-  
-  // Mock data for now
-  return [
-    {
-      id: "1",
-      subject: "Réunion Due Diligence - Projet Alpha",
-      start: {
-        dateTime: new Date().toISOString(),
-        timeZone: "Europe/Paris",
-      },
-      end: {
-        dateTime: new Date(Date.now() + 3600000).toISOString(),
-        timeZone: "Europe/Paris",
-      },
-      location: {
-        displayName: "Salle de réunion 1",
-      },
-    },
-  ];
+  try {
+    const params = new URLSearchParams({
+      startDateTime: startDate,
+      endDateTime: endDate,
+      $top: "50", // Fetch up to 50 events
+    });
+
+    const response = await fetch(
+      `https://graph.microsoft.com/v1.0/me/calendar/calendarView?${params.toString()}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      logger.error("Microsoft Graph API error", {
+        status: response.status,
+        body: errorText,
+      });
+      throw new Error(`Failed to fetch calendar events: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return (data.value as CalendarEvent[]) || [];
+  } catch (error) {
+    logger.error("Error fetching calendar events", error);
+    throw error;
+  }
 }
 
 /**
