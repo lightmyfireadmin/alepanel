@@ -98,11 +98,11 @@ export async function getPostBySlug(slug: string) {
     }
 
     // Fallback: case-insensitive match for slugs with unexpected casing
-    const lowerCandidates = uniqueCandidates.map((candidate) =>
-      candidate.toLowerCase()
-    );
+    if (uniqueCandidates.length > 0) {
+      const lowerCandidates = uniqueCandidates.map((candidate) =>
+        candidate.toLowerCase()
+      );
 
-    if (lowerCandidates.length > 0) {
       const [ciMatch] = await db
         .select()
         .from(posts)
