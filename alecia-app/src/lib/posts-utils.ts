@@ -36,7 +36,6 @@ export const buildSlugCandidates = (slug: string) => {
   };
 
   addVariants(slug, normalized);
-  addVariants(normalized, normalized);
 
   // If the normalized slug corresponds to a legacy redirect target,
   // also include the legacy source so both URLs resolve.
