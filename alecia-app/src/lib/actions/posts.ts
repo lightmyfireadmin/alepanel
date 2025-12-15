@@ -100,18 +100,16 @@ export async function getPostBySlug(slug: string) {
     // Fallback: case-insensitive match for slugs with unexpected casing
     // Only a few variants are checked; add a lowercase index if dataset grows
     if (uniqueCandidates.length > 0) {
-      const regexPattern = uniqueCandidates
-        .map((candidate) => candidate.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
-        .join("|");
+      for (const candidate of uniqueCandidates) {
+        const [ciMatch] = await db
+          .select()
+          .from(posts)
+          .where(sql`lower(${posts.slug}) = ${candidate.toLowerCase()}`)
+          .limit(1);
 
-      const [ciMatch] = await db
-        .select()
-        .from(posts)
-        .where(sql`${posts.slug} ~* ${`^(${regexPattern})$`}`)
-        .limit(1);
-
-      if (ciMatch) {
-        return ciMatch;
+        if (ciMatch) {
+          return ciMatch;
+        }
       }
     }
 

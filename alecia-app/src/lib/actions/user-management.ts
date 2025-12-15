@@ -11,8 +11,8 @@ export async function changePassword(newPassword: string) {
   const session = await auth();
   if (!session?.user?.id) return { success: false, error: "Unauthorized" };
 
-  if (!newPassword || newPassword.length < 6) {
-    return { success: false, error: "Le mot de passe doit contenir au moins 6 caractères" };
+  if (!newPassword || newPassword.length < 8) {
+    return { success: false, error: "Le mot de passe doit contenir au moins 8 caractères" };
   }
 
   try {
