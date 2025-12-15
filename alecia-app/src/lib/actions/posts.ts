@@ -7,7 +7,7 @@
 
 import { db } from "@/lib/db";
 import { posts } from "@/lib/db/schema";
-import { eq, desc, sql, and, inArray } from "drizzle-orm";
+import { eq, desc, sql, and, inArray, or } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { normalizeSlug } from "@/lib/posts-utils";
@@ -98,11 +98,15 @@ export async function getPostBySlug(slug: string) {
     }
 
     // Fallback: case-insensitive match for slugs with unexpected casing
-    for (const candidate of uniqueCandidates) {
+    const lowerCandidates = uniqueCandidates.map((candidate) =>
+      candidate.toLowerCase()
+    );
+
+    if (lowerCandidates.length > 0) {
       const [ciMatch] = await db
         .select()
         .from(posts)
-        .where(sql`lower(${posts.slug}) = ${candidate.toLowerCase()}`)
+        .where(or(...lowerCandidates.map((candidate) => sql`lower(${posts.slug}) = ${candidate}`)))
         .limit(1);
 
       if (ciMatch) {

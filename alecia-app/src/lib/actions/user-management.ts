@@ -40,7 +40,8 @@ export async function changePassword(newPassword: string) {
         updatedAt: new Date(),
       })
       .where(eq(users.id, session.user.id));
-  } catch {
+  } catch (error) {
+    console.error("[User] changePassword error:", error);
     return { success: false, error: "Impossible de mettre à jour le mot de passe" };
   }
 
