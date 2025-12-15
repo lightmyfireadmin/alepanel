@@ -29,14 +29,15 @@ export const buildSlugCandidates = (slug: string) => {
   const addVariants = (raw?: string, resolved?: string) => {
     if (!raw) return;
     const canonical = resolved ?? normalizeSlug(raw);
+    const canonicalLower = canonical.toLowerCase();
     candidates.add(raw);
     if (canonical) {
       if (canonical !== raw) {
-        candidates.add(canonical);
+        candidates.add(canonicalLower);
       }
-      const prefixed = canonical.toLowerCase().startsWith(ACTUALITES_PREFIX)
-        ? canonical
-        : `${ACTUALITES_PREFIX}${canonical}`;
+      const prefixed = canonicalLower.startsWith(ACTUALITES_PREFIX)
+        ? canonicalLower
+        : `${ACTUALITES_PREFIX}${canonicalLower}`;
       candidates.add(prefixed);
     }
   };
@@ -49,7 +50,7 @@ export const buildSlugCandidates = (slug: string) => {
   if (LEGACY_SLUG_REVERSE[normalizedLower]) {
     addVariants(LEGACY_SLUG_REVERSE[normalizedLower]);
   }
-  if (LEGACY_SLUG_REDIRECTIONS[normalizedLower]) {
+  else if (LEGACY_SLUG_REDIRECTIONS[normalizedLower]) {
     addVariants(LEGACY_SLUG_REDIRECTIONS[normalizedLower]);
   }
 
