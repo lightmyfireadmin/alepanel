@@ -446,6 +446,27 @@ export const jobOffers = pgTable("job_offers", {
 });
 
 // =============================================================================
+// LEADS TABLE - Contact form submissions
+// =============================================================================
+export const leads = pgTable("leads", {
+  id: uuid("id").defaultRandom().primaryKey(),
+
+  // Form fields
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
+  email: text("email").notNull(),
+  company: text("company"),
+  message: text("message").notNull(),
+
+  // Status
+  status: text("status").default("new"), // "new", "contacted", "qualified", "closed"
+
+  // Timestamps
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// =============================================================================
 // TYPE EXPORTS
 // =============================================================================
 export type User = typeof users.$inferSelect;
@@ -495,6 +516,9 @@ export type NewTestimonial = typeof testimonials.$inferInsert;
 
 export type JobOffer = typeof jobOffers.$inferSelect;
 export type NewJobOffer = typeof jobOffers.$inferInsert;
+
+export type Lead = typeof leads.$inferSelect;
+export type NewLead = typeof leads.$inferInsert;
 
 // =============================================================================
 // ENUMS (for reference/validation)
@@ -549,3 +573,4 @@ export const CONTACT_TAGS = [
   "Fonds PE",
 ] as const;
 
+export const LEAD_STATUSES = ["new", "contacted", "qualified", "closed"] as const;
