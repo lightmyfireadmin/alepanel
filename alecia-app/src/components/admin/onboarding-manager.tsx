@@ -47,9 +47,13 @@ export function OnboardingManager() {
   };
 
   const handleTourComplete = async () => {
-    await completeOnboarding();
-    await update();
-    setShowTour(false);
+    setLoading(true);
+    const result = await completeOnboarding();
+    if (result?.success) {
+      await update({ hasSeenOnboarding: true });
+      setShowTour(false);
+    }
+    setLoading(false);
   };
 
   // 1. Password Change Enforcement
@@ -143,9 +147,10 @@ export function OnboardingManager() {
                   if (tourStep < tours.length - 1) setTourStep(tourStep + 1);
                   else handleTourComplete();
                }} 
+               disabled={loading}
                className="bg-[var(--accent)] text-black hover:bg-white transition-colors font-medium px-6"
              >
-               {tourStep < tours.length - 1 ? "Suivant" : "C'est parti !"}
+               {tourStep < tours.length - 1 ? "Suivant" : (loading ? "Enregistrement..." : "C'est parti !")}
              </Button>
            </div>
          </DialogContent>
