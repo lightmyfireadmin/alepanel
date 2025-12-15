@@ -47,19 +47,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           return null;
         }
 
-        // DEV AUTH BYPASS: In development mode, if password is "testing",
-        // automatically log in if the email exists in the database
-        if (process.env.NODE_ENV === "development" && password === "testing") {
-          return {
-            id: user[0].id,
-            email: user[0].email,
-            name: user[0].name,
-            role: user[0].role,
-            mustChangePassword: user[0].mustChangePassword,
-            hasSeenOnboarding: user[0].hasSeenOnboarding,
-          };
-        }
-
         const isValid = await bcrypt.compare(password, user[0].passwordHash);
 
         if (!isValid) {
