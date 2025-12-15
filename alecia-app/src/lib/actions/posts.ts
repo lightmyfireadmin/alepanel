@@ -10,9 +10,7 @@ import { posts } from "@/lib/db/schema";
 import { eq, desc, sql, and, inArray, or } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
-import { normalizeSlug } from "@/lib/posts-utils";
-
-const ACTUALITES_PREFIX = "actualites/";
+import { buildSlugCandidates } from "@/lib/posts-utils";
 
 export interface PostFormData {
   slug: string;
@@ -72,17 +70,7 @@ export async function getAllPosts() {
   */
 export async function getPostBySlug(slug: string) {
   try {
-    const normalized = normalizeSlug(slug);
-    const candidates = [normalized, slug];
-    if (normalized) {
-      candidates.push(`${ACTUALITES_PREFIX}${normalized}`);
-    }
-    const uniqueCandidates: string[] = [];
-    for (const candidate of candidates) {
-      if (candidate && !uniqueCandidates.includes(candidate)) {
-        uniqueCandidates.push(candidate);
-      }
-    }
+    const uniqueCandidates = buildSlugCandidates(slug);
 
     if (uniqueCandidates.length === 0) {
       return null;
