@@ -17,7 +17,9 @@
     "db:seed:admin": "tsx src/lib/db/seed-admin.ts"
   },
   "dependencies": {
+    "@azure/msal-node": "^3.8.4",
     "@hookform/resolvers": "^5.2.2",
+    "@microsoft/microsoft-graph-client": "^3.0.7",
     "@neondatabase/serverless": "^1.0.2",
     "@radix-ui/react-avatar": "^1.1.11",
     "@radix-ui/react-dialog": "^1.1.15",
@@ -38,6 +40,7 @@
     "drizzle-orm": "^0.45.1",
     "exceljs": "^4.4.0",
     "framer-motion": "^12.23.26",
+    "isomorphic-fetch": "^3.0.0",
     "lucide-react": "^0.560.0",
     "next": "16.0.10",
     "next-auth": "^5.0.0-beta.30",
