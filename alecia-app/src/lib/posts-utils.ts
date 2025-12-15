@@ -23,24 +23,26 @@ export const buildSlugCandidates = (slug: string) => {
   const normalized = normalizeSlug(slug);
   const candidates = new Set<string>();
 
-  const addSlug = (value?: string) => {
-    if (!value) return;
-    candidates.add(value);
-    const canonical = normalizeSlug(value);
+  const addVariants = (raw?: string, resolved?: string) => {
+    if (!raw) return;
+    const canonical = resolved ?? normalizeSlug(raw);
+    candidates.add(raw);
     if (canonical) {
-      candidates.add(canonical);
+      if (canonical !== raw) {
+        candidates.add(canonical);
+      }
       candidates.add(`${ACTUALITES_PREFIX}${canonical}`);
     }
   };
 
-  addSlug(slug);
-  addSlug(normalized);
+  addVariants(slug, normalized);
+  addVariants(normalized, normalized);
 
   // If the normalized slug corresponds to a legacy redirect target,
   // also include the legacy source so both URLs resolve.
   Object.entries(LEGACY_SLUG_REDIRECTIONS).forEach(([legacy, target]) => {
     if (normalized.toLowerCase() === target.toLowerCase()) {
-      addSlug(legacy);
+      addVariants(legacy);
     }
   });
 
