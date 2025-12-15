@@ -1,9 +1,9 @@
 export const ACTUALITES_PREFIX = "actualites/";
 
-// Legacy redirections for slugs that were published with a different wording
+// Legacy redirections for slugs that were published with a different wording.
 // Example: early marketing links used "...-acquiert-..." while the database kept "...-acquisition-..."
 const LEGACY_SLUG_REDIRECTIONS: Record<string, string> = {
-  "safe-groupe-acquisition-dogs-security": "safe-groupe-acquiert-dogs-security",
+  "safe-groupe-acquiert-dogs-security": "safe-groupe-acquisition-dogs-security",
 };
 
 export const normalizeSlug = (slug?: string | null) => {
