@@ -40,8 +40,12 @@ export const buildSlugCandidates = (slug: string) => {
   // If the normalized slug corresponds to a legacy redirect target,
   // also include the legacy source so both URLs resolve.
   Object.entries(LEGACY_SLUG_REDIRECTIONS).forEach(([legacy, target]) => {
-    if (normalized.toLowerCase() === target.toLowerCase()) {
+    const normalizedLower = normalized.toLowerCase();
+    if (normalizedLower === target.toLowerCase()) {
       addVariants(legacy);
+    }
+    if (normalizedLower === legacy.toLowerCase()) {
+      addVariants(target);
     }
   });
 
