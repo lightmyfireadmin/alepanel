@@ -41,7 +41,8 @@ export async function changePassword(newPassword: string) {
       })
       .where(eq(users.id, session.user.id));
   } catch (error) {
-    console.error("[User] changePassword error:", error);
+    const message = error instanceof Error ? error.message : "Unknown error";
+    console.error("[User] changePassword error:", message);
     return { success: false, error: "Impossible de mettre à jour le mot de passe" };
   }
 
