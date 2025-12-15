@@ -33,7 +33,7 @@ export function OnboardingManager() {
   }, [session, mustChange, hasSeen]);
 
   const handleChangePwd = async () => {
-    if (pwd.length < 6) return;
+    if (pwd.length < 8) return;
     setError("");
     setLoading(true);
     const result = await changePassword(pwd);
@@ -78,7 +78,7 @@ export function OnboardingManager() {
                 type="password" 
                 value={pwd} 
                 onChange={(e) => setPwd(e.target.value)} 
-                placeholder="6 caractères minimum"
+                placeholder="8 caractères minimum"
               />
             </div>
           </div>
@@ -86,7 +86,7 @@ export function OnboardingManager() {
             <p className="text-sm text-red-500 px-1">{error}</p>
           )}
           <DialogFooter>
-             <Button onClick={handleChangePwd} disabled={loading || pwd.length < 6} className="w-full">
+             <Button onClick={handleChangePwd} disabled={loading || pwd.length < 8} className="w-full">
                {loading ? "Mise à jour..." : "Définir mon mot de passe"}
              </Button>
            </DialogFooter>
