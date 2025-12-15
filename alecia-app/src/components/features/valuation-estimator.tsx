@@ -51,6 +51,8 @@ export function ValuationEstimator() {
     company: "",
   });
   const [result, setResult] = useState<ValuationResult | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const calculateValuation = () => {
     const ebitda = parseFloat(formData.ebitda) * 1000; // Convert K€ to actual value
@@ -78,15 +80,36 @@ export function ValuationEstimator() {
 
   const handleCapture = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Send to CRM/email service
-    console.log("Lead captured:", { ...formData, result });
-    setStep("capture");
+    setIsSubmitting(true);
+    setErrorMessage("");
+
+    try {
+      const response = await fetch("/api/valuation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, result }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Une erreur s'est produite");
+      }
+
+      console.log("Lead captured:", { ...formData, result });
+      setStep("capture");
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : "Une erreur s'est produite");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const reset = () => {
     setStep("form");
     setFormData({ revenue: "", ebitda: "", sector: "", email: "", company: "" });
     setResult(null);
+    setErrorMessage("");
   };
 
   return (
@@ -254,8 +277,20 @@ export function ValuationEstimator() {
                     className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]"
                   />
                 </div>
-                <Button type="submit" className="btn-gold w-full rounded-lg">
-                  Recevoir l&apos;analyse complète
+
+                {errorMessage && (
+                  <p className="text-sm text-red-500 text-center">{errorMessage}</p>
+                )}
+
+                <Button type="submit" className="btn-gold w-full rounded-lg" disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Envoi en cours...
+                    </>
+                  ) : (
+                    "Recevoir l'analyse complète"
+                  )}
                 </Button>
               </form>
             </motion.div>
