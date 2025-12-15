@@ -212,6 +212,7 @@ export default function Home() {
                         src={member.photo}
                         alt={member.name}
                         fill
+                        sizes="(max-width: 1024px) 25vw, 160px"
                         className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
                       />
                     ) : (
