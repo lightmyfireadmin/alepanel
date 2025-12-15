@@ -1,3 +1,6 @@
+import { ConfidentialClientApplication } from "@azure/msal-node";
+import "isomorphic-fetch"; // Polyfill fetch for Microsoft Graph Client if needed, though mostly for Node environment compatibility
+
 /**
  * Microsoft Graph API Service (Skeleton)
  * 
@@ -8,8 +11,27 @@
  * Documentation: https://learn.microsoft.com/en-us/graph/overview
  */
 
-// TODO: Add Microsoft Graph SDK
-// npm install @microsoft/microsoft-graph-client @azure/msal-node
+// Global MSAL client instance for caching
+let cca: ConfidentialClientApplication | null = null;
+
+function getMsalClient(): ConfidentialClientApplication {
+  if (cca) return cca;
+
+  if (!process.env.AZURE_CLIENT_ID || !process.env.AZURE_CLIENT_SECRET || !process.env.AZURE_TENANT_ID) {
+    throw new Error("Missing Azure MSAL environment variables (AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, AZURE_TENANT_ID)");
+  }
+
+  const msalConfig = {
+    auth: {
+      clientId: process.env.AZURE_CLIENT_ID,
+      clientSecret: process.env.AZURE_CLIENT_SECRET,
+      authority: `https://login.microsoftonline.com/${process.env.AZURE_TENANT_ID}`,
+    },
+  };
+
+  cca = new ConfidentialClientApplication(msalConfig);
+  return cca;
+}
 
 interface CalendarEvent {
   id: string;
@@ -89,12 +111,21 @@ export async function getCalendarEvents(
  * @returns Access token for Microsoft Graph API
  */
 export async function getMicrosoftGraphToken(): Promise<string> {
-  // TODO: Implement MSAL authentication flow
-  // 1. Configure MSAL client with tenant ID and client ID
-  // 2. Use client credentials or authorization code flow
-  // 3. Return access token
-  
-  throw new Error("Microsoft Graph authentication not yet implemented");
+  const client = getMsalClient();
+  const clientCredentialRequest = {
+    scopes: ["https://graph.microsoft.com/.default"],
+  };
+
+  try {
+    const response = await client.acquireTokenByClientCredential(clientCredentialRequest);
+    if (response && response.accessToken) {
+      return response.accessToken;
+    }
+    throw new Error("Failed to acquire access token from MSAL");
+  } catch (error) {
+    console.error("Error acquiring Microsoft Graph token:", error);
+    throw error;
+  }
 }
 
 /**
@@ -104,10 +135,8 @@ export async function getMicrosoftGraphToken(): Promise<string> {
  */
 export async function validateGraphConnection(): Promise<boolean> {
   try {
-    // TODO: Make a simple test call to Microsoft Graph API
-    // Example: GET /me to get current user info
-    
-    return false; // Not yet implemented
+    const token = await getMicrosoftGraphToken();
+    return !!token;
   } catch (error) {
     console.error("Microsoft Graph connection validation failed:", error);
     return false;
