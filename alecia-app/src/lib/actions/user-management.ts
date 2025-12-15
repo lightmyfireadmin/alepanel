@@ -42,7 +42,10 @@ export async function changePassword(newPassword: string) {
       .where(eq(users.id, session.user.id));
   } catch (error) {
     const safeDetail = error instanceof Error ? error.name : "UnknownError";
-    console.error("[User] changePassword error", safeDetail);
+    console.error("[User] changePassword error", {
+      scope: "changePassword",
+      detail: safeDetail,
+    });
     return { success: false, error: "Impossible de mettre à jour le mot de passe" };
   }
 
