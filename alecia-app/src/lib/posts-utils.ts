@@ -31,7 +31,10 @@ export const buildSlugCandidates = (slug: string) => {
       if (canonical !== raw) {
         candidates.add(canonical);
       }
-      candidates.add(`${ACTUALITES_PREFIX}${canonical}`);
+      const prefixed = canonical.toLowerCase().startsWith(ACTUALITES_PREFIX)
+        ? canonical
+        : `${ACTUALITES_PREFIX}${canonical}`;
+      candidates.add(prefixed);
     }
   };
 
@@ -39,8 +42,8 @@ export const buildSlugCandidates = (slug: string) => {
 
   // If the normalized slug corresponds to a legacy redirect target,
   // also include the legacy source so both URLs resolve.
+  const normalizedLower = normalized.toLowerCase();
   Object.entries(LEGACY_SLUG_REDIRECTIONS).forEach(([legacy, target]) => {
-    const normalizedLower = normalized.toLowerCase();
     if (normalizedLower === target.toLowerCase()) {
       addVariants(legacy);
     }
