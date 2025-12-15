@@ -5,12 +5,15 @@ export const ACTUALITES_PREFIX = "actualites/";
 const LEGACY_SLUG_REDIRECTIONS: Record<string, string> = {
   "safe-groupe-acquiert-dogs-security": "safe-groupe-acquisition-dogs-security",
 };
+const LEGACY_SLUG_REVERSE: Record<string, string> = Object.fromEntries(
+  Object.entries(LEGACY_SLUG_REDIRECTIONS).map(([legacy, target]) => [target, legacy])
+);
 
 export const normalizeSlug = (slug?: string | null) => {
   const cleaned = (slug || "").trim().replace(/^\/+/, "").replace(/\/+$/, "");
   const withoutPrefix = cleaned.replace(/^actualites\//i, "");
   const lower = withoutPrefix.toLowerCase();
-  return LEGACY_SLUG_REDIRECTIONS[lower] || withoutPrefix;
+  return LEGACY_SLUG_REDIRECTIONS[lower] || lower;
 };
 
 /**
@@ -43,14 +46,12 @@ export const buildSlugCandidates = (slug: string) => {
   // If the normalized slug corresponds to a legacy redirect target,
   // also include the legacy source so both URLs resolve.
   const normalizedLower = normalized.toLowerCase();
-  Object.entries(LEGACY_SLUG_REDIRECTIONS).forEach(([legacy, target]) => {
-    if (normalizedLower === target.toLowerCase()) {
-      addVariants(legacy);
-    }
-    if (normalizedLower === legacy.toLowerCase()) {
-      addVariants(target);
-    }
-  });
+  if (LEGACY_SLUG_REVERSE[normalizedLower]) {
+    addVariants(LEGACY_SLUG_REVERSE[normalizedLower]);
+  }
+  if (LEGACY_SLUG_REDIRECTIONS[normalizedLower]) {
+    addVariants(LEGACY_SLUG_REDIRECTIONS[normalizedLower]);
+  }
 
   return Array.from(candidates).filter(Boolean);
 };
