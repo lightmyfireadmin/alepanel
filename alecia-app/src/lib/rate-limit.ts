@@ -106,5 +106,6 @@ function cleanupExpiredEntries(): void {
 export const rateLimitConfigs = {
   contact: { maxRequests: 5, windowMs: 60 * 1000 }, // 5 per minute
   newsletter: { maxRequests: 3, windowMs: 60 * 1000 }, // 3 per minute
+  valuation: { maxRequests: 3, windowMs: 60 * 1000 }, // 3 per minute
   api: { maxRequests: 100, windowMs: 60 * 1000 }, // 100 per minute
 };

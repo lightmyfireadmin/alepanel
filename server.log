@@ -1,0 +1,51 @@
+
+> alecia-app@0.1.0 dev
+> next dev
+
+   ▲ Next.js 16.0.10 (Turbopack)
+   - Local:         http://localhost:3000
+   - Network:       http://192.168.0.2:3000
+
+ ✓ Starting...
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+ ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+ ✓ Ready in 2.6s
+ ○ Compiling / ...
+Error: ENVIRONMENT_FALLBACK: There is no `timeZone` configured, this can lead to markup mismatches caused by environment differences. Consider adding a global default: https://next-intl.dev/docs/configuration#time-zone
+    at Home (src/app/page.tsx:25:28)
+  23 |
+  24 | export default function Home() {
+> 25 |   const t = useTranslations();
+     |                            ^
+  26 |
+  27 |   const expertises = [
+  28 |     { {
+  code: 'ENVIRONMENT_FALLBACK',
+  originalMessage: 'There is no `timeZone` configured, this can lead to markup mismatches caused by environment differences. Consider adding a global default: https://next-intl.dev/docs/configuration#time-zone'
+}
+ GET / 200 in 10.2s (compile: 8.8s, render: 1377ms)
+[31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
+    at assertConfig (/app/alecia-app/.next/dev/server/chunks/node_modules_@auth_core_36df0127._.js:513:16)
+    at Auth (/app/alecia-app/.next/dev/server/chunks/node_modules_@auth_core_36df0127._.js:5330:204)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AppRouteRouteModule.do (/app/alecia-app/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.dev.js:5:37789)
+ GET /api/auth/session 500 in 3.4s (compile: 3.4s, render: 28ms)
+[31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
+    at assertConfig (/app/alecia-app/.next/dev/server/chunks/node_modules_@auth_core_36df0127._.js:513:16)
+    at Auth (/app/alecia-app/.next/dev/server/chunks/node_modules_@auth_core_36df0127._.js:5330:204)
+    at async AppRouteRouteModule.do (/app/alecia-app/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.dev.js:5:37789)
+ GET /api/auth/session 500 in 46ms (compile: 36ms, render: 10ms)
+[INFO] 2025-12-15T17:55:41.088Z Valuation lead captured {
+  revenue: '2000',
+  ebitda: '500',
+  sector: 'Technologies & logiciels',
+  email: 'test@example.com',
+  company: 'Test Corp',
+  valuationResult: { low: 3000000, mid: 4000000, high: 6000000, multiple: 8 },
+  timestamp: '2025-12-15T17:55:41.088Z'
+}
+ POST /api/valuation 200 in 209ms (compile: 198ms, render: 11ms)
