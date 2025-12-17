@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, timestamp, integer, boolean, jsonb, date } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, timestamp, integer, boolean, jsonb, date, index } from "drizzle-orm/pg-core";
 
 // =============================================================================
 // USERS TABLE - Admin authentication
@@ -195,7 +195,9 @@ export const contacts = pgTable("contacts", {
   // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => ({
+  companyIdIdx: index("contacts_company_id_idx").on(table.companyId),
+}));
 
 // =============================================================================
 // PROJECTS TABLE - Interactive timeline
@@ -226,7 +228,9 @@ export const projects = pgTable("projects", {
   // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => ({
+  clientIdIdx: index("projects_client_id_idx").on(table.clientId),
+}));
 
 // =============================================================================
 // PROJECT EVENTS TABLE - Timeline details
@@ -247,7 +251,9 @@ export const projectEvents = pgTable("project_events", {
   
   // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
-});
+}, (table) => ({
+  projectIdIdx: index("project_events_project_id_idx").on(table.projectId),
+}));
 
 // =============================================================================
 // DOCUMENTS TABLE - Data Room / Magic Links
@@ -270,7 +276,9 @@ export const documents = pgTable("documents", {
   // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => ({
+  projectIdIdx: index("documents_project_id_idx").on(table.projectId),
+}));
 
 // =============================================================================
 // WEATHER CACHE TABLE - Max 2 API calls per day (Cost Control)
@@ -313,7 +321,9 @@ export const buyerCriteria = pgTable("buyer_criteria", {
   // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => ({
+  contactIdIdx: index("buyer_criteria_contact_id_idx").on(table.contactId),
+}));
 
 // =============================================================================
 // VOICE NOTES TABLE - Stored in Vercel Blob
@@ -337,7 +347,11 @@ export const voiceNotes = pgTable("voice_notes", {
   
   // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
-});
+}, (table) => ({
+  projectIdIdx: index("voice_notes_project_id_idx").on(table.projectId),
+  contactIdIdx: index("voice_notes_contact_id_idx").on(table.contactId),
+  recordedByIdIdx: index("voice_notes_recorded_by_idx").on(table.recordedBy),
+}));
 
 // =============================================================================
 // SECTORS TABLE - Sector verticals (Phase 1 - Roadmap #44)
@@ -366,7 +380,9 @@ export const sectors = pgTable("sectors", {
   // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => ({
+  referentPartnerIdIdx: index("sectors_referent_partner_id_idx").on(table.referentPartnerId),
+}));
 
 // =============================================================================
 // OFFICES TABLE - Regional offices (Phase 1 - Roadmap #44)
@@ -416,7 +432,9 @@ export const testimonials = pgTable("testimonials", {
   
   // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
-});
+}, (table) => ({
+  dealIdIdx: index("testimonials_deal_id_idx").on(table.dealId),
+}));
 
 // =============================================================================
 // JOB OFFERS TABLE
