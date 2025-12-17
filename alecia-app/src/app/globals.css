@@ -49,6 +49,11 @@
   --radius: 0.625rem;
   --accent-foreground: #0f172a;
   
+  /* Fonts - fallback to system fonts */
+  --font-geist-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  --font-geist-mono: 'Menlo', 'Monaco', 'Courier New', monospace;
+  --font-playfair: Georgia, 'Times New Roman', Times, serif;
+  
   /* Charts */
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);

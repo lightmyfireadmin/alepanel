@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import SidebarLinkGroup from "./SidebarLinkGroup";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import {
@@ -13,11 +12,8 @@ import {
   Briefcase,
   FileText,
   PieChart,
-  MessageSquare,
-  Globe,
   ChevronDown,
-  ArrowLeft,
-  Calendar
+  ArrowLeft
 } from "lucide-react";
 
 interface SidebarProps {
@@ -27,7 +23,6 @@ interface SidebarProps {
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const pathname = usePathname();
-  const [pageName, setPageName] = useLocalStorage("selectedMenu", "dashboard");
 
   const trigger = useRef<HTMLButtonElement>(null);
   const sidebar = useRef<HTMLElement>(null);
@@ -40,8 +35,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       if (!sidebar.current || !trigger.current) return;
       if (
         !sidebarOpen ||
-        sidebar.current.contains(target) ||
-        trigger.current.contains(target)
+        sidebar.current.contains(target as Node) ||
+        trigger.current.contains(target as Node)
       )
         return;
       setSidebarOpen(false);
@@ -60,7 +55,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   }, [sidebarOpen, setSidebarOpen]);
 
   useEffect(() => {
-    localStorage.setItem("sidebar-expanded", sidebarExpanded.toString());
     if (sidebarExpanded) {
       document.body.classList.add("sidebar-expanded");
     } else {
@@ -152,7 +146,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
-                          sidebarExpanded ? handleClick() : setSidebarExpanded(true);
+                          sidebarExpanded ? handleClick() : setSidebarExpanded("true");
                         }}
                       >
                         <PieChart className="w-5 h-5" />
