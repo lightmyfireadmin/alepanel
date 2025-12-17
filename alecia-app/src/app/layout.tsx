@@ -1,27 +1,22 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { Playfair_Display } from "next/font/google";
 import { SkipToMain } from "@/components/layout";
 import { MobileStickyFooter, CookieBanner } from "@/components/features";
 import { Providers } from "@/components/Providers";
 import { getMessages, getLocale } from "next-intl/server";
 import "./globals.css";
 
-const geistSans = Geist({
+// Using fallback fonts to avoid Google Fonts fetching issues during build
+const geistSans = {
   variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+};
 
-const geistMono = Geist_Mono({
+const geistMono = {
   variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+};
 
-const playfair = Playfair_Display({
+const playfair = {
   variable: "--font-playfair",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
+};
 
 export const metadata: Metadata = {
   title: {

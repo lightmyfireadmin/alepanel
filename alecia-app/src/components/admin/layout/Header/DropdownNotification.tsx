@@ -14,8 +14,8 @@ const DropdownNotification = () => {
       if (!dropdown.current) return;
       if (
         !dropdownOpen ||
-        dropdown.current.contains(target) ||
-        trigger.current.contains(target)
+        dropdown.current.contains(target as Node) ||
+        trigger.current?.contains(target as Node)
       )
         return;
       setDropdownOpen(false);
