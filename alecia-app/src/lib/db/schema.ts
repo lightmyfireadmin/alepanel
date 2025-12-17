@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, timestamp, integer, boolean, jsonb, date } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, timestamp, integer, boolean, jsonb, date, index } from "drizzle-orm/pg-core";
 
 // =============================================================================
 // USERS TABLE - Admin authentication
@@ -195,6 +195,10 @@ export const contacts = pgTable("contacts", {
   // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => {
+  return {
+    companyIdIdx: index("contacts_company_id_idx").on(table.companyId),
+  };
 });
 
 // =============================================================================
@@ -226,6 +230,10 @@ export const projects = pgTable("projects", {
   // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => {
+  return {
+    clientIdIdx: index("projects_client_id_idx").on(table.clientId),
+  };
 });
 
 // =============================================================================
@@ -247,6 +255,10 @@ export const projectEvents = pgTable("project_events", {
   
   // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
+}, (table) => {
+  return {
+    projectIdIdx: index("project_events_project_id_idx").on(table.projectId),
+  };
 });
 
 // =============================================================================
@@ -270,6 +282,10 @@ export const documents = pgTable("documents", {
   // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => {
+  return {
+    documentsProjectIdIdx: index("documents_project_id_idx").on(table.projectId),
+  };
 });
 
 // =============================================================================
