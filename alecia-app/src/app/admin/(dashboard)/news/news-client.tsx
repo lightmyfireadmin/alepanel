@@ -1,13 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
+import Breadcrumb from "@/components/admin/ui/Breadcrumb";
+import {
+  Plus, Pencil, Trash2, Newspaper, Calendar, Search, Eye, EyeOff, ExternalLink, Loader2, Image as ImageIcon
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { createPost, updatePost, deletePost, togglePostPublish, type PostFormData } from "@/lib/actions/posts";
 import {
   Dialog,
   DialogContent,
@@ -15,10 +14,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Pencil, Trash2, Newspaper, Calendar, Search, Eye, EyeOff, ExternalLink, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { createPost, updatePost, deletePost, togglePostPublish, type PostFormData } from "@/lib/actions/posts";
 
 interface NewsArticle {
   id: string;
@@ -72,8 +72,6 @@ export default function NewsClient({ initialArticles }: NewsClientProps) {
     article.titleFr.toLowerCase().includes(searchQuery.toLowerCase()) ||
     (article.category && article.category.toLowerCase().includes(searchQuery.toLowerCase()))
   );
-
-  const publishedCount = articles.filter((a) => a.isPublished).length;
 
   const handleOpenDialog = (article?: NewsArticle) => {
     if (article) {
@@ -180,7 +178,6 @@ export default function NewsClient({ initialArticles }: NewsClientProps) {
       .slice(0, 60);
   };
 
-  // Helper to format date for input type="date"
   const formatDateForInput = (date?: Date | null) => {
     if (!date) return new Date().toISOString().split("T")[0];
     try {
@@ -191,271 +188,200 @@ export default function NewsClient({ initialArticles }: NewsClientProps) {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-[var(--foreground)] flex items-center gap-2">
-            <Newspaper className="w-6 h-6" />
-            Actualités &amp; Articles
-          </h1>
-          <p className="text-[var(--foreground-muted)]">
-            {publishedCount} article{publishedCount > 1 ? "s" : ""} publié{publishedCount > 1 ? "s" : ""} sur {articles.length}
-          </p>
-        </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+    <>
+      <Breadcrumb pageName="News Management" />
+
+      <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between mb-5">
+         <div className="relative w-full md:w-1/3">
+             <input
+                 type="text"
+                 placeholder="Search articles..."
+                 value={searchQuery}
+                 onChange={(e) => setSearchQuery(e.target.value)}
+                 className="w-full rounded-md border border-stroke bg-transparent py-2.5 px-5 outline-none focus:border-primary dark:border-strokedark dark:bg-meta-4 dark:focus:border-primary"
+             />
+             <Search className="absolute right-4 top-3 text-bodydark2 w-5 h-5" />
+         </div>
+
+         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={() => handleOpenDialog()} className="btn-gold">
-              <Plus className="w-4 h-4 mr-2" />
-              Nouvel article
-            </Button>
+            <button onClick={() => handleOpenDialog()} className="rounded-md bg-primary py-3 px-6 font-medium text-white hover:bg-opacity-90 flex items-center gap-2">
+                <Plus className="w-4 h-4" />
+                Add Article
+            </button>
           </DialogTrigger>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-[var(--card)] border-[var(--border)]">
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white dark:bg-boxdark border-stroke dark:border-strokedark text-black dark:text-white">
             <DialogHeader>
-              <DialogTitle className="text-[var(--foreground)]">
-                {editingArticle ? "Modifier l'article" : "Nouvel article"}
+              <DialogTitle className="text-black dark:text-white">
+                {editingArticle ? "Edit Article" : "New Article"}
               </DialogTitle>
             </DialogHeader>
             <div className="space-y-6 py-4">
-              {/* Basic Info */}
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label>Titre (FR) *</Label>
-                  <Input
-                    value={formData.titleFr}
-                    onChange={(e) => {
-                      const title = e.target.value;
-                      setFormData({
-                        ...formData,
-                        titleFr: title,
-                        slug: formData.slug || generateSlug(title),
-                      });
-                    }}
-                    placeholder="Titre de l'article"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Titre (EN)</Label>
-                  <Input
-                    value={formData.titleEn || ""}
-                    onChange={(e) => setFormData({ ...formData, titleEn: e.target.value })}
-                    placeholder="Article title"
-                  />
-                </div>
-              </div>
-
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label>Slug (URL) *</Label>
-                  <Input
-                    value={formData.slug}
-                    onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                    placeholder="mon-article"
-                  />
-                  <p className="text-xs text-[var(--foreground-muted)]">
-                    URL: /actualites/{formData.slug || "..."}
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <Label>Catégorie *</Label>
-                  <Select
-                    value={formData.category || ""}
-                    onValueChange={(v) => setFormData({ ...formData, category: v })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Choisir" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {CATEGORIES.map((cat) => (
-                        <SelectItem key={cat.value} value={cat.value}>{cat.label}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-               {/* Cover Image */}
-               <div className="space-y-2">
-                  <Label>Image de couverture (URL)</Label>
-                  <Input
-                    value={formData.coverImage || ""}
-                    onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
-                    placeholder="https://..."
-                  />
-                  {formData.coverImage && (
-                    <div className="mt-2 h-32 w-full relative border rounded bg-white overflow-hidden">
-                       <img src={formData.coverImage} alt="Preview" className="w-full h-full object-cover" />
-                    </div>
-                  )}
+               {/* Simplified Form Wrapper for consistency */}
+               <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                      <Label className="text-black dark:text-white">Title (FR)</Label>
+                      <Input
+                        value={formData.titleFr}
+                        onChange={(e) => {
+                            const title = e.target.value;
+                            setFormData({
+                                ...formData,
+                                titleFr: title,
+                                slug: formData.slug || generateSlug(title),
+                            });
+                        }}
+                        className="border-stroke dark:border-strokedark dark:bg-meta-4 dark:text-white"
+                      />
+                  </div>
+                  <div className="space-y-2">
+                      <Label className="text-black dark:text-white">Category</Label>
+                      <Select
+                            value={formData.category || ""}
+                            onValueChange={(v) => setFormData({ ...formData, category: v })}
+                        >
+                            <SelectTrigger className="border-stroke dark:border-strokedark dark:bg-meta-4 dark:text-white">
+                            <SelectValue placeholder="Select" />
+                            </SelectTrigger>
+                            <SelectContent>
+                            {CATEGORIES.map((cat) => (
+                                <SelectItem key={cat.value} value={cat.value}>{cat.label}</SelectItem>
+                            ))}
+                            </SelectContent>
+                        </Select>
+                  </div>
                </div>
 
-              {/* Excerpt */}
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label>Extrait (FR) *</Label>
-                  <Textarea
-                    value={formData.excerpt || ""}
-                    onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
-                    rows={2}
-                    placeholder="Résumé court pour les listings (150 car. max)"
-                  />
-                </div>
-                {/* Note: Excerpt EN is not in Schema currently, using contentEn for now or ignoring */}
-              </div>
+               <div className="grid gap-4 md:grid-cols-2">
+                   <div className="space-y-2">
+                      <Label className="text-black dark:text-white">Slug</Label>
+                      <Input
+                        value={formData.slug}
+                        onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                        className="border-stroke dark:border-strokedark dark:bg-meta-4 dark:text-white"
+                      />
+                   </div>
+                   <div className="space-y-2">
+                       <Label className="text-black dark:text-white">Publish Date</Label>
+                       <Input
+                            type="date"
+                            value={formatDateForInput(formData.publishedAt)}
+                            onChange={(e) => setFormData({ ...formData, publishedAt: e.target.valueAsDate })}
+                            className="border-stroke dark:border-strokedark dark:bg-meta-4 dark:text-white"
+                        />
+                   </div>
+               </div>
 
-              {/* Content */}
-              <div className="space-y-2">
-                <Label>Contenu (FR) *</Label>
-                <Textarea
-                  value={formData.contentFr}
-                  onChange={(e) => setFormData({ ...formData, contentFr: e.target.value })}
-                  rows={8}
-                  placeholder="Contenu complet de l'article (Markdown supporté)"
-                />
-                <p className="text-xs text-[var(--foreground-muted)]">
-                  Supporte le format Markdown : **gras**, *italique*, [lien](url), etc.
-                </p>
-              </div>
+               <div className="space-y-2">
+                    <Label className="text-black dark:text-white">Excerpt (FR)</Label>
+                    <Textarea
+                        value={formData.excerpt || ""}
+                        onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
+                        rows={2}
+                        className="border-stroke dark:border-strokedark dark:bg-meta-4 dark:text-white"
+                    />
+               </div>
 
-              <div className="space-y-2">
-                <Label>Contenu (EN)</Label>
-                <Textarea
-                  value={formData.contentEn || ""}
-                  onChange={(e) => setFormData({ ...formData, contentEn: e.target.value })}
-                  rows={6}
-                  placeholder="Full article content (Markdown supported)"
-                />
-              </div>
+               <div className="space-y-2">
+                    <Label className="text-black dark:text-white">Content (FR)</Label>
+                    <Textarea
+                        value={formData.contentFr}
+                        onChange={(e) => setFormData({ ...formData, contentFr: e.target.value })}
+                        rows={6}
+                        className="border-stroke dark:border-strokedark dark:bg-meta-4 dark:text-white"
+                    />
+               </div>
 
-              {/* Status & Date */}
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label>Date de publication</Label>
-                  <Input
-                    type="date"
-                    value={formatDateForInput(formData.publishedAt)}
-                    onChange={(e) => setFormData({ ...formData, publishedAt: e.target.valueAsDate })}
-                  />
+                <div className="flex items-center gap-4 py-2">
+                   <Label className="text-black dark:text-white">Published</Label>
+                   <Switch
+                        checked={formData.isPublished}
+                        onCheckedChange={(checked) => setFormData({ ...formData, isPublished: checked })}
+                    />
                 </div>
-                <div className="flex items-center justify-between p-4 bg-[var(--background-secondary)] rounded-lg">
-                  <div>
-                    <p className="font-medium text-[var(--foreground)]">Publier</p>
-                    <p className="text-sm text-[var(--foreground-muted)]">
-                      L&apos;article sera visible sur le site
-                    </p>
-                  </div>
-                  <Switch
-                    checked={formData.isPublished}
-                    onCheckedChange={(checked) => setFormData({ ...formData, isPublished: checked })}
-                  />
-                </div>
-              </div>
 
-              {/* Actions */}
-              <div className="flex justify-between pt-4 border-t border-[var(--border)]">
-                <Button variant="outline" asChild>
-                  <a href={`/actualites/${formData.slug}`} target="_blank" rel="noopener noreferrer">
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    Prévisualiser
-                  </a>
-                </Button>
-                <div className="flex gap-3">
-                  <Button variant="outline" onClick={() => setIsDialogOpen(false)} disabled={isLoading}>
-                    Annuler
-                  </Button>
-                  <Button
-                    onClick={handleSave}
-                    className="btn-gold"
-                    disabled={!formData.titleFr || !formData.slug || !formData.contentFr || isLoading}
-                  >
-                    {isLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                    {editingArticle ? "Mettre à jour" : "Créer"}
-                  </Button>
+                <div className="flex justify-end gap-3 pt-4 border-t border-stroke dark:border-strokedark">
+                    <button
+                        onClick={() => setIsDialogOpen(false)}
+                        className="rounded border border-stroke py-2 px-6 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        onClick={handleSave}
+                        className="rounded bg-primary py-2 px-6 font-medium text-white hover:bg-opacity-90"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? <Loader2 className="animate-spin w-5 h-5" /> : "Save"}
+                    </button>
                 </div>
-              </div>
             </div>
           </DialogContent>
         </Dialog>
       </div>
 
-      {/* Search */}
-      <div className="relative max-w-md">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--foreground-muted)]" />
-        <Input
-          placeholder="Rechercher un article..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-10"
-        />
-      </div>
-
-      {/* Articles List */}
-      <div className="space-y-4">
-        {filteredArticles.map((article) => (
-          <Card key={article.id} className={`bg-[var(--card)] border-[var(--border)] ${!article.isPublished ? "opacity-70" : ""}`}>
-            <CardHeader className="pb-2">
-              <div className="flex items-start justify-between">
-                <div className="space-y-1 flex-1 pr-4">
-                  <div className="flex items-center gap-2">
-                    <CardTitle className="text-lg text-[var(--foreground)] line-clamp-1">{article.titleFr}</CardTitle>
-                  </div>
-                  <div className="flex items-center gap-4 text-sm text-[var(--foreground-muted)]">
-                    <Badge variant="outline" className="bg-[var(--accent)]/10 text-[var(--accent)]">
-                      {article.category}
-                    </Badge>
-                    <span className="flex items-center gap-1">
-                      <Calendar className="w-3 h-3" />
-                      {article.publishedAt ? new Date(article.publishedAt).toLocaleDateString("fr-FR") : "N/A"}
-                    </span>
-                    <Badge variant={article.isPublished ? "default" : "secondary"} className={article.isPublished ? "bg-green-500/10 text-green-500" : ""}>
-                      {article.isPublished ? "Publié" : "Brouillon"}
-                    </Badge>
-                  </div>
-                </div>
-                <div className="flex gap-1">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => togglePublishedState(article.id, article.isPublished)}
-                    className="h-8 w-8 p-0"
-                    title={article.isPublished ? "Dépublier" : "Publier"}
-                  >
-                    {article.isPublished ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleOpenDialog(article)}
-                    className="h-8 w-8 p-0"
-                  >
-                    <Pencil className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleDelete(article.id)}
-                    className="h-8 w-8 p-0 text-red-400 hover:text-red-300"
-                    disabled={isLoading}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-[var(--foreground-muted)] line-clamp-2">
-                {article.excerpt}
-              </p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {filteredArticles.length === 0 && (
-        <div className="text-center py-12 text-[var(--foreground-muted)]">
-          Aucun article trouvé
+      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+        <div className="max-w-full overflow-x-auto">
+            <table className="w-full table-auto">
+                <thead>
+                    <tr className="bg-gray-2 text-left dark:bg-meta-4">
+                        <th className="py-4 px-4 font-medium text-black dark:text-white xl:pl-11">Article</th>
+                        <th className="py-4 px-4 font-medium text-black dark:text-white">Category</th>
+                        <th className="py-4 px-4 font-medium text-black dark:text-white">Published Date</th>
+                        <th className="py-4 px-4 font-medium text-black dark:text-white">Status</th>
+                        <th className="py-4 px-4 font-medium text-black dark:text-white">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {filteredArticles.map((article) => (
+                        <tr key={article.id} className="border-b border-[#eee] dark:border-strokedark last:border-0">
+                            <td className="py-5 px-4 pl-9 xl:pl-11">
+                                <h5 className="font-medium text-black dark:text-white line-clamp-1">{article.titleFr}</h5>
+                                <p className="text-sm text-bodydark2 line-clamp-1">{article.slug}</p>
+                            </td>
+                            <td className="py-5 px-4">
+                                <p className="text-black dark:text-white">{article.category}</p>
+                            </td>
+                            <td className="py-5 px-4">
+                                <p className="text-black dark:text-white">
+                                    {article.publishedAt ? new Date(article.publishedAt).toLocaleDateString("fr-FR") : "N/A"}
+                                </p>
+                            </td>
+                            <td className="py-5 px-4">
+                                <span className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${
+                                    article.isPublished ? "bg-success text-success" : "bg-warning text-warning"
+                                }`}>
+                                    {article.isPublished ? "Published" : "Draft"}
+                                </span>
+                            </td>
+                            <td className="py-5 px-4">
+                                <div className="flex items-center space-x-3.5">
+                                    <button
+                                        onClick={() => togglePublishedState(article.id, article.isPublished)}
+                                        className="hover:text-primary"
+                                        title={article.isPublished ? "Unpublish" : "Publish"}
+                                    >
+                                        {article.isPublished ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                    </button>
+                                    <button onClick={() => handleOpenDialog(article)} className="hover:text-primary">
+                                        <Pencil className="w-5 h-5" />
+                                    </button>
+                                    <button onClick={() => handleDelete(article.id)} className="hover:text-danger">
+                                        <Trash2 className="w-5 h-5" />
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+             {filteredArticles.length === 0 && (
+                 <div className="py-10 text-center text-bodydark2">
+                     No articles found.
+                 </div>
+             )}
         </div>
-      )}
-    </div>
+      </div>
+    </>
   );
 }

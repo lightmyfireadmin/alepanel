@@ -1,13 +1,11 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useState, useCallback } from "react";
+import Breadcrumb from "@/components/admin/ui/Breadcrumb";
 import { 
   Upload, FileText, Image, File, Link2, 
   Lock, Unlock, Trash2, Check, Download
 } from "lucide-react";
-import { motion } from "framer-motion";
-import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 
 // Mock documents data
@@ -62,43 +60,33 @@ export default function DocumentsPage() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-[var(--foreground)] font-[family-name:var(--font-playfair)]">
-            Documents
-          </h1>
-          <p className="text-[var(--foreground-muted)] mt-1">
-            Data Room et partage sécurisé
-          </p>
-        </div>
-      </div>
+    <>
+      <Breadcrumb pageName="Documents" />
 
       {/* Upload Zone */}
-      <Card className="bg-[var(--card)] border-[var(--border)]">
-        <CardContent className="pt-6">
+      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark mb-6">
+        <div className="p-6.5">
           <div
             {...getRootProps()}
             className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors cursor-pointer ${
               isDragActive
-                ? "border-[var(--accent)] bg-[var(--accent)]/5"
-                : "border-[var(--border)] hover:border-[var(--accent)]/50"
+                ? "border-primary bg-primary/5"
+                : "border-stroke hover:border-primary/50 dark:border-strokedark"
             }`}
           >
             <input {...getInputProps()} />
             <div className="flex flex-col items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-[var(--accent)]/10 flex items-center justify-center">
-                <Upload className="w-6 h-6 text-[var(--accent)]" />
+              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                <Upload className="w-6 h-6 text-primary" />
               </div>
               <div>
-                <p className="text-[var(--foreground)] font-medium">
+                <p className="text-black dark:text-white font-medium">
                   {isDragActive
-                    ? "Déposez les fichiers ici..."
-                    : "Glissez-déposez vos fichiers ici"}
+                    ? "Drop files here..."
+                    : "Drag & drop files here"}
                 </p>
-                <p className="text-sm text-[var(--foreground-muted)] mt-1">
-                  ou cliquez pour sélectionner • PDF, Images, Excel
+                <p className="text-sm text-bodydark2 mt-1">
+                  or click to select • PDF, Images, Excel
                 </p>
               </div>
             </div>
@@ -110,109 +98,95 @@ export default function DocumentsPage() {
               {uploadingFiles.map((file, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center gap-3 p-3 rounded-lg bg-[var(--background-tertiary)]"
+                  className="flex items-center gap-3 p-3 rounded-lg bg-gray-2 dark:bg-meta-4"
                 >
-                  <FileText className="w-5 h-5 text-[var(--accent)]" />
+                  <FileText className="w-5 h-5 text-primary" />
                   <div className="flex-1">
-                    <p className="text-sm text-[var(--foreground)]">{file.name}</p>
-                    <div className="mt-1 h-1 bg-[var(--border)] rounded-full overflow-hidden">
-                      <motion.div
-                        initial={{ width: "0%" }}
-                        animate={{ width: "100%" }}
-                        transition={{ duration: 2 }}
-                        className="h-full bg-[var(--accent)]"
-                      />
+                    <p className="text-sm text-black dark:text-white">{file.name}</p>
+                    <div className="mt-1 h-1 bg-stroke dark:border-strokedark rounded-full overflow-hidden">
+                      <div className="h-full bg-primary w-full animate-pulse" />
                     </div>
                   </div>
                 </div>
               ))}
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Documents List */}
-      <Card className="bg-[var(--card)] border-[var(--border)]">
-        <CardHeader>
-          <CardTitle className="text-[var(--foreground)]">Fichiers</CardTitle>
-        </CardHeader>
-        <CardContent className="p-0">
-          <div className="divide-y divide-[var(--border)]">
+      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+        <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+          <h3 className="font-medium text-black dark:text-white">
+            Files
+          </h3>
+        </div>
+        <div className="p-0">
+          <div className="flex flex-col">
             {mockDocuments.map((doc, idx) => {
               const FileIcon = getFileIcon(doc.mimeType);
               return (
-                <motion.div
+                <div
                   key={doc.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: idx * 0.05 }}
-                  className="flex items-center gap-4 px-4 py-3 hover:bg-[var(--background-tertiary)] transition-colors"
+                  className="flex items-center justify-between gap-4 px-6 py-4 border-b border-stroke dark:border-strokedark last:border-0 hover:bg-gray-2 dark:hover:bg-meta-4 transition-colors"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center">
-                    <FileIcon className="w-5 h-5 text-[var(--accent)]" />
-                  </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[var(--foreground)] font-medium truncate">
-                      {doc.name}
-                    </p>
-                    <p className="text-xs text-[var(--foreground-muted)]">
-                      {formatFileSize(doc.size)} • {new Date(doc.createdAt).toLocaleDateString("fr-FR")}
-                    </p>
+                  <div className="flex items-center gap-4 min-w-0">
+                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <FileIcon className="w-5 h-5 text-primary" />
+                      </div>
+
+                      <div className="min-w-0">
+                        <p className="text-black dark:text-white font-medium truncate">
+                          {doc.name}
+                        </p>
+                        <p className="text-xs text-bodydark2">
+                          {formatFileSize(doc.size)} • {new Date(doc.createdAt).toLocaleDateString("fr-FR")}
+                        </p>
+                      </div>
                   </div>
 
                   <div className="flex items-center gap-2">
                     {/* Confidential Badge */}
                     <span className={`p-1.5 rounded-md ${
                       doc.isConfidential 
-                        ? "bg-red-500/10 text-red-400" 
-                        : "bg-emerald-500/10 text-emerald-400"
+                        ? "bg-danger/10 text-danger"
+                        : "bg-success/10 text-success"
                     }`}>
-                      {doc.isConfidential ? <Lock className="w-3.5 h-3.5" /> : <Unlock className="w-3.5 h-3.5" />}
+                      {doc.isConfidential ? <Lock className="w-4 h-4" /> : <Unlock className="w-4 h-4" />}
                     </span>
 
                     {/* Magic Link */}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-8 gap-1.5 border-[var(--border)]"
+                    <button
+                      className="flex items-center gap-1 px-3 py-1.5 rounded border border-stroke dark:border-strokedark hover:text-primary text-sm"
                       onClick={() => copyMagicLink(doc.id)}
                     >
                       {copiedId === doc.id ? (
                         <>
-                          <Check className="w-3.5 h-3.5 text-emerald-400" />
-                          <span className="text-xs">Copié</span>
+                          <Check className="w-4 h-4 text-success" />
+                          <span className="hidden sm:inline text-success">Copied</span>
                         </>
                       ) : (
                         <>
-                          <Link2 className="w-3.5 h-3.5" />
-                          <span className="text-xs">Partager</span>
+                          <Link2 className="w-4 h-4" />
+                          <span className="hidden sm:inline">Share</span>
                         </>
                       )}
-                    </Button>
+                    </button>
 
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-8 w-8 p-0"
-                    >
-                      <Download className="w-4 h-4 text-[var(--foreground-muted)]" />
-                    </Button>
+                    <button className="p-1.5 hover:text-primary">
+                      <Download className="w-4 h-4" />
+                    </button>
 
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-8 w-8 p-0 hover:text-red-400"
-                    >
+                    <button className="p-1.5 hover:text-danger">
                       <Trash2 className="w-4 h-4" />
-                    </Button>
+                    </button>
                   </div>
-                </motion.div>
+                </div>
               );
             })}
           </div>
-        </CardContent>
-      </Card>
-    </div>
+        </div>
+      </div>
+    </>
   );
 }

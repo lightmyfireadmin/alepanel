@@ -1,12 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
+import Breadcrumb from "@/components/admin/ui/Breadcrumb";
+import { Plus, Pencil, Trash2, Building2, Users, Search, MoreVertical } from "lucide-react";
+import { mockSectors } from "@/lib/data";
+import { teamMembers } from "@/lib/data";
 import {
   Dialog,
   DialogContent,
@@ -14,10 +12,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Pencil, Trash2, Building2, Users, Search } from "lucide-react";
-import { mockSectors } from "@/lib/data";
-import { teamMembers } from "@/lib/data";
 
 interface SectorFormData {
   id: string;
@@ -126,218 +124,119 @@ export default function SectorsAdminPage() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-[var(--foreground)] flex items-center gap-2">
-            <Building2 className="w-6 h-6" />
-            Gestion des secteurs
-          </h1>
-          <p className="text-[var(--foreground-muted)]">
-            Gérez les secteurs d&apos;activité affichés sur le site
-          </p>
-        </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+    <>
+      <Breadcrumb pageName="Sectors" />
+
+      <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between mb-5">
+         <div className="relative w-full md:w-1/3">
+             <input
+                 type="text"
+                 placeholder="Search sectors..."
+                 value={searchQuery}
+                 onChange={(e) => setSearchQuery(e.target.value)}
+                 className="w-full rounded-md border border-stroke bg-transparent py-2.5 px-5 outline-none focus:border-primary dark:border-strokedark dark:bg-meta-4 dark:focus:border-primary"
+             />
+             <Search className="absolute right-4 top-3 text-bodydark2 w-5 h-5" />
+         </div>
+
+         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={() => handleOpenDialog()} className="btn-gold">
-              <Plus className="w-4 h-4 mr-2" />
-              Nouveau secteur
-            </Button>
+            <button onClick={() => handleOpenDialog()} className="rounded-md bg-primary py-3 px-6 font-medium text-white hover:bg-opacity-90 flex items-center gap-2">
+                <Plus className="w-4 h-4" />
+                Add Sector
+            </button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-[var(--card)] border-[var(--border)]">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-white dark:bg-boxdark border-stroke dark:border-strokedark text-black dark:text-white">
             <DialogHeader>
-              <DialogTitle className="text-[var(--foreground)]">
-                {editingSector ? "Modifier le secteur" : "Nouveau secteur"}
+              <DialogTitle className="text-black dark:text-white">
+                {editingSector ? "Edit Sector" : "New Sector"}
               </DialogTitle>
             </DialogHeader>
             <div className="space-y-6 py-4">
-              {/* Basic Info */}
-              <div className="grid gap-4 md:grid-cols-2">
+               {/* Form */}
+               <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                      <Label className="text-black dark:text-white">Name (FR) *</Label>
+                      <Input
+                        value={formData.nameFr}
+                        onChange={(e) => setFormData({ ...formData, nameFr: e.target.value })}
+                        className="border-stroke dark:border-strokedark dark:bg-meta-4 dark:text-white"
+                      />
+                  </div>
+                  <div className="space-y-2">
+                      <Label className="text-black dark:text-white">Slug *</Label>
+                      <Input
+                        value={formData.slug}
+                        onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                        className="border-stroke dark:border-strokedark dark:bg-meta-4 dark:text-white"
+                      />
+                  </div>
+               </div>
+
                 <div className="space-y-2">
-                  <Label>Nom (FR) *</Label>
-                  <Input
-                    value={formData.nameFr}
-                    onChange={(e) => setFormData({ ...formData, nameFr: e.target.value })}
-                    placeholder="Technologies & logiciels"
-                  />
+                    <Label className="text-black dark:text-white">Description (FR)</Label>
+                    <Textarea
+                        value={formData.descriptionFr}
+                        onChange={(e) => setFormData({ ...formData, descriptionFr: e.target.value })}
+                        rows={3}
+                        className="border-stroke dark:border-strokedark dark:bg-meta-4 dark:text-white"
+                    />
                 </div>
-                <div className="space-y-2">
-                  <Label>Nom (EN)</Label>
-                  <Input
-                    value={formData.nameEn}
-                    onChange={(e) => setFormData({ ...formData, nameEn: e.target.value })}
-                    placeholder="Technology & Software"
-                  />
+
+                {/* Additional fields would go here */}
+
+                <div className="flex justify-end gap-3 pt-4 border-t border-stroke dark:border-strokedark">
+                    <button
+                        onClick={() => setIsDialogOpen(false)}
+                        className="rounded border border-stroke py-2 px-6 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        onClick={handleSave}
+                        className="rounded bg-primary py-2 px-6 font-medium text-white hover:bg-opacity-90"
+                        disabled={!formData.nameFr}
+                    >
+                        Save
+                    </button>
                 </div>
-              </div>
-
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label>Slug *</Label>
-                  <Input
-                    value={formData.slug}
-                    onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                    placeholder="technologies-logiciels"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Icône</Label>
-                  <Select
-                    value={formData.iconType}
-                    onValueChange={(v) => setFormData({ ...formData, iconType: v })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Choisir une icône" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {ICON_TYPES.map((icon) => (
-                        <SelectItem key={icon.value} value={icon.value}>
-                          {icon.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              {/* Descriptions */}
-              <div className="space-y-2">
-                <Label>Description courte (FR)</Label>
-                <Textarea
-                  value={formData.descriptionFr}
-                  onChange={(e) => setFormData({ ...formData, descriptionFr: e.target.value })}
-                  rows={2}
-                  placeholder="Accompagnement des éditeurs de logiciels..."
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Description courte (EN)</Label>
-                <Textarea
-                  value={formData.descriptionEn}
-                  onChange={(e) => setFormData({ ...formData, descriptionEn: e.target.value })}
-                  rows={2}
-                  placeholder="Supporting software publishers..."
-                />
-              </div>
-
-              {/* Investment Thesis */}
-              <div className="space-y-2">
-                <Label>Thèse d&apos;investissement (FR)</Label>
-                <Textarea
-                  value={formData.investmentThesisFr}
-                  onChange={(e) => setFormData({ ...formData, investmentThesisFr: e.target.value })}
-                  rows={4}
-                  placeholder="Le secteur technologique français connaît une consolidation..."
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Thèse d&apos;investissement (EN)</Label>
-                <Textarea
-                  value={formData.investmentThesisEn}
-                  onChange={(e) => setFormData({ ...formData, investmentThesisEn: e.target.value })}
-                  rows={4}
-                  placeholder="The French technology sector is experiencing..."
-                />
-              </div>
-
-              {/* Referent Partner */}
-              <div className="space-y-2">
-                <Label>Associé référent</Label>
-                <Select
-                  value={formData.referentPartner}
-                  onValueChange={(v) => setFormData({ ...formData, referentPartner: v })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Choisir un associé" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {teamMembers.map((member) => (
-                      <SelectItem key={member.slug} value={member.slug}>
-                        {member.name} - {member.role}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Actions */}
-              <div className="flex justify-end gap-3 pt-4 border-t border-[var(--border)]">
-                <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                  Annuler
-                </Button>
-                <Button onClick={handleSave} className="btn-gold" disabled={!formData.nameFr || !formData.slug}>
-                  {editingSector ? "Mettre à jour" : "Créer"}
-                </Button>
-              </div>
             </div>
           </DialogContent>
         </Dialog>
       </div>
 
-      {/* Search */}
-      <div className="relative max-w-md">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--foreground-muted)]" />
-        <Input
-          placeholder="Rechercher un secteur..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-10"
-        />
-      </div>
-
-      {/* Sectors Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredSectors.map((sector) => (
-          <Card key={sector.id} className="bg-[var(--card)] border-[var(--border)]">
-            <CardHeader className="pb-2">
-              <div className="flex items-start justify-between">
-                <CardTitle className="text-lg text-[var(--foreground)]">{sector.nameFr}</CardTitle>
-                <div className="flex gap-1">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleOpenDialog(sector)}
-                    className="h-8 w-8 p-0"
-                  >
-                    <Pencil className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleDelete(sector.id)}
-                    className="h-8 w-8 p-0 text-red-400 hover:text-red-300"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <p className="text-sm text-[var(--foreground-muted)] line-clamp-2">
-                {sector.descriptionFr}
-              </p>
-              <div className="flex items-center gap-2 text-sm">
-                <Users className="w-4 h-4 text-[var(--accent)]" />
-                <span className="text-[var(--foreground-muted)]">
-                  {getReferentName(sector.referentPartner)}
-                </span>
-              </div>
-              <Badge variant="outline" className="text-xs">
-                /{sector.slug}
-              </Badge>
-            </CardContent>
-          </Card>
+          <div key={sector.id} className="rounded-sm border border-stroke bg-white p-4 shadow-default dark:border-strokedark dark:bg-boxdark hover:border-primary dark:hover:border-primary transition-colors">
+             <div className="flex justify-between items-start mb-3">
+                 <h4 className="text-lg font-semibold text-black dark:text-white">{sector.nameFr}</h4>
+                 <div className="flex gap-1">
+                     <button onClick={() => handleOpenDialog(sector)} className="text-bodydark2 hover:text-primary p-1">
+                         <Pencil className="w-4 h-4" />
+                     </button>
+                     <button onClick={() => handleDelete(sector.id)} className="text-bodydark2 hover:text-danger p-1">
+                         <Trash2 className="w-4 h-4" />
+                     </button>
+                 </div>
+             </div>
+
+             <p className="text-sm text-bodydark2 mb-4 line-clamp-3">
+                 {sector.descriptionFr}
+             </p>
+
+             <div className="flex items-center gap-2 text-sm text-bodydark2 border-t border-stroke dark:border-strokedark pt-3">
+                 <Users className="w-4 h-4 text-primary" />
+                 <span>{getReferentName(sector.referentPartner)}</span>
+             </div>
+          </div>
         ))}
       </div>
 
       {filteredSectors.length === 0 && (
-        <div className="text-center py-12 text-[var(--foreground-muted)]">
-          Aucun secteur trouvé
+        <div className="text-center py-12 text-bodydark2">
+          No sectors found.
         </div>
       )}
-    </div>
+    </>
   );
 }

@@ -55,165 +55,162 @@ export default async function AdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {stats.map((stat) => (
           <Link key={stat.label} href={stat.href} className="group">
-            <Card className="bg-[var(--card)] border-[var(--border)] group-hover:border-[var(--accent)] transition-all duration-300 shadow-sm group-hover:shadow-md h-full">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-[var(--foreground-muted)]">
-                  {stat.label}
-                </CardTitle>
-                <div className={`p-2 rounded-full bg-[var(--background-tertiary)] ${stat.color}`}>
-                    <stat.icon className="w-5 h-5" />
+            <div className="rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark h-full group-hover:border-[var(--accent)] transition-all">
+              <div className="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4 mb-4">
+                <stat.icon className={`w-6 h-6 ${stat.color}`} />
+              </div>
+
+              <div className="flex items-end justify-between">
+                <div>
+                  <h4 className="text-title-md font-bold text-black dark:text-white">
+                    {stat.value}
+                  </h4>
+                  <span className="text-sm font-medium text-bodydark">{stat.label}</span>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-4xl font-bold text-[var(--foreground)]">
-                  {stat.value}
-                </div>
-                <p className="text-sm text-[var(--foreground-muted)] mt-2 font-medium">
-                  {stat.change}
-                </p>
-              </CardContent>
-            </Card>
+
+                <span className="text-sm font-medium text-meta-3">
+                   {stat.change}
+                </span>
+              </div>
+            </div>
           </Link>
         ))}
       </div>
 
       {/* Marketing & Tools Highlight */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card className="md:col-span-4 bg-gradient-to-r from-[var(--background-secondary)] to-[var(--background-tertiary)] border-[var(--border)]">
-            <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-xl">
-                    <Sparkles className="w-5 h-5 text-[var(--accent)]" />
+        <div className="md:col-span-4 rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+            <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+                <h3 className="font-medium text-black dark:text-white flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-primary" />
                     Marketing Studio & Création IA
-                </CardTitle>
-                <CardDescription>
-                    Utilisez la puissance de l&apos;IA (Mistral, Groq) pour générer vos contenus en un clic.
-                </CardDescription>
-            </CardHeader>
-            <CardContent>
+                </h3>
+            </div>
+            <div className="p-6.5">
                 <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
-                    <Link href="/admin/marketing" className="flex flex-col items-center justify-center gap-2 p-4 bg-[var(--card)] rounded-lg border border-[var(--border)] hover:border-[var(--accent)] hover:shadow-md transition-all text-center">
+                    <Link href="/admin/marketing" className="flex flex-col items-center justify-center gap-2 p-4 bg-gray-2 dark:bg-meta-4 rounded-lg border border-transparent hover:border-primary hover:shadow-md transition-all text-center">
                         <FileText className="w-6 h-6 text-blue-500" />
-                        <span className="text-sm font-medium">Articles</span>
+                        <span className="text-sm font-medium text-black dark:text-white">Articles</span>
                     </Link>
-                    <Link href="/admin/marketing" className="flex flex-col items-center justify-center gap-2 p-4 bg-[var(--card)] rounded-lg border border-[var(--border)] hover:border-[var(--accent)] hover:shadow-md transition-all text-center">
+                    <Link href="/admin/marketing" className="flex flex-col items-center justify-center gap-2 p-4 bg-gray-2 dark:bg-meta-4 rounded-lg border border-transparent hover:border-primary hover:shadow-md transition-all text-center">
                         <Mail className="w-6 h-6 text-orange-500" />
-                        <span className="text-sm font-medium">Emails</span>
+                        <span className="text-sm font-medium text-black dark:text-white">Emails</span>
                     </Link>
-                    <Link href="/admin/marketing" className="flex flex-col items-center justify-center gap-2 p-4 bg-[var(--card)] rounded-lg border border-[var(--border)] hover:border-[var(--accent)] hover:shadow-md transition-all text-center">
+                    <Link href="/admin/marketing" className="flex flex-col items-center justify-center gap-2 p-4 bg-gray-2 dark:bg-meta-4 rounded-lg border border-transparent hover:border-primary hover:shadow-md transition-all text-center">
                         <MessageSquare className="w-6 h-6 text-indigo-500" />
-                        <span className="text-sm font-medium">LinkedIn</span>
+                        <span className="text-sm font-medium text-black dark:text-white">LinkedIn</span>
                     </Link>
-                    <Link href="/admin/marketing" className="flex flex-col items-center justify-center gap-2 p-4 bg-[var(--card)] rounded-lg border border-[var(--border)] hover:border-[var(--accent)] hover:shadow-md transition-all text-center">
+                    <Link href="/admin/marketing" className="flex flex-col items-center justify-center gap-2 p-4 bg-gray-2 dark:bg-meta-4 rounded-lg border border-transparent hover:border-primary hover:shadow-md transition-all text-center">
                         <LayoutDashboard className="w-6 h-6 text-pink-500" />
-                        <span className="text-sm font-medium">Carrousels</span>
+                        <span className="text-sm font-medium text-black dark:text-white">Carrousels</span>
                     </Link>
-                    <Link href="/admin/marketing" className="flex flex-col items-center justify-center gap-2 p-4 bg-[var(--card)] rounded-lg border border-[var(--border)] hover:border-[var(--accent)] hover:shadow-md transition-all text-center">
+                    <Link href="/admin/marketing" className="flex flex-col items-center justify-center gap-2 p-4 bg-gray-2 dark:bg-meta-4 rounded-lg border border-transparent hover:border-primary hover:shadow-md transition-all text-center">
                         <Languages className="w-6 h-6 text-green-500" />
-                        <span className="text-sm font-medium">Traductions</span>
+                        <span className="text-sm font-medium text-black dark:text-white">Traductions</span>
                     </Link>
-                    <Link href="/admin/marketing" className="flex flex-col items-center justify-center gap-2 p-4 bg-[var(--card)] rounded-lg border border-[var(--border)] hover:border-[var(--accent)] hover:shadow-md transition-all text-center">
+                    <Link href="/admin/marketing" className="flex flex-col items-center justify-center gap-2 p-4 bg-gray-2 dark:bg-meta-4 rounded-lg border border-transparent hover:border-primary hover:shadow-md transition-all text-center">
                         <Lightbulb className="w-6 h-6 text-yellow-500" />
-                        <span className="text-sm font-medium">Conseils</span>
+                        <span className="text-sm font-medium text-black dark:text-white">Conseils</span>
                     </Link>
                 </div>
-            </CardContent>
-        </Card>
+            </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Deals */}
-        <Card className="lg:col-span-2 bg-[var(--card)] border-[var(--border)] h-full">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-[var(--foreground)]">
+        <div className="lg:col-span-2 rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+          <div className="flex items-center justify-between border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+            <h3 className="font-medium text-black dark:text-white">
               Opérations récentes
-            </CardTitle>
+            </h3>
             <Link
               href="/admin/deals"
-              className="text-sm text-[var(--accent)] hover:underline font-medium"
+              className="text-sm text-primary hover:underline font-medium"
             >
               Tout voir →
             </Link>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-0 divide-y divide-[var(--border)]">
+          </div>
+          <div className="p-6.5">
+            <div className="flex flex-col gap-3">
               {recentDeals.length > 0 ? recentDeals.map((deal, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center justify-between py-4 hover:bg-[var(--background-tertiary)]/50 px-2 rounded-sm transition-colors"
+                  className="flex items-center justify-between py-3 border-b border-stroke dark:border-strokedark last:border-0"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-[var(--background-secondary)] rounded-full">
-                        <Briefcase className="w-4 h-4 text-[var(--foreground-muted)]" />
+                  <div className="flex items-center gap-4">
+                    <div className="h-10 w-10 rounded-full bg-gray-2 dark:bg-meta-4 flex items-center justify-center">
+                        <Briefcase className="w-5 h-5 text-bodydark2" />
                     </div>
                     <div>
-                        <p className="text-[var(--foreground)] font-semibold text-sm">
+                        <h5 className="font-medium text-black dark:text-white text-sm">
                         {deal.name}
-                        </p>
-                        <p className="text-xs text-[var(--foreground-muted)]">
+                        </h5>
+                        <span className="text-xs text-bodydark2">
                         {deal.type}
-                        </p>
+                        </span>
                     </div>
                   </div>
-                  <span className="text-sm text-[var(--foreground-muted)] font-medium">
+                  <span className="text-sm text-black dark:text-white font-medium">
                     {deal.date}
                   </span>
                 </div>
               )) : (
-                  <div className="py-8 text-center text-[var(--foreground-muted)]">
+                  <div className="py-4 text-center text-bodydark2">
                       Aucune opération récente.
                   </div>
               )}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Quick Actions */}
-        <Card className="bg-[var(--card)] border-[var(--border)] h-full">
-          <CardHeader>
-            <CardTitle className="text-[var(--foreground)]">
+        <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+          <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+            <h3 className="font-medium text-black dark:text-white">
               Actions rapides
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
+            </h3>
+          </div>
+          <div className="p-6.5 flex flex-col gap-4">
             <Link
-              href="/admin/deals/new"
-              className="flex items-center gap-3 p-4 rounded-lg bg-[var(--background-tertiary)] hover:bg-[var(--accent)]/10 border border-transparent hover:border-[var(--accent)]/20 transition-all group"
+              href="/admin/deals"
+              className="flex items-center gap-3.5 px-4 py-3 rounded-md bg-gray-2 dark:bg-meta-4 hover:bg-opacity-90 transition-all"
             >
-              <Briefcase className="w-5 h-5 text-[var(--foreground-muted)] group-hover:text-[var(--accent)] transition-colors" />
-              <span className="text-[var(--foreground)] font-medium">
+              <Briefcase className="w-5 h-5 text-primary" />
+              <span className="font-medium text-black dark:text-white">
                 Ajouter une opération
               </span>
             </Link>
             <Link
-              href="/admin/news/new"
-              className="flex items-center gap-3 p-4 rounded-lg bg-[var(--background-tertiary)] hover:bg-[var(--accent)]/10 border border-transparent hover:border-[var(--accent)]/20 transition-all group"
+              href="/admin/news"
+              className="flex items-center gap-3.5 px-4 py-3 rounded-md bg-gray-2 dark:bg-meta-4 hover:bg-opacity-90 transition-all"
             >
-              <Newspaper className="w-5 h-5 text-[var(--foreground-muted)] group-hover:text-[var(--accent)] transition-colors" />
-              <span className="text-[var(--foreground)] font-medium">
+              <Newspaper className="w-5 h-5 text-primary" />
+              <span className="font-medium text-black dark:text-white">
                 Créer un article
               </span>
             </Link>
             <Link
-              href="/admin/team/new"
-              className="flex items-center gap-3 p-4 rounded-lg bg-[var(--background-tertiary)] hover:bg-[var(--accent)]/10 border border-transparent hover:border-[var(--accent)]/20 transition-all group"
+              href="/admin/team"
+              className="flex items-center gap-3.5 px-4 py-3 rounded-md bg-gray-2 dark:bg-meta-4 hover:bg-opacity-90 transition-all"
             >
-              <Users className="w-5 h-5 text-[var(--foreground-muted)] group-hover:text-[var(--accent)] transition-colors" />
-              <span className="text-[var(--foreground)] font-medium">
+              <Users className="w-5 h-5 text-primary" />
+              <span className="font-medium text-black dark:text-white">
                 Ajouter un membre
               </span>
             </Link>
             <Link
               href="/"
               target="_blank"
-              className="flex items-center gap-3 p-4 rounded-lg bg-[var(--background-tertiary)] hover:bg-[var(--accent)]/10 border border-transparent hover:border-[var(--accent)]/20 transition-all group"
+              className="flex items-center gap-3.5 px-4 py-3 rounded-md bg-gray-2 dark:bg-meta-4 hover:bg-opacity-90 transition-all"
             >
-              <TrendingUp className="w-5 h-5 text-[var(--foreground-muted)] group-hover:text-[var(--accent)] transition-colors" />
-              <span className="text-[var(--foreground)] font-medium">
+              <TrendingUp className="w-5 h-5 text-primary" />
+              <span className="font-medium text-black dark:text-white">
                 Voir le site public
               </span>
             </Link>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   );
