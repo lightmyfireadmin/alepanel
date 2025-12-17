@@ -74,6 +74,16 @@ export const deals = pgTable("deals", {
   // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => {
+  return {
+    // Indexes for frequent filtering and sorting
+    yearIdx: index("deals_year_idx").on(table.year),
+    sectorIdx: index("deals_sector_idx").on(table.sector),
+    regionIdx: index("deals_region_idx").on(table.region),
+    mandateTypeIdx: index("deals_mandate_type_idx").on(table.mandateType),
+    // Composite index for default sorting (Year DESC, DisplayOrder ASC)
+    yearDisplayOrderIdx: index("deals_year_display_order_idx").on(table.year, table.displayOrder),
+  };
 });
 
 // =============================================================================
@@ -103,6 +113,15 @@ export const posts = pgTable("posts", {
   // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => {
+  return {
+    // Indexes for filtering published posts
+    isPublishedIdx: index("posts_is_published_idx").on(table.isPublished),
+    publishedAtIdx: index("posts_published_at_idx").on(table.publishedAt),
+    categoryIdx: index("posts_category_idx").on(table.category),
+    // Composite index for efficient retrieval of published posts sorted by date
+    isPublishedPublishedAtIdx: index("posts_is_published_published_at_idx").on(table.isPublished, table.publishedAt),
+  };
 });
 
 // =============================================================================
