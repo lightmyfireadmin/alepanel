@@ -13,39 +13,107 @@ You can learn more, including how to opt-out if you'd not like to participate in
 https://nextjs.org/telemetry
 
  ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
- ✓ Ready in 2.6s
- ○ Compiling / ...
+ ✓ Ready in 2.2s
+[31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
+    at assertConfig (/app/alecia-app/.next/dev/server/edge/chunks/node_modules_@auth_core_544da84f._.js:513:16)
+    at Auth (/app/alecia-app/.next/dev/server/edge/chunks/node_modules_@auth_core_544da84f._.js:5331:210)
+ ○ Compiling /admin/marketing ...
+[31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
+    at assertConfig (/app/alecia-app/.next/dev/server/chunks/ssr/node_modules_@auth_core_e00e322b._.js:513:16)
+    at Auth (/app/alecia-app/.next/dev/server/chunks/ssr/node_modules_@auth_core_e00e322b._.js:5330:202)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:549:9)
+    at process.processTimers (node:internal/timers:523:7)
 Error: ENVIRONMENT_FALLBACK: There is no `timeZone` configured, this can lead to markup mismatches caused by environment differences. Consider adding a global default: https://next-intl.dev/docs/configuration#time-zone
-    at Home (src/app/page.tsx:25:28)
-  23 |
-  24 | export default function Home() {
-> 25 |   const t = useTranslations();
+    at MobileStickyFooter (src/components/features/mobile-sticky-footer.tsx:21:28)
+  19 |   const [isVisible, setIsVisible] = useState(true);
+  20 |   const [lastScrollY, setLastScrollY] = useState(0);
+> 21 |   const t = useTranslations("mobileCta");
      |                            ^
-  26 |
-  27 |   const expertises = [
-  28 |     { {
+  22 |
+  23 |   useEffect(() => {
+  24 |     const handleScroll = () => { {
   code: 'ENVIRONMENT_FALLBACK',
   originalMessage: 'There is no `timeZone` configured, this can lead to markup mismatches caused by environment differences. Consider adding a global default: https://next-intl.dev/docs/configuration#time-zone'
 }
- GET / 200 in 10.2s (compile: 8.8s, render: 1377ms)
+ GET /admin/marketing 200 in 15.7s (compile: 13.4s, proxy.ts: 291ms, render: 1936ms)
+[31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
+    at assertConfig (/app/alecia-app/.next/dev/server/edge/chunks/node_modules_@auth_core_544da84f._.js:513:16)
+    at Auth (/app/alecia-app/.next/dev/server/edge/chunks/node_modules_@auth_core_544da84f._.js:5331:210)
+ ○ Compiling /api/auth/[...nextauth] ...
 [31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
     at assertConfig (/app/alecia-app/.next/dev/server/chunks/node_modules_@auth_core_36df0127._.js:513:16)
     at Auth (/app/alecia-app/.next/dev/server/chunks/node_modules_@auth_core_36df0127._.js:5330:204)
     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
     at async AppRouteRouteModule.do (/app/alecia-app/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.dev.js:5:37789)
- GET /api/auth/session 500 in 3.4s (compile: 3.4s, render: 28ms)
+ GET /api/auth/session 500 in 3.3s (compile: 3.2s, render: 33ms)
 [31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
     at assertConfig (/app/alecia-app/.next/dev/server/chunks/node_modules_@auth_core_36df0127._.js:513:16)
     at Auth (/app/alecia-app/.next/dev/server/chunks/node_modules_@auth_core_36df0127._.js:5330:204)
     at async AppRouteRouteModule.do (/app/alecia-app/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.dev.js:5:37789)
- GET /api/auth/session 500 in 46ms (compile: 36ms, render: 10ms)
-[INFO] 2025-12-15T17:55:41.088Z Valuation lead captured {
-  revenue: '2000',
-  ebitda: '500',
-  sector: 'Technologies & logiciels',
-  email: 'test@example.com',
-  company: 'Test Corp',
-  valuationResult: { low: 3000000, mid: 4000000, high: 6000000, multiple: 8 },
-  timestamp: '2025-12-15T17:55:41.088Z'
-}
- POST /api/valuation 200 in 209ms (compile: 198ms, render: 11ms)
+ GET /api/auth/session 500 in 65ms (compile: 52ms, render: 13ms)
+[Deals] Error fetching stats: Error: DATABASE_URL environment variable is not set
+    at getDbConnection (src/lib/db/index.ts:8:11)
+    at Object.get (src/lib/db/index.ts:20:13)
+    at getDealStats (src/lib/actions/deals.ts:265:8)
+    at AdminDashboard (src/app/admin/(dashboard)/page.tsx:16:17)
+   6 |   const databaseUrl = process.env.DATABASE_URL;
+   7 |   if (!databaseUrl) {
+>  8 |     throw new Error("DATABASE_URL environment variable is not set");
+     |           ^
+   9 |   }
+  10 |   const sql = neon(databaseUrl);
+  11 |   return drizzle(sql, { schema });
+[Posts] Error fetching count: Error: DATABASE_URL environment variable is not set
+    at getDbConnection (src/lib/db/index.ts:8:11)
+    at Object.get (src/lib/db/index.ts:20:13)
+    at getPostCount (src/lib/actions/posts.ts:293:8)
+    at AdminDashboard (src/app/admin/(dashboard)/page.tsx:17:17)
+   6 |   const databaseUrl = process.env.DATABASE_URL;
+   7 |   if (!databaseUrl) {
+>  8 |     throw new Error("DATABASE_URL environment variable is not set");
+     |           ^
+   9 |   }
+  10 |   const sql = neon(databaseUrl);
+  11 |   return drizzle(sql, { schema });
+[Team] Error fetching count: Error: DATABASE_URL environment variable is not set
+    at getDbConnection (src/lib/db/index.ts:8:11)
+    at Object.get (src/lib/db/index.ts:20:13)
+    at getTeamMemberCount (src/lib/actions/team.ts:184:8)
+    at AdminDashboard (src/app/admin/(dashboard)/page.tsx:18:23)
+   6 |   const databaseUrl = process.env.DATABASE_URL;
+   7 |   if (!databaseUrl) {
+>  8 |     throw new Error("DATABASE_URL environment variable is not set");
+     |           ^
+   9 |   }
+  10 |   const sql = neon(databaseUrl);
+  11 |   return drizzle(sql, { schema });
+[Deals] Error fetching recent deals: Error: DATABASE_URL environment variable is not set
+    at getDbConnection (src/lib/db/index.ts:8:11)
+    at Object.get (src/lib/db/index.ts:20:13)
+    at getRecentDeals (src/lib/actions/deals.ts:281:8)
+    at AdminDashboard (src/app/admin/(dashboard)/page.tsx:19:19)
+   6 |   const databaseUrl = process.env.DATABASE_URL;
+   7 |   if (!databaseUrl) {
+>  8 |     throw new Error("DATABASE_URL environment variable is not set");
+     |           ^
+   9 |   }
+  10 |   const sql = neon(databaseUrl);
+  11 |   return drizzle(sql, { schema });
+[31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
+    at assertConfig (/app/alecia-app/.next/dev/server/chunks/ssr/node_modules_@auth_core_e00e322b._.js:513:16)
+    at Auth (/app/alecia-app/.next/dev/server/chunks/ssr/node_modules_@auth_core_e00e322b._.js:5330:202)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:549:9)
+    at process.processTimers (node:internal/timers:523:7)
+ GET /admin 200 in 3.4s (compile: 3.0s, proxy.ts: 13ms, render: 433ms)
+[31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
+    at assertConfig (/app/alecia-app/.next/dev/server/chunks/node_modules_@auth_core_36df0127._.js:513:16)
+    at Auth (/app/alecia-app/.next/dev/server/chunks/node_modules_@auth_core_36df0127._.js:5330:204)
+    at async AppRouteRouteModule.do (/app/alecia-app/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.dev.js:5:37789)
+ GET /api/auth/session 500 in 52ms (compile: 39ms, render: 14ms)
+[31m[auth][error][0m MissingSecret: Please define a `secret`. Read more at https://errors.authjs.dev#missingsecret
+    at assertConfig (/app/alecia-app/.next/dev/server/chunks/node_modules_@auth_core_36df0127._.js:513:16)
+    at Auth (/app/alecia-app/.next/dev/server/chunks/node_modules_@auth_core_36df0127._.js:5330:204)
+    at async AppRouteRouteModule.do (/app/alecia-app/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.dev.js:5:37789)
+ GET /api/auth/session 500 in 41ms (compile: 19ms, render: 22ms)
