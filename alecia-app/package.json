@@ -14,7 +14,8 @@
     "db:seed": "tsx src/lib/db/seed-simple.ts",
     "db:seed:operations": "tsx src/lib/db/seed-operations.ts",
     "db:seed:extra": "tsx src/lib/db/seed-extra.ts",
-    "db:seed:admin": "tsx src/lib/db/seed-admin.ts"
+    "db:seed:admin": "tsx src/lib/db/seed-admin.ts",
+    "db:seed:all": "tsx src/lib/db/seed-all.ts"
   },
   "dependencies": {
     "@azure/msal-node": "^3.8.4",

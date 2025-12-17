@@ -9,11 +9,12 @@ import type { Metadata } from "next";
 import { normalizeCoverImage, normalizeSlug } from "@/lib/posts-utils";
 
 interface PageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const post = await getPostBySlug(normalizeSlug(params.slug));
+  const { slug } = await params;
+  const post = await getPostBySlug(normalizeSlug(slug));
 
   if (!post) {
     return {
@@ -31,7 +32,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
-  const post = await getPostBySlug(normalizeSlug(params.slug));
+  const { slug } = await params;
+  const post = await getPostBySlug(normalizeSlug(slug));
 
   if (!post || !post.isPublished) {
     notFound();
@@ -122,3 +124,4 @@ export default async function BlogPostPage({ params }: PageProps) {
     </>
   );
 }
+
