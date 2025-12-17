@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { User, Settings, LogOut, ChevronDown } from "lucide-react";
 // import { signOut } from "next-auth/react"; // Assuming next-auth, but we might use server action for logout
 

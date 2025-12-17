@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import SidebarLinkGroup from "./SidebarLinkGroup";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import {
@@ -13,11 +12,8 @@ import {
   Briefcase,
   FileText,
   PieChart,
-  MessageSquare,
-  Globe,
   ChevronDown,
-  ArrowLeft,
-  Calendar
+  ArrowLeft
 } from "lucide-react";
 
 interface SidebarProps {
@@ -27,7 +23,6 @@ interface SidebarProps {
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const pathname = usePathname();
-  const [pageName, setPageName] = useLocalStorage("selectedMenu", "dashboard");
 
   const trigger = useRef<HTMLButtonElement>(null);
   const sidebar = useRef<HTMLElement>(null);
