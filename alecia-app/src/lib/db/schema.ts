@@ -195,9 +195,11 @@ export const contacts = pgTable("contacts", {
   // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-}, (table) => ({
-  companyIdIdx: index("contacts_company_id_idx").on(table.companyId),
-}));
+}, (table) => {
+  return {
+    companyIdIdx: index("contacts_company_id_idx").on(table.companyId),
+  };
+});
 
 // =============================================================================
 // PROJECTS TABLE - Interactive timeline
@@ -228,9 +230,11 @@ export const projects = pgTable("projects", {
   // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-}, (table) => ({
-  clientIdIdx: index("projects_client_id_idx").on(table.clientId),
-}));
+}, (table) => {
+  return {
+    clientIdIdx: index("projects_client_id_idx").on(table.clientId),
+  };
+});
 
 // =============================================================================
 // PROJECT EVENTS TABLE - Timeline details
@@ -251,9 +255,11 @@ export const projectEvents = pgTable("project_events", {
   
   // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
-}, (table) => ({
-  projectIdIdx: index("project_events_project_id_idx").on(table.projectId),
-}));
+}, (table) => {
+  return {
+    projectIdIdx: index("project_events_project_id_idx").on(table.projectId),
+  };
+});
 
 // =============================================================================
 // DOCUMENTS TABLE - Data Room / Magic Links
@@ -276,9 +282,11 @@ export const documents = pgTable("documents", {
   // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-}, (table) => ({
-  projectIdIdx: index("documents_project_id_idx").on(table.projectId),
-}));
+}, (table) => {
+  return {
+    documentsProjectIdIdx: index("documents_project_id_idx").on(table.projectId),
+  };
+});
 
 // =============================================================================
 // WEATHER CACHE TABLE - Max 2 API calls per day (Cost Control)
