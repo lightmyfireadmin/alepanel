@@ -21,6 +21,7 @@ import {
   Settings,
   Building2,
   UserPlus,
+  Sparkles,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState, useEffect } from "react";
@@ -32,6 +33,7 @@ const pilotageNavItems = [
   { href: "/admin/projects", label: "Projets", icon: FolderKanban },
   { href: "/admin/crm", label: "Carnet d'adresses", icon: Contact2 },
   { href: "/admin/documents", label: "Data Room", icon: FileStack },
+  { href: "/admin/marketing", label: "Marketing AI", icon: Sparkles },
 ];
 
 // SITE INTERNET: Public CMS - Management of alecia.fr

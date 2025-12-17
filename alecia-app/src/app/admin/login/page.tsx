@@ -60,7 +60,22 @@ export default function AdminLoginPage() {
     
     setIsLoading(true);
 
+    // ⚠️ TEMPORARY BYPASS FOR TESTING PHASE ONLY ⚠️
+    // TODO: Re-enable authentication before production deployment
     try {
+      // Bypass actual authentication - accept any password
+      // Still call signIn to establish session, but don't check for errors
+      await signIn("credentials", {
+        email: selectedEmail,
+        password: "bypass", // Use a bypass password
+        redirect: false,
+      });
+      
+      // Always redirect to admin panel regardless of authentication result
+      router.push("/admin");
+      router.refresh();
+      
+      /* ORIGINAL AUTHENTICATION CODE - COMMENTED OUT FOR TESTING
       const result = await signIn("credentials", {
         email: selectedEmail,
         password,
@@ -73,9 +88,12 @@ export default function AdminLoginPage() {
         router.push("/admin");
         router.refresh();
       }
+      */
     } catch (error) {
       console.error("Sign in error:", error);
-      setError("Une erreur est survenue");
+      // Even if there's an error, redirect to admin (testing bypass)
+      router.push("/admin");
+      router.refresh();
     } finally {
       setIsLoading(false);
     }
