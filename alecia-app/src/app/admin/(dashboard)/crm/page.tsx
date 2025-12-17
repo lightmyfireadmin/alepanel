@@ -1,16 +1,15 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { 
-  Plus, Search, Building2, Users as UsersIcon, 
-  Phone, Mail, Tag, MoreVertical, Filter, UserPlus, FileSpreadsheet
-} from "lucide-react";
-import { motion } from "framer-motion";
 import { useState } from "react";
-import { CONTACT_TAGS } from "@/lib/db/schema";
+import Breadcrumb from "@/components/admin/ui/Breadcrumb";
 import { CompanyEnrichment } from "@/components/admin";
 import ExcelJS from "exceljs";
+import { 
+  Plus, Search, Building2, Users as UsersIcon, 
+  Phone, Mail, Tag, MoreVertical, Filter, UserPlus, FileSpreadsheet, Eye
+} from "lucide-react";
+import { CONTACT_TAGS } from "@/lib/db/schema";
+import { motion } from "framer-motion";
 
 // Mock contacts data
 const mockContacts = [
@@ -140,252 +139,133 @@ export default function CRMPage() {
   );
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-[var(--foreground)] font-[family-name:var(--font-playfair)]">
-            Carnet d&apos;adresses
-          </h1>
-          <p className="text-[var(--foreground-muted)] mt-1">
-            Gestion des contacts et entreprises
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            className="gap-2 border-[var(--border)] hover:bg-[var(--background-tertiary)]"
-            onClick={handleExportToExcel}
-          >
-            <FileSpreadsheet className="w-4 h-4" />
-            Exporter Excel
-          </Button>
-          <Button className="btn-gold gap-2">
-            <Plus className="w-4 h-4" />
-            {activeTab === "contacts" ? "Nouveau contact" : "Nouvelle entreprise"}
-          </Button>
-        </div>
-      </div>
+    <>
+      <Breadcrumb pageName="CRM" />
 
-      {/* Two Column Layout */}
       <div className="grid lg:grid-cols-[1fr_350px] gap-6">
         {/* Main Content */}
         <div className="space-y-6">
-          {/* Tabs & Search */}
-          <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-            <div className="flex gap-2 p-1 bg-[var(--background-secondary)] rounded-lg">
-              <button
-                onClick={() => setActiveTab("contacts")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  activeTab === "contacts"
-                    ? "bg-[var(--card)] text-[var(--foreground)] shadow-sm"
-                    : "text-[var(--foreground-muted)] hover:text-[var(--foreground)]"
-                }`}
-              >
-                <UsersIcon className="w-4 h-4" />
-                Contacts
-              </button>
-              <button
-                onClick={() => setActiveTab("companies")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  activeTab === "companies"
-                    ? "bg-[var(--card)] text-[var(--foreground)] shadow-sm"
-                    : "text-[var(--foreground-muted)] hover:text-[var(--foreground)]"
-                }`}
-              >
-                <Building2 className="w-4 h-4" />
-                Entreprises
-              </button>
-            </div>
+          {/* Controls */}
+          <div className="flex flex-col md:flex-row gap-4 justify-between">
+             <div className="flex gap-2">
+                 <button
+                    onClick={() => setActiveTab("contacts")}
+                    className={`px-4 py-2 rounded text-sm font-medium ${activeTab === 'contacts' ? 'bg-primary text-white' : 'bg-white dark:bg-boxdark text-black dark:text-white'}`}
+                 >
+                    Contacts
+                 </button>
+                 <button
+                    onClick={() => setActiveTab("companies")}
+                    className={`px-4 py-2 rounded text-sm font-medium ${activeTab === 'companies' ? 'bg-primary text-white' : 'bg-white dark:bg-boxdark text-black dark:text-white'}`}
+                 >
+                    Companies
+                 </button>
+             </div>
 
-            <div className="flex gap-3 w-full md:w-auto">
-              <div className="relative flex-1 md:w-64">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--foreground-muted)]" />
-                <input
-                  type="text"
-                  placeholder="Rechercher..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 rounded-lg bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] focus:outline-none focus:border-[var(--accent)]"
-                />
-              </div>
-              
-              {activeTab === "contacts" && (
-                <div className="relative">
-                  <select
-                    value={selectedTag || ""}
-                    onChange={(e) => setSelectedTag(e.target.value || null)}
-                    className="appearance-none pl-10 pr-8 py-2 rounded-lg bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground)] focus:outline-none focus:border-[var(--accent)]"
-                  >
-                    <option value="">Tous les tags</option>
-                    {CONTACT_TAGS.map((tag) => (
-                      <option key={tag} value={tag}>{tag}</option>
-                    ))}
-                  </select>
-                  <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--foreground-muted)]" />
-                </div>
-              )}
-            </div>
+             <div className="flex gap-2 w-full md:w-auto">
+                 <div className="relative flex-1 md:w-64">
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full rounded border border-stroke bg-white py-2 pl-10 pr-4 outline-none focus:border-primary dark:border-strokedark dark:bg-boxdark dark:text-white"
+                    />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-bodydark2" />
+                 </div>
+                  <button onClick={handleExportToExcel} className="p-2 bg-white dark:bg-boxdark border border-stroke dark:border-strokedark rounded text-primary hover:bg-gray">
+                     <FileSpreadsheet className="w-5 h-5" />
+                  </button>
+             </div>
           </div>
 
-          {/* Contacts Grid */}
+          {/* Contacts View */}
           {activeTab === "contacts" && (
-            <>
-              {filteredContacts.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {filteredContacts.map((contact, idx) => (
-                    <motion.div
-                      key={contact.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: idx * 0.05 }}
-                    >
-                      <Card className="bg-[var(--card)] border-[var(--border)] hover:border-[var(--accent)] transition-colors cursor-pointer group">
-                        <CardHeader className="pb-2">
-                          <div className="flex items-start justify-between">
-                            <div>
-                              <CardTitle className="text-base font-medium text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors">
-                                {contact.name}
-                              </CardTitle>
-                              <p className="text-sm text-[var(--foreground-muted)]">
-                                {contact.role} • {contact.company}
-                              </p>
-                            </div>
-                            <button className="p-1 rounded hover:bg-[var(--background-tertiary)] opacity-0 group-hover:opacity-100 transition-opacity">
-                              <MoreVertical className="w-4 h-4 text-[var(--foreground-muted)]" />
-                            </button>
-                          </div>
-                        </CardHeader>
-                        <CardContent className="pt-0 space-y-3">
-                          <div className="space-y-1.5 text-sm">
-                            <div className="flex items-center gap-2 text-[var(--foreground-muted)]">
-                              <Mail className="w-3.5 h-3.5" />
-                              <span className="truncate">{contact.email}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-[var(--foreground-muted)]">
-                              <Phone className="w-3.5 h-3.5" />
-                              <span>{contact.phone}</span>
-                            </div>
-                          </div>
-                          
-                          <div className="flex flex-wrap gap-1.5">
-                            {contact.tags.map((tag) => (
-                              <span
-                                key={tag}
-                                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs border ${tagColors[tag] || "bg-gray-500/20 text-gray-400"}`}
-                              >
-                                <Tag className="w-2.5 h-2.5" />
-                                {tag}
-                              </span>
-                            ))}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-                  ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {filteredContacts.map((contact, idx) => (
+                <div key={contact.id} className="rounded-sm border border-stroke bg-white p-4 shadow-default dark:border-strokedark dark:bg-boxdark">
+                   <div className="flex justify-between items-start mb-2">
+                      <div>
+                         <h4 className="text-lg font-semibold text-black dark:text-white">{contact.name}</h4>
+                         <p className="text-sm text-bodydark2">{contact.role} at {contact.company}</p>
+                      </div>
+                      <button className="text-bodydark2 hover:text-primary">
+                         <MoreVertical className="w-4 h-4" />
+                      </button>
+                   </div>
+                   <div className="space-y-1 mb-3">
+                       <div className="flex items-center gap-2 text-sm text-bodydark2">
+                           <Mail className="w-4 h-4" /> {contact.email}
+                       </div>
+                       <div className="flex items-center gap-2 text-sm text-bodydark2">
+                           <Phone className="w-4 h-4" /> {contact.phone}
+                       </div>
+                   </div>
+                   <div className="flex flex-wrap gap-2">
+                       {contact.tags.map(tag => (
+                           <span key={tag} className={`px-2 py-0.5 rounded text-xs border ${tagColors[tag] || "bg-gray-2 text-bodydark2"}`}>
+                               {tag}
+                           </span>
+                       ))}
+                   </div>
                 </div>
-              ) : (
-                /* Empty State */
-                <div className="flex flex-col items-center justify-center py-16 text-center">
-                  <div className="w-16 h-16 rounded-full bg-[var(--background-tertiary)] flex items-center justify-center mb-4">
-                    <UserPlus className="w-8 h-8 text-[var(--foreground-muted)]" />
-                  </div>
-                  <h3 className="text-lg font-medium text-[var(--foreground)] mb-2">
-                    Aucun contact trouvé
-                  </h3>
-                  <p className="text-sm text-[var(--foreground-muted)] max-w-sm">
-                    {searchQuery || selectedTag 
-                      ? "Essayez de modifier vos critères de recherche."
-                      : "Ajoutez votre premier contact pour commencer."}
-                  </p>
-                </div>
-              )}
-            </>
+              ))}
+            </div>
           )}
 
-          {/* Companies Table */}
-          {activeTab === "companies" && (
-            <>
-              {filteredCompanies.length > 0 ? (
-                <Card className="bg-[var(--card)] border-[var(--border)]">
-                  <CardContent className="p-0">
-                    <div className="overflow-x-auto">
-                      <table className="w-full">
-                        <thead>
-                          <tr className="border-b border-[var(--border)]">
-                            <th className="text-left px-4 py-3 text-sm font-medium text-[var(--foreground-muted)]">Entreprise</th>
-                            <th className="text-left px-4 py-3 text-sm font-medium text-[var(--foreground-muted)]">SIREN</th>
-                            <th className="text-left px-4 py-3 text-sm font-medium text-[var(--foreground-muted)]">Secteur</th>
-                            <th className="text-right px-4 py-3 text-sm font-medium text-[var(--foreground-muted)]">CA</th>
-                            <th className="px-4 py-3"></th>
+           {/* Companies View */}
+           {activeTab === "companies" && (
+              <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+                 <div className="max-w-full overflow-x-auto">
+                    <table className="w-full table-auto">
+                       <thead>
+                          <tr className="bg-gray-2 text-left dark:bg-meta-4">
+                             <th className="py-4 px-4 font-medium text-black dark:text-white">Company</th>
+                             <th className="py-4 px-4 font-medium text-black dark:text-white">SIREN</th>
+                             <th className="py-4 px-4 font-medium text-black dark:text-white">Sector</th>
+                             <th className="py-4 px-4 font-medium text-black dark:text-white text-right">Revenue</th>
+                             <th className="py-4 px-4 font-medium text-black dark:text-white"></th>
                           </tr>
-                        </thead>
-                        <tbody>
-                          {filteredCompanies.map((company, idx) => (
-                            <motion.tr
-                              key={company.id}
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              transition={{ delay: idx * 0.05 }}
-                              className="border-b border-[var(--border)] last:border-0 hover:bg-[var(--background-tertiary)] transition-colors"
-                            >
-                              <td className="px-4 py-3">
-                                <div className="flex items-center gap-3">
-                                  <div className="w-8 h-8 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center">
-                                    <Building2 className="w-4 h-4 text-[var(--accent)]" />
-                                  </div>
-                                  <span className="font-medium text-[var(--foreground)]">{company.name}</span>
-                                </div>
-                              </td>
-                              <td className="px-4 py-3 text-sm text-[var(--foreground-muted)] font-mono">
-                                {company.siren}
-                              </td>
-                              <td className="px-4 py-3 text-sm text-[var(--foreground-muted)]">
-                                {company.sector}
-                              </td>
-                              <td className="px-4 py-3 text-right text-sm text-[var(--foreground)]">
-                                {company.revenue 
-                                  ? `${(company.revenue / 1000000).toFixed(1)}M€` 
-                                  : "—"}
-                              </td>
-                              <td className="px-4 py-3">
-                                <button className="p-1 rounded hover:bg-[var(--background-secondary)]">
-                                  <MoreVertical className="w-4 h-4 text-[var(--foreground-muted)]" />
-                                </button>
-                              </td>
-                            </motion.tr>
+                       </thead>
+                       <tbody>
+                          {filteredCompanies.map((company) => (
+                              <tr key={company.id} className="border-b border-[#eee] dark:border-strokedark last:border-0">
+                                  <td className="py-5 px-4">
+                                      <div className="flex items-center gap-3">
+                                          <div className="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary">
+                                              <Building2 className="w-4 h-4" />
+                                          </div>
+                                          <span className="font-medium text-black dark:text-white">{company.name}</span>
+                                      </div>
+                                  </td>
+                                  <td className="py-5 px-4 text-sm font-mono text-bodydark2">{company.siren}</td>
+                                  <td className="py-5 px-4 text-sm text-bodydark2">{company.sector}</td>
+                                  <td className="py-5 px-4 text-sm text-black dark:text-white text-right">
+                                      {company.revenue ? `${(company.revenue / 1000000).toFixed(1)}M€` : "-"}
+                                  </td>
+                                  <td className="py-5 px-4">
+                                       <button className="text-bodydark2 hover:text-primary">
+                                         <MoreVertical className="w-4 h-4" />
+                                       </button>
+                                  </td>
+                              </tr>
                           ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </CardContent>
-                </Card>
-              ) : (
-                /* Empty State */
-                <div className="flex flex-col items-center justify-center py-16 text-center">
-                  <div className="w-16 h-16 rounded-full bg-[var(--background-tertiary)] flex items-center justify-center mb-4">
-                    <Building2 className="w-8 h-8 text-[var(--foreground-muted)]" />
-                  </div>
-                  <h3 className="text-lg font-medium text-[var(--foreground)] mb-2">
-                    Aucune entreprise trouvée
-                  </h3>
-                  <p className="text-sm text-[var(--foreground-muted)] max-w-sm">
-                    {searchQuery 
-                      ? "Essayez de modifier vos critères de recherche."
-                      : "Utilisez l'enrichissement SIREN pour ajouter une entreprise."}
-                  </p>
-                </div>
-              )}
-            </>
-          )}
+                       </tbody>
+                    </table>
+                 </div>
+              </div>
+           )}
+
         </div>
 
-        {/* Sidebar - Company Enrichment */}
+         {/* Sidebar - Company Enrichment */}
         <div className="hidden lg:block">
-          <CompanyEnrichment className="sticky top-6" />
+           {/* Wrapping CompanyEnrichment in a card style if needed, assuming component handles its own basic style but aligning it with layout */}
+           <div className="sticky top-24">
+              <CompanyEnrichment />
+           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
-
