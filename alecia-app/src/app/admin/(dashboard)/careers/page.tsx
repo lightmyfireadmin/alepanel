@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Breadcrumb from "@/components/admin/ui/Breadcrumb";
 import { Plus, Pencil, Trash2, Briefcase, MapPin, Calendar, Search, Eye, EyeOff } from "lucide-react";
+import { getAllJobOffers, createJobOffer, updateJobOffer, deleteJobOffer, toggleJobOfferPublished } from "@/lib/actions/jobs";
 import {
   Dialog,
   DialogContent,
@@ -18,114 +19,146 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 interface JobOffer {
   id: string;
-  titleFr: string;
-  titleEn: string;
-  descriptionFr: string;
-  descriptionEn: string;
-  requirementsFr: string;
-  requirementsEn: string;
+  slug: string;
+  title: string;
+  description: string | null;
+  requirements: string[] | null;
   location: string;
   type: string;
-  department: string;
-  isActive: boolean;
-  publishedAt: string;
+  contactEmail: string | null;
+  pdfUrl: string | null;
+  isPublished: boolean | null;
+  displayOrder: number | null;
+  createdAt: Date | null;
+  updatedAt: Date | null;
 }
 
-const INITIAL_JOBS: JobOffer[] = [
-  {
-    id: "1",
-    titleFr: "Analyste M&A Junior",
-    titleEn: "Junior M&A Analyst",
-    descriptionFr: "Rejoignez notre équipe dynamique en tant qu'analyste M&A junior. Vous participerez à des opérations de cession et d'acquisition de PME et ETI françaises.",
-    descriptionEn: "Join our dynamic team as a junior M&A analyst. You will participate in sell-side and buy-side transactions for French SMEs.",
-    requirementsFr: "- Master Grande École de commerce ou d'ingénieur\n- Stage en banque d'affaires ou audit Big4\n- Excel avancé et modélisation financière\n- Anglais courant",
-    requirementsEn: "- Master's from top business or engineering school\n- Internship in investment banking or Big4 audit\n- Advanced Excel and financial modeling\n- Fluent English",
-    location: "Paris",
-    type: "CDI",
-    department: "M&A Advisory",
-    isActive: true,
-    publishedAt: "2024-12-01",
-  },
-  {
-    id: "2",
-    titleFr: "Associate M&A",
-    titleEn: "M&A Associate",
-    descriptionFr: "Nous recherchons un(e) Associate expérimenté(e) pour piloter des mandats de bout en bout et encadrer les analystes junior.",
-    descriptionEn: "We are looking for an experienced Associate to lead transactions end-to-end and mentor junior analysts.",
-    requirementsFr: "- 3-5 ans d'expérience en M&A mid-cap\n- Track record de deals closés\n- Leadership et autonomie\n- Réseau acquéreurs développé",
-    requirementsEn: "- 3-5 years of mid-cap M&A experience\n- Track record of closed deals\n- Leadership and autonomy\n- Established buyer network",
-    location: "Lyon",
-    type: "CDI",
-    department: "M&A Advisory",
-    isActive: true,
-    publishedAt: "2024-11-15",
-  },
-];
-
-const EMPTY_JOB: JobOffer = {
-  id: "",
-  titleFr: "",
-  titleEn: "",
-  descriptionFr: "",
-  descriptionEn: "",
-  requirementsFr: "",
-  requirementsEn: "",
-  location: "",
+const EMPTY_JOB = {
+  title: "",
+  description: "",
+  requirements: [] as string[],
+  location: "Paris",
   type: "CDI",
-  department: "",
-  isActive: true,
-  publishedAt: new Date().toISOString().split("T")[0],
+  contactEmail: "recrutement@alecia.fr",
+  pdfUrl: "",
+  isPublished: true,
+  displayOrder: 0,
 };
 
-const JOB_TYPES = ["CDI", "CDD", "Stage", "Alternance"];
+const JOB_TYPES = ["CDI", "CDD", "Stage", "Alternance", "Stage/alternance"];
 const LOCATIONS = ["Paris", "Lyon", "Nice", "Nantes", "Remote"];
-const DEPARTMENTS = ["M&A Advisory", "Levée de fonds", "Direction", "Support"];
 
 export default function CareersAdminPage() {
-  const [jobs, setJobs] = useState<JobOffer[]>(INITIAL_JOBS);
+  const [jobs, setJobs] = useState<JobOffer[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingJob, setEditingJob] = useState<JobOffer | null>(null);
-  const [formData, setFormData] = useState<JobOffer>(EMPTY_JOB);
+  const [formData, setFormData] = useState(EMPTY_JOB);
+  const [loading, setLoading] = useState(true);
+  const [requirementsText, setRequirementsText] = useState("");
+
+  // Fetch job offers on mount
+  useEffect(() => {
+    async function loadJobs() {
+      setLoading(true);
+      const offers = await getAllJobOffers();
+      setJobs(offers);
+      setLoading(false);
+    }
+    loadJobs();
+  }, []);
 
   const filteredJobs = jobs.filter((job) =>
-    job.titleFr.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     job.location.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleOpenDialog = (job?: JobOffer) => {
     if (job) {
       setEditingJob(job);
-      setFormData({ ...job });
+      setFormData({
+        title: job.title,
+        description: job.description || "",
+        requirements: job.requirements || [],
+        location: job.location,
+        type: job.type,
+        contactEmail: job.contactEmail || "recrutement@alecia.fr",
+        pdfUrl: job.pdfUrl || "",
+        isPublished: job.isPublished !== false,
+        displayOrder: job.displayOrder || 0,
+      });
+      setRequirementsText((job.requirements || []).join("\n"));
     } else {
       setEditingJob(null);
-      setFormData({ ...EMPTY_JOB, id: Date.now().toString() });
+      setFormData(EMPTY_JOB);
+      setRequirementsText("");
     }
     setIsDialogOpen(true);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    if (!formData.title) {
+      alert("Le titre est obligatoire");
+      return;
+    }
+
+    // Parse requirements from text
+    const requirements = requirementsText
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0);
+
+    const data = {
+      ...formData,
+      requirements,
+    };
+
     if (editingJob) {
-      setJobs((prev) =>
-        prev.map((j) => (j.id === formData.id ? { ...formData } : j))
-      );
+      const result = await updateJobOffer(editingJob.id, data);
+      if (result.success) {
+        // Refresh the list
+        const offers = await getAllJobOffers();
+        setJobs(offers);
+      } else {
+        alert("Erreur lors de la mise à jour de l'offre");
+        return;
+      }
     } else {
-      setJobs((prev) => [...prev, formData]);
+      const result = await createJobOffer(data);
+      if (result.success) {
+        // Refresh the list
+        const offers = await getAllJobOffers();
+        setJobs(offers);
+      } else {
+        alert("Erreur lors de la création de l'offre");
+        return;
+      }
     }
     setIsDialogOpen(false);
     setFormData(EMPTY_JOB);
+    setRequirementsText("");
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm("Supprimer cette offre ?")) {
-      setJobs((prev) => prev.filter((j) => j.id !== id));
+      const result = await deleteJobOffer(id);
+      if (result.success) {
+        // Refresh the list
+        const offers = await getAllJobOffers();
+        setJobs(offers);
+      } else {
+        alert("Erreur lors de la suppression de l'offre");
+      }
     }
   };
 
-  const toggleActive = (id: string) => {
-    setJobs((prev) =>
-      prev.map((j) => (j.id === id ? { ...j, isActive: !j.isActive } : j))
-    );
+  const toggleActive = async (id: string) => {
+    const result = await toggleJobOfferPublished(id);
+    if (result.success) {
+      // Refresh the list
+      const offers = await getAllJobOffers();
+      setJobs(offers);
+    }
   };
 
   return (
@@ -161,46 +194,88 @@ export default function CareersAdminPage() {
                {/* Form */}
                <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
-                      <Label className="text-black dark:text-white">Title (FR) *</Label>
+                      <Label className="text-black dark:text-white">Title *</Label>
                       <Input
-                        value={formData.titleFr}
-                        onChange={(e) => setFormData({ ...formData, titleFr: e.target.value })}
+                        value={formData.title}
+                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                         className="border-stroke dark:border-strokedark dark:bg-meta-4 dark:text-white"
+                        placeholder="e.g., Analyste M&A Junior"
                       />
                   </div>
                   <div className="space-y-2">
-                      <Label className="text-black dark:text-white">Department</Label>
+                      <Label className="text-black dark:text-white">Type *</Label>
                       <Select
-                            value={formData.department}
-                            onValueChange={(v) => setFormData({ ...formData, department: v })}
+                            value={formData.type}
+                            onValueChange={(v) => setFormData({ ...formData, type: v })}
                         >
                             <SelectTrigger className="border-stroke dark:border-strokedark dark:bg-meta-4 dark:text-white">
-                            <SelectValue placeholder="Select" />
+                            <SelectValue placeholder="Select type" />
                             </SelectTrigger>
                             <SelectContent>
-                            {DEPARTMENTS.map((dept) => (
-                                <SelectItem key={dept} value={dept}>{dept}</SelectItem>
+                            {JOB_TYPES.map((type) => (
+                                <SelectItem key={type} value={type}>{type}</SelectItem>
                             ))}
                             </SelectContent>
                         </Select>
                   </div>
                </div>
 
+               <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                      <Label className="text-black dark:text-white">Location *</Label>
+                      <Select
+                            value={formData.location}
+                            onValueChange={(v) => setFormData({ ...formData, location: v })}
+                        >
+                            <SelectTrigger className="border-stroke dark:border-strokedark dark:bg-meta-4 dark:text-white">
+                            <SelectValue placeholder="Select location" />
+                            </SelectTrigger>
+                            <SelectContent>
+                            {LOCATIONS.map((loc) => (
+                                <SelectItem key={loc} value={loc}>{loc}</SelectItem>
+                            ))}
+                            </SelectContent>
+                        </Select>
+                  </div>
+                  <div className="space-y-2">
+                      <Label className="text-black dark:text-white">Contact Email</Label>
+                      <Input
+                        value={formData.contactEmail || ""}
+                        onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
+                        className="border-stroke dark:border-strokedark dark:bg-meta-4 dark:text-white"
+                        placeholder="recrutement@alecia.fr"
+                        type="email"
+                      />
+                  </div>
+               </div>
+
                 <div className="space-y-2">
-                    <Label className="text-black dark:text-white">Description (FR)</Label>
+                    <Label className="text-black dark:text-white">Description</Label>
                     <Textarea
-                        value={formData.descriptionFr}
-                        onChange={(e) => setFormData({ ...formData, descriptionFr: e.target.value })}
+                        value={formData.description || ""}
+                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                         rows={4}
                         className="border-stroke dark:border-strokedark dark:bg-meta-4 dark:text-white"
+                        placeholder="Detailed job description..."
+                    />
+                </div>
+
+                <div className="space-y-2">
+                    <Label className="text-black dark:text-white">Requirements (one per line)</Label>
+                    <Textarea
+                        value={requirementsText}
+                        onChange={(e) => setRequirementsText(e.target.value)}
+                        rows={6}
+                        className="border-stroke dark:border-strokedark dark:bg-meta-4 dark:text-white"
+                        placeholder="Master Grande École de commerce ou d'ingénieur&#10;Stage en banque d'affaires&#10;Excel avancé"
                     />
                 </div>
 
                 <div className="flex items-center gap-4 py-2">
-                    <Label className="text-black dark:text-white">Active</Label>
+                    <Label className="text-black dark:text-white">Published</Label>
                     <Switch
-                        checked={formData.isActive}
-                        onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
+                        checked={formData.isPublished}
+                        onCheckedChange={(checked) => setFormData({ ...formData, isPublished: checked })}
                     />
                 </div>
 
@@ -214,7 +289,7 @@ export default function CareersAdminPage() {
                     <button
                         onClick={handleSave}
                         className="rounded bg-primary py-2 px-6 font-medium text-white hover:bg-opacity-90"
-                        disabled={!formData.titleFr}
+                        disabled={!formData.title}
                     >
                         Save
                     </button>
@@ -224,56 +299,64 @@ export default function CareersAdminPage() {
         </Dialog>
       </div>
 
-      <div className="flex flex-col gap-4">
-        {filteredJobs.map((job) => (
-          <div key={job.id} className={`rounded-sm border border-stroke bg-white p-4 shadow-default dark:border-strokedark dark:bg-boxdark ${!job.isActive ? "opacity-60" : ""}`}>
-             <div className="flex justify-between items-start mb-2">
-                 <div>
-                     <div className="flex items-center gap-2">
-                         <h4 className="text-lg font-semibold text-black dark:text-white">{job.titleFr}</h4>
-                         <span className={`inline-flex rounded-full bg-opacity-10 py-0.5 px-2.5 text-xs font-medium ${job.isActive ? "bg-success text-success" : "bg-warning text-warning"}`}>
-                             {job.isActive ? "Active" : "Inactive"}
-                         </span>
-                     </div>
-                     <div className="flex items-center gap-4 text-sm text-bodydark2 mt-1">
-                         <span className="flex items-center gap-1">
-                             <MapPin className="w-3 h-3" />
-                             {job.location}
-                         </span>
-                         <span className="flex items-center gap-1">
-                             <Briefcase className="w-3 h-3" />
-                             {job.type}
-                         </span>
-                         <span className="flex items-center gap-1">
-                             <Calendar className="w-3 h-3" />
-                             {new Date(job.publishedAt).toLocaleDateString("fr-FR")}
-                         </span>
-                     </div>
-                 </div>
-                 <div className="flex gap-1">
-                     <button onClick={() => toggleActive(job.id)} className="p-1 text-bodydark2 hover:text-primary">
-                         {job.isActive ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                     </button>
-                     <button onClick={() => handleOpenDialog(job)} className="p-1 text-bodydark2 hover:text-primary">
-                         <Pencil className="w-4 h-4" />
-                     </button>
-                     <button onClick={() => handleDelete(job.id)} className="p-1 text-bodydark2 hover:text-danger">
-                         <Trash2 className="w-4 h-4" />
-                     </button>
-                 </div>
-             </div>
-
-             <p className="text-sm text-bodydark2 mt-3 line-clamp-2">
-                 {job.descriptionFr}
-             </p>
-          </div>
-        ))}
-      </div>
-
-      {filteredJobs.length === 0 && (
+      {loading ? (
         <div className="text-center py-12 text-bodydark2">
-          No offers found.
+          Loading job offers...
         </div>
+      ) : (
+        <>
+          <div className="flex flex-col gap-4">
+            {filteredJobs.map((job) => (
+              <div key={job.id} className={`rounded-sm border border-stroke bg-white p-4 shadow-default dark:border-strokedark dark:bg-boxdark ${job.isPublished === false ? "opacity-60" : ""}`}>
+                 <div className="flex justify-between items-start mb-2">
+                     <div>
+                         <div className="flex items-center gap-2">
+                             <h4 className="text-lg font-semibold text-black dark:text-white">{job.title}</h4>
+                             <span className={`inline-flex rounded-full bg-opacity-10 py-0.5 px-2.5 text-xs font-medium ${job.isPublished !== false ? "bg-success text-success" : "bg-warning text-warning"}`}>
+                                 {job.isPublished !== false ? "Published" : "Draft"}
+                             </span>
+                         </div>
+                         <div className="flex items-center gap-4 text-sm text-bodydark2 mt-1">
+                             <span className="flex items-center gap-1">
+                                 <MapPin className="w-3 h-3" />
+                                 {job.location}
+                             </span>
+                             <span className="flex items-center gap-1">
+                                 <Briefcase className="w-3 h-3" />
+                                 {job.type}
+                             </span>
+                             <span className="flex items-center gap-1">
+                                 <Calendar className="w-3 h-3" />
+                                 {job.createdAt ? new Date(job.createdAt).toLocaleDateString("fr-FR") : "N/A"}
+                             </span>
+                         </div>
+                     </div>
+                     <div className="flex gap-1">
+                         <button onClick={() => toggleActive(job.id)} className="p-1 text-bodydark2 hover:text-primary">
+                             {job.isPublished !== false ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                         </button>
+                         <button onClick={() => handleOpenDialog(job)} className="p-1 text-bodydark2 hover:text-primary">
+                             <Pencil className="w-4 h-4" />
+                         </button>
+                         <button onClick={() => handleDelete(job.id)} className="p-1 text-bodydark2 hover:text-danger">
+                             <Trash2 className="w-4 h-4" />
+                         </button>
+                     </div>
+                 </div>
+
+                 <p className="text-sm text-bodydark2 mt-3 line-clamp-2">
+                     {job.description || "No description"}
+                 </p>
+              </div>
+            ))}
+          </div>
+
+          {filteredJobs.length === 0 && !loading && (
+            <div className="text-center py-12 text-bodydark2">
+              No offers found.
+            </div>
+          )}
+        </>
       )}
     </>
   );
