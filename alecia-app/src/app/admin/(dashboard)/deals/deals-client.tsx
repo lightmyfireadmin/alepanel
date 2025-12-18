@@ -270,6 +270,7 @@ export default function DealsClient({ initialDeals }: DealsClientProps) {
                   />
                   {formData.clientLogo && (
                     <div className="mt-2 h-12 w-12 relative border rounded bg-white overflow-hidden">
+                       {/* eslint-disable-next-line @next/next/no-img-element */}
                        <img src={formData.clientLogo} alt="Preview" className="w-full h-full object-contain" />
                     </div>
                   )}
@@ -283,6 +284,7 @@ export default function DealsClient({ initialDeals }: DealsClientProps) {
                   />
                    {formData.acquirerLogo && (
                     <div className="mt-2 h-12 w-12 relative border rounded bg-white overflow-hidden">
+                       {/* eslint-disable-next-line @next/next/no-img-element */}
                        <img src={formData.acquirerLogo} alt="Preview" className="w-full h-full object-contain" />
                     </div>
                   )}

@@ -5,11 +5,9 @@ import Breadcrumb from "@/components/admin/ui/Breadcrumb";
 import { CompanyEnrichment } from "@/components/admin";
 import ExcelJS from "exceljs";
 import { 
-  Plus, Search, Building2, Users as UsersIcon, 
-  Phone, Mail, Tag, MoreVertical, Filter, UserPlus, FileSpreadsheet, Eye
+  Search, Building2,
+  Phone, Mail, MoreVertical, FileSpreadsheet
 } from "lucide-react";
-import { CONTACT_TAGS } from "@/lib/db/schema";
-import { motion } from "framer-motion";
 
 // Mock contacts data
 const mockContacts = [
@@ -41,7 +39,6 @@ const tagColors: Record<string, string> = {
 export default function CRMPage() {
   const [activeTab, setActiveTab] = useState<"contacts" | "companies">("contacts");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
   // Export to Excel function
   const handleExportToExcel = async () => {
@@ -129,8 +126,7 @@ export default function CRMPage() {
   const filteredContacts = mockContacts.filter((contact) => {
     const matchesSearch = contact.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          contact.company.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesTag = !selectedTag || contact.tags.includes(selectedTag);
-    return matchesSearch && matchesTag;
+    return matchesSearch;
   });
 
   const filteredCompanies = mockCompanies.filter((company) =>
@@ -182,7 +178,7 @@ export default function CRMPage() {
           {/* Contacts View */}
           {activeTab === "contacts" && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {filteredContacts.map((contact, idx) => (
+              {filteredContacts.map((contact) => (
                 <div key={contact.id} className="rounded-sm border border-stroke bg-white p-4 shadow-default dark:border-strokedark dark:bg-boxdark">
                    <div className="flex justify-between items-start mb-2">
                       <div>
