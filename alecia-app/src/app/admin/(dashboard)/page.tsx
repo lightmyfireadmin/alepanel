@@ -8,6 +8,8 @@ import { getPostCount } from "@/lib/actions/posts";
 import { getTeamMemberCount } from "@/lib/actions/team";
 import { DashboardSkeleton } from "@/components/admin/skeletons";
 import { DashboardChart } from "@/components/admin/dashboard-chart";
+import { WeatherWidget } from "@/components/admin/dashboard/WeatherWidget";
+import { TravelWidget } from "@/components/admin/dashboard/TravelWidget";
 
 export const metadata: Metadata = {
   title: "Admin Dashboard",
@@ -61,6 +63,18 @@ async function DashboardContent() {
                <span>Marketing Studio</span>
            </div>
         </Link>
+      </div>
+
+      {/* Utility Widgets - Phase 2 */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <Suspense fallback={<div className="h-full bg-gray-100 dark:bg-meta-4 rounded-sm animate-pulse min-h-[100px]" />}>
+             <WeatherWidget />
+          </Suspense>
+        </div>
+        <div className="lg:col-span-1">
+             <TravelWidget />
+        </div>
       </div>
 
       {/* Main Stats */}

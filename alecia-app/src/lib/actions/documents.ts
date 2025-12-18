@@ -222,7 +222,9 @@ export async function deleteDocument(id: string): Promise<{ success: boolean; er
     }
     
     // Delete from Vercel Blob
-    await del(document.url);
+    if (document.url) {
+      await del(document.url);
+    }
     
     // Delete from database
     await db.delete(documents).where(eq(documents.id, id));

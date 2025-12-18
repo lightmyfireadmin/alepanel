@@ -288,7 +288,8 @@ export const documents = pgTable("documents", {
   
   // File info
   name: text("name").notNull(),
-  url: text("url").notNull(), // Vercel Blob URL
+  url: text("url"), // Vercel Blob URL - nullable for whiteboards
+  content: jsonb("content"), // Excalidraw JSON content
   mimeType: text("mime_type"),
   
   // Project relation (optional)

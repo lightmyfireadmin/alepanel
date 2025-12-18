@@ -1,5 +1,3 @@
-"use server";
-
 /**
  * Weather Service - Database-First Caching Strategy
  * 
@@ -14,7 +12,7 @@ import { eq } from "drizzle-orm";
 // 6 hours = 2 calls per day max
 const CACHE_VALIDITY_MS = 6 * 60 * 60 * 1000;
 
-interface WeatherData {
+export interface WeatherData {
   temp: number;
   description: string;
   icon: string;
@@ -22,7 +20,7 @@ interface WeatherData {
   windSpeed?: number;
 }
 
-interface WeatherResult {
+export interface WeatherResult {
   data: WeatherData | null;
   isStale: boolean;
   error?: string;
@@ -127,6 +125,23 @@ export async function getWeather(city: string): Promise<WeatherResult> {
       error: error instanceof Error ? error.message : "Unknown error" 
     };
   }
+}
+
+/**
+ * Get weather for multiple cities in parallel.
+ */
+export async function getWeatherForCities(cities: string[]): Promise<Record<string, WeatherResult>> {
+  const results = await Promise.all(
+    cities.map(async (city) => {
+      const result = await getWeather(city);
+      return { city, result };
+    })
+  );
+
+  return results.reduce((acc, { city, result }) => {
+    acc[city] = result;
+    return acc;
+  }, {} as Record<string, WeatherResult>);
 }
 
 /**
