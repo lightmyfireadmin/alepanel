@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, X, ArrowRight, FileText, Users, Briefcase } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 interface SearchResult {
   type: "page" | "operation" | "team";
@@ -12,21 +13,22 @@ interface SearchResult {
   description?: string;
 }
 
-// Static pages for search
-const staticPages: SearchResult[] = [
-  { type: "page", title: "Accueil", href: "/", description: "Page d'accueil alecia" },
-  { type: "page", title: "Expertises", href: "/expertises", description: "Cession, acquisition, levée de fonds" },
-  { type: "page", title: "Opérations", href: "/operations", description: "Nos transactions" },
-  { type: "page", title: "Équipe", href: "/equipe", description: "Notre équipe" },
-  { type: "page", title: "Actualités", href: "/actualites", description: "News et articles" },
-  { type: "page", title: "Contact", href: "/contact", description: "Nous contacter" },
-  { type: "page", title: "Nous rejoindre", href: "/nous-rejoindre", description: "Carrières" },
-];
-
 export function CommandPalette() {
+  const t = useTranslations("commandPalette");
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Static pages for search
+  const staticPages: SearchResult[] = [
+    { type: "page", title: t("pages.home"), href: "/", description: t("pages.homeDesc") },
+    { type: "page", title: t("pages.expertises"), href: "/expertises", description: t("pages.expertisesDesc") },
+    { type: "page", title: t("pages.operations"), href: "/operations", description: t("pages.operationsDesc") },
+    { type: "page", title: t("pages.team"), href: "/equipe", description: t("pages.teamDesc") },
+    { type: "page", title: t("pages.news"), href: "/actualites", description: t("pages.newsDesc") },
+    { type: "page", title: t("pages.contact"), href: "/contact", description: t("pages.contactDesc") },
+    { type: "page", title: t("pages.careers"), href: "/nous-rejoindre", description: t("pages.careersDesc") },
+  ];
 
   // Filter results based on query
   const results = query.length > 0
@@ -78,10 +80,10 @@ export function CommandPalette() {
       <button
         onClick={() => setIsOpen(true)}
         className="hidden md:flex items-center gap-2 px-3 py-1.5 text-sm text-[var(--foreground-muted)] bg-[var(--background-tertiary)] border border-[var(--border)] rounded-lg hover:border-[var(--accent)] transition-colors"
-        aria-label="Ouvrir la recherche (⌘K)"
+        aria-label={t("openSearchLabel")}
       >
         <Search className="w-4 h-4" />
-        <span>Rechercher...</span>
+        <span>{t("searchPlaceholder")}</span>
         <kbd className="ml-2 px-1.5 py-0.5 text-xs bg-[var(--background)] border border-[var(--border)] rounded">
           ⌘K
         </kbd>
@@ -116,13 +118,13 @@ export function CommandPalette() {
                     type="text"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Rechercher une page..."
+                    placeholder={t("searchPlaceholder")}
                     className="flex-1 bg-transparent text-[var(--foreground)] placeholder:text-[var(--foreground-muted)] outline-none"
                   />
                   <button
                     onClick={close}
                     className="p-1 text-[var(--foreground-muted)] hover:text-[var(--foreground)]"
-                    aria-label="Fermer"
+                    aria-label={t("closeLabel")}
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -132,7 +134,7 @@ export function CommandPalette() {
                 <div className="max-h-80 overflow-y-auto py-2">
                   {results.length === 0 ? (
                     <p className="px-4 py-8 text-center text-[var(--foreground-muted)]">
-                      Aucun résultat pour &quot;{query}&quot;
+                      {t("noResults", { query })}
                     </p>
                   ) : (
                     <ul>
@@ -167,9 +169,9 @@ export function CommandPalette() {
 
                 {/* Footer */}
                 <div className="flex items-center gap-4 px-4 py-2 border-t border-[var(--border)] text-xs text-[var(--foreground-muted)]">
-                  <span><kbd className="px-1 bg-[var(--background)] rounded">↑↓</kbd> naviguer</span>
-                  <span><kbd className="px-1 bg-[var(--background)] rounded">↵</kbd> ouvrir</span>
-                  <span><kbd className="px-1 bg-[var(--background)] rounded">esc</kbd> fermer</span>
+                  <span><kbd className="px-1 bg-[var(--background)] rounded">↑↓</kbd> {t("navigate")}</span>
+                  <span><kbd className="px-1 bg-[var(--background)] rounded">↵</kbd> {t("open")}</span>
+                  <span><kbd className="px-1 bg-[var(--background)] rounded">esc</kbd> {t("close")}</span>
                 </div>
               </div>
             </motion.div>

@@ -4,10 +4,12 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2, CheckCircle2, Mail } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
 export function NewsletterForm() {
+  const t = useTranslations("newsletterForm");
   const [email, setEmail] = useState("");
   const [formState, setFormState] = useState<FormState>("idle");
   const [errorMessage, setErrorMessage] = useState("");
@@ -27,14 +29,14 @@ export function NewsletterForm() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Une erreur s'est produite");
+        throw new Error(data.error || t("error"));
       }
 
       setFormState("success");
       setEmail("");
     } catch (error) {
       setFormState("error");
-      setErrorMessage(error instanceof Error ? error.message : "Une erreur s'est produite");
+      setErrorMessage(error instanceof Error ? error.message : t("error"));
     }
   };
 
@@ -42,7 +44,7 @@ export function NewsletterForm() {
     return (
       <div className="flex items-center gap-3 text-emerald-400">
         <CheckCircle2 className="w-5 h-5" />
-        <span>Merci ! Vous êtes inscrit à notre newsletter.</span>
+        <span>{t("success")}</span>
       </div>
     );
   }
@@ -55,7 +57,7 @@ export function NewsletterForm() {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Votre email"
+          placeholder={t("emailPlaceholder")}
           required
           disabled={formState === "submitting"}
           className="pl-10 bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]"
@@ -69,10 +71,10 @@ export function NewsletterForm() {
         {formState === "submitting" ? (
           <>
             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            Inscription...
+            {t("submitting")}
           </>
         ) : (
-          "S'inscrire"
+          t("submit")
         )}
       </Button>
       {formState === "error" && (

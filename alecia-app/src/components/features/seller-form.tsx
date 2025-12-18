@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, ArrowRight, Check, Building2, User, FileText, Send } from "lucide-react";
 import { SECTORS, REGIONS } from "@/lib/db/schema";
+import { useTranslations } from "next-intl";
 
 interface FormData {
   // Step 1 - Company Info
@@ -53,23 +54,8 @@ const INITIAL_DATA: FormData = {
   message: "",
 };
 
-const MOTIVATIONS = [
-  { value: "retirement", label: "Départ à la retraite" },
-  { value: "new-project", label: "Nouveau projet professionnel" },
-  { value: "capital", label: "Réalisation patrimoniale" },
-  { value: "growth", label: "Croissance externe avec partenaire" },
-  { value: "health", label: "Raisons personnelles / santé" },
-  { value: "other", label: "Autre" },
-];
-
-const TIMELINES = [
-  { value: "6months", label: "Moins de 6 mois" },
-  { value: "1year", label: "6 à 12 mois" },
-  { value: "2years", label: "1 à 2 ans" },
-  { value: "exploring", label: "Simple exploration" },
-];
-
 export function SellerForm() {
+  const t = useTranslations("sellerForm");
   const [step, setStep] = useState(1);
   const [data, setData] = useState<FormData>(INITIAL_DATA);
   const [submitting, setSubmitting] = useState(false);
@@ -125,22 +111,38 @@ export function SellerForm() {
             <Check className="w-8 h-8 text-green-500" />
           </div>
           <h3 className="font-[family-name:var(--font-playfair)] text-2xl font-semibold mb-2 text-[var(--foreground)]">
-            Merci pour votre demande
+            {t("successTitle")}
           </h3>
           <p className="text-[var(--foreground-muted)]">
-            Un associé vous contactera sous 48h pour un premier échange confidentiel.
+            {t("successMessage")}
           </p>
         </CardContent>
       </Card>
     );
   }
 
+  const MOTIVATIONS = [
+    { value: "retirement", label: t("motivationRetirement") },
+    { value: "new-project", label: t("motivationNewProject") },
+    { value: "capital", label: t("motivationCapital") },
+    { value: "growth", label: t("motivationGrowth") },
+    { value: "health", label: t("motivationHealth") },
+    { value: "other", label: t("motivationOther") },
+  ];
+
+  const TIMELINES = [
+    { value: "6months", label: t("timeline6months") },
+    { value: "1year", label: t("timeline1year") },
+    { value: "2years", label: t("timeline2years") },
+    { value: "exploring", label: t("timelineExploring") },
+  ];
+
   return (
     <Card className="bg-[var(--card)] border-[var(--border)]">
       <CardHeader>
         <div className="flex items-center justify-between mb-4">
-          <CardTitle className="text-[var(--foreground)]">Vous souhaitez céder votre entreprise</CardTitle>
-          <span className="text-sm text-[var(--foreground-muted)]">Étape {step}/{totalSteps}</span>
+          <CardTitle className="text-[var(--foreground)]">{t("title")}</CardTitle>
+          <span className="text-sm text-[var(--foreground-muted)]">{t("step")} {step}/{totalSteps}</span>
         </div>
         <Progress value={progress} className="h-2" />
       </CardHeader>
@@ -160,28 +162,28 @@ export function SellerForm() {
                   <Building2 className="w-5 h-5 text-[var(--accent)]" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-[var(--foreground)]">Votre entreprise</h4>
-                  <p className="text-sm text-[var(--foreground-muted)]">Informations générales</p>
+                  <h4 className="font-semibold text-[var(--foreground)]">{t("companyInfo")}</h4>
+                  <p className="text-sm text-[var(--foreground-muted)]">{t("companyInfoDesc")}</p>
                 </div>
               </div>
 
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="companyName">Nom de l&apos;entreprise *</Label>
+                  <Label htmlFor="companyName">{t("companyName")} *</Label>
                   <Input
                     id="companyName"
                     value={data.companyName}
                     onChange={(e) => updateField("companyName", e.target.value)}
-                    placeholder="Ma Société SAS"
+                    placeholder={t("companyNamePlaceholder")}
                   />
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Secteur d&apos;activité *</Label>
+                    <Label>{t("sector")} *</Label>
                     <Select value={data.sector} onValueChange={(v) => updateField("sector", v)}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Sélectionnez" />
+                        <SelectValue placeholder={t("selectPlaceholder")} />
                       </SelectTrigger>
                       <SelectContent>
                         {SECTORS.map((sector) => (
@@ -191,10 +193,10 @@ export function SellerForm() {
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label>Région *</Label>
+                    <Label>{t("region")} *</Label>
                     <Select value={data.region} onValueChange={(v) => updateField("region", v)}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Sélectionnez" />
+                        <SelectValue placeholder={t("selectPlaceholder")} />
                       </SelectTrigger>
                       <SelectContent>
                         {REGIONS.map((region) => (
@@ -207,30 +209,30 @@ export function SellerForm() {
 
                 <div className="grid md:grid-cols-3 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="revenue">CA annuel (M€)</Label>
+                    <Label htmlFor="revenue">{t("revenue")}</Label>
                     <Input
                       id="revenue"
                       value={data.revenue}
                       onChange={(e) => updateField("revenue", e.target.value)}
-                      placeholder="5"
+                      placeholder={t("revenuePlaceholder")}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="ebitda">EBITDA (M€)</Label>
+                    <Label htmlFor="ebitda">{t("ebitda")}</Label>
                     <Input
                       id="ebitda"
                       value={data.ebitda}
                       onChange={(e) => updateField("ebitda", e.target.value)}
-                      placeholder="0.8"
+                      placeholder={t("ebitdaPlaceholder")}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="employees">Effectif</Label>
+                    <Label htmlFor="employees">{t("employees")}</Label>
                     <Input
                       id="employees"
                       value={data.employees}
                       onChange={(e) => updateField("employees", e.target.value)}
-                      placeholder="25"
+                      placeholder={t("employeesPlaceholder")}
                     />
                   </div>
                 </div>
@@ -252,14 +254,14 @@ export function SellerForm() {
                   <FileText className="w-5 h-5 text-[var(--accent)]" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-[var(--foreground)]">Votre projet</h4>
-                  <p className="text-sm text-[var(--foreground-muted)]">Motivations et calendrier</p>
+                  <h4 className="font-semibold text-[var(--foreground)]">{t("projectInfo")}</h4>
+                  <p className="text-sm text-[var(--foreground-muted)]">{t("projectInfoDesc")}</p>
                 </div>
               </div>
 
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label>Motivations de la cession * (plusieurs choix possibles)</Label>
+                  <Label>{t("motivations")}</Label>
                   <div className="grid md:grid-cols-2 gap-2">
                     {MOTIVATIONS.map((m) => (
                       <button
@@ -279,30 +281,30 @@ export function SellerForm() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Horizon souhaité *</Label>
+                  <Label>{t("timeline")} *</Label>
                   <Select value={data.timeline} onValueChange={(v) => updateField("timeline", v)}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Sélectionnez" />
+                      <SelectValue placeholder={t("selectPlaceholder")} />
                     </SelectTrigger>
                     <SelectContent>
-                      {TIMELINES.map((t) => (
-                        <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
+                      {TIMELINES.map((timeline) => (
+                        <SelectItem key={timeline.value} value={timeline.value}>{timeline.label}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Êtes-vous déjà accompagné ?</Label>
+                  <Label>{t("hasAdvisor")}</Label>
                   <Select value={data.hasAdvisor} onValueChange={(v) => updateField("hasAdvisor", v)}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Sélectionnez" />
+                      <SelectValue placeholder={t("selectPlaceholder")} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="no">Non, pas encore</SelectItem>
-                      <SelectItem value="yes-lawyer">Oui, par un avocat</SelectItem>
-                      <SelectItem value="yes-accountant">Oui, par un expert-comptable</SelectItem>
-                      <SelectItem value="yes-bank">Oui, par une banque d&apos;affaires</SelectItem>
+                      <SelectItem value="no">{t("advisorNo")}</SelectItem>
+                      <SelectItem value="yes-lawyer">{t("advisorLawyer")}</SelectItem>
+                      <SelectItem value="yes-accountant">{t("advisorAccountant")}</SelectItem>
+                      <SelectItem value="yes-bank">{t("advisorBank")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -324,15 +326,15 @@ export function SellerForm() {
                   <User className="w-5 h-5 text-[var(--accent)]" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-[var(--foreground)]">Vos coordonnées</h4>
-                  <p className="text-sm text-[var(--foreground-muted)]">Pour vous recontacter en toute confidentialité</p>
+                  <h4 className="font-semibold text-[var(--foreground)]">{t("contactInfo")}</h4>
+                  <p className="text-sm text-[var(--foreground-muted)]">{t("contactInfoDesc")}</p>
                 </div>
               </div>
 
               <div className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="firstName">Prénom *</Label>
+                    <Label htmlFor="firstName">{t("firstName")} *</Label>
                     <Input
                       id="firstName"
                       value={data.firstName}
@@ -340,7 +342,7 @@ export function SellerForm() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="lastName">Nom *</Label>
+                    <Label htmlFor="lastName">{t("lastName")} *</Label>
                     <Input
                       id="lastName"
                       value={data.lastName}
@@ -351,7 +353,7 @@ export function SellerForm() {
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email *</Label>
+                    <Label htmlFor="email">{t("email")} *</Label>
                     <Input
                       id="email"
                       type="email"
@@ -360,7 +362,7 @@ export function SellerForm() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="phone">Téléphone</Label>
+                    <Label htmlFor="phone">{t("phone")}</Label>
                     <Input
                       id="phone"
                       value={data.phone}
@@ -370,22 +372,22 @@ export function SellerForm() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="role">Votre fonction</Label>
+                  <Label htmlFor="role">{t("role")}</Label>
                   <Input
                     id="role"
                     value={data.role}
                     onChange={(e) => updateField("role", e.target.value)}
-                    placeholder="Dirigeant, Actionnaire..."
+                    placeholder={t("rolePlaceholder")}
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="message">Message complémentaire</Label>
+                  <Label htmlFor="message">{t("message")}</Label>
                   <Textarea
                     id="message"
                     value={data.message}
                     onChange={(e) => updateField("message", e.target.value)}
-                    placeholder="N'hésitez pas à préciser votre situation..."
+                    placeholder={t("messagePlaceholder")}
                     rows={3}
                   />
                 </div>
@@ -403,7 +405,7 @@ export function SellerForm() {
             className="border-[var(--border)]"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Précédent
+            {t("previous")}
           </Button>
 
           {step < totalSteps ? (
@@ -412,7 +414,7 @@ export function SellerForm() {
               disabled={!canProceed()}
               className="btn-gold"
             >
-              Suivant
+              {t("next")}
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           ) : (
@@ -422,10 +424,10 @@ export function SellerForm() {
               className="btn-gold"
             >
               {submitting ? (
-                "Envoi en cours..."
+                t("submitting")
               ) : (
                 <>
-                  Envoyer ma demande
+                  {t("submit")}
                   <Send className="w-4 h-4 ml-2" />
                 </>
               )}

@@ -12,6 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { Slider } from "@/components/ui/slider";
 import { ArrowLeft, ArrowRight, Check, Target, Building2, User, Send } from "lucide-react";
 import { SECTORS, REGIONS } from "@/lib/db/schema";
+import { useTranslations } from "next-intl";
 
 interface BuyerFormData {
   // Step 1 - Buyer Profile
@@ -52,22 +53,8 @@ const INITIAL_DATA: BuyerFormData = {
   message: "",
 };
 
-const BUYER_TYPES = [
-  { value: "strategic", label: "Industriel / stratégique", desc: "Acquisition pour croissance externe" },
-  { value: "pe", label: "Fonds d'investissement", desc: "Private Equity, LBO, Growth" },
-  { value: "family-office", label: "Family Office", desc: "Investissement patrimonial" },
-  { value: "individual", label: "Repreneur individuel", desc: "Entrepreneur / Manager" },
-  { value: "mbi", label: "Management Buy-In", desc: "Cadre dirigeant en recherche" },
-];
-
-const INVESTMENT_CAPACITIES = [
-  { value: "1-5M", label: "1 à 5 M€" },
-  { value: "5-15M", label: "5 à 15 M€" },
-  { value: "15-30M", label: "15 à 30 M€" },
-  { value: "30M+", label: "Plus de 30 M€" },
-];
-
 export function BuyerForm() {
+  const t = useTranslations("buyerForm");
   const [step, setStep] = useState(1);
   const [data, setData] = useState<BuyerFormData>(INITIAL_DATA);
   const [submitting, setSubmitting] = useState(false);
@@ -122,22 +109,37 @@ export function BuyerForm() {
             <Check className="w-8 h-8 text-green-500" />
           </div>
           <h3 className="font-[family-name:var(--font-playfair)] text-2xl font-semibold mb-2 text-[var(--foreground)]">
-            Inscription confirmée
+            {t("successTitle")}
           </h3>
           <p className="text-[var(--foreground-muted)]">
-            Vous recevrez nos opportunités correspondant à vos critères dès leur mise en marché.
+            {t("successMessage")}
           </p>
         </CardContent>
       </Card>
     );
   }
 
+  const BUYER_TYPES = [
+    { value: "strategic", label: t("buyerTypeStrategic"), desc: t("buyerTypeStrategicDesc") },
+    { value: "pe", label: t("buyerTypePE"), desc: t("buyerTypePEDesc") },
+    { value: "family-office", label: t("buyerTypeFamilyOffice"), desc: t("buyerTypeFamilyOfficeDesc") },
+    { value: "individual", label: t("buyerTypeIndividual"), desc: t("buyerTypeIndividualDesc") },
+    { value: "mbi", label: t("buyerTypeMBI"), desc: t("buyerTypeMBIDesc") },
+  ];
+
+  const INVESTMENT_CAPACITIES = [
+    { value: "1-5M", label: t("capacity1to5") },
+    { value: "5-15M", label: t("capacity5to15") },
+    { value: "15-30M", label: t("capacity15to30") },
+    { value: "30M+", label: t("capacity30plus") },
+  ];
+
   return (
     <Card className="bg-[var(--card)] border-[var(--border)]">
       <CardHeader>
         <div className="flex items-center justify-between mb-4">
-          <CardTitle className="text-[var(--foreground)]">Vous recherchez des opportunités d&apos;investissement</CardTitle>
-          <span className="text-sm text-[var(--foreground-muted)]">Étape {step}/{totalSteps}</span>
+          <CardTitle className="text-[var(--foreground)]">{t("title")}</CardTitle>
+          <span className="text-sm text-[var(--foreground-muted)]">{t("step")} {step}/{totalSteps}</span>
         </div>
         <Progress value={progress} className="h-2" />
       </CardHeader>
@@ -157,14 +159,14 @@ export function BuyerForm() {
                   <Building2 className="w-5 h-5 text-[var(--accent)]" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-[var(--foreground)]">Votre profil acquéreur</h4>
-                  <p className="text-sm text-[var(--foreground-muted)]">Type d&apos;investisseur et capacité</p>
+                  <h4 className="font-semibold text-[var(--foreground)]">{t("buyerProfile")}</h4>
+                  <p className="text-sm text-[var(--foreground-muted)]">{t("buyerProfileDesc")}</p>
                 </div>
               </div>
 
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label>Type d&apos;acquéreur *</Label>
+                  <Label>{t("buyerType")} *</Label>
                   <div className="grid gap-2">
                     {BUYER_TYPES.map((type) => (
                       <button
@@ -185,20 +187,20 @@ export function BuyerForm() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="companyName">Société / Fonds (optionnel)</Label>
+                  <Label htmlFor="companyName">{t("companyName")}</Label>
                   <Input
                     id="companyName"
                     value={data.companyName}
                     onChange={(e) => updateField("companyName", e.target.value)}
-                    placeholder="Nom de votre structure"
+                    placeholder={t("companyPlaceholder")}
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Capacité d&apos;investissement (valeur d&apos;entreprise) *</Label>
+                  <Label>{t("investmentCapacity")} *</Label>
                   <Select value={data.investmentCapacity} onValueChange={(v) => updateField("investmentCapacity", v)}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Sélectionnez une fourchette" />
+                      <SelectValue placeholder={t("investmentCapacityPlaceholder")} />
                     </SelectTrigger>
                     <SelectContent>
                       {INVESTMENT_CAPACITIES.map((cap) => (
@@ -225,14 +227,14 @@ export function BuyerForm() {
                   <Target className="w-5 h-5 text-[var(--accent)]" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-[var(--foreground)]">Vos critères</h4>
-                  <p className="text-sm text-[var(--foreground-muted)]">Affinez votre recherche</p>
+                  <h4 className="font-semibold text-[var(--foreground)]">{t("criteria")}</h4>
+                  <p className="text-sm text-[var(--foreground-muted)]">{t("criteriaDesc")}</p>
                 </div>
               </div>
 
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <Label>Secteurs ciblés * (plusieurs choix possibles)</Label>
+                  <Label>{t("targetSectors")}</Label>
                   <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto">
                     {SECTORS.slice(0, 10).map((sector) => (
                       <button
@@ -252,7 +254,7 @@ export function BuyerForm() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Régions ciblées (optionnel)</Label>
+                  <Label>{t("targetRegions")}</Label>
                   <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
                     {REGIONS.slice(0, 8).map((region) => (
                       <button
@@ -273,7 +275,7 @@ export function BuyerForm() {
 
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label>Chiffre d&apos;affaires cible: {data.revenueMin}M€ - {data.revenueMax}M€</Label>
+                    <Label>{t("revenueRange", { min: data.revenueMin, max: data.revenueMax })}</Label>
                     <Slider
                       value={[data.revenueMin, data.revenueMax]}
                       onValueChange={(values: number[]) => {
@@ -287,7 +289,7 @@ export function BuyerForm() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>EBITDA minimum: {data.ebitdaMin}M€</Label>
+                    <Label>{t("ebitdaMin", { min: data.ebitdaMin })}</Label>
                     <Slider
                       value={[data.ebitdaMin]}
                       onValueChange={(values: number[]) => updateField("ebitdaMin", values[0])}
@@ -316,15 +318,15 @@ export function BuyerForm() {
                   <User className="w-5 h-5 text-[var(--accent)]" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-[var(--foreground)]">Vos coordonnées</h4>
-                  <p className="text-sm text-[var(--foreground-muted)]">Pour recevoir les opportunités</p>
+                  <h4 className="font-semibold text-[var(--foreground)]">{t("contactInfo")}</h4>
+                  <p className="text-sm text-[var(--foreground-muted)]">{t("contactInfoDesc")}</p>
                 </div>
               </div>
 
               <div className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="firstName">Prénom *</Label>
+                    <Label htmlFor="firstName">{t("firstName")} *</Label>
                     <Input
                       id="firstName"
                       value={data.firstName}
@@ -332,7 +334,7 @@ export function BuyerForm() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="lastName">Nom *</Label>
+                    <Label htmlFor="lastName">{t("lastName")} *</Label>
                     <Input
                       id="lastName"
                       value={data.lastName}
@@ -343,7 +345,7 @@ export function BuyerForm() {
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email *</Label>
+                    <Label htmlFor="email">{t("email")} *</Label>
                     <Input
                       id="email"
                       type="email"
@@ -352,7 +354,7 @@ export function BuyerForm() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="phone">Téléphone</Label>
+                    <Label htmlFor="phone">{t("phone")}</Label>
                     <Input
                       id="phone"
                       value={data.phone}
@@ -362,22 +364,22 @@ export function BuyerForm() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="role">Votre fonction</Label>
+                  <Label htmlFor="role">{t("role")}</Label>
                   <Input
                     id="role"
                     value={data.role}
                     onChange={(e) => updateField("role", e.target.value)}
-                    placeholder="Directeur d'investissement, CEO..."
+                    placeholder={t("rolePlaceholder")}
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="message">Message complémentaire</Label>
+                  <Label htmlFor="message">{t("message")}</Label>
                   <Textarea
                     id="message"
                     value={data.message}
                     onChange={(e) => updateField("message", e.target.value)}
-                    placeholder="Précisez vos critères ou contraintes particuliers..."
+                    placeholder={t("messagePlaceholder")}
                     rows={3}
                   />
                 </div>
@@ -395,7 +397,7 @@ export function BuyerForm() {
             className="border-[var(--border)]"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Précédent
+            {t("previous")}
           </Button>
 
           {step < totalSteps ? (
@@ -404,7 +406,7 @@ export function BuyerForm() {
               disabled={!canProceed()}
               className="btn-gold"
             >
-              Suivant
+              {t("next")}
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           ) : (
@@ -414,10 +416,10 @@ export function BuyerForm() {
               className="btn-gold"
             >
               {submitting ? (
-                "Envoi en cours..."
+                t("submitting")
               ) : (
                 <>
-                  S&apos;inscrire
+                  {t("submit")}
                   <Send className="w-4 h-4 ml-2" />
                 </>
               )}

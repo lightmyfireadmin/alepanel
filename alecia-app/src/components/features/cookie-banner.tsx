@@ -5,10 +5,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Cookie, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 const COOKIE_CONSENT_KEY = "alecia-cookie-consent";
 
 export function CookieBanner() {
+  const t = useTranslations("cookieBanner");
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -49,16 +51,15 @@ export function CookieBanner() {
                 </div>
                 <div>
                   <p className="text-[var(--foreground)] font-medium mb-1">
-                    Nous utilisons des cookies
+                    {t("title")}
                   </p>
                   <p className="text-sm text-[var(--foreground-muted)]">
-                    Ce site utilise des cookies pour améliorer votre expérience.
-                    En continuant, vous acceptez notre{" "}
+                    {t("description")}{" "}
                     <Link 
                       href="/politique-de-confidentialite" 
                       className="text-[var(--accent)] hover:underline"
                     >
-                      politique de confidentialité
+                      {t("privacyPolicy")}
                     </Link>.
                   </p>
                 </div>
@@ -72,14 +73,14 @@ export function CookieBanner() {
                   onClick={handleDecline}
                   className="border-[var(--border)] text-[var(--foreground-muted)]"
                 >
-                  Refuser
+                  {t("decline")}
                 </Button>
                 <Button
                   size="sm"
                   onClick={handleAccept}
                   className="btn-gold"
                 >
-                  Accepter
+                  {t("accept")}
                 </Button>
               </div>
 
@@ -87,7 +88,7 @@ export function CookieBanner() {
               <button
                 onClick={handleDecline}
                 className="absolute top-2 right-2 md:hidden p-2 text-[var(--foreground-muted)]"
-                aria-label="Fermer"
+                aria-label={t("closeLabel")}
               >
                 <X className="w-4 h-4" />
               </button>
