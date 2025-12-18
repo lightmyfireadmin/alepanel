@@ -4,24 +4,26 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
-
-const faqItems = [
-  {
-    question: "Quels sont les multiples de valorisation dans ce secteur ?",
-    answer: "Les multiples varient selon la taille, la rentabilité et les perspectives de croissance de l'entreprise. Contactez-nous pour une analyse personnalisée de votre situation."
-  },
-  {
-    question: "Quelle est la durée moyenne d'une opération de cession ?",
-    answer: "Une opération de cession prend généralement entre 6 et 12 mois, selon la complexité du dossier et les conditions de marché."
-  },
-  {
-    question: "Accompagnez-vous également les acquisitions ?",
-    answer: "Oui, nous accompagnons aussi bien les cédants que les acquéreurs dans leurs projets de croissance externe, que ce soit pour des acquisitions unitaires ou des stratégies de build-up."
-  }
-];
+import { useTranslations } from "next-intl";
 
 export function SectorFaq() {
+  const t = useTranslations("faq");
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const faqItems = [
+    {
+      question: t("sectorMultiples"),
+      answer: t("sectorMultiplesAnswer")
+    },
+    {
+      question: t("transactionDuration"),
+      answer: t("transactionDurationAnswer")
+    },
+    {
+      question: t("acquisitionSupport"),
+      answer: t("acquisitionSupportAnswer")
+    }
+  ];
 
   const toggleItem = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);

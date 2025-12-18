@@ -42,6 +42,7 @@ const sectorMultiples: Record<string, { low: number; mid: number; high: number }
 
 export function ValuationEstimator() {
   const t = useTranslations("valuation");
+  const tForm = useTranslations("valuationForm");
   const [step, setStep] = useState<Step>("form");
   const [formData, setFormData] = useState({
     revenue: "",
@@ -93,13 +94,13 @@ export function ValuationEstimator() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Une erreur s'est produite");
+        throw new Error(data.error || tForm("error"));
       }
 
       console.log("Lead captured:", { ...formData, result });
       setStep("capture");
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Une erreur s'est produite");
+      setErrorMessage(error instanceof Error ? error.message : tForm("error"));
     } finally {
       setIsSubmitting(false);
     }
@@ -121,10 +122,10 @@ export function ValuationEstimator() {
           </div>
           <div>
             <CardTitle className="text-[var(--foreground)] font-[family-name:var(--font-playfair)]">
-              Estimez la valeur de votre entreprise
+              {tForm("title")}
             </CardTitle>
             <CardDescription className="text-[var(--foreground-muted)]">
-              Obtenez une estimation gratuite en 30 secondes
+              {tForm("subtitle")}
             </CardDescription>
           </div>
         </div>
@@ -175,14 +176,14 @@ export function ValuationEstimator() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-[var(--foreground)]">Secteur d&apos;activité</Label>
+                <Label className="text-[var(--foreground)]">{tForm("sectorLabel")}</Label>
                 <Select
                   value={formData.sector}
                   onValueChange={(value) => setFormData({ ...formData, sector: value })}
                   required
                 >
                   <SelectTrigger className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]">
-                    <SelectValue placeholder="Sélectionnez votre secteur" />
+                    <SelectValue placeholder={tForm("sectorPlaceholder")} />
                   </SelectTrigger>
                   <SelectContent className="bg-[var(--background-secondary)] border-[var(--border)]">
                     {SECTORS.map((sector) => (
@@ -199,12 +200,12 @@ export function ValuationEstimator() {
                 className="btn-gold w-full rounded-lg"
                 disabled={!formData.revenue || !formData.ebitda || !formData.sector}
               >
-                Calculer ma valorisation
+                {tForm("calculateButton")}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
 
               <p className="text-xs text-[var(--foreground-muted)] text-center">
-                Cette estimation est indicative et ne constitue pas un avis de valorisation.
+                {tForm("disclaimer")}
               </p>
             </motion.form>
           )}
@@ -218,9 +219,9 @@ export function ValuationEstimator() {
               className="flex flex-col items-center justify-center py-12"
             >
               <Loader2 className="w-12 h-12 text-[var(--accent)] animate-spin mb-4" />
-              <p className="text-[var(--foreground)]">Calcul en cours...</p>
+              <p className="text-[var(--foreground)]">{tForm("calculating")}</p>
               <p className="text-sm text-[var(--foreground-muted)]">
-                Analyse des multiples sectoriels
+                {tForm("analyzingMultiples")}
               </p>
             </motion.div>
           )}
@@ -235,13 +236,13 @@ export function ValuationEstimator() {
             >
               <div className="text-center py-4">
                 <p className="text-sm text-[var(--foreground-muted)] mb-2">
-                  Valorisation estimée
+                  {tForm("estimatedValuation")}
                 </p>
                 <p className="text-4xl font-bold text-gradient-gold">
                   {formatCurrency(result.mid)}
                 </p>
                 <p className="text-sm text-[var(--foreground-muted)] mt-2">
-                  Fourchette : {formatCurrency(result.low)} - {formatCurrency(result.high)}
+                  {tForm("range", { low: formatCurrency(result.low), high: formatCurrency(result.high) })}
                 </p>
               </div>
 
@@ -249,31 +250,31 @@ export function ValuationEstimator() {
                 <div className="flex items-center gap-2 mb-2">
                   <TrendingUp className="w-4 h-4 text-[var(--accent)]" />
                   <span className="text-sm font-medium text-[var(--foreground)]">
-                    Multiple appliqué : {result.multiple}x EBITDA
+                    {tForm("multipleApplied", { multiple: result.multiple })}
                   </span>
                 </div>
                 <p className="text-xs text-[var(--foreground-muted)]">
-                  Basé sur les transactions comparables dans le secteur {formData.sector}
+                  {tForm("basedOn", { sector: formData.sector })}
                 </p>
               </div>
 
               <form onSubmit={handleCapture} className="space-y-4 pt-4 border-t border-[var(--border)]">
                 <p className="text-sm text-[var(--foreground)] font-medium">
-                  Recevez une analyse détaillée par email
+                  {tForm("receiveAnalysis")}
                 </p>
                 <div className="grid grid-cols-2 gap-4">
                   <Input
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="Votre email"
+                    placeholder={tForm("emailPlaceholder")}
                     required
                     className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]"
                   />
                   <Input
                     value={formData.company}
                     onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                    placeholder="Votre entreprise"
+                    placeholder={tForm("companyPlaceholder")}
                     className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]"
                   />
                 </div>
@@ -286,10 +287,10 @@ export function ValuationEstimator() {
                   {isSubmitting ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Envoi en cours...
+                      {tForm("submitting")}
                     </>
                   ) : (
-                    "Recevoir l'analyse complète"
+                    tForm("submitAnalysis")
                   )}
                 </Button>
               </form>
@@ -307,13 +308,13 @@ export function ValuationEstimator() {
                 <CheckCircle2 className="w-8 h-8 text-emerald-400" />
               </div>
               <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">
-                Merci !
+                {tForm("successTitle")}
               </h3>
               <p className="text-[var(--foreground-muted)] mb-6">
-                Vous recevrez votre analyse détaillée sous 24h.
+                {tForm("successMessage")}
               </p>
               <Button variant="outline" onClick={reset} className="border-[var(--border)]">
-                Faire une nouvelle estimation
+                {tForm("newCalculation")}
               </Button>
             </motion.div>
           )}
