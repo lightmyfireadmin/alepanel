@@ -27,10 +27,10 @@ interface JobOffer {
   type: string;
   contactEmail: string | null;
   pdfUrl: string | null;
-  isPublished: boolean;
-  displayOrder: number;
-  createdAt: Date;
-  updatedAt: Date;
+  isPublished: boolean | null;
+  displayOrder: number | null;
+  createdAt: Date | null;
+  updatedAt: Date | null;
 }
 
 const EMPTY_JOB = {
@@ -84,8 +84,8 @@ export default function CareersAdminPage() {
         type: job.type,
         contactEmail: job.contactEmail || "recrutement@alecia.fr",
         pdfUrl: job.pdfUrl || "",
-        isPublished: job.isPublished,
-        displayOrder: job.displayOrder,
+        isPublished: job.isPublished !== false,
+        displayOrder: job.displayOrder || 0,
       });
       setRequirementsText((job.requirements || []).join("\n"));
     } else {
@@ -296,13 +296,13 @@ export default function CareersAdminPage() {
         <>
           <div className="flex flex-col gap-4">
             {filteredJobs.map((job) => (
-              <div key={job.id} className={`rounded-sm border border-stroke bg-white p-4 shadow-default dark:border-strokedark dark:bg-boxdark ${!job.isPublished ? "opacity-60" : ""}`}>
+              <div key={job.id} className={`rounded-sm border border-stroke bg-white p-4 shadow-default dark:border-strokedark dark:bg-boxdark ${job.isPublished === false ? "opacity-60" : ""}`}>
                  <div className="flex justify-between items-start mb-2">
                      <div>
                          <div className="flex items-center gap-2">
                              <h4 className="text-lg font-semibold text-black dark:text-white">{job.title}</h4>
-                             <span className={`inline-flex rounded-full bg-opacity-10 py-0.5 px-2.5 text-xs font-medium ${job.isPublished ? "bg-success text-success" : "bg-warning text-warning"}`}>
-                                 {job.isPublished ? "Published" : "Draft"}
+                             <span className={`inline-flex rounded-full bg-opacity-10 py-0.5 px-2.5 text-xs font-medium ${job.isPublished !== false ? "bg-success text-success" : "bg-warning text-warning"}`}>
+                                 {job.isPublished !== false ? "Published" : "Draft"}
                              </span>
                          </div>
                          <div className="flex items-center gap-4 text-sm text-bodydark2 mt-1">
@@ -316,13 +316,13 @@ export default function CareersAdminPage() {
                              </span>
                              <span className="flex items-center gap-1">
                                  <Calendar className="w-3 h-3" />
-                                 {new Date(job.createdAt).toLocaleDateString("fr-FR")}
+                                 {job.createdAt ? new Date(job.createdAt).toLocaleDateString("fr-FR") : "N/A"}
                              </span>
                          </div>
                      </div>
                      <div className="flex gap-1">
                          <button onClick={() => toggleActive(job.id)} className="p-1 text-bodydark2 hover:text-primary">
-                             {job.isPublished ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                             {job.isPublished !== false ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                          </button>
                          <button onClick={() => handleOpenDialog(job)} className="p-1 text-bodydark2 hover:text-primary">
                              <Pencil className="w-4 h-4" />
