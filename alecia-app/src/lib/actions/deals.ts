@@ -10,34 +10,10 @@ import { deals } from "@/lib/db/schema";
 import { eq, desc, and, sql } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { dealSchema, type DealFormData } from "@/lib/validations/forms";
 
-export interface DealFormData {
-  slug: string;
-  clientName: string;
-  clientLogo?: string | null;
-  acquirerName?: string | null;
-  acquirerLogo?: string | null;
-  sector: string;
-  region?: string | null;
-  year: number;
-  mandateType: string;
-  description?: string | null;
-  isConfidential?: boolean;
-  isPriorExperience?: boolean;
-  context?: string | null;
-  intervention?: string | null;
-  result?: string | null;
-  testimonialText?: string | null;
-  testimonialAuthor?: string | null;
-  roleType?: string | null;
-  dealSize?: string | null;
-  keyMetrics?: {
-    multiple?: number;
-    duration?: string;
-    approachedBuyers?: number;
-  } | null;
-  displayOrder?: number;
-}
+// Re-export the type so it can be used by consumers of this module
+export type { DealFormData };
 
 /**
  * Get all deals (for public display)
@@ -52,6 +28,27 @@ export async function getAllDeals() {
     return allDeals;
   } catch (error) {
     console.error("[Deals] Error fetching deals:", error);
+    return [];
+  }
+}
+
+/**
+ * Get deals distribution by sector for dashboard
+ */
+export async function getDealsBySector() {
+  try {
+    const result = await db
+      .select({
+        name: deals.sector,
+        value: sql<number>`count(*)::int`,
+      })
+      .from(deals)
+      .groupBy(deals.sector)
+      .orderBy(desc(sql`count(*)`));
+
+    return result;
+  } catch (error) {
+    console.error("[Deals] Error fetching sector distribution:", error);
     return [];
   }
 }
@@ -124,11 +121,29 @@ export async function createDeal(data: DealFormData): Promise<{ success: boolean
     if (!session?.user?.id) {
       return { success: false, error: "Non authentifié" };
     }
+
+    // Validate input
+    const validatedData = dealSchema.parse(data);
     
+    // Generate slug from client name if not provided (though typically handled by form or separate logic)
+    // For now, we assume slug is generated here or passed. Wait, the schema doesn't have slug?
+    // Looking at schema.ts, slug is required. Looking at forms.ts, dealSchema doesn't have slug.
+    // We need to generate a slug.
+
+    const baseSlug = validatedData.clientName
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)+/g, "");
+
+    const slug = `${baseSlug}-${Date.now()}`; // Simple unique slug strategy
+
     // Insert deal
     const [inserted] = await db
       .insert(deals)
-      .values(data)
+      .values({
+        ...validatedData,
+        slug,
+      })
       .returning({ id: deals.id });
     
     // Revalidate pages that display deals
@@ -138,6 +153,9 @@ export async function createDeal(data: DealFormData): Promise<{ success: boolean
     return { success: true, id: inserted.id };
   } catch (error) {
     console.error("[Deals] Error creating deal:", error);
+    // Determine if it's a validation error or something else
+    // Zod errors usually thrown as ZodError, but we want a simple string
+    // If we want detailed errors we could parse it, but for now simple message
     return {
       success: false,
       error: error instanceof Error ? error.message : "Échec de la création",
@@ -159,10 +177,13 @@ export async function updateDeal(
       return { success: false, error: "Non authentifié" };
     }
     
+    // Validate input (partial)
+    const validatedData = dealSchema.partial().parse(data);
+
     // Update deal
     await db
       .update(deals)
-      .set({ ...data, updatedAt: new Date() })
+      .set({ ...validatedData, updatedAt: new Date() })
       .where(eq(deals.id, id));
     
     // Revalidate pages
@@ -243,12 +264,6 @@ export async function getDealFilterOptions(filters?: {
     const years = yearsResult.map(r => r.val).sort((a, b) => b - a);
     const mandateTypes = typesResult.map(r => r.val).filter((s): s is string => Boolean(s)).sort();
     
-    console.log('[Deals Debug] Filters:', filters);
-    console.log('[Deals Debug] Sectors:', sectors.length, sectors);
-    console.log('[Deals Debug] Regions:', regions.length, regions);
-    console.log('[Deals Debug] Years:', years.length, years);
-    console.log('[Deals Debug] Types:', mandateTypes.length, mandateTypes);
-
     return { sectors, regions, years, mandateTypes };
   } catch (error) {
     console.error("[Deals] Error fetching filter options:", error);

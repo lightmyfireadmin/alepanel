@@ -1,48 +1,28 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogFooter,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Pencil, Trash2, Briefcase, Search, ExternalLink, Star, Loader2 } from "lucide-react";
+import { Plus, Briefcase, ExternalLink, Loader2 } from "lucide-react";
 import { SECTORS, REGIONS } from "@/lib/db/schema";
-import { createDeal, updateDeal, deleteDeal, type DealFormData } from "@/lib/actions/deals";
+import { createDeal, updateDeal, deleteDeal } from "@/lib/actions/deals";
+import { type DealFormData } from "@/lib/validations/forms";
 import { useRouter } from "next/navigation";
-
-// We define a local interface that matches what we expect from the DB + UI needs
-// Ideally we import the type from schema, but we need to map nulls to undefined for forms sometimes
-interface Deal {
-  id: string;
-  slug: string;
-  clientName: string;
-  clientLogo?: string | null;
-  acquirerName?: string | null;
-  acquirerLogo?: string | null;
-  sector: string;
-  region?: string | null;
-  year: number;
-  mandateType: string;
-  isConfidential: boolean;
-  isPriorExperience: boolean;
-  context?: string | null;
-  intervention?: string | null;
-  result?: string | null;
-  testimonialText?: string | null;
-  testimonialAuthor?: string | null;
-  dealSize?: string | null;
-}
+import { DataTable } from "@/components/ui/data-table";
+import { createColumns, type Deal } from "./columns";
+import { useToast } from "@/components/ui/toast";
 
 interface DealsClientProps {
   initialDeals: Deal[];
@@ -70,9 +50,9 @@ const EMPTY_DEAL: Deal = {
 };
 
 const MANDATE_TYPES = [
-  { value: "Cession", label: "Cession", color: "bg-emerald-500/20 text-emerald-500" },
-  { value: "Acquisition", label: "Acquisition", color: "bg-blue-500/20 text-blue-500" },
-  { value: "Levée de fonds", label: "Levée de fonds", color: "bg-purple-500/20 text-purple-500" },
+  { value: "Cession", label: "Cession" },
+  { value: "Acquisition", label: "Acquisition" },
+  { value: "Levée de fonds", label: "Levée de fonds" },
 ];
 
 const DEAL_SIZES = [
@@ -86,18 +66,14 @@ const DEAL_SIZES = [
 
 export default function DealsClient({ initialDeals }: DealsClientProps) {
   const router = useRouter();
+  const { toast, success, error: errorToast } = useToast();
   const [deals, setDeals] = useState<Deal[]>(initialDeals);
-  const [searchQuery, setSearchQuery] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [dealToDelete, setDealToDelete] = useState<string | null>(null);
   const [editingDeal, setEditingDeal] = useState<Deal | null>(null);
   const [formData, setFormData] = useState<Deal>(EMPTY_DEAL);
   const [isLoading, setIsLoading] = useState(false);
-
-  const filteredDeals = deals.filter((deal) =>
-    deal.clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (deal.acquirerName && deal.acquirerName.toLowerCase().includes(searchQuery.toLowerCase())) ||
-    deal.sector.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   const handleOpenDialog = (deal?: Deal) => {
     if (deal) {
@@ -110,77 +86,97 @@ export default function DealsClient({ initialDeals }: DealsClientProps) {
     setIsDialogOpen(true);
   };
 
+  const confirmDelete = (id: string) => {
+    setDealToDelete(id);
+    setIsDeleteDialogOpen(true);
+  };
+
   const handleSave = async () => {
     setIsLoading(true);
     try {
+      // Ensure nulls are converted to undefined or empty string as required by DealFormData (Zod)
+      // Note: Zod schema uses .optional().or(z.literal("")) for strings
       const dealData: DealFormData = {
-        slug: formData.slug,
         clientName: formData.clientName,
-        clientLogo: formData.clientLogo,
-        acquirerName: formData.acquirerName,
-        acquirerLogo: formData.acquirerLogo,
-        sector: formData.sector,
-        region: formData.region,
+        clientLogo: formData.clientLogo || undefined,
+        acquirerName: formData.acquirerName || undefined,
+        acquirerLogo: formData.acquirerLogo || undefined,
+        sector: formData.sector as any, // Cast to any to bypass strict Zod enum check if needed, or ensure exact match
+        region: (formData.region || undefined) as any,
         year: formData.year,
-        mandateType: formData.mandateType,
+        mandateType: formData.mandateType as any,
         isConfidential: formData.isConfidential,
         isPriorExperience: formData.isPriorExperience,
-        context: formData.context,
-        intervention: formData.intervention,
-        result: formData.result,
-        testimonialText: formData.testimonialText,
-        testimonialAuthor: formData.testimonialAuthor,
-        dealSize: formData.dealSize,
+        context: formData.context || undefined,
+        intervention: formData.intervention || undefined,
+        result: formData.result || undefined,
+        testimonialText: formData.testimonialText || undefined,
+        testimonialAuthor: formData.testimonialAuthor || undefined,
+        dealSize: formData.dealSize || undefined,
       };
 
       if (editingDeal) {
         const result = await updateDeal(editingDeal.id, dealData);
         if (result.success) {
+          // Manually update the local state with the slug if it wasn't returned by updateDeal
+          // But updateDeal usually returns success only.
+          // We can keep the existing slug.
+          const updatedDeal = { ...formData, id: editingDeal.id };
           setDeals((prev) =>
-            prev.map((d) => (d.id === editingDeal.id ? { ...formData, id: editingDeal.id } : d))
+            prev.map((d) => (d.id === editingDeal.id ? updatedDeal : d))
           );
           setIsDialogOpen(false);
           setFormData(EMPTY_DEAL);
+          success("Opération mise à jour", "Les modifications ont été enregistrées avec succès.");
           router.refresh();
         } else {
-          alert("Erreur lors de la mise à jour : " + result.error);
+          errorToast("Erreur", result.error || "Une erreur est survenue lors de la mise à jour.");
         }
       } else {
         const result = await createDeal(dealData);
         if (result.success && result.id) {
-          setDeals((prev) => [...prev, { ...formData, id: result.id! }]);
+          // createDeal generates a slug. We might not know it here unless createDeal returns it.
+          // Ideally createDeal should return the full object or at least the slug.
+          // But we can refresh the page to get the new list.
+          // For optimistic UI, we can guess the slug or just leave it empty until refresh.
+          const newDeal = { ...formData, id: result.id!, slug: "generating..." };
+          setDeals((prev) => [...prev, newDeal]);
           setIsDialogOpen(false);
           setFormData(EMPTY_DEAL);
+          success("Opération créée", "La nouvelle opération a été ajoutée avec succès.");
           router.refresh();
         } else {
-          alert("Erreur lors de la création : " + result.error);
+           errorToast("Erreur", result.error || "Une erreur est survenue lors de la création.");
         }
       }
     } catch (error) {
       console.error("Error saving deal:", error);
-      alert("Une erreur est survenue.");
+      errorToast("Erreur inattendue", "Une erreur est survenue. Veuillez réessayer.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (confirm("Supprimer cette opération ?")) {
-      setIsLoading(true);
-      try {
-        const result = await deleteDeal(id);
-        if (result.success) {
-          setDeals((prev) => prev.filter((d) => d.id !== id));
-          router.refresh();
-        } else {
-          alert("Erreur lors de la suppression : " + result.error);
-        }
-      } catch (error) {
-        console.error("Error deleting deal:", error);
-        alert("Une erreur est survenue.");
-      } finally {
-        setIsLoading(false);
+  const handleDelete = async () => {
+    if (!dealToDelete) return;
+
+    setIsLoading(true);
+    try {
+      const result = await deleteDeal(dealToDelete);
+      if (result.success) {
+        setDeals((prev) => prev.filter((d) => d.id !== dealToDelete));
+        success("Opération supprimée", "L'opération a été supprimée avec succès.");
+        router.refresh();
+      } else {
+        errorToast("Erreur", result.error || "Erreur lors de la suppression.");
       }
+    } catch (error) {
+      console.error("Error deleting deal:", error);
+      errorToast("Erreur inattendue", "Impossible de supprimer l'opération.");
+    } finally {
+      setIsLoading(false);
+      setIsDeleteDialogOpen(false);
+      setDealToDelete(null);
     }
   };
 
@@ -194,9 +190,10 @@ export default function DealsClient({ initialDeals }: DealsClientProps) {
       .replace(/(^-|-$)/g, "");
   };
 
-  const getMandateColor = (type: string) => {
-    return MANDATE_TYPES.find((m) => m.value === type)?.color || "";
-  };
+  const columns = createColumns({
+    onEdit: handleOpenDialog,
+    onDelete: confirmDelete,
+  });
 
   return (
     <div className="space-y-6">
@@ -211,20 +208,29 @@ export default function DealsClient({ initialDeals }: DealsClientProps) {
             {deals.length} opérations enregistrées
           </p>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={() => handleOpenDialog()} className="btn-gold">
-              <Plus className="w-4 h-4 mr-2" />
-              Nouvelle opération
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-[var(--card)] border-[var(--border)]">
-            <DialogHeader>
-              <DialogTitle className="text-[var(--foreground)]">
-                {editingDeal ? "Modifier l'opération" : "Nouvelle opération"}
-              </DialogTitle>
-            </DialogHeader>
-            <div className="space-y-6 py-4">
+        <Button onClick={() => handleOpenDialog()} className="btn-gold">
+          <Plus className="w-4 h-4 mr-2" />
+          Nouvelle opération
+        </Button>
+      </div>
+
+      {/* Data Table */}
+      <DataTable
+        columns={columns}
+        data={deals}
+        searchKey="clientName"
+        searchPlaceholder="Rechercher par client..."
+      />
+
+      {/* Edit/Create Dialog */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-[var(--card)] border-[var(--border)]">
+          <DialogHeader>
+            <DialogTitle className="text-[var(--foreground)]">
+              {editingDeal ? "Modifier l'opération" : "Nouvelle opération"}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-6 py-4">
               {/* Basic Info */}
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
@@ -268,11 +274,6 @@ export default function DealsClient({ initialDeals }: DealsClientProps) {
                     onChange={(e) => setFormData({ ...formData, clientLogo: e.target.value })}
                     placeholder="https://..."
                   />
-                  {formData.clientLogo && (
-                    <div className="mt-2 h-12 w-12 relative border rounded bg-white overflow-hidden">
-                       <img src={formData.clientLogo} alt="Preview" className="w-full h-full object-contain" />
-                    </div>
-                  )}
                 </div>
                 <div className="space-y-2">
                   <Label>Logo Acquéreur (URL)</Label>
@@ -281,14 +282,10 @@ export default function DealsClient({ initialDeals }: DealsClientProps) {
                     onChange={(e) => setFormData({ ...formData, acquirerLogo: e.target.value })}
                     placeholder="https://..."
                   />
-                   {formData.acquirerLogo && (
-                    <div className="mt-2 h-12 w-12 relative border rounded bg-white overflow-hidden">
-                       <img src={formData.acquirerLogo} alt="Preview" className="w-full h-full object-contain" />
-                    </div>
-                  )}
                 </div>
               </div>
 
+              {/* Classification */}
               <div className="grid gap-4 md:grid-cols-3">
                 <div className="space-y-2">
                   <Label>Type de mandat *</Label>
@@ -340,6 +337,7 @@ export default function DealsClient({ initialDeals }: DealsClientProps) {
                 </div>
               </div>
 
+              {/* Details */}
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label>Année *</Label>
@@ -473,78 +471,30 @@ export default function DealsClient({ initialDeals }: DealsClientProps) {
                   </Button>
                 </div>
               </div>
-            </div>
-          </DialogContent>
-        </Dialog>
-      </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
-      {/* Search */}
-      <div className="relative max-w-md">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--foreground-muted)]" />
-        <Input
-          placeholder="Rechercher une opération..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-10"
-        />
-      </div>
-
-      {/* Deals Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredDeals.map((deal) => (
-          <Card key={deal.id} className="bg-[var(--card)] border-[var(--border)]">
-            <CardHeader className="pb-2">
-              <div className="flex items-start justify-between">
-                <div className="space-y-1">
-                  <CardTitle className="text-base text-[var(--foreground)]">
-                    {deal.clientName}
-                    {deal.isPriorExperience && <Star className="inline w-4 h-4 ml-1 text-[var(--accent)]" />}
-                  </CardTitle>
-                  <p className="text-sm text-[var(--foreground-muted)]">
-                    → {deal.acquirerName || "N/A"}
-                  </p>
-                </div>
-                <div className="flex gap-1">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleOpenDialog(deal)}
-                    className="h-8 w-8 p-0"
-                  >
-                    <Pencil className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleDelete(deal.id)}
-                    className="h-8 w-8 p-0 text-red-400 hover:text-red-300"
-                    disabled={isLoading}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="flex items-center gap-2 flex-wrap">
-                <Badge variant="outline" className={getMandateColor(deal.mandateType)}>
-                  {deal.mandateType}
-                </Badge>
-                <span className="text-xs text-[var(--foreground-muted)]">{deal.year}</span>
-              </div>
-              <p className="text-xs text-[var(--foreground-muted)] truncate">
-                {deal.sector}
-              </p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {filteredDeals.length === 0 && (
-        <div className="text-center py-12 text-[var(--foreground-muted)]">
-          Aucune opération trouvée
-        </div>
-      )}
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Êtes-vous sûr ?</DialogTitle>
+            <DialogDescription>
+              Cette action est irréversible. L&apos;opération sera définitivement supprimée.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)} disabled={isLoading}>
+              Annuler
+            </Button>
+            <Button variant="destructive" onClick={handleDelete} disabled={isLoading}>
+              {isLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              Supprimer
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
