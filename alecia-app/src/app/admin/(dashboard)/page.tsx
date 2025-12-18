@@ -1,4 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Briefcase, Newspaper, Users, TrendingUp, Sparkles, LayoutDashboard, FileText, Mail, Languages, MessageSquare, Lightbulb } from "lucide-react";
 import Link from "next/link";
 import type { Metadata } from "next";

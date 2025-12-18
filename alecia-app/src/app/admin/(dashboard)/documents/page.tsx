@@ -123,7 +123,7 @@ export default function DocumentsPage() {
         </div>
         <div className="p-0">
           <div className="flex flex-col">
-            {mockDocuments.map((doc, idx) => {
+            {mockDocuments.map((doc) => {
               const FileIcon = getFileIcon(doc.mimeType);
               return (
                 <div

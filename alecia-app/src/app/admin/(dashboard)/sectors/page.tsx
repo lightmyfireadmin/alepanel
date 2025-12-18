@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Breadcrumb from "@/components/admin/ui/Breadcrumb";
-import { Plus, Pencil, Trash2, Building2, Users, Search, MoreVertical } from "lucide-react";
+import { Plus, Pencil, Trash2, Users, Search } from "lucide-react";
 import { mockSectors } from "@/lib/data";
 import { teamMembers } from "@/lib/data";
 import {
@@ -15,7 +15,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface SectorFormData {
   id: string;
@@ -42,18 +41,6 @@ const EMPTY_SECTOR: SectorFormData = {
   iconType: "",
   referentPartner: "",
 };
-
-const ICON_TYPES = [
-  { value: "technology", label: "Technologies" },
-  { value: "distribution", label: "Distribution" },
-  { value: "retail", label: "Retail" },
-  { value: "health", label: "Santé" },
-  { value: "building", label: "Immobilier" },
-  { value: "factory", label: "Industries" },
-  { value: "finance", label: "Finance" },
-  { value: "food", label: "Agroalimentaire" },
-  { value: "energy", label: "Énergie" },
-];
 
 export default function SectorsAdminPage() {
   const [sectors, setSectors] = useState(mockSectors);

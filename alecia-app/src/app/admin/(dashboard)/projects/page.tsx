@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button"; // Keeping some shadcn as helpers for now or adapt if needed
 import Breadcrumb from "@/components/admin/ui/Breadcrumb";
 import { Plus, Calendar, User, MoreVertical, FileText } from "lucide-react";
 import Link from "next/link";
@@ -38,13 +37,6 @@ const mockProjects = [
   },
 ];
 
-const statusColors: Record<string, string> = {
-  Lead: "bg-blue-500/10 border-blue-500/30 text-blue-400",
-  "Due Diligence": "bg-amber-500/10 border-amber-500/30 text-amber-400",
-  Closing: "bg-emerald-500/10 border-emerald-500/30 text-emerald-400",
-  Closed: "bg-gray-500/10 border-gray-500/30 text-gray-400",
-};
-
 export default function ProjectsPage() {
   const activeStatuses = PROJECT_STATUSES.filter((s) => s !== "Closed");
 
@@ -75,7 +67,7 @@ export default function ProjectsPage() {
               </div>
 
               <div className="flex flex-col gap-4">
-                {statusProjects.map((project, idx) => (
+                {statusProjects.map((project) => (
                     <Link href={`/admin/projects/${project.id}`} key={project.id}>
                       <div className="rounded-sm border border-stroke bg-white p-5 shadow-default dark:border-strokedark dark:bg-boxdark hover:border-primary dark:hover:border-primary transition-colors cursor-pointer group">
                         <div className="flex items-start justify-between mb-4">

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Breadcrumb from "@/components/admin/ui/Breadcrumb";
 import {
-  Plus, Pencil, Trash2, Newspaper, Calendar, Search, Eye, EyeOff, ExternalLink, Loader2, Image as ImageIcon
+  Plus, Pencil, Trash2, Search, Eye, EyeOff, Loader2
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { createPost, updatePost, deletePost, togglePostPublish, type PostFormData } from "@/lib/actions/posts";
@@ -182,7 +182,7 @@ export default function NewsClient({ initialArticles }: NewsClientProps) {
     if (!date) return new Date().toISOString().split("T")[0];
     try {
         return new Date(date).toISOString().split("T")[0];
-    } catch (e) {
+    } catch {
         return "";
     }
   };
