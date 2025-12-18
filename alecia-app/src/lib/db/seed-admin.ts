@@ -66,7 +66,7 @@ async function seedAdmin() {
     passwordHash: passwordHash,
     role: "admin",
     mustChangePassword: false,
-    hasSeenOnboarding: true,
+    hasSeenOnboarding: false, // Reset to make user go through onboarding again
   });
 
   console.log("✅ Admin user seeded successfully.");

@@ -7,16 +7,31 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Loader2, Shield, ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+// Admin users configuration
+const ADMIN_USERS = [
+  {
+    id: "christophe",
+    name: "Christophe",
+    email: "christophe.berthon@alecia.fr",
+    avatar: "/assets/Equipe_Alecia/CB_1_-_cropped_-_alt_p800.jpg",
+  },
+];
+
 export default function AdminLoginPage() {
-  const [email, setEmail] = useState("");
+  const [selectedUser, setSelectedUser] = useState(ADMIN_USERS[0].id);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
+  // Get the selected user's details
+  const currentUser = ADMIN_USERS.find(user => user.id === selectedUser) || ADMIN_USERS[0];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +40,7 @@ export default function AdminLoginPage() {
 
     try {
       const result = await signIn("credentials", {
-        email,
+        email: currentUser.email,
         password,
         redirect: false,
       });
@@ -92,18 +107,39 @@ export default function AdminLoginPage() {
         <CardContent className="pt-4">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-[var(--foreground)] text-sm font-medium">
-                Email
+              <Label htmlFor="user" className="text-[var(--foreground)] text-sm font-medium">
+                Utilisateur
               </Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@alecia.fr"
-                required
-                className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)] h-11 focus:border-[var(--accent)] focus:ring-[var(--accent)]/20"
-              />
+              <Select value={selectedUser} onValueChange={setSelectedUser}>
+                <SelectTrigger className="w-full bg-[var(--input)] border-[var(--border)] text-[var(--foreground)] h-11 focus:border-[var(--accent)] focus:ring-[var(--accent)]/20">
+                  <SelectValue>
+                    <div className="flex items-center gap-3">
+                      <Avatar className="size-6">
+                        <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
+                        <AvatarFallback className="text-xs">
+                          {currentUser.name.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span>{currentUser.name}</span>
+                    </div>
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {ADMIN_USERS.map((user) => (
+                    <SelectItem key={user.id} value={user.id}>
+                      <div className="flex items-center gap-3">
+                        <Avatar className="size-6">
+                          <AvatarImage src={user.avatar} alt={user.name} />
+                          <AvatarFallback className="text-xs">
+                            {user.name.charAt(0)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span>{user.name}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div className="space-y-2">
               <Label htmlFor="password" className="text-[var(--foreground)] text-sm font-medium">
