@@ -16,7 +16,8 @@
     "db:seed:extra": "tsx src/lib/db/seed-extra.ts",
     "db:seed:admin": "tsx src/lib/db/seed-admin.ts",
     "db:seed:all": "tsx src/lib/db/seed-all.ts",
-    "db:seed:jobs": "tsx src/lib/db/seed-job-offers.ts"
+    "db:seed:jobs": "tsx src/lib/db/seed-job-offers.ts",
+    "db:reset-onboarding": "tsx src/lib/db/reset-user-onboarding.ts"
   },
   "dependencies": {
     "@azure/msal-node": "^3.8.4",
