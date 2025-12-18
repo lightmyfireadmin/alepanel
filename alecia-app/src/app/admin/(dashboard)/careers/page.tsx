@@ -97,7 +97,10 @@ export default function CareersAdminPage() {
   };
 
   const handleSave = async () => {
-    if (!formData.title) return;
+    if (!formData.title) {
+      alert("Le titre est obligatoire");
+      return;
+    }
 
     // Parse requirements from text
     const requirements = requirementsText
@@ -116,6 +119,9 @@ export default function CareersAdminPage() {
         // Refresh the list
         const offers = await getAllJobOffers();
         setJobs(offers);
+      } else {
+        alert("Erreur lors de la mise à jour de l'offre");
+        return;
       }
     } else {
       const result = await createJobOffer(data);
@@ -123,6 +129,9 @@ export default function CareersAdminPage() {
         // Refresh the list
         const offers = await getAllJobOffers();
         setJobs(offers);
+      } else {
+        alert("Erreur lors de la création de l'offre");
+        return;
       }
     }
     setIsDialogOpen(false);
@@ -137,6 +146,8 @@ export default function CareersAdminPage() {
         // Refresh the list
         const offers = await getAllJobOffers();
         setJobs(offers);
+      } else {
+        alert("Erreur lors de la suppression de l'offre");
       }
     }
   };

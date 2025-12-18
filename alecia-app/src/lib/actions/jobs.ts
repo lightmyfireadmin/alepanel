@@ -37,6 +37,16 @@ export async function getAllJobOffers() {
   }
 }
 
+// Helper: Generate slug from title
+function generateSlugFromTitle(title: string): string {
+  return title
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // Remove diacritics
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 // Admin: Create a new job offer
 export async function createJobOffer(data: {
   title: string;
@@ -50,13 +60,7 @@ export async function createJobOffer(data: {
   displayOrder?: number;
 }) {
   try {
-    // Generate slug from title
-    const slug = data.title
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "") // Remove diacritics
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
+    const slug = generateSlugFromTitle(data.title);
 
     const [offer] = await db
       .insert(jobOffers)
@@ -89,12 +93,7 @@ export async function updateJobOffer(id: string, data: {
     // If title is being updated, regenerate slug
     const updateData: typeof data & { slug?: string } = { ...data };
     if (data.title) {
-      updateData.slug = data.title
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "");
+      updateData.slug = generateSlugFromTitle(data.title);
     }
 
     const [offer] = await db
