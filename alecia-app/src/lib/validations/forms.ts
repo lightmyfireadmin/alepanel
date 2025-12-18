@@ -57,7 +57,23 @@ export const dealSchema = z.object({
     .optional()
     .or(z.literal("")),
   
+  isConfidential: z.boolean().optional(),
+
   isPriorExperience: z.boolean().optional(),
+
+  context: z.string().optional().or(z.literal("")),
+  intervention: z.string().optional().or(z.literal("")),
+  result: z.string().optional().or(z.literal("")),
+  testimonialText: z.string().optional().or(z.literal("")),
+  testimonialAuthor: z.string().optional().or(z.literal("")),
+  roleType: z.string().optional().or(z.literal("")),
+  dealSize: z.string().optional().or(z.literal("")),
+
+  keyMetrics: z.object({
+    multiple: z.number().optional(),
+    duration: z.string().optional(),
+    approachedBuyers: z.number().optional(),
+  }).optional(),
 });
 
 export type DealFormData = z.infer<typeof dealSchema>;

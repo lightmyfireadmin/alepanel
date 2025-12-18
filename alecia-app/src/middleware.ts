@@ -53,28 +53,23 @@ export default auth((req) => {
     return NextResponse.next();
   }
 
-  // Protect all admin routes - require authentication
-  if (isOnAdmin && !isLoggedIn) {
-    return NextResponse.redirect(new URL("/admin/login", req.url));
-  }
+  // Protect all admin routes - require authentication and specific roles
+  if (isOnAdmin) {
+    if (!isLoggedIn) {
+      return NextResponse.redirect(new URL("/admin/login", req.url));
+    }
 
-  // Role-based protection for sensitive admin routes
-  // Only "admin" role can access these
-  const adminOnlyRoutes = [
-    "/admin/users",
-    "/admin/settings",
-    "/admin/api-keys",
-  ];
-  
-  const isAdminOnlyRoute = adminOnlyRoutes.some((route) =>
-    pathname.startsWith(route)
-  );
-
-  if (isAdminOnlyRoute && userRole !== "admin") {
-    console.warn(
-      `[Middleware] Unauthorized access attempt to ${pathname} by role: ${userRole}`
-    );
-    return NextResponse.redirect(new URL("/admin", req.url));
+    // Require role "admin" or "sudo" for ANY /admin access
+    if (userRole !== "admin" && userRole !== "sudo") {
+      console.warn(
+        `[Middleware] Unauthorized access attempt to ${pathname} by role: ${userRole}`
+      );
+      // Redirect to home page or show forbidden page?
+      // For now, redirect to home page to avoid infinite loops if we redirected to login
+      // or we could signOut but that requires client side action.
+      // Redirecting to root is safer.
+      return NextResponse.redirect(new URL("/", req.url));
+    }
   }
 
   return NextResponse.next();

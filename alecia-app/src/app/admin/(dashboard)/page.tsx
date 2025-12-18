@@ -2,21 +2,25 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Briefcase, Newspaper, Users, TrendingUp, Sparkles, LayoutDashboard, FileText, Mail, Languages, MessageSquare, Lightbulb } from "lucide-react";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { getDealStats, getRecentDeals } from "@/lib/actions/deals";
+import { Suspense } from "react";
+import { getDealStats, getRecentDeals, getDealsBySector } from "@/lib/actions/deals";
 import { getPostCount } from "@/lib/actions/posts";
 import { getTeamMemberCount } from "@/lib/actions/team";
+import { DashboardSkeleton } from "@/components/admin/skeletons";
+import { DashboardChart } from "@/components/admin/dashboard-chart";
 
 export const metadata: Metadata = {
   title: "Admin Dashboard",
 };
 
-export default async function AdminDashboard() {
+async function DashboardContent() {
   // Fetch stats from database
-  const [dealCount, postCount, teamCount, recentDealsData] = await Promise.all([
+  const [dealCount, postCount, teamCount, recentDealsData, dealsBySector] = await Promise.all([
     getDealStats(),
     getPostCount(),
     getTeamMemberCount(),
     getRecentDeals(3),
+    getDealsBySector(),
   ]);
 
   const stats = [
@@ -30,6 +34,14 @@ export default async function AdminDashboard() {
     type: deal.mandateType,
     date: deal.year.toString(),
   }));
+
+  // Clean data for chart (remove null sectors)
+  const chartData = dealsBySector
+    .filter(item => item.name)
+    .map(item => ({
+      name: item.name as string,
+      value: item.value,
+    }));
 
   return (
     <div className="space-y-8 pb-8">
@@ -164,54 +176,26 @@ export default async function AdminDashboard() {
           </div>
         </div>
 
-        {/* Quick Actions */}
+        {/* Sector Distribution Chart */}
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
           <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
             <h3 className="font-medium text-black dark:text-white">
-              Actions rapides
+              Répartition sectorielle
             </h3>
           </div>
-          <div className="p-6.5 flex flex-col gap-4">
-            <Link
-              href="/admin/deals"
-              className="flex items-center gap-3.5 px-4 py-3 rounded-md bg-gray-2 dark:bg-meta-4 hover:bg-opacity-90 transition-all"
-            >
-              <Briefcase className="w-5 h-5 text-primary" />
-              <span className="font-medium text-black dark:text-white">
-                Ajouter une opération
-              </span>
-            </Link>
-            <Link
-              href="/admin/news"
-              className="flex items-center gap-3.5 px-4 py-3 rounded-md bg-gray-2 dark:bg-meta-4 hover:bg-opacity-90 transition-all"
-            >
-              <Newspaper className="w-5 h-5 text-primary" />
-              <span className="font-medium text-black dark:text-white">
-                Créer un article
-              </span>
-            </Link>
-            <Link
-              href="/admin/team"
-              className="flex items-center gap-3.5 px-4 py-3 rounded-md bg-gray-2 dark:bg-meta-4 hover:bg-opacity-90 transition-all"
-            >
-              <Users className="w-5 h-5 text-primary" />
-              <span className="font-medium text-black dark:text-white">
-                Ajouter un membre
-              </span>
-            </Link>
-            <Link
-              href="/"
-              target="_blank"
-              className="flex items-center gap-3.5 px-4 py-3 rounded-md bg-gray-2 dark:bg-meta-4 hover:bg-opacity-90 transition-all"
-            >
-              <TrendingUp className="w-5 h-5 text-primary" />
-              <span className="font-medium text-black dark:text-white">
-                Voir le site public
-              </span>
-            </Link>
+          <div className="p-6.5 h-80">
+            <DashboardChart data={chartData} />
           </div>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AdminDashboard() {
+  return (
+    <Suspense fallback={<DashboardSkeleton />}>
+      <DashboardContent />
+    </Suspense>
   );
 }

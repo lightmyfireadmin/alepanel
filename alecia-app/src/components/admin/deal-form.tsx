@@ -18,12 +18,13 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Loader2, AlertCircle, CheckCircle } from "lucide-react";
-import { SECTORS, REGIONS, MANDATE_TYPES } from "@/lib/db/schema";
+import { SECTORS, REGIONS, MANDATE_TYPES, type Deal } from "@/lib/db/schema";
 import { dealSchema, type DealFormData } from "@/lib/validations/forms";
+import { createDeal, updateDeal } from "@/lib/actions/deals";
 
 interface DealFormProps {
   mode: "create" | "edit";
-  initialData?: Partial<DealFormData> & { id?: string };
+  initialData?: Partial<Deal>;
 }
 
 export function DealForm({ mode, initialData = {} }: DealFormProps) {
@@ -61,8 +62,6 @@ export function DealForm({ mode, initialData = {} }: DealFormProps) {
 
     try {
       if (mode === "create") {
-         // Import dynamically to avoid client-side bundling issues if any (though calling server action directly is fine usually)
-         const { createDeal } = await import("@/app/actions/deals");
          const result = await createDeal(data);
          
          if (!result.success) {
@@ -75,9 +74,21 @@ export function DealForm({ mode, initialData = {} }: DealFormProps) {
             router.refresh();
          }, 1000);
       } else {
-         // TODO: Implement updateDeal
-         console.log("Update not implemented yet");
+         if (!initialData.id) {
+           throw new Error("ID manquant pour la mise à jour");
+         }
+
+         const result = await updateDeal(initialData.id, data);
+
+         if (!result.success) {
+           throw new Error(result.error);
+         }
+
          setSubmitSuccess(true);
+         setTimeout(() => {
+           router.push("/admin/deals");
+           router.refresh();
+         }, 1000);
       }
     } catch (error) {
       setSubmitError(

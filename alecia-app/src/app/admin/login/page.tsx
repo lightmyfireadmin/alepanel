@@ -1,100 +1,45 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, Shield, ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-type User = {
-  id: string;
-  name: string;
-  email: string;
-  image?: string;
-};
-
 export default function AdminLoginPage() {
-  const [users, setUsers] = useState<User[]>([]);
-  const [selectedEmail, setSelectedEmail] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isFetchingUsers, setIsFetchingUsers] = useState(true);
   const router = useRouter();
-
-  useEffect(() => {
-    async function fetchUsers() {
-      try {
-        const response = await fetch("/api/users");
-        if (response.ok) {
-          const data = await response.json();
-          setUsers(data);
-        } else {
-          console.error("Failed to fetch users:", response.status);
-          setError("Impossible de charger les utilisateurs");
-        }
-      } catch (error) {
-        console.error("Error fetching users:", error);
-        setError("Erreur lors du chargement des utilisateurs");
-      } finally {
-        setIsFetchingUsers(false);
-      }
-    }
-    fetchUsers();
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    
-    if (!selectedEmail) {
-      setError("Veuillez sélectionner un utilisateur");
-      return;
-    }
-    
     setIsLoading(true);
 
-    // ⚠️ TEMPORARY BYPASS FOR TESTING PHASE ONLY ⚠️
-    // TODO: Re-enable authentication before production deployment
     try {
-      // Bypass actual authentication - accept any password
-      // Still call signIn to establish session, but don't check for errors
-      await signIn("credentials", {
-        email: selectedEmail,
-        password: "bypass", // Use a bypass password
-        redirect: false,
-      });
-      
-      // Always redirect to admin panel regardless of authentication result
-      router.push("/admin");
-      router.refresh();
-      
-      /* ORIGINAL AUTHENTICATION CODE - COMMENTED OUT FOR TESTING
       const result = await signIn("credentials", {
-        email: selectedEmail,
+        email,
         password,
         redirect: false,
       });
 
       if (result?.error) {
-        setError("Utilisateur ou mot de passe incorrect");
+        setError("Identifiants incorrects. Veuillez réessayer.");
+        setIsLoading(false);
       } else {
         router.push("/admin");
         router.refresh();
       }
-      */
     } catch (error) {
       console.error("Sign in error:", error);
-      // Even if there's an error, redirect to admin (testing bypass)
-      router.push("/admin");
-      router.refresh();
-    } finally {
+      setError("Une erreur est survenue lors de la connexion.");
       setIsLoading(false);
     }
   };
@@ -147,50 +92,18 @@ export default function AdminLoginPage() {
         <CardContent className="pt-4">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="user" className="text-[var(--foreground)] text-sm font-medium">
-                Utilisateur
+              <Label htmlFor="email" className="text-[var(--foreground)] text-sm font-medium">
+                Email
               </Label>
-              {isFetchingUsers ? (
-                <div className="flex items-center justify-center h-11 border border-[var(--border)] rounded-md bg-[var(--input)]">
-                  <Loader2 className="h-4 w-4 animate-spin text-[var(--foreground-muted)]" />
-                </div>
-              ) : users.length === 0 ? (
-                <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/30">
-                  <p className="text-sm text-amber-600 text-center">Aucun utilisateur trouvé</p>
-                </div>
-              ) : (
-                <Select value={selectedEmail} onValueChange={setSelectedEmail}>
-                  <SelectTrigger 
-                    id="user"
-                    className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)] h-11 focus:border-[var(--accent)] focus:ring-[var(--accent)]/20 w-full"
-                  >
-                    <SelectValue placeholder="Sélectionnez un utilisateur" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {users.map((user) => (
-                      <SelectItem key={user.id} value={user.email}>
-                        <div className="flex items-center gap-2">
-                           {user.image ? (
-                            <div className="relative w-6 h-6 rounded-full overflow-hidden">
-                              <Image 
-                                src={user.image} 
-                                alt={user.name}
-                                fill
-                                className="object-cover"
-                              />
-                            </div>
-                           ) : (
-                            <div className="w-6 h-6 rounded-full bg-[var(--accent)] flex items-center justify-center text-xs text-white">
-                              {user.name.charAt(0)}
-                            </div>
-                           )}
-                           <span>{user.name}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="admin@alecia.fr"
+                required
+                className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)] h-11 focus:border-[var(--accent)] focus:ring-[var(--accent)]/20"
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password" className="text-[var(--foreground)] text-sm font-medium">
@@ -233,4 +146,3 @@ export default function AdminLoginPage() {
     </main>
   );
 }
-
