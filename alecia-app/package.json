@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@azure/msal-node": "^3.8.4",
+    "@excalidraw/excalidraw": "^0.18.0",
     "@hookform/resolvers": "^5.2.2",
     "@microsoft/microsoft-graph-client": "^3.0.7",
     "@mistralai/mistralai": "^1.11.0",
