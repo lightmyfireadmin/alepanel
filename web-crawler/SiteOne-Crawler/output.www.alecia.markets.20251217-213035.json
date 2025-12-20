@@ -1,0 +1,933 @@
+{
+    "extraColumnsFromAnalysis": [
+        {
+            "name": "Access.",
+            "length": 8,
+            "truncate": false
+        },
+        {
+            "name": "Best pr.",
+            "length": 8,
+            "truncate": false
+        }
+    ],
+    "crawler": {
+        "name": "SiteOne Crawler",
+        "version": "1.0.7.20231222",
+        "executedAt": "2025-12-17 21:30:35",
+        "command": "\/Applications\/SiteOne Crawler.app\/Contents\/Resources\/src\/siteone-crawler\/src\/crawler.php --url=https:\/\/www.alecia.markets\/ --device=desktop --user-agent='' --timeout=5 --output=json --extra-columns='Title,Description,Keywords,DOM' --force-color --workers=4 --max-reqs-per-sec=15 --allowed-domain-for-external-files='*' --max-visited-urls=2100 --upload-retention='30d' --upload-timeout=3600 --result-storage=file --result-storage-dir='\/Users\/utilisateur\/Desktop\/SiteOne-Crawler\/result-storage' --http-cache-dir='\/Users\/utilisateur\/Desktop\/SiteOne-Crawler\/http-client-cache' --console-width=162 --output-html-report='\/Users\/utilisateur\/Desktop\/SiteOne-Crawler\/report.%domain%.%datetime%.html' --output-json-file='\/Users\/utilisateur\/Desktop\/SiteOne-Crawler\/output.%domain%.%datetime%.json' --output-text-file='\/Users\/utilisateur\/Desktop\/SiteOne-Crawler\/output.%domain%.%datetime%.txt' --offline-export-dir='\/Users\/utilisateur\/Desktop\/SiteOne-Crawler\/%domain%' --sitemap-xml-file='\/Users\/utilisateur\/Desktop\/SiteOne-Crawler\/%domain%.sitemap.xml' --sitemap-txt-file='\/Users\/utilisateur\/Desktop\/SiteOne-Crawler\/%domain%.sitemap.txt' --force-color",
+        "hostname": "MacBook-Pro-de-Utilisateur.local",
+        "finalUserAgent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/25.0.0.0 Safari\/537.36 siteone-crawler\/1.0.7.20231222"
+    },
+    "results": [],
+    "tables": {
+        "redirects": {
+            "aplCode": "redirects",
+            "title": "Redirected URLs",
+            "columns": {
+                "statusCode": {
+                    "aplCode": "statusCode",
+                    "name": "Status",
+                    "width": 6,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "url": {
+                    "aplCode": "url",
+                    "name": "Redirected URL",
+                    "width": 47,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": true,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "targetUrl": {
+                    "aplCode": "targetUrl",
+                    "name": "Target URL",
+                    "width": 47,
+                    "formatter": null,
+                    "renderer": {},
+                    "truncateIfLonger": true,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "sourceUqId": {
+                    "aplCode": "sourceUqId",
+                    "name": "Found at URL",
+                    "width": 47,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": true,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                }
+            },
+            "rows": [],
+            "position": "before-url-table"
+        },
+        "404": {
+            "aplCode": "404",
+            "title": "404 URLs",
+            "columns": {
+                "statusCode": {
+                    "aplCode": "statusCode",
+                    "name": "Status",
+                    "width": 6,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "url": {
+                    "aplCode": "url",
+                    "name": "URL 404",
+                    "width": 73,
+                    "formatter": null,
+                    "renderer": null,
+                    "truncateIfLonger": true,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "sourceUqId": {
+                    "aplCode": "sourceUqId",
+                    "name": "Found at URL",
+                    "width": 73,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": true,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                }
+            },
+            "rows": [],
+            "position": "before-url-table"
+        },
+        "certificate-info": {
+            "aplCode": "certificate-info",
+            "title": "SSL\/TLS info",
+            "columns": {
+                "info": {
+                    "aplCode": "info",
+                    "name": "Info",
+                    "width": -1,
+                    "formatter": null,
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "value": {
+                    "aplCode": "value",
+                    "name": "Text",
+                    "width": 132,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": true,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": false
+                }
+            },
+            "rows": [
+                {
+                    "info": "Issuer",
+                    "value": "C=US, O=Let's Encrypt, CN=R13"
+                },
+                {
+                    "info": "Subject",
+                    "value": "CN=*.alecia.markets"
+                },
+                {
+                    "info": "Valid from",
+                    "value": "Dec 12 17:00:58 2025 GMT (\u001b[0;32mVALID already 5.2 day(s)\u001b[0m)"
+                },
+                {
+                    "info": "Valid to",
+                    "value": "Mar 12 17:00:57 2026 GMT (\u001b[0;32mVALID still for 84.8 day(s)\u001b[0m)"
+                },
+                {
+                    "info": "Supported protocols",
+                    "value": [
+                        "TLSv1.2",
+                        "TLSv1.3"
+                    ]
+                },
+                {
+                    "info": "RAW certificate output",
+                    "value": "Certificate:\n    Data:\n        Version: 3 (0x2)\n        Serial Number:\n            05:40:30:bc:cc:5b:2f:b3:ab:fe:a5:fe:5c:ca:ba:c8:54:35\n    Signature Algorithm: sha256WithRSAEncryption\n        Issuer: C=US, O=Let's Encrypt, CN=R13\n        Validity\n            Not Before: Dec 12 17:00:58 2025 GMT\n            Not After : Mar 12 17:00:57 2026 GMT\n        Subject: CN=*.alecia.markets\n        Subject Public Key Info:\n            Public Key Algorithm: rsaEncryption\n                RSA Public-Key: (2048 bit)\n                Modulus:\n                    00:d6:6d:b5:c2:42:61:8a:b8:8e:13:2e:1b:4f:59:\n                    0e:fb:e0:9e:92:c7:62:9d:e9:e2:fc:92:ab:99:b1:\n                    03:ab:6e:28:b5:cc:d8:04:8b:0b:af:a6:cc:d4:79:\n                    78:36:b8:e6:50:b1:ea:4f:27:d1:5f:f2:a6:de:e6:\n                    08:4b:4d:7b:47:06:b1:13:d5:34:4e:8f:2c:35:ab:\n                    ec:42:d6:f4:2c:80:c9:af:98:df:1d:26:a6:a5:a3:\n                    51:2d:26:e5:84:ad:dd:28:b1:35:2a:46:cb:c0:ea:\n                    fb:5c:64:6b:9d:e6:30:58:9d:d9:63:c9:77:9f:56:\n                    bb:b8:98:93:09:23:c1:c1:db:5a:ee:a5:08:71:be:\n                    4b:a9:c1:29:62:12:02:6c:60:3e:bb:d8:75:1f:a0:\n                    ae:ba:f4:9d:a8:c2:07:ad:6b:dc:4d:6e:d3:49:42:\n                    00:91:64:0e:de:40:ca:bf:78:a3:60:d7:b5:56:06:\n                    af:c7:ff:d3:9d:e8:31:26:e1:e1:ea:14:c7:ad:e6:\n                    bf:71:2b:fe:12:03:b3:3d:69:88:b2:80:85:88:b6:\n                    66:c8:9b:f1:12:9f:78:93:5e:dc:d3:c4:52:5b:59:\n                    fa:b0:22:14:e8:08:bb:12:13:bf:ce:88:74:b0:af:\n                    bf:aa:2f:4b:9a:94:37:9e:2c:93:b5:b2:bd:ee:0b:\n                    03:71\n                Exponent: 65537 (0x10001)\n        X509v3 extensions:\n            X509v3 Key Usage: critical\n                Digital Signature, Key Encipherment\n            X509v3 Extended Key Usage: \n                TLS Web Server Authentication, TLS Web Client Authentication\n            X509v3 Basic Constraints: critical\n                CA:FALSE\n            X509v3 Subject Key Identifier: \n                9C:25:37:05:50:59:F9:D3:CB:BA:2B:B7:B4:D6:5D:5C:F8:AC:44:A6\n            X509v3 Authority Key Identifier: \n                keyid:E7:AB:9F:0F:2C:33:A0:53:D3:5E:4F:78:C8:B2:84:0E:3B:D6:92:33\n\n            Authority Information Access: \n                CA Issuers - URI:http:\/\/r13.i.lencr.org\/\n\n            X509v3 Subject Alternative Name: \n                DNS:*.alecia.markets, DNS:alecia.markets\n            X509v3 Certificate Policies: \n                Policy: 2.23.140.1.2.1\n\n            X509v3 CRL Distribution Points: \n\n                Full Name:\n                  URI:http:\/\/r13.c.lencr.org\/54.crl\n\n            1.3.6.1.4.1.11129.2.4.2: \n                ......v.d..l............O(...5'......}.........\\.....G0E. wjm..H.O..\/.@....\r..._8......>C?.!...}$lsp...4..~....b......1.....r.w..8...|..D_[....n..Y.G\ni.......X........x.....H0F.!....;o.O..`......].M....v.........!...i].!.$.....F.8..d..g.......>.X\n    Signature Algorithm: sha256WithRSAEncryption\n         2f:b8:ca:bd:67:8d:0e:f2:ed:51:ef:0f:cf:07:73:6b:a2:44:\n         cc:5e:69:53:ed:5e:f8:0b:c9:69:cb:92:a8:b0:fd:5f:01:59:\n         27:90:c0:51:cc:82:c8:26:55:4d:05:82:f6:75:46:26:20:c8:\n         a6:55:a4:74:b0:4a:39:3b:f3:99:06:1d:4f:9f:a3:f2:e6:0e:\n         38:cb:13:41:18:13:fa:34:2c:a7:55:8c:db:ff:53:68:2b:80:\n         1e:fe:93:40:71:e8:89:7f:c2:ac:11:1c:f8:14:47:eb:18:7d:\n         ab:8f:4e:3f:17:2b:7c:88:ae:e0:27:97:48:58:4a:a0:0e:28:\n         bf:a2:e7:d1:3d:55:cd:af:58:39:ac:38:8e:a4:00:59:c6:e9:\n         d8:d4:60:56:78:21:d1:22:8c:eb:6f:8d:ba:09:21:05:36:37:\n         bc:fa:5a:ec:85:7f:7e:ce:54:81:9b:a7:8b:18:51:cd:96:b0:\n         8a:f0:c3:84:74:0c:9f:62:57:27:fb:c3:ef:31:d7:54:e0:e7:\n         cd:08:1f:cd:b8:b3:17:2d:98:76:38:b2:4f:c2:d8:b0:52:ac:\n         3a:5f:b1:e6:d8:21:1e:c5:7b:8f:a4:2d:7c:62:86:50:ec:6a:\n         21:10:90:c1:67:6f:85:e6:ae:9b:8a:da:dd:eb:df:d1:05:08:\n         79:e6:41:6b\n"
+                },
+                {
+                    "info": "RAW protocols output",
+                    "value": "depth=2 C = US, O = Internet Security Research Group, CN = ISRG Root X1\nverify return:1\ndepth=1 C = US, O = Let's Encrypt, CN = R13\nverify return:1\ndepth=0 CN = *.alecia.markets\nverify return:1\nCONNECTED(00000007)\nwrite W BLOCK\n---\nCertificate chain\n 0 s:\/CN=*.alecia.markets\n   i:\/C=US\/O=Let's Encrypt\/CN=R13\n 1 s:\/C=US\/O=Let's Encrypt\/CN=R13\n   i:\/C=US\/O=Internet Security Research Group\/CN=ISRG Root X1\n---\nServer certificate\n-----BEGIN CERTIFICATE-----\nMIIFDTCCA\/WgAwIBAgISBUAwvMxbL7Or\/qX+XMq6yFQ1MA0GCSqGSIb3DQEBCwUA\nMDMxCzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MQwwCgYDVQQD\nEwNSMTMwHhcNMjUxMjEyMTcwMDU4WhcNMjYwMzEyMTcwMDU3WjAbMRkwFwYDVQQD\nDBAqLmFsZWNpYS5tYXJrZXRzMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC\nAQEA1m21wkJhiriOEy4bT1kO++Ceksdineni\/JKrmbEDq24otczYBIsLr6bM1Hl4\nNrjmULHqTyfRX\/Km3uYIS017RwaxE9U0To8sNavsQtb0LIDJr5jfHSampaNRLSbl\nhK3dKLE1KkbLwOr7XGRrneYwWJ3ZY8l3n1a7uJiTCSPBwdta7qUIcb5LqcEpYhIC\nbGA+u9h1H6CuuvSdqMIHrWvcTW7TSUIAkWQO3kDKv3ijYNe1Vgavx\/\/TnegxJuHh\n6hTHrea\/cSv+EgOzPWmIsoCFiLZmyJvxEp94k17c08RSW1n6sCIU6Ai7EhO\/zoh0\nsK+\/qi9LmpQ3niyTtbK97gsDcQIDAQABo4ICMTCCAi0wDgYDVR0PAQH\/BAQDAgWg\nMB0GA1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjAMBgNVHRMBAf8EAjAAMB0G\nA1UdDgQWBBScJTcFUFn508u6K7e01l1c+KxEpjAfBgNVHSMEGDAWgBTnq58PLDOg\nU9NeT3jIsoQOO9aSMzAzBggrBgEFBQcBAQQnMCUwIwYIKwYBBQUHMAKGF2h0dHA6\nLy9yMTMuaS5sZW5jci5vcmcvMCsGA1UdEQQkMCKCECouYWxlY2lhLm1hcmtldHOC\nDmFsZWNpYS5tYXJrZXRzMBMGA1UdIAQMMAowCAYGZ4EMAQIBMC4GA1UdHwQnMCUw\nI6AhoB+GHWh0dHA6Ly9yMTMuYy5sZW5jci5vcmcvNTQuY3JsMIIBBQYKKwYBBAHW\neQIEAgSB9gSB8wDxAHYAZBHEbKQS7KeJHKICLgC8q08oB9QeNSer6v7VA8l9zfAA\nAAGbE7fCXAAABAMARzBFAiB3am26oEgIT7f7L9ZAlpKa9g21zMpfOOae1gXpmj5D\nPwIhAMcffSRsc3Df0Lk0qbx+o4fef2LOheeBorgx6tHE58lyAHcAyzj3FYl8hKFE\nX1vB3fvJbvKaWc1HCmkFhbDLFMMUWOcAAAGbE7fCeAAABAMASDBGAiEAnfaTO2\/s\nT8L1YN3Cv8nq012FTQ7Ey6l24cySDsSi0tECIQCLhWldryH3JN68pR\/WRrY4mJ5k\nq5Zn3ugEtQDX7z7dWDANBgkqhkiG9w0BAQsFAAOCAQEAL7jKvWeNDvLtUe8Pzwdz\na6JEzF5pU+1e+AvJacuSqLD9XwFZJ5DAUcyCyCZVTQWC9nVGJiDIplWkdLBKOTvz\nmQYdT5+j8uYOOMsTQRgT+jQsp1WM2\/9TaCuAHv6TQHHoiX\/CrBEc+BRH6xh9q49O\nPxcrfIiu4CeXSFhKoA4ov6Ln0T1Vza9YOaw4jqQAWcbp2NRgVngh0SKM62+Nugkh\nBTY3vPpa7IV\/fs5UgZunixhRzZawivDDhHQMn2JXJ\/vD7zHXVODnzQgfzbizFy2Y\ndjiyT8LYsFKsOl+x5tghHsV7j6QtfGKGUOxqIRCQwWdvheaum4ra3evf0QUIeeZB\naw==\n-----END CERTIFICATE-----\nsubject=\/CN=*.alecia.markets\nissuer=\/C=US\/O=Let's Encrypt\/CN=R13\n---\nNo client certificate CA names sent\nServer Temp Key: ECDH, X25519, 253 bits\n---\nSSL handshake has read 3131 bytes and written 278 bytes\n---\nNew, TLSv1\/SSLv3, Cipher is AEAD-AES128-GCM-SHA256\nServer public key is 2048 bit\nSecure Renegotiation IS NOT supported\nCompression: NONE\nExpansion: NONE\nNo ALPN negotiated\nSSL-Session:\n    Protocol  : TLSv1.3\n    Cipher    : AEAD-AES128-GCM-SHA256\n    Session-ID: \n    Session-ID-ctx: \n    Master-Key: \n    Start Time: 1766007282\n    Timeout   : 7200 (sec)\n    Verify return code: 0 (ok)\n---\nDONE\n"
+                }
+            ],
+            "position": "before-url-table"
+        },
+        "fastest-urls": {
+            "aplCode": "fastest-urls",
+            "title": "TOP fastest URLs",
+            "columns": {
+                "requestTime": {
+                    "aplCode": "requestTime",
+                    "name": "Time",
+                    "width": 6,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "statusCode": {
+                    "aplCode": "statusCode",
+                    "name": "Status",
+                    "width": 6,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "url": {
+                    "aplCode": "url",
+                    "name": "Fast URL",
+                    "width": 142,
+                    "formatter": null,
+                    "renderer": null,
+                    "truncateIfLonger": true,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                }
+            },
+            "rows": [],
+            "position": "before-url-table"
+        },
+        "slowest-urls": {
+            "aplCode": "slowest-urls",
+            "title": "TOP slowest URLs",
+            "columns": {
+                "requestTime": {
+                    "aplCode": "requestTime",
+                    "name": "Time",
+                    "width": 6,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "statusCode": {
+                    "aplCode": "statusCode",
+                    "name": "Status",
+                    "width": 6,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "url": {
+                    "aplCode": "url",
+                    "name": "Slow URL",
+                    "width": 137,
+                    "formatter": null,
+                    "renderer": null,
+                    "truncateIfLonger": true,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                }
+            },
+            "rows": [],
+            "position": "before-url-table"
+        },
+        "seo": {
+            "aplCode": "seo",
+            "title": "SEO metadata",
+            "columns": {
+                "urlPathAndQuery": {
+                    "aplCode": "urlPathAndQuery",
+                    "name": "URL",
+                    "width": 50,
+                    "formatter": null,
+                    "renderer": null,
+                    "truncateIfLonger": true,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "indexing": {
+                    "aplCode": "indexing",
+                    "name": "Indexing",
+                    "width": 20,
+                    "formatter": null,
+                    "renderer": {},
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": false,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "title": {
+                    "aplCode": "title",
+                    "name": "Title",
+                    "width": 18,
+                    "formatter": null,
+                    "renderer": null,
+                    "truncateIfLonger": true,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "h1": {
+                    "aplCode": "h1",
+                    "name": "H1",
+                    "width": 18,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": true,
+                    "formatterWillChangeValueLength": false,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "description": {
+                    "aplCode": "description",
+                    "name": "Description",
+                    "width": 18,
+                    "formatter": null,
+                    "renderer": null,
+                    "truncateIfLonger": true,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "keywords": {
+                    "aplCode": "keywords",
+                    "name": "Keywords",
+                    "width": 18,
+                    "formatter": null,
+                    "renderer": null,
+                    "truncateIfLonger": true,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                }
+            },
+            "rows": [],
+            "position": "before-url-table"
+        },
+        "open-graph": {
+            "aplCode": "open-graph",
+            "title": "OpenGraph metadata",
+            "columns": {
+                "urlPathAndQuery": {
+                    "aplCode": "urlPathAndQuery",
+                    "name": "URL",
+                    "width": 50,
+                    "formatter": null,
+                    "renderer": null,
+                    "truncateIfLonger": true,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                }
+            },
+            "rows": [],
+            "position": "before-url-table"
+        },
+        "seo-headings": {
+            "aplCode": "seo-headings",
+            "title": "Heading structure",
+            "columns": {
+                "headings": {
+                    "aplCode": "headings",
+                    "name": "Heading structure",
+                    "width": 108,
+                    "formatter": null,
+                    "renderer": {},
+                    "truncateIfLonger": true,
+                    "formatterWillChangeValueLength": false,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": false
+                },
+                "headingsCount": {
+                    "aplCode": "headingsCount",
+                    "name": "Count",
+                    "width": 5,
+                    "formatter": null,
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "headingsErrorsCount": {
+                    "aplCode": "headingsErrorsCount",
+                    "name": "Errors",
+                    "width": 6,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": false,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "urlPathAndQuery": {
+                    "aplCode": "urlPathAndQuery",
+                    "name": "URL",
+                    "width": 30,
+                    "formatter": null,
+                    "renderer": null,
+                    "truncateIfLonger": true,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                }
+            },
+            "rows": [],
+            "position": "before-url-table"
+        },
+        "headers": {
+            "aplCode": "headers",
+            "title": "HTTP headers",
+            "columns": {
+                "header": {
+                    "aplCode": "header",
+                    "name": "Header",
+                    "width": -1,
+                    "formatter": null,
+                    "renderer": {},
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "occurrences": {
+                    "aplCode": "occurrences",
+                    "name": "Occurs",
+                    "width": 6,
+                    "formatter": null,
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "uniqueValues": {
+                    "aplCode": "uniqueValues",
+                    "name": "Unique",
+                    "width": 6,
+                    "formatter": null,
+                    "renderer": {},
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "valuesPreview": {
+                    "aplCode": "valuesPreview",
+                    "name": "Values preview",
+                    "width": 72,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": true,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": false
+                },
+                "minValue": {
+                    "aplCode": "minValue",
+                    "name": "Min value",
+                    "width": 10,
+                    "formatter": null,
+                    "renderer": {},
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "maxValue": {
+                    "aplCode": "maxValue",
+                    "name": "Max value",
+                    "width": 10,
+                    "formatter": null,
+                    "renderer": {},
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                }
+            },
+            "rows": [],
+            "position": "before-url-table"
+        },
+        "headers-values": {
+            "aplCode": "headers-values",
+            "title": "HTTP header values",
+            "columns": {
+                "header": {
+                    "aplCode": "header",
+                    "name": "Header",
+                    "width": -1,
+                    "formatter": null,
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "occurrences": {
+                    "aplCode": "occurrences",
+                    "name": "Occurs",
+                    "width": 6,
+                    "formatter": null,
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "value": {
+                    "aplCode": "value",
+                    "name": "Value",
+                    "width": 106,
+                    "formatter": null,
+                    "renderer": null,
+                    "truncateIfLonger": true,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                }
+            },
+            "rows": [],
+            "position": "before-url-table"
+        },
+        "best-practices": {
+            "aplCode": "best-practices",
+            "title": "Best practices",
+            "columns": {
+                "analysisName": {
+                    "aplCode": "analysisName",
+                    "name": "Analysis name",
+                    "width": -1,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "ok": {
+                    "aplCode": "ok",
+                    "name": "OK",
+                    "width": 5,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": false,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "notice": {
+                    "aplCode": "notice",
+                    "name": "Notice",
+                    "width": 6,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "warning": {
+                    "aplCode": "warning",
+                    "name": "Warning",
+                    "width": 7,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "critical": {
+                    "aplCode": "critical",
+                    "name": "Critical",
+                    "width": 8,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                }
+            },
+            "rows": [
+                {
+                    "analysisName": "Title uniqueness",
+                    "ok": 0,
+                    "notice": 0,
+                    "warning": 1,
+                    "critical": 0
+                },
+                {
+                    "analysisName": "Description uniqueness",
+                    "ok": 0,
+                    "notice": 0,
+                    "warning": 1,
+                    "critical": 0
+                },
+                {
+                    "analysisName": "Brotli support",
+                    "ok": 0,
+                    "notice": 0,
+                    "warning": 0,
+                    "critical": 0
+                },
+                {
+                    "analysisName": "WebP support",
+                    "ok": 0,
+                    "notice": 0,
+                    "warning": 1,
+                    "critical": 0
+                },
+                {
+                    "analysisName": "AVIF support",
+                    "ok": 0,
+                    "notice": 0,
+                    "warning": 1,
+                    "critical": 0
+                }
+            ],
+            "position": "before-url-table"
+        },
+        "accessibility": {
+            "aplCode": "accessibility",
+            "title": "Accessibility",
+            "columns": {
+                "analysisName": {
+                    "aplCode": "analysisName",
+                    "name": "Analysis name",
+                    "width": -1,
+                    "formatter": null,
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "ok": {
+                    "aplCode": "ok",
+                    "name": "OK",
+                    "width": 5,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": false,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "notice": {
+                    "aplCode": "notice",
+                    "name": "Notice",
+                    "width": 6,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "warning": {
+                    "aplCode": "warning",
+                    "name": "Warning",
+                    "width": 7,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "critical": {
+                    "aplCode": "critical",
+                    "name": "Critical",
+                    "width": 8,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                }
+            },
+            "rows": [],
+            "position": "before-url-table"
+        },
+        "source-domains": {
+            "aplCode": "source-domains",
+            "title": "Source domains",
+            "columns": {
+                "domain": {
+                    "aplCode": "domain",
+                    "name": "Domain",
+                    "width": -1,
+                    "formatter": null,
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "totals": {
+                    "aplCode": "totals",
+                    "name": "Totals",
+                    "width": -1,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": false,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                }
+            },
+            "rows": [],
+            "position": "after-url-table"
+        },
+        "content-types": {
+            "aplCode": "content-types",
+            "title": "Content types",
+            "columns": [],
+            "rows": [],
+            "position": "before-url-table"
+        },
+        "content-types-raw": {
+            "aplCode": "content-types-raw",
+            "title": "Content types (MIME types)",
+            "columns": [],
+            "rows": [],
+            "position": "before-url-table"
+        },
+        "dns": {
+            "aplCode": "dns",
+            "title": "DNS info",
+            "columns": {
+                "info": {
+                    "aplCode": "info",
+                    "name": "DNS resolving tree",
+                    "width": 70,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": true,
+                    "formatterWillChangeValueLength": false,
+                    "nonBreakingSpaces": true,
+                    "escapeOutputHtml": false
+                }
+            },
+            "rows": [
+                {
+                    "info": "www.alecia.markets"
+                },
+                {
+                    "info": "  IPv4: 216.198.79.65"
+                },
+                {
+                    "info": "  IPv4: 64.29.17.1"
+                },
+                {
+                    "info": ""
+                },
+                {
+                    "info": "DNS server: 10.22.27.123"
+                }
+            ],
+            "position": "after-url-table"
+        },
+        "security": {
+            "aplCode": "security",
+            "title": "Security",
+            "columns": {
+                "header": {
+                    "aplCode": "header",
+                    "name": "Header",
+                    "width": 26,
+                    "formatter": null,
+                    "renderer": null,
+                    "truncateIfLonger": true,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "ok": {
+                    "aplCode": "ok",
+                    "name": "OK",
+                    "width": 5,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": false,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "notice": {
+                    "aplCode": "notice",
+                    "name": "Notice",
+                    "width": 6,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": false,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "warning": {
+                    "aplCode": "warning",
+                    "name": "Warning",
+                    "width": 7,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": false,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "critical": {
+                    "aplCode": "critical",
+                    "name": "Critical",
+                    "width": 8,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": false,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "recommendation": {
+                    "aplCode": "recommendation",
+                    "name": "Recommendation",
+                    "width": 92,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": true,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": false
+                }
+            },
+            "rows": [],
+            "position": "before-url-table"
+        },
+        "analysis-stats": {
+            "aplCode": "analysis-stats",
+            "title": "Analysis stats",
+            "columns": {
+                "classAndMethod": {
+                    "aplCode": "classAndMethod",
+                    "name": "Class::method",
+                    "width": -1,
+                    "formatter": null,
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "execTime": {
+                    "aplCode": "execTime",
+                    "name": "Exec time",
+                    "width": 9,
+                    "formatter": {},
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": false,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                },
+                "execCount": {
+                    "aplCode": "execCount",
+                    "name": "Exec count",
+                    "width": -1,
+                    "formatter": null,
+                    "renderer": null,
+                    "truncateIfLonger": false,
+                    "formatterWillChangeValueLength": true,
+                    "nonBreakingSpaces": false,
+                    "escapeOutputHtml": true
+                }
+            },
+            "rows": [
+                {
+                    "classAndMethod": "SslTlsAnalyzer::getTLSandSSLCertificateInfo",
+                    "execTime": 2.0598440170288086,
+                    "execTimeFormatted": "2.1 s",
+                    "execCount": 1
+                },
+                {
+                    "classAndMethod": "SeoAndOpenGraphAnalyzer::analyzeSeo",
+                    "execTime": 2.09808349609375e-5,
+                    "execTimeFormatted": "0 ms",
+                    "execCount": 1
+                },
+                {
+                    "classAndMethod": "SeoAndOpenGraphAnalyzer::analyzeHeadings",
+                    "execTime": 1.5020370483398438e-5,
+                    "execTimeFormatted": "0 ms",
+                    "execCount": 1
+                },
+                {
+                    "classAndMethod": "BestPracticeAnalyzer::checkBrotliSupport",
+                    "execTime": 1.2159347534179688e-5,
+                    "execTimeFormatted": "0 ms",
+                    "execCount": 1
+                },
+                {
+                    "classAndMethod": "SeoAndOpenGraphAnalyzer::analyzeOpenGraph",
+                    "execTime": 1.1920928955078125e-5,
+                    "execTimeFormatted": "0 ms",
+                    "execCount": 1
+                },
+                {
+                    "classAndMethod": "BestPracticeAnalyzer::checkTitleUniqueness",
+                    "execTime": 7.152557373046875e-6,
+                    "execTimeFormatted": "0 ms",
+                    "execCount": 1
+                },
+                {
+                    "classAndMethod": "BestPracticeAnalyzer::checkWebpSupport",
+                    "execTime": 4.0531158447265625e-6,
+                    "execTimeFormatted": "0 ms",
+                    "execCount": 1
+                },
+                {
+                    "classAndMethod": "BestPracticeAnalyzer::checkMetaDescriptionUniqueness",
+                    "execTime": 2.1457672119140625e-6,
+                    "execTimeFormatted": "0 ms",
+                    "execCount": 1
+                },
+                {
+                    "classAndMethod": "BestPracticeAnalyzer::checkAvifSupport",
+                    "execTime": 9.5367431640625e-7,
+                    "execTimeFormatted": "0 ms",
+                    "execCount": 1
+                }
+            ],
+            "position": "after-url-table"
+        }
+    }
+}
