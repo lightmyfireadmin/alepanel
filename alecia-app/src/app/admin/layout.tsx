@@ -1,228 +1,63 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
+import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { signOut } from "next-auth/react";
-import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
-import {
-  LayoutDashboard,
-  Briefcase,
-  Newspaper,
-  Users,
-  LogOut,
-  Menu,
-  FolderKanban,
-  Contact2,
-  FileStack,
-  Sun,
-  Moon,
-  Settings,
-  Building2,
-  UserPlus,
-  Sparkles,
-} from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useState, useEffect } from "react";
-import { VoiceNoteRecorder, OnboardingManager } from "@/components/admin";
-
-// PILOTAGE: Business OS - Private internal tools
-const pilotageNavItems = [
-  { href: "/admin", label: "Tableau de bord", icon: LayoutDashboard },
-  { href: "/admin/projects", label: "Projets", icon: FolderKanban },
-  { href: "/admin/crm", label: "Carnet d'adresses", icon: Contact2 },
-  { href: "/admin/documents", label: "Data Room", icon: FileStack },
-  { href: "/admin/marketing", label: "Marketing AI", icon: Sparkles },
-];
-
-// SITE INTERNET: Public CMS - Management of alecia.fr
-const siteInternetNavItems = [
-  { href: "/admin/deals", label: "Portefeuille", icon: Briefcase },
-  { href: "/admin/team", label: "Équipe", icon: Users },
-  { href: "/admin/sectors", label: "Secteurs", icon: Building2 },
-  { href: "/admin/news", label: "Actualités", icon: Newspaper },
-  { href: "/admin/careers", label: "Recrutement", icon: UserPlus },
-  { href: "/admin/settings", label: "Paramètres", icon: Settings },
-];
-
-function Sidebar({ onItemClick }: { onItemClick?: () => void }) {
-  const pathname = usePathname();
-
-  return (
-    <div className="flex flex-col h-full">
-      {/* Logo */}
-      <div className="p-6 border-b border-[var(--border)]">
-        <Link href="/" className="block">
-          <Image
-            src="/assets/alecia_logo_blue.svg"
-            alt="alecia"
-            width={100}
-            height={32}
-            className="h-8 w-auto dark:hidden"
-          />
-          <Image
-            src="/assets/alecia_logo.svg"
-            alt="alecia"
-            width={100}
-            height={32}
-            className="h-8 w-auto hidden dark:block"
-          />
-        </Link>
-        <p className="text-xs text-[var(--foreground-muted)] mt-1">Administration</p>
-      </div>
-
-      {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-6 overflow-y-auto">
-        {/* PILOTAGE Section */}
-        <div>
-          <h3 className="px-4 mb-2 text-xs font-semibold uppercase tracking-wider text-[var(--foreground-muted)]">
-            Pilotage
-          </h3>
-          <div className="space-y-1">
-            {pilotageNavItems.map((item) => {
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={onItemClick}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                    isActive
-                      ? "bg-[var(--accent)]/10 text-[var(--accent)]"
-                      : "text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:bg-[var(--background-tertiary)]"
-                  }`}
-                >
-                  <item.icon className="w-5 h-5" />
-                  {item.label}
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* SITE INTERNET Section */}
-        <div>
-          <h3 className="px-4 mb-2 text-xs font-semibold uppercase tracking-wider text-[var(--foreground-muted)]">
-            Site Internet
-          </h3>
-          <div className="space-y-1">
-            {siteInternetNavItems.map((item) => {
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={onItemClick}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                    isActive
-                      ? "bg-[var(--accent)]/10 text-[var(--accent)]"
-                      : "text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:bg-[var(--background-tertiary)]"
-                  }`}
-                >
-                  <item.icon className="w-5 h-5" />
-                  {item.label}
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      </nav>
-
-      {/* Footer */}
-      <div className="p-4 border-t border-[var(--border)]">
-        <Button
-          variant="ghost"
-          className="w-full justify-start text-[var(--foreground-muted)] hover:text-red-400"
-          onClick={() => signOut({ callbackUrl: "/admin/login" })}
-        >
-          <LogOut className="w-5 h-5 mr-3" />
-          Déconnexion
-        </Button>
-      </div>
-    </div>
-  );
-}
+import Sidebar from "@/components/admin/layout/Sidebar";
+import Header from "@/components/admin/layout/Header";
+import { CommandPalette } from "@/components/ui/command-palette";
+import { OnboardingManager, VoiceNoteRecorder } from "@/components/admin";
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
-  const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
-  // Fix hydration mismatch for theme
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true);
+    setIsClient(true);
   }, []);
 
-  // Skip sidebar layout for login page - render login fullscreen
+  // Login page layout bypass
   if (pathname === "/admin/login") {
     return <>{children}</>;
   }
 
+  // Prevent hydration mismatch for client-only components
+  if (!isClient) return null;
+
   return (
-    <div className="min-h-screen bg-[var(--background)]">
+    <div className="dark:bg-boxdark-2 dark:text-bodydark">
+      {/* <!-- ===== Page Wrapper Start ===== --> */}
+      <div className="flex h-screen overflow-hidden">
+        {/* <!-- ===== Sidebar Start ===== --> */}
+        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        {/* <!-- ===== Sidebar End ===== --> */}
+
+        {/* <!-- ===== Content Area Start ===== --> */}
+        <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+          {/* <!-- ===== Header Start ===== --> */}
+          <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+          {/* <!-- ===== Header End ===== --> */}
+
+          {/* <!-- ===== Main Content Start ===== --> */}
+          <main>
+            <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+              {children}
+            </div>
+          </main>
+          {/* <!-- ===== Main Content End ===== --> */}
+        </div>
+        {/* <!-- ===== Content Area End ===== --> */}
+      </div>
+      {/* <!-- ===== Page Wrapper End ===== --> */}
+      
+      {/* Global OS Components */}
+      <CommandPalette />
       <OnboardingManager />
-      {/* Desktop Sidebar */}
-      <aside className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:flex lg:w-64 lg:flex-col bg-[var(--background-secondary)] border-r border-[var(--border)]">
-        <Sidebar />
-      </aside>
-
-      {/* Mobile Header */}
-      <header className="lg:hidden sticky top-0 z-40 flex items-center gap-4 h-16 px-4 bg-[var(--background-secondary)] border-b border-[var(--border)]">
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger asChild>
-            <button className="p-2 text-[var(--foreground)]">
-              <Menu className="w-6 h-6" />
-            </button>
-          </SheetTrigger>
-          <SheetContent
-            side="left"
-            className="w-64 p-0 bg-[var(--background-secondary)] border-[var(--border)]"
-          >
-            <Sidebar onItemClick={() => setIsOpen(false)} />
-          </SheetContent>
-        </Sheet>
-        <span className="flex-1">
-          <Image
-            src="/assets/alecia_logo_blue.svg"
-            alt="alecia"
-            width={80}
-            height={26}
-            className="h-6 w-auto dark:hidden"
-          />
-          <Image
-            src="/assets/alecia_logo.svg"
-            alt="alecia"
-            width={80}
-            height={26}
-            className="h-6 w-auto hidden dark:block"
-          />
-        </span>
-        {/* Theme Toggle */}
-        <button
-          onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-          className="p-2 text-[var(--foreground-muted)] hover:text-[var(--foreground)]"
-          aria-label={resolvedTheme === "dark" ? "Passer en mode clair" : "Passer en mode sombre"}
-        >
-          {mounted && resolvedTheme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-        </button>
-      </header>
-
-      {/* Main Content */}
-      <main className="lg:pl-64">
-        <div className="p-6 lg:p-8">{children}</div>
-      </main>
-
-      {/* Voice Note Recorder FAB (Mobile only) */}
       <VoiceNoteRecorder />
     </div>
   );
 }
-
-

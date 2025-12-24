@@ -1,4 +1,5 @@
 import { pgTable, uuid, text, timestamp, integer, boolean, jsonb, date, index } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 
 // =============================================================================
 // USERS TABLE - Admin authentication
@@ -8,12 +9,17 @@ export const users = pgTable("users", {
   email: text("email").unique().notNull(),
   passwordHash: text("password_hash").notNull(),
   name: text("name").notNull(),
-  role: text("role").default("admin"),
+  role: text("role").default("admin"), // 'sudo', 'admin', 'advisor', 'guest'
   mustChangePassword: boolean("must_change_password").default(false),
   hasSeenOnboarding: boolean("has_seen_onboarding").default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
+
+// ... existing tables ...
+// I will insert relations at the end of the file or after the tables.
+// Let's rewrite the end of the file to include relations.
+
 
 // =============================================================================
 // DEALS TABLE - M&A Transactions
@@ -32,36 +38,25 @@ export const deals = pgTable("deals", {
   
   // Classification
   sector: text("sector").notNull(),
-  // Sectors: 'Technologies & logiciels', 'Distribution & services B2B', 
-  // 'Distribution & services B2C', 'Santé', 'Immobilier & construction',
-  // 'Industries', 'Services financiers & assurance', 'Agroalimentaire',
-  // 'Énergie & environnement'
-  
   region: text("region"),
-  // Regions: 'Île-de-France', 'Provence-Alpes-Côte d\'Azur', 
-  // 'Auvergne-Rhône-Alpes', 'Pays de la Loire', 'Centre-Val de Loire',
-  // 'Hauts-de-France', 'Occitanie', 'Grand Ouest', 'Normandie', etc.
-  
   year: integer("year").notNull(),
-  
   mandateType: text("mandate_type").notNull(),
-  // Types: 'Cession', 'Acquisition', 'Levée de fonds'
   
   // Content
   description: text("description"),
   
   // Flags
   isConfidential: boolean("is_confidential").default(false),
-  isPriorExperience: boolean("is_prior_experience").default(false), // Operations with *
+  isPriorExperience: boolean("is_prior_experience").default(false),
   
-  // Enhanced case study content (Phase 1 - Roadmap #25)
-  context: text("context"), // Context of the operation
-  intervention: text("intervention"), // Our intervention details
-  result: text("result"), // Results obtained
-  testimonialText: text("testimonial_text"), // Client verbatim
-  testimonialAuthor: text("testimonial_author"), // Testimonial author
-  roleType: text("role_type"), // "Conseil vendeur" | "Conseil acquéreur" | "Conseil levée"
-  dealSize: text("deal_size"), // Value range bracket
+  // Enhanced case study content
+  context: text("context"),
+  intervention: text("intervention"),
+  result: text("result"),
+  testimonialText: text("testimonial_text"),
+  testimonialAuthor: text("testimonial_author"),
+  roleType: text("role_type"),
+  dealSize: text("deal_size"),
   keyMetrics: jsonb("key_metrics").$type<{
     multiple?: number;
     duration?: string;
@@ -76,12 +71,10 @@ export const deals = pgTable("deals", {
   updatedAt: timestamp("updated_at").defaultNow(),
 }, (table) => {
   return {
-    // Indexes for frequent filtering and sorting
     yearIdx: index("deals_year_idx").on(table.year),
     sectorIdx: index("deals_sector_idx").on(table.sector),
     regionIdx: index("deals_region_idx").on(table.region),
     mandateTypeIdx: index("deals_mandate_type_idx").on(table.mandateType),
-    // Composite index for default sorting (Year DESC, DisplayOrder ASC)
     yearDisplayOrderIdx: index("deals_year_display_order_idx").on(table.year, table.displayOrder),
   };
 });
@@ -92,34 +85,22 @@ export const deals = pgTable("deals", {
 export const posts = pgTable("posts", {
   id: uuid("id").defaultRandom().primaryKey(),
   slug: text("slug").unique().notNull(),
-  
-  // Multilingual content
   titleFr: text("title_fr").notNull(),
   titleEn: text("title_en"),
   contentFr: text("content_fr").notNull(),
   contentEn: text("content_en"),
   excerpt: text("excerpt"),
-  
-  // Media
   coverImage: text("cover_image"),
-  
-  // Classification
-  category: text("category"), // 'Communiqué', 'Article', 'Revue de presse'
-  
-  // Publishing
+  category: text("category"),
   publishedAt: timestamp("published_at"),
   isPublished: boolean("is_published").default(false),
-  
-  // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 }, (table) => {
   return {
-    // Indexes for filtering published posts
     isPublishedIdx: index("posts_is_published_idx").on(table.isPublished),
     publishedAtIdx: index("posts_published_at_idx").on(table.publishedAt),
     categoryIdx: index("posts_category_idx").on(table.category),
-    // Composite index for efficient retrieval of published posts sorted by date
     isPublishedPublishedAtIdx: index("posts_is_published_published_at_idx").on(table.isPublished, table.publishedAt),
   };
 });
@@ -130,31 +111,17 @@ export const posts = pgTable("posts", {
 export const teamMembers = pgTable("team_members", {
   id: uuid("id").defaultRandom().primaryKey(),
   slug: text("slug").unique().notNull(),
-  
-  // Identity
   name: text("name").notNull(),
-  role: text("role").notNull(), // 'Associé fondateur', 'Analyste', 'Directeur'
-  
-  // Media
+  role: text("role").notNull(),
   photo: text("photo"),
-  
-  // Multilingual bio
   bioFr: text("bio_fr"),
   bioEn: text("bio_en"),
-  
-  // Contact
   linkedinUrl: text("linkedin_url"),
   email: text("email"),
-  
-  // Expertise (Phase 1 - Roadmap #22)
-  sectorsExpertise: text("sectors_expertise").array(), // Array of sector slugs
-  transactions: text("transactions").array(), // Array of deal slugs
-  
-  // Display
+  sectorsExpertise: text("sectors_expertise").array(),
+  transactions: text("transactions").array(),
   displayOrder: integer("display_order").default(0),
   isActive: boolean("is_active").default(true),
-  
-  // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -163,31 +130,19 @@ export const teamMembers = pgTable("team_members", {
 // =============================================================================
 export const companies = pgTable("companies", {
   id: uuid("id").defaultRandom().primaryKey(),
-  
-  // Identity
   name: text("name").notNull(),
   siren: text("siren").unique(),
-  
-  // Details
   address: text("address"),
   sector: text("sector"),
-  
-  // Financial data (JSONB for revenue/EBITDA)
   financialData: jsonb("financial_data").$type<{
     revenue?: number;
     ebitda?: number;
     employees?: number;
     year?: number;
   }>(),
-  
-  // Media
   logoUrl: text("logo_url"),
-  
-  // Enrichment tracking (cost control)
   isEnriched: boolean("is_enriched").default(false),
   lastEnrichedAt: timestamp("last_enriched_at"),
-  
-  // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -197,21 +152,13 @@ export const companies = pgTable("companies", {
 // =============================================================================
 export const contacts = pgTable("contacts", {
   id: uuid("id").defaultRandom().primaryKey(),
-  
-  // Identity
   name: text("name").notNull(),
   email: text("email"),
   phone: text("phone"),
   role: text("role"),
-  
-  // Company relation
   companyId: uuid("company_id").references(() => companies.id),
-  
-  // CRM data
   notes: text("notes"),
-  tags: text("tags").array(), // ["Investisseur", "Cédant", etc.]
-  
-  // Timestamps
+  tags: text("tags").array(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 }, (table) => {
@@ -225,28 +172,13 @@ export const contacts = pgTable("contacts", {
 // =============================================================================
 export const projects = pgTable("projects", {
   id: uuid("id").defaultRandom().primaryKey(),
-  
-  // Identity
   title: text("title").notNull(),
-  
-  // Kanban status
   status: text("status").notNull().default("Lead"),
-  // Statuses: "Lead", "Due Diligence", "Closing", "Closed"
-  
-  // Relations
   clientId: uuid("client_id").references(() => contacts.id),
-  
-  // Timeline
   startDate: date("start_date"),
   targetCloseDate: date("target_close_date"),
-  
-  // Description
   description: text("description"),
-  
-  // Display
   displayOrder: integer("display_order").default(0),
-  
-  // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 }, (table) => {
@@ -260,19 +192,11 @@ export const projects = pgTable("projects", {
 // =============================================================================
 export const projectEvents = pgTable("project_events", {
   id: uuid("id").defaultRandom().primaryKey(),
-  
-  // Project relation
   projectId: uuid("project_id").references(() => projects.id).notNull(),
-  
-  // Event details
-  type: text("type").notNull(), // "Meeting", "Document", "Milestone", "Note"
+  type: text("type").notNull(),
   date: date("date").notNull(),
   description: text("description"),
-  
-  // Optional file attachment
   fileUrl: text("file_url"),
-  
-  // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
 }, (table) => {
   return {
@@ -285,21 +209,13 @@ export const projectEvents = pgTable("project_events", {
 // =============================================================================
 export const documents = pgTable("documents", {
   id: uuid("id").defaultRandom().primaryKey(),
-  
-  // File info
   name: text("name").notNull(),
-  url: text("url"), // Vercel Blob URL - nullable for whiteboards
-  content: jsonb("content"), // Excalidraw JSON content
+  url: text("url"),
+  content: jsonb("content"),
   mimeType: text("mime_type"),
-  
-  // Project relation (optional)
   projectId: uuid("project_id").references(() => projects.id),
-  
-  // Access control
   isConfidential: boolean("is_confidential").default(true),
-  accessToken: text("access_token").unique(), // For magic links
-  
-  // Timestamps
+  accessToken: text("access_token").unique(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 }, (table) => {
@@ -309,11 +225,11 @@ export const documents = pgTable("documents", {
 });
 
 // =============================================================================
-// WEATHER CACHE TABLE - Max 2 API calls per day (Cost Control)
+// WEATHER CACHE TABLE
 // =============================================================================
 export const weatherCache = pgTable("weather_cache", {
   id: uuid("id").defaultRandom().primaryKey(),
-  locationKey: text("location_key").unique().notNull(), // e.g., "Paris,FR"
+  locationKey: text("location_key").unique().notNull(),
   data: jsonb("data").$type<{
     temp: number;
     description: string;
@@ -325,28 +241,18 @@ export const weatherCache = pgTable("weather_cache", {
 });
 
 // =============================================================================
-// BUYER CRITERIA TABLE - For Deal Matchmaker SQL matching
+// BUYER CRITERIA TABLE
 // =============================================================================
 export const buyerCriteria = pgTable("buyer_criteria", {
   id: uuid("id").defaultRandom().primaryKey(),
-  
-  // Linked to contact (buyer/investor)
   contactId: uuid("contact_id").references(() => contacts.id).notNull(),
-  
-  // Target preferences
   targetSectors: text("target_sectors").array(),
   targetRegions: text("target_regions").array(),
-  
-  // Financial range preferences
-  minRevenue: integer("min_revenue"), // in euros
+  minRevenue: integer("min_revenue"),
   maxRevenue: integer("max_revenue"),
   minEbitda: integer("min_ebitda"),
   maxEbitda: integer("max_ebitda"),
-  
-  // Additional preferences
   notes: text("notes"),
-  
-  // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 }, (table) => ({
@@ -354,26 +260,16 @@ export const buyerCriteria = pgTable("buyer_criteria", {
 }));
 
 // =============================================================================
-// VOICE NOTES TABLE - Stored in Vercel Blob
+// VOICE NOTES TABLE
 // =============================================================================
 export const voiceNotes = pgTable("voice_notes", {
   id: uuid("id").defaultRandom().primaryKey(),
-  
-  // Relations (optional - can be linked to project or contact)
   projectId: uuid("project_id").references(() => projects.id),
   contactId: uuid("contact_id").references(() => contacts.id),
-  
-  // Storage
-  blobUrl: text("blob_url").notNull(), // Vercel Blob URL
-  
-  // Metadata
+  blobUrl: text("blob_url").notNull(),
   durationSeconds: integer("duration_seconds"),
-  transcription: text("transcription"), // Future: Whisper API
-  
-  // User who recorded
+  transcription: text("transcription"),
   recordedBy: uuid("recorded_by").references(() => users.id),
-  
-  // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
 }, (table) => ({
   projectIdIdx: index("voice_notes_project_id_idx").on(table.projectId),
@@ -382,30 +278,20 @@ export const voiceNotes = pgTable("voice_notes", {
 }));
 
 // =============================================================================
-// SECTORS TABLE - Sector verticals (Phase 1 - Roadmap #44)
+// SECTORS TABLE
 // =============================================================================
 export const sectors = pgTable("sectors", {
   id: uuid("id").defaultRandom().primaryKey(),
   slug: text("slug").unique().notNull(),
-  
-  // Multilingual content
   nameFr: text("name_fr").notNull(),
   nameEn: text("name_en"),
   descriptionFr: text("description_fr"),
   descriptionEn: text("description_en"),
   investmentThesisFr: text("investment_thesis_fr"),
   investmentThesisEn: text("investment_thesis_en"),
-  
-  // UI
-  iconType: text("icon_type"), // For selecting appropriate icon
-  
-  // Relations
+  iconType: text("icon_type"),
   referentPartnerId: uuid("referent_partner_id").references(() => teamMembers.id),
-  
-  // Display
   displayOrder: integer("display_order").default(0),
-  
-  // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 }, (table) => ({
@@ -413,52 +299,34 @@ export const sectors = pgTable("sectors", {
 }));
 
 // =============================================================================
-// OFFICES TABLE - Regional offices (Phase 1 - Roadmap #44)
+// OFFICES TABLE
 // =============================================================================
 export const officesTable = pgTable("offices", {
   id: uuid("id").defaultRandom().primaryKey(),
-  
-  // Identity
   name: text("name").notNull(),
   city: text("city").notNull(),
   region: text("region").notNull(),
-  
-  // Location
   address: text("address"),
   phone: text("phone"),
   latitude: text("latitude"),
   longitude: text("longitude"),
-  
-  // Media
   imageUrl: text("image_url"),
-  
-  // Display
   displayOrder: integer("display_order").default(0),
-  
-  // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
 });
 
 // =============================================================================
-// TESTIMONIALS TABLE - Client verbatims (Phase 1 - Roadmap #44)
+// TESTIMONIALS TABLE
 // =============================================================================
 export const testimonials = pgTable("testimonials", {
   id: uuid("id").defaultRandom().primaryKey(),
-  
-  // Relations
   dealId: uuid("deal_id").references(() => deals.id),
-  
-  // Content
   authorName: text("author_name").notNull(),
   authorRole: text("author_role"),
   authorCompany: text("author_company"),
   content: text("content").notNull(),
-  rating: integer("rating"), // 1-5 stars
-  
-  // Publishing
+  rating: integer("rating"),
   isPublished: boolean("is_published").default(false),
-  
-  // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
 }, (table) => ({
   dealIdIdx: index("testimonials_deal_id_idx").on(table.dealId),
@@ -470,45 +338,160 @@ export const testimonials = pgTable("testimonials", {
 export const jobOffers = pgTable("job_offers", {
   id: uuid("id").defaultRandom().primaryKey(),
   slug: text("slug").unique().notNull(),
-  
-  // Job details
   title: text("title").notNull(),
-  type: text("type").notNull(), // 'Stage/alternance', 'CDI'
+  type: text("type").notNull(),
   location: text("location").notNull(),
   description: text("description"),
   requirements: text("requirements").array(),
-  
-  // Contact/Application
   contactEmail: text("contact_email"),
   pdfUrl: text("pdf_url"),
-  
-  // Display
   isPublished: boolean("is_published").default(true),
   displayOrder: integer("display_order").default(0),
-  
-  // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 // =============================================================================
-// LEADS TABLE - Contact form submissions
+// LEADS TABLE
 // =============================================================================
 export const leads = pgTable("leads", {
   id: uuid("id").defaultRandom().primaryKey(),
-
-  // Form fields
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
   email: text("email").notNull(),
   company: text("company"),
   message: text("message").notNull(),
-
-  // Status
-  status: text("status").default("new"), // "new", "contacted", "qualified", "closed"
-
-  // Timestamps
+  status: text("status").default("new"),
   createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// =============================================================================
+// BUSINESS OS TABLES (NEW)
+// =============================================================================
+
+// FORUM
+export const forumCategories = pgTable("forum_categories", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  slug: text("slug").unique().notNull(),
+  name: text("name").notNull(),
+  description: text("description"),
+  icon: text("icon"),
+  order: integer("order").default(0),
+  isPrivate: boolean("is_private").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const forumThreads = pgTable("forum_threads", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  categoryId: uuid("category_id").references(() => forumCategories.id).notNull(),
+  authorId: uuid("author_id").references(() => users.id).notNull(),
+  title: text("title").notNull(),
+  isPinned: boolean("is_pinned").default(false),
+  isLocked: boolean("is_locked").default(false),
+  lastPostAt: timestamp("last_post_at").defaultNow(),
+  replyCount: integer("reply_count").default(0),
+  viewCount: integer("view_count").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const forumPosts = pgTable("forum_posts", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  threadId: uuid("thread_id").references(() => forumThreads.id).notNull(),
+  authorId: uuid("author_id").references(() => users.id).notNull(),
+  content: text("content").notNull(), 
+  parentId: uuid("parent_id"), 
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// COLLAB - PADS
+export const pads = pgTable("pads", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  title: text("title").notNull(),
+  content: text("content"),
+  ownerId: uuid("owner_id").references(() => users.id),
+  isPublic: boolean("is_public").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const padRevisions = pgTable("pad_revisions", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  padId: uuid("pad_id").references(() => pads.id).notNull(),
+  contentSnapshot: text("content_snapshot"),
+  createdAt: timestamp("created_at").defaultNow(),
+  createdBy: uuid("created_by").references(() => users.id),
+});
+
+// COLLAB - WHITEBOARDS
+export const whiteboards = pgTable("whiteboards", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  title: text("title").notNull(),
+  content: jsonb("content"),
+  thumbnailUrl: text("thumbnail_url"),
+  ownerId: uuid("owner_id").references(() => users.id),
+  isPublic: boolean("is_public").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// COLLAB - SPREADSHEETS
+export const spreadsheets = pgTable("spreadsheets", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  title: text("title").notNull(),
+  data: jsonb("data"),
+  schemaDef: jsonb("schema_def"),
+  ownerId: uuid("owner_id").references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// SIGNATURES
+export const signRequests = pgTable("sign_requests", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  title: text("title").notNull(),
+  documentUrl: text("document_url").notNull(),
+  status: text("status").default("pending"),
+  requesterId: uuid("requester_id").references(() => users.id),
+  signerEmail: text("signer_email").notNull(),
+  signedUrl: text("signed_url"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const signAuditLogs = pgTable("sign_audit_logs", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  requestId: uuid("request_id").references(() => signRequests.id).notNull(),
+  action: text("action").notNull(),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// RESEARCH
+export const researchTasks = pgTable("research_tasks", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  query: text("query").notNull(),
+  status: text("status").default("pending"),
+  resultSummary: text("result_summary"),
+  sources: jsonb("sources"),
+  createdBy: uuid("created_by").references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const companyEnrichments = pgTable("company_enrichments", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  companyId: uuid("company_id").references(() => companies.id),
+  source: text("source").notNull(),
+  data: jsonb("data"),
+  fetchedAt: timestamp("fetched_at").defaultNow(),
+});
+
+export const systemConfig = pgTable("system_config", {
+  key: text("key").primaryKey(),
+  value: text("value").notNull(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
@@ -566,9 +549,22 @@ export type NewJobOffer = typeof jobOffers.$inferInsert;
 export type Lead = typeof leads.$inferSelect;
 export type NewLead = typeof leads.$inferInsert;
 
+export type ForumCategory = typeof forumCategories.$inferSelect;
+export type ForumThread = typeof forumThreads.$inferSelect;
+export type ForumPost = typeof forumPosts.$inferSelect;
+
+export type Pad = typeof pads.$inferSelect;
+export type Whiteboard = typeof whiteboards.$inferSelect;
+export type Spreadsheet = typeof spreadsheets.$inferSelect;
+
+export type SignRequest = typeof signRequests.$inferSelect;
+export type ResearchTask = typeof researchTasks.$inferSelect;
+
 // =============================================================================
-// ENUMS (for reference/validation)
+// ENUMS
 // =============================================================================
+export const USER_ROLES = ["sudo", "admin", "advisor", "guest"] as const;
+
 export const SECTORS = [
   "Technologies & logiciels",
   "Distribution & services B2B",
@@ -603,7 +599,6 @@ export const POST_CATEGORIES = ["Communiqué", "Article", "Revue de presse"] as 
 
 export const TEAM_ROLES = ["Associé fondateur", "Associé", "Directeur", "Manager", "Analyste"] as const;
 
-// New Business OS enums
 export const PROJECT_STATUSES = ["Lead", "Due Diligence", "Closing", "Closed"] as const;
 
 export const PROJECT_EVENT_TYPES = ["Meeting", "Document", "Milestone", "Note"] as const;
@@ -618,5 +613,33 @@ export const CONTACT_TAGS = [
   "Family Office",
   "Fonds PE",
 ] as const;
+
+export const leadRelations = relations(leads, ({ one }) => ({
+  // Define any relations if needed
+}));
+
+// BUSINESS OS RELATIONS
+export const projectRelations = relations(projects, ({ one, many }) => ({
+  client: one(contacts, {
+    fields: [projects.clientId],
+    references: [contacts.id],
+  }),
+  events: many(projectEvents),
+}));
+
+export const contactRelations = relations(contacts, ({ one, many }) => ({
+  company: one(companies, {
+    fields: [contacts.companyId],
+    references: [companies.id],
+  }),
+  projects: many(projects),
+}));
+
+export const projectEventRelations = relations(projectEvents, ({ one }) => ({
+  project: one(projects, {
+    fields: [projectEvents.projectId],
+    references: [projects.id],
+  }),
+}));
 
 export const LEAD_STATUSES = ["new", "contacted", "qualified", "closed"] as const;

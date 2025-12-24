@@ -216,7 +216,7 @@ export function HomeClient() {
                     onClick={() => setSelectedMember(member)}
                     role="button"
                     tabIndex={0}
-                    aria-label={`View details for ${member.name}`}
+                    aria-label={t("ui.viewDetails", { name: member.name })}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
                         setSelectedMember(member);

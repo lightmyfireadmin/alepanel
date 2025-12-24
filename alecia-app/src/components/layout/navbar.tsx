@@ -33,6 +33,7 @@ export function Navbar() {
     { href: "/operations", label: t("operations") },
     { href: "/actualites", label: t("news") },
     { href: "/equipe", label: t("team") },
+    { href: "/faq", label: t("faq") },
     { href: "/nous-rejoindre", label: t("careers") },
   ];
 

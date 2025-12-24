@@ -137,7 +137,7 @@ export function ContactForm() {
               id="company"
               value={formData.company}
               onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-              placeholder="Entreprise SAS"
+              placeholder={t("companyPlaceholder")}
               disabled={formState === "submitting"}
               className="bg-[var(--input)] border-[var(--border)] text-[var(--foreground)]"
             />

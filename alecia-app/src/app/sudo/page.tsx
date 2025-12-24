@@ -12,6 +12,8 @@ import {
   forcePasswordReset,
   purgeAllCaches,
   getEnvKeys,
+  toggleMaintenanceMode,
+  getMaintenanceMode,
 } from "@/lib/actions/sudo";
 
 /**
@@ -24,6 +26,9 @@ export default function SudoPanel() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
+
+  // Maintenance Mode State
+  const [maintenanceMode, setMaintenanceMode] = useState(false);
 
   // Health Check State
   const [healthResults, setHealthResults] = useState<Array<{
@@ -64,6 +69,11 @@ export default function SudoPanel() {
     setEnvKeys(keys);
   };
 
+  const loadMaintenanceMode = async () => {
+    const enabled = await getMaintenanceMode();
+    setMaintenanceMode(enabled);
+  };
+
   // Check authentication on mount
   useEffect(() => {
     checkSudoSession().then((isAuth) => {
@@ -73,6 +83,7 @@ export default function SudoPanel() {
         setAuthenticated(true);
         setLoading(false);
         loadEnvKeys();
+        loadMaintenanceMode();
       }
     });
   }, [router]);
@@ -80,6 +91,14 @@ export default function SudoPanel() {
   const handleLogout = async () => {
     await sudoLogout();
     router.push("/sudo/login");
+  };
+
+  const handleToggleMaintenance = async () => {
+    const newState = !maintenanceMode;
+    const res = await toggleMaintenanceMode(newState);
+    if (res.success) {
+        setMaintenanceMode(newState);
+    }
   };
 
   const handleHealthCheck = async () => {
@@ -282,9 +301,22 @@ export default function SudoPanel() {
       <section style={styles.section}>
         <h2 style={styles.sectionTitle}>4. CACHE & SYSTEM</h2>
         
-        <button onClick={handlePurgeCache} style={styles.dangerBtn}>
-          PURGE ALL CACHES
-        </button>
+        <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
+            <button onClick={handlePurgeCache} style={styles.dangerBtn}>
+            PURGE ALL CACHES
+            </button>
+
+            <button 
+                onClick={handleToggleMaintenance} 
+                style={{ 
+                    ...styles.btn, 
+                    background: maintenanceMode ? "#f00" : "#333",
+                    color: maintenanceMode ? "#fff" : "#0f0" 
+                }}
+            >
+                {maintenanceMode ? "DISABLE MAINTENANCE" : "ENABLE MAINTENANCE"}
+            </button>
+        </div>
         
         {cacheMessage && (
           <p style={{ color: "#0f0", marginTop: "0.5rem" }}>{cacheMessage}</p>

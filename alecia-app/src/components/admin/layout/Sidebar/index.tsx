@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import SidebarLinkGroup from "./SidebarLinkGroup";
-import useLocalStorage from "../../hooks/useLocalStorage";
+import useLocalStorage from "@/hooks/useLocalStorage";
 import {
   LayoutDashboard,
   Settings,
@@ -13,7 +13,17 @@ import {
   FileText,
   PieChart,
   ChevronDown,
-  ArrowLeft
+  ArrowLeft,
+  MessageSquare,
+  PenTool,
+  Sheet,
+  ScrollText,
+  Globe,
+  Database,
+  Building2,
+  Newspaper,
+  UserPlus,
+  Terminal
 } from "lucide-react";
 
 interface SidebarProps {
@@ -75,7 +85,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             <div className="w-8 h-8 rounded bg-primary flex items-center justify-center text-white font-bold text-xl">
                 A
             </div>
-            <span className="text-white text-xl font-semibold">Alecia Admin</span>
+            <span className="text-white text-xl font-semibold">Alecia OS</span>
         </Link>
 
         <button
@@ -93,46 +103,49 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
         {/* <!-- Sidebar Menu --> */}
         <nav className="mt-5 px-4 py-4 lg:mt-9 lg:px-6">
-          {/* <!-- Menu Group --> */}
+          
+          {/* DASHBOARD */}
           <div>
-            <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
-              MENU
-            </h3>
-
+            <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">MAIN</h3>
             <ul className="mb-6 flex flex-col gap-1.5">
-              {/* <!-- Menu Item Dashboard --> */}
               <li>
                 <Link
                   href="/admin"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname === "/admin" || pathname.includes("dashboard")
-                      ? "bg-graydark dark:bg-meta-4"
-                      : ""
+                    pathname === "/admin" ? "bg-graydark dark:bg-meta-4" : ""
                   }`}
                 >
                   <LayoutDashboard className="w-5 h-5" />
                   Dashboard
                 </Link>
               </li>
+            </ul>
+          </div>
 
-              {/* <!-- Menu Item Deals --> */}
-              <li>
-                <Link
-                  href="/admin/deals"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("deals") ? "bg-graydark dark:bg-meta-4" : ""
-                  }`}
-                >
-                  <Briefcase className="w-5 h-5" />
-                  Deals
-                </Link>
-              </li>
+          {/* COMMUNICATION */}
+          <div>
+            <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">COMMUNICATION</h3>
+            <ul className="mb-6 flex flex-col gap-1.5">
+                <li>
+                    <Link
+                    href="/admin/forum"
+                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                        pathname.includes("forum") ? "bg-graydark dark:bg-meta-4" : ""
+                    }`}
+                    >
+                    <MessageSquare className="w-5 h-5" />
+                    Forum
+                    </Link>
+                </li>
+            </ul>
+          </div>
 
-              {/* <!-- Menu Item Marketing --> */}
+          {/* COLLABORATION */}
+          <div>
+            <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">COLLABORATION</h3>
+            <ul className="mb-6 flex flex-col gap-1.5">
               <SidebarLinkGroup
-                activeCondition={
-                  pathname === "/admin/marketing" || pathname.includes("marketing")
-                }
+                activeCondition={pathname.includes("deals") || pathname.includes("projects")}
               >
                 {(handleClick, open) => {
                   return (
@@ -140,103 +153,150 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <Link
                         href="#"
                         className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          (pathname === "/admin/marketing" ||
-                            pathname.includes("marketing")) &&
-                          "bg-graydark dark:bg-meta-4"
+                          (pathname.includes("deals") || pathname.includes("projects")) && "bg-graydark dark:bg-meta-4"
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
                           sidebarExpanded ? handleClick() : setSidebarExpanded("true");
                         }}
                       >
-                        <PieChart className="w-5 h-5" />
-                        Marketing
-                        <ChevronDown
-                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
-                            open && "rotate-180"
-                          }`}
-                          width={20}
-                          height={20}
-                        />
+                        <Briefcase className="w-5 h-5" />
+                        Deals & Projects
+                        <ChevronDown className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && "rotate-180"}`} width={20} height={20} />
                       </Link>
-                      {/* <!-- Dropdown Menu Start --> */}
-                      <div
-                        className={`translate transform overflow-hidden ${
-                          !open && "hidden"
-                        }`}
-                      >
+                      <div className={`translate transform overflow-hidden ${!open && "hidden"}`}>
                         <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
                           <li>
-                            <Link
-                              href="/admin/marketing"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === "/admin/marketing" && "text-white"
-                              }`}
-                            >
-                              Overview
+                            <Link href="/admin/deals" className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname === "/admin/deals" && "text-white"}`}>
+                              Tombstones
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/admin/projects" className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname === "/admin/projects" && "text-white"}`}>
+                              Kanban
                             </Link>
                           </li>
                         </ul>
                       </div>
-                      {/* <!-- Dropdown Menu End --> */}
                     </React.Fragment>
                   );
                 }}
               </SidebarLinkGroup>
 
-              {/* <!-- Menu Item News --> */}
               <li>
                 <Link
-                  href="/admin/news"
+                  href="/admin/whiteboard"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("news") ? "bg-graydark dark:bg-meta-4" : ""
+                    pathname.includes("whiteboard") ? "bg-graydark dark:bg-meta-4" : ""
                   }`}
                 >
-                  <FileText className="w-5 h-5" />
-                  News
+                  <PenTool className="w-5 h-5" />
+                  Whiteboard
                 </Link>
               </li>
 
-              {/* <!-- Menu Item CRM --> */}
               <li>
                 <Link
-                  href="/admin/crm"
+                  href="/admin/sheets"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("crm") ? "bg-graydark dark:bg-meta-4" : ""
+                    pathname.includes("sheets") ? "bg-graydark dark:bg-meta-4" : ""
                   }`}
                 >
-                  <Users className="w-5 h-5" />
-                  CRM
+                  <Sheet className="w-5 h-5" />
+                  Spreadsheets
                 </Link>
               </li>
 
-              {/* <!-- Menu Item Team --> */}
               <li>
                 <Link
-                  href="/admin/team"
+                  href="/admin/documents"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("team") ? "bg-graydark dark:bg-meta-4" : ""
+                    pathname.includes("documents") ? "bg-graydark dark:bg-meta-4" : ""
                   }`}
                 >
-                  <Users className="w-5 h-5" />
-                  Team
+                  <ScrollText className="w-5 h-5" />
+                  Documents & Sign
                 </Link>
               </li>
+            </ul>
+          </div>
 
-              {/* <!-- Menu Item Projects --> */}
-              <li>
-                 <Link
-                  href="/admin/projects"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("projects") ? "bg-graydark dark:bg-meta-4" : ""
-                  }`}
-                >
-                  <Briefcase className="w-5 h-5" />
-                  Projects
-                </Link>
-              </li>
+          {/* INTELLIGENCE */}
+          <div>
+            <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">INTELLIGENCE</h3>
+            <ul className="mb-6 flex flex-col gap-1.5">
+                <li>
+                    <Link
+                    href="/admin/research"
+                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                        pathname.includes("research") ? "bg-graydark dark:bg-meta-4" : ""
+                    }`}
+                    >
+                    <Globe className="w-5 h-5" />
+                    Market Research
+                    </Link>
+                </li>
+                <li>
+                    <Link
+                    href="/admin/crm"
+                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                        pathname.includes("crm") ? "bg-graydark dark:bg-meta-4" : ""
+                    }`}
+                    >
+                    <Database className="w-5 h-5" />
+                    CRM Database
+                    </Link>
+                </li>
+                 <li>
+                    <Link
+                    href="/admin/marketing"
+                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                        pathname.includes("marketing") ? "bg-graydark dark:bg-meta-4" : ""
+                    }`}
+                    >
+                    <PieChart className="w-5 h-5" />
+                    Marketing Analytics
+                    </Link>
+                </li>
+            </ul>
+          </div>
 
-              {/* <!-- Menu Item Settings --> */}
+          {/* WEBSITE */}
+          <SidebarLinkGroup activeCondition={pathname.includes("news") || pathname.includes("team") || pathname.includes("sectors") || pathname.includes("careers")}>
+            {(handleClick, open) => {
+                return (
+                <React.Fragment>
+                    <Link
+                    href="#"
+                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                        (pathname.includes("news") || pathname.includes("team") || pathname.includes("sectors")) && "bg-graydark dark:bg-meta-4"
+                    }`}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        sidebarExpanded ? handleClick() : setSidebarExpanded("true");
+                    }}
+                    >
+                    <Globe className="w-5 h-5" />
+                    Public Website
+                    <ChevronDown className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && "rotate-180"}`} width={20} height={20} />
+                    </Link>
+                    <div className={`translate transform overflow-hidden ${!open && "hidden"}`}>
+                    <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
+                        <li><Link href="/admin/news" className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-white"><Newspaper className="w-4 h-4" /> News</Link></li>
+                        <li><Link href="/admin/team" className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-white"><Users className="w-4 h-4" /> Team</Link></li>
+                        <li><Link href="/admin/sectors" className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-white"><Building2 className="w-4 h-4" /> Sectors</Link></li>
+                        <li><Link href="/admin/careers" className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-white"><UserPlus className="w-4 h-4" /> Careers</Link></li>
+                    </ul>
+                    </div>
+                </React.Fragment>
+                );
+            }}
+            </SidebarLinkGroup>
+
+          {/* SYSTEM */}
+          <div>
+            <h3 className="mb-4 ml-4 mt-6 text-sm font-semibold text-bodydark2">SYSTEM</h3>
+            <ul className="mb-6 flex flex-col gap-1.5">
               <li>
                 <Link
                   href="/admin/settings"
@@ -248,8 +308,18 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Settings
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/sudo"
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4`}
+                >
+                  <Terminal className="w-5 h-5 text-red-400" />
+                  <span className="text-red-400">Sudo Access</span>
+                </Link>
+              </li>
             </ul>
           </div>
+          
         </nav>
       </div>
     </aside>

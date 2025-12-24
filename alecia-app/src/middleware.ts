@@ -1,17 +1,24 @@
 import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
+import { getMaintenanceMode } from "@/lib/actions/sudo";
 
 const SUDO_COOKIE_NAME = "alecia_sudo_session";
 
-/**
- * Middleware for authentication and role-based access control.
- * 
- * Protects:
- * - /admin routes via NextAuth
- * - /sudo routes via custom cookie (independent of NextAuth)
- */
-export default auth((req) => {
+export default auth(async (req) => {
   const pathname = req.nextUrl.pathname;
+  const sudoCookie = req.cookies.get(SUDO_COOKIE_NAME);
+  const isSudoAuthenticated = sudoCookie?.value === "authenticated";
+
+  // Skip for maintenance page itself and public assets
+  if (pathname === "/maintenance" || pathname.startsWith("/assets") || pathname.startsWith("/icon.svg")) {
+    return NextResponse.next();
+  }
+
+  // Check Maintenance Mode
+  const isMaintenance = await getMaintenanceMode();
+  if (isMaintenance && !pathname.startsWith("/sudo") && !isSudoAuthenticated) {
+    return NextResponse.redirect(new URL("/maintenance", req.url));
+  }
   
   // =========================================================================
   // SUDO PANEL PROTECTION (Independent of NextAuth)

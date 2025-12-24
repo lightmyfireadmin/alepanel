@@ -45,43 +45,17 @@ export {
 
 // CRM (Contacts & Companies)
 export {
-  getAllContacts,
-  getContactsByTag,
-  searchContacts,
-  getContactById,
+  getContacts as getAllContacts,
   createContact,
-  updateContact,
-  deleteContact,
-  getAllCompanies,
-  searchCompanies,
-  getCompanyById,
-  getCompanyBySiren,
-  createCompany,
-  updateCompany,
-  deleteCompany,
-  getContactCount,
-  getCompanyCount,
-  type ContactFormData,
-  type CompanyFormData,
+  getCompanies as getAllCompanies,
 } from "./crm";
 
 // Projects
 export {
-  getAllProjects,
-  getProjectsByStatus,
-  getProjectById,
+  getProjects as getAllProjects,
+  getProject as getProjectById,
   createProject,
-  updateProject,
   updateProjectStatus,
-  deleteProject,
-  getProjectCount,
-  getActiveProjectCount,
-  getProjectEvents,
-  createProjectEvent,
-  updateProjectEvent,
-  deleteProjectEvent,
-  type ProjectFormData,
-  type ProjectEventFormData,
 } from "./projects";
 
 // Posts/News

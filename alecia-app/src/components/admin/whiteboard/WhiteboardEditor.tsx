@@ -11,6 +11,7 @@ const Excalidraw = dynamic(
 );
 
 export function WhiteboardEditor() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [excalidrawAPI, setExcalidrawAPI] = useState<any>(null);
   const [saving, setSaving] = useState(false);
 

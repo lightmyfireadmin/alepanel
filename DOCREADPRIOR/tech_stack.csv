@@ -1,0 +1,17 @@
+Name,Type,Origin,Access
+Next.js 16,Framework,Library,https://nextjs.org/
+Svelte 19,Library,Library,https://react.dev/
+Neon PostgreSQL,Database,Cloud Service,https://neon.tech/
+Drizzle ORM,Database ORM,Library,https://orm.drizzle.team/
+NextAuth.js v5,Authentication,Library,https://next-auth.js.org/
+Mistral AI,AI Engine,API,https://mistral.ai/
+Groq SDK,AI Engine,API,https://groq.com/
+Tailwind CSS v4,Styling,Framework,https://tailwindcss.com/
+Framer Motion,Animations,Library,https://www.framer.com/motion/
+ExcelJS,Excel Processing,Library,https://github.com/exceljs/exceljs
+React-PDF,PDF Generation,Library,https://react-pdf.org/
+Microsoft Graph API,Integration,API,https://developer.microsoft.com/en-us/graph
+Resend,Email,Service,https://resend.com/
+Next-Intl,i18n,Library,https://next-intl-docs.vercel.app/
+Zod v4,Validation,Library,https://zod.dev/
+Vercel Blob,File Storage,Cloud Service,https://vercel.com/docs/storage/vercel-blob

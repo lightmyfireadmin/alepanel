@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 import { documents } from "@/lib/db/schema";
 import { revalidatePath } from "next/cache";
 
-export async function saveWhiteboardState(name: string, content: any) {
+export async function saveWhiteboardState(name: string, content: unknown) {
   try {
     await db.insert(documents).values({
       name,

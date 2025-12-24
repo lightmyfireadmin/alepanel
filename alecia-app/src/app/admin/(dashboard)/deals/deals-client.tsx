@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, Briefcase, ExternalLink, Loader2 } from "lucide-react";
-import { SECTORS, REGIONS } from "@/lib/db/schema";
+import { SECTORS, REGIONS, MANDATE_TYPES } from "@/lib/db/schema";
 import { createDeal, updateDeal, deleteDeal } from "@/lib/actions/deals";
 import { type DealFormData } from "@/lib/validations/forms";
 import { useRouter } from "next/navigation";
@@ -49,7 +49,7 @@ const EMPTY_DEAL: Deal = {
   dealSize: "",
 };
 
-const MANDATE_TYPES = [
+const MANDATE_TYPE_OPTIONS = [
   { value: "Cession", label: "Cession" },
   { value: "Acquisition", label: "Acquisition" },
   { value: "Levée de fonds", label: "Levée de fonds" },
@@ -101,10 +101,10 @@ export default function DealsClient({ initialDeals }: DealsClientProps) {
         clientLogo: formData.clientLogo || undefined,
         acquirerName: formData.acquirerName || undefined,
         acquirerLogo: formData.acquirerLogo || undefined,
-        sector: formData.sector as any, // Cast to any to bypass strict Zod enum check if needed, or ensure exact match
-        region: (formData.region || undefined) as any,
+        sector: formData.sector as typeof SECTORS[number],
+        region: (formData.region || undefined) as typeof REGIONS[number] | undefined,
         year: formData.year,
-        mandateType: formData.mandateType as any,
+        mandateType: formData.mandateType as typeof MANDATE_TYPES[number],
         isConfidential: formData.isConfidential,
         isPriorExperience: formData.isPriorExperience,
         context: formData.context || undefined,
@@ -297,7 +297,7 @@ export default function DealsClient({ initialDeals }: DealsClientProps) {
                       <SelectValue placeholder="Choisir" />
                     </SelectTrigger>
                     <SelectContent>
-                      {MANDATE_TYPES.map((type) => (
+                      {MANDATE_TYPE_OPTIONS.map((type) => (
                         <SelectItem key={type.value} value={type.value}>{type.label}</SelectItem>
                       ))}
                     </SelectContent>
