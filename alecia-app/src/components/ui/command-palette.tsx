@@ -5,22 +5,16 @@ import { useRouter } from "next/navigation";
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from "cmdk";
 import { 
   Calculator, 
-  Calendar, 
-  CreditCard, 
-  Settings, 
-  Smile, 
-  User, 
   LayoutDashboard,
   Briefcase,
-  FileText,
   Users,
-  Search,
   MessageSquare,
   PenTool,
   Sheet,
   ScrollText,
   TrendingUp,
-  Globe
+  Globe,
+  Settings
 } from "lucide-react";
 
 export function CommandPalette() {
@@ -47,74 +41,74 @@ export function CommandPalette() {
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
       <div className="fixed inset-0 z-50 flex items-start justify-center pt-[20vh] bg-black/50 backdrop-blur-sm">
-        <div className="w-full max-w-2xl bg-[var(--card)] rounded-xl shadow-2xl border border-[var(--border)] overflow-hidden">
+        <div className="w-full max-w-2xl bg-white dark:bg-boxdark rounded-xl shadow-2xl border border-stroke dark:border-strokedark overflow-hidden">
             <CommandInput 
-                placeholder="Type a command or search..." 
-                className="w-full px-4 py-3 text-lg bg-transparent border-b border-[var(--border)] outline-none text-[var(--foreground)] placeholder-[var(--foreground-muted)]"
+                placeholder="Tapez une commande ou recherchez..." 
+                className="w-full px-4 py-4 text-base bg-transparent border-b border-stroke dark:border-strokedark outline-none text-black dark:text-white placeholder-bodydark2"
             />
             <CommandList className="max-h-[60vh] overflow-y-auto p-2">
-                <CommandEmpty className="py-6 text-center text-[var(--foreground-muted)]">No results found.</CommandEmpty>
+                <CommandEmpty className="py-6 text-center text-bodydark2">Aucun résultat trouvé.</CommandEmpty>
                 
-                <CommandGroup heading="Suggestions">
-                <CommandItem onSelect={() => runCommand(() => router.push("/admin"))} className="flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer hover:bg-[var(--accent)]/10 hover:text-[var(--accent)]">
-                    <LayoutDashboard className="w-4 h-4" />
-                    <span>Dashboard</span>
+                <CommandGroup heading="Suggestions" className="text-xs font-bold text-bodydark2 uppercase p-2">
+                <CommandItem onSelect={() => runCommand(() => router.push("/admin"))} className="flex items-center gap-3 px-3 py-3 rounded-lg cursor-pointer hover:bg-primary/10 text-black dark:text-white group">
+                    <LayoutDashboard className="w-4 h-4 text-primary" />
+                    <span>Tableau de bord</span>
                 </CommandItem>
-                <CommandItem onSelect={() => runCommand(() => router.push("/admin/deals"))} className="flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer hover:bg-[var(--accent)]/10 hover:text-[var(--accent)]">
-                    <Briefcase className="w-4 h-4" />
-                    <span>Manage Deals</span>
+                <CommandItem onSelect={() => runCommand(() => router.push("/admin/deals"))} className="flex items-center gap-3 px-3 py-3 rounded-lg cursor-pointer hover:bg-primary/10 text-black dark:text-white group">
+                    <Briefcase className="w-4 h-4 text-primary" />
+                    <span>Gérer les Transactions</span>
                 </CommandItem>
-                <CommandItem onSelect={() => runCommand(() => router.push("/admin/crm"))} className="flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer hover:bg-[var(--accent)]/10 hover:text-[var(--accent)]">
-                    <Users className="w-4 h-4" />
+                <CommandItem onSelect={() => runCommand(() => router.push("/admin/crm"))} className="flex items-center gap-3 px-3 py-3 rounded-lg cursor-pointer hover:bg-primary/10 text-black dark:text-white group">
+                    <Users className="w-4 h-4 text-primary" />
                     <span>CRM & Contacts</span>
                 </CommandItem>
                 </CommandGroup>
 
-                <CommandSeparator className="my-2 h-px bg-[var(--border)]" />
+                <CommandSeparator className="my-2 h-px bg-stroke dark:bg-strokedark" />
 
-                <CommandGroup heading="Communication">
-                <CommandItem onSelect={() => runCommand(() => router.push("/admin/forum"))} className="flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer hover:bg-[var(--accent)]/10 hover:text-[var(--accent)]">
-                    <MessageSquare className="w-4 h-4" />
-                    <span>Internal Forum</span>
+                <CommandGroup heading="Communication" className="text-xs font-bold text-bodydark2 uppercase p-2">
+                <CommandItem onSelect={() => runCommand(() => router.push("/admin/forum"))} className="flex items-center gap-3 px-3 py-3 rounded-lg cursor-pointer hover:bg-primary/10 text-black dark:text-white group">
+                    <MessageSquare className="w-4 h-4 text-primary" />
+                    <span>Forum Interne</span>
                 </CommandItem>
                 </CommandGroup>
 
-                <CommandGroup heading="Collaboration">
-                <CommandItem onSelect={() => runCommand(() => router.push("/admin/whiteboard"))} className="flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer hover:bg-[var(--accent)]/10 hover:text-[var(--accent)]">
-                    <PenTool className="w-4 h-4" />
-                    <span>New Whiteboard</span>
+                <CommandGroup heading="Collaboration" className="text-xs font-bold text-bodydark2 uppercase p-2">
+                <CommandItem onSelect={() => runCommand(() => router.push("/admin/whiteboard"))} className="flex items-center gap-3 px-3 py-3 rounded-lg cursor-pointer hover:bg-primary/10 text-black dark:text-white group">
+                    <PenTool className="w-4 h-4 text-primary" />
+                    <span>Tableau Blanc</span>
                 </CommandItem>
-                <CommandItem onSelect={() => runCommand(() => router.push("/admin/sheets"))} className="flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer hover:bg-[var(--accent)]/10 hover:text-[var(--accent)]">
-                    <Sheet className="w-4 h-4" />
-                    <span>Spreadsheets</span>
+                <CommandItem onSelect={() => runCommand(() => router.push("/admin/sheets"))} className="flex items-center gap-3 px-3 py-3 rounded-lg cursor-pointer hover:bg-primary/10 text-black dark:text-white group">
+                    <Sheet className="w-4 h-4 text-primary" />
+                    <span>Feuilles de Calcul</span>
                 </CommandItem>
-                 <CommandItem onSelect={() => runCommand(() => router.push("/admin/documents"))} className="flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer hover:bg-[var(--accent)]/10 hover:text-[var(--accent)]">
-                    <ScrollText className="w-4 h-4" />
+                 <CommandItem onSelect={() => runCommand(() => router.push("/admin/documents"))} className="flex items-center gap-3 px-3 py-3 rounded-lg cursor-pointer hover:bg-primary/10 text-black dark:text-white group">
+                    <ScrollText className="w-4 h-4 text-primary" />
                     <span>Documents & Signatures</span>
                 </CommandItem>
                 </CommandGroup>
 
-                <CommandGroup heading="Intelligence">
-                <CommandItem onSelect={() => runCommand(() => router.push("/admin/research"))} className="flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer hover:bg-[var(--accent)]/10 hover:text-[var(--accent)]">
-                    <Globe className="w-4 h-4" />
-                    <span>Market Research (AI)</span>
+                <CommandGroup heading="Intelligence" className="text-xs font-bold text-bodydark2 uppercase p-2">
+                <CommandItem onSelect={() => runCommand(() => router.push("/admin/research"))} className="flex items-center gap-3 px-3 py-3 rounded-lg cursor-pointer hover:bg-primary/10 text-black dark:text-white group">
+                    <Globe className="w-4 h-4 text-primary" />
+                    <span>Études de Marché (AI)</span>
                 </CommandItem>
-                <CommandItem onSelect={() => runCommand(() => router.push("/admin/marketing"))} className="flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer hover:bg-[var(--accent)]/10 hover:text-[var(--accent)]">
-                    <TrendingUp className="w-4 h-4" />
+                <CommandItem onSelect={() => runCommand(() => router.push("/admin/marketing"))} className="flex items-center gap-3 px-3 py-3 rounded-lg cursor-pointer hover:bg-primary/10 text-black dark:text-white group">
+                    <TrendingUp className="w-4 h-4 text-primary" />
                     <span>Marketing & Analytics</span>
                 </CommandItem>
                 </CommandGroup>
 
-                <CommandSeparator className="my-2 h-px bg-[var(--border)]" />
+                <CommandSeparator className="my-2 h-px bg-stroke dark:bg-strokedark" />
 
-                <CommandGroup heading="System">
-                <CommandItem onSelect={() => runCommand(() => router.push("/admin/settings"))} className="flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer hover:bg-[var(--accent)]/10 hover:text-[var(--accent)]">
-                    <Settings className="w-4 h-4" />
-                    <span>Settings</span>
+                <CommandGroup heading="Système" className="text-xs font-bold text-bodydark2 uppercase p-2">
+                <CommandItem onSelect={() => runCommand(() => router.push("/admin/settings"))} className="flex items-center gap-3 px-3 py-3 rounded-lg cursor-pointer hover:bg-primary/10 text-black dark:text-white group">
+                    <Settings className="w-4 h-4 text-primary" />
+                    <span>Paramètres</span>
                 </CommandItem>
-                <CommandItem onSelect={() => runCommand(() => router.push("/sudo"))} className="flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer hover:bg-[var(--accent)]/10 hover:text-[var(--accent)]">
-                    <Calculator className="w-4 h-4" />
-                    <span>Sudo Panel</span>
+                <CommandItem onSelect={() => runCommand(() => router.push("/sudo"))} className="flex items-center gap-3 px-3 py-3 rounded-lg cursor-pointer hover:bg-primary/10 text-black dark:text-white group">
+                    <Calculator className="w-4 h-4 text-red-400" />
+                    <span className="text-red-400">Accès Sudo</span>
                 </CommandItem>
                 </CommandGroup>
             </CommandList>

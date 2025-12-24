@@ -75,7 +75,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
+      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-[#1C2434] duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
@@ -106,17 +106,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           
           {/* DASHBOARD */}
           <div>
-            <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">MAIN</h3>
+            <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">PRINCIPAL</h3>
             <ul className="mb-6 flex flex-col gap-1.5">
               <li>
                 <Link
                   href="/admin"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname === "/admin" ? "bg-graydark dark:bg-meta-4" : ""
+                    pathname === "/admin" ? "bg-graydark dark:bg-meta-4 text-white" : "text-bodydark1"
                   }`}
                 >
                   <LayoutDashboard className="w-5 h-5" />
-                  Dashboard
+                  Tableau de bord
                 </Link>
               </li>
             </ul>
@@ -130,11 +130,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <Link
                     href="/admin/forum"
                     className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                        pathname.includes("forum") ? "bg-graydark dark:bg-meta-4" : ""
+                        pathname.includes("forum") ? "bg-graydark dark:bg-meta-4 text-white" : "text-bodydark1"
                     }`}
                     >
                     <MessageSquare className="w-5 h-5" />
-                    Forum
+                    Forum Interne
                     </Link>
                 </li>
             </ul>
@@ -153,7 +153,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <Link
                         href="#"
                         className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          (pathname.includes("deals") || pathname.includes("projects")) && "bg-graydark dark:bg-meta-4"
+                          (pathname.includes("deals") || pathname.includes("projects")) && "bg-graydark dark:bg-meta-4 text-white"
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
@@ -161,19 +161,19 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         }}
                       >
                         <Briefcase className="w-5 h-5" />
-                        Deals & Projects
+                        Transactions & Projets
                         <ChevronDown className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && "rotate-180"}`} width={20} height={20} />
                       </Link>
                       <div className={`translate transform overflow-hidden ${!open && "hidden"}`}>
                         <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
                           <li>
                             <Link href="/admin/deals" className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname === "/admin/deals" && "text-white"}`}>
-                              Tombstones
+                              Portefeuille (Tombstones)
                             </Link>
                           </li>
                           <li>
                             <Link href="/admin/projects" className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname === "/admin/projects" && "text-white"}`}>
-                              Kanban
+                              Kanban Opérationnel
                             </Link>
                           </li>
                         </ul>
@@ -187,11 +187,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <Link
                   href="/admin/whiteboard"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("whiteboard") ? "bg-graydark dark:bg-meta-4" : ""
+                    pathname.includes("whiteboard") ? "bg-graydark dark:bg-meta-4 text-white" : "text-bodydark1"
                   }`}
                 >
                   <PenTool className="w-5 h-5" />
-                  Whiteboard
+                  Tableau Blanc
                 </Link>
               </li>
 
@@ -199,11 +199,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <Link
                   href="/admin/sheets"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("sheets") ? "bg-graydark dark:bg-meta-4" : ""
+                    pathname.includes("sheets") ? "bg-graydark dark:bg-meta-4 text-white" : "text-bodydark1"
                   }`}
                 >
                   <Sheet className="w-5 h-5" />
-                  Spreadsheets
+                  Feuilles de Calcul
                 </Link>
               </li>
 
@@ -211,11 +211,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <Link
                   href="/admin/documents"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("documents") ? "bg-graydark dark:bg-meta-4" : ""
+                    pathname.includes("documents") ? "bg-graydark dark:bg-meta-4 text-white" : "text-bodydark1"
                   }`}
                 >
                   <ScrollText className="w-5 h-5" />
-                  Documents & Sign
+                  Documents & Signatures
                 </Link>
               </li>
             </ul>
@@ -229,33 +229,33 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <Link
                     href="/admin/research"
                     className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                        pathname.includes("research") ? "bg-graydark dark:bg-meta-4" : ""
+                        pathname.includes("research") ? "bg-graydark dark:bg-meta-4 text-white" : "text-bodydark1"
                     }`}
                     >
                     <Globe className="w-5 h-5" />
-                    Market Research
+                    Études de Marché
                     </Link>
                 </li>
                 <li>
                     <Link
                     href="/admin/crm"
                     className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                        pathname.includes("crm") ? "bg-graydark dark:bg-meta-4" : ""
+                        pathname.includes("crm") ? "bg-graydark dark:bg-meta-4 text-white" : "text-bodydark1"
                     }`}
                     >
                     <Database className="w-5 h-5" />
-                    CRM Database
+                    Base CRM
                     </Link>
                 </li>
                  <li>
                     <Link
                     href="/admin/marketing"
                     className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                        pathname.includes("marketing") ? "bg-graydark dark:bg-meta-4" : ""
+                        pathname.includes("marketing") ? "bg-graydark dark:bg-meta-4 text-white" : "text-bodydark1"
                     }`}
                     >
                     <PieChart className="w-5 h-5" />
-                    Marketing Analytics
+                    Marketing & Analytics
                     </Link>
                 </li>
             </ul>
@@ -269,7 +269,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <Link
                     href="#"
                     className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                        (pathname.includes("news") || pathname.includes("team") || pathname.includes("sectors")) && "bg-graydark dark:bg-meta-4"
+                        (pathname.includes("news") || pathname.includes("team") || pathname.includes("sectors")) && "bg-graydark dark:bg-meta-4 text-white"
                     }`}
                     onClick={(e) => {
                         e.preventDefault();
@@ -277,15 +277,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     }}
                     >
                     <Globe className="w-5 h-5" />
-                    Public Website
+                    Site Web Public
                     <ChevronDown className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && "rotate-180"}`} width={20} height={20} />
                     </Link>
                     <div className={`translate transform overflow-hidden ${!open && "hidden"}`}>
                     <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
-                        <li><Link href="/admin/news" className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-white"><Newspaper className="w-4 h-4" /> News</Link></li>
-                        <li><Link href="/admin/team" className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-white"><Users className="w-4 h-4" /> Team</Link></li>
-                        <li><Link href="/admin/sectors" className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-white"><Building2 className="w-4 h-4" /> Sectors</Link></li>
-                        <li><Link href="/admin/careers" className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-white"><UserPlus className="w-4 h-4" /> Careers</Link></li>
+                        <li><Link href="/admin/news" className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-white"><Newspaper className="w-4 h-4" /> Actualités</Link></li>
+                        <li><Link href="/admin/team" className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-white"><Users className="w-4 h-4" /> Équipe</Link></li>
+                        <li><Link href="/admin/sectors" className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-white"><Building2 className="w-4 h-4" /> Secteurs</Link></li>
+                        <li><Link href="/admin/careers" className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-white"><UserPlus className="w-4 h-4" /> Carrières</Link></li>
                     </ul>
                     </div>
                 </React.Fragment>
@@ -295,17 +295,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
           {/* SYSTEM */}
           <div>
-            <h3 className="mb-4 ml-4 mt-6 text-sm font-semibold text-bodydark2">SYSTEM</h3>
+            <h3 className="mb-4 ml-4 mt-6 text-sm font-semibold text-bodydark2">SYSTÈME</h3>
             <ul className="mb-6 flex flex-col gap-1.5">
               <li>
                 <Link
                   href="/admin/settings"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("settings") ? "bg-graydark dark:bg-meta-4" : ""
+                    pathname.includes("settings") ? "bg-graydark dark:bg-meta-4 text-white" : "text-bodydark1"
                   }`}
                 >
                   <Settings className="w-5 h-5" />
-                  Settings
+                  Paramètres
                 </Link>
               </li>
               <li>
@@ -314,7 +314,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4`}
                 >
                   <Terminal className="w-5 h-5 text-red-400" />
-                  <span className="text-red-400">Sudo Access</span>
+                  <span className="text-red-400">Accès Sudo</span>
                 </Link>
               </li>
             </ul>

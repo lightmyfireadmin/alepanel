@@ -1,10 +1,10 @@
 import React from 'react';
-import { Document, Page, Text, View, StyleSheet, renderToFile } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet, Image, renderToFile } from '@react-pdf/renderer';
 import path from 'path';
 
-// ============================================================================ 
+// ============================================================================
 // THEME CONFIGURATION
-// ============================================================================ 
+// ============================================================================
 const THEME = {
   colors: {
     primary: '#D4AF37',    // Gold (Alecia Brand)
@@ -15,9 +15,7 @@ const THEME = {
     border: '#E2E8F0',     // Slate 200
     textMain: '#334155',   // Slate 700
     textMuted: '#64748B',  // Slate 500
-    accent: '#3B82F6',     // Blue (Links/Info)
-    success: '#10B981',
-    error: '#EF4444',
+    accent: '#3B82F6',     // Blue
   },
   fonts: {
     heading: 'Helvetica-Bold',
@@ -25,6 +23,8 @@ const THEME = {
     code: 'Courier',
   }
 };
+
+const ASSETS_PATH = path.join(process.cwd(), 'alecia-app', 'public', 'manual_assets');
 
 const styles = StyleSheet.create({
   // LAYOUT
@@ -171,34 +171,25 @@ const styles = StyleSheet.create({
   },
   
   // UI VISUALIZATION
-  uiContainer: {
-    marginVertical: 10,
-    borderWidth: 1,
-    borderColor: THEME.colors.border,
+  screenshotContainer: {
+    marginVertical: 15,
     borderRadius: 4,
     overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: THEME.colors.border,
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
   },
-  uiHeader: {
-    backgroundColor: '#E2E8F0',
-    padding: '4 8',
-    borderBottomWidth: 1,
-    borderBottomColor: '#CBD5E1',
-    flexDirection: 'row',
-    gap: 4,
+  screenshot: {
+    width: '100%',
+    height: 'auto',
+    objectFit: 'contain',
   },
-  uiDot: {
-    width: 6, height: 6, borderRadius: 3, backgroundColor: '#94A3B8'
-  },
-  uiBody: {
-    backgroundColor: '#FFFFFF',
-    padding: 15,
-    minHeight: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  uiText: {
+  caption: {
     fontSize: 8,
     color: THEME.colors.textMuted,
+    textAlign: 'center',
+    marginTop: 4,
     fontStyle: 'italic',
   },
   
@@ -225,9 +216,9 @@ const styles = StyleSheet.create({
   }
 });
 
-// ============================================================================ 
+// ============================================================================
 // COMPONENTS
-// ============================================================================ 
+// ============================================================================
 
 const Header = ({ title }: { title: string }) => (
   <View style={styles.header}>
@@ -248,16 +239,10 @@ const HowToCard = ({ title, steps }: { title: string, steps: string[] }) => (
   </View>
 );
 
-const UIPreview = ({ label }: { label: string }) => (
-  <View style={styles.uiContainer}>
-    <View style={styles.uiHeader}>
-      <View style={styles.uiDot} />
-      <View style={styles.uiDot} />
-      <View style={styles.uiDot} />
-    </View>
-    <View style={styles.uiBody}>
-      <Text style={styles.uiText}>[ {label} ]</Text>
-    </View>
+const Screenshot = ({ src, caption }: { src: string, caption?: string }) => (
+  <View style={styles.screenshotContainer}>
+    <Image src={path.join(ASSETS_PATH, src)} style={styles.screenshot} />
+    {caption && <Text style={styles.caption}>{caption}</Text>}
   </View>
 );
 
@@ -267,9 +252,9 @@ const InfoBlock = ({ text }: { text: string }) => (
   </View>
 );
 
-// ============================================================================ 
+// ============================================================================
 // DOCUMENT STRUCTURE
-// ============================================================================ 
+// ============================================================================
 
 const ManualPDF = () => (
   <Document>
@@ -308,240 +293,175 @@ const ManualPDF = () => (
           les attaques par force brute et une gestion stricte des rôles.
         </Text>
 
-        <UIPreview label="Interface de Connexion avec Avatar" />
+        <Screenshot src="login.png" caption="Nouvelle interface de connexion sécurisée avec sélection de profil" />
 
         <HowToCard 
           title="Se Connecter à la Plateforme"
           steps={[
             "Rendez-vous sur /admin/login.",
-            "Sélectionnez votre profil dans le menu déroulant (inutile de taper l'email).",
+            "Sélectionnez votre profil dans le menu déroulant.",
             "Entrez votre mot de passe.",
             "Cliquez sur 'Se connecter'.",
           ]}
         />
-        
-        <InfoBlock text="En cas d'oubli de mot de passe, contactez l'administrateur système (Sudo)." />
       </View>
     </Page>
 
     {/* 3. NAVIGATION & DASHBOARD */}
     <Page size="A4" style={styles.page}>
-      <Header title="Navigation" />
+      <Header title="Tableau de Bord" />
       <View style={styles.content}>
-        <Text style={styles.h1}>L'Interface "Business OS"</Text>
+        <Text style={styles.h1}>Pilotage de l'Activité</Text>
         
-        <Text style={styles.h2}>Le Tableau de Bord</Text>
+        <Text style={styles.h2}>Le Dashboard</Text>
         <Text style={styles.text}>
-          Votre cockpit personnel. Il affiche en temps réel :
-        </Text>
-        <Text style={{ ...styles.text, marginLeft: 10 }}>
-          • Les KPIs financiers (Pipeline, Leads).{'\n'}          • Un flux d'activité (Derniers posts, mises à jour deals).{'\n'}          • Des actions rapides pour démarrer une tâche sans naviguer.
+          Dès la connexion, le tableau de bord offre une vue synthétique des opérations.
+          Il regroupe les indicateurs clés (Pipeline, Deals Actifs), un accès rapide aux outils 
+          courants, et un fil d'actualité des discussions récentes.
         </Text>
 
-        <UIPreview label="Dashboard Grid: Metrics + Activity Feed" />
+        <Screenshot src="dashboard.png" caption="Vue d'ensemble du Dashboard avec KPIs et Widgets" />
 
         <Text style={styles.h2}>La Palette de Commande</Text>
         <Text style={styles.text}>
-          Pour gagner du temps, Alecia OS intègre un moteur de navigation rapide.
+          Pour une navigation ultra-rapide, utilisez la palette de commande globale.
         </Text>
-        
         <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}>
-            <Text style={styles.text}>Appuyez sur </Text>
+            <Text style={styles.text}>Raccourci : </Text>
             <Text style={styles.shortcut}> CMD + K </Text>
-            <Text style={styles.text}> (ou Ctrl + K) n'importe où.</Text>
         </View>
-
-        <HowToCard 
-          title="Utiliser la Palette de Commande"
-          steps={[
-            "Faites le raccourci clavier ou cliquez sur la barre de recherche.",
-            "Tapez 'Deal' pour aller aux transactions, 'Forum' pour les discussions, etc.",
-            "Utilisez les flèches pour sélectionner et Entrée pour valider.",
-          ]}
-        />
       </View>
     </Page>
 
-    {/* 4. COMMUNICATION (FORUM) */}
-    <Page size="A4" style={styles.page}>
-      <Header title="Communication" />
-      <View style={styles.content}>
-        <Text style={styles.h1}>Forum Interne</Text>
-        <Text style={styles.text}>
-          L'espace d'échange de l'équipe, structuré par thèmes (Annonces, Deals, Veille).
-          Il remplace les chaînes d'emails fragmentées.
-        </Text>
-
-        <Text style={styles.h2}>Créer et Répondre</Text>
-        <UIPreview label="Éditeur Riche (TipTap) avec Toolbar" />
-
-        <HowToCard 
-          title="Lancer une nouvelle discussion"
-          steps={[
-            "Allez dans le module 'Forum'.",
-            "Entrez dans la catégorie concernée (ex: Discussions Deals).",
-            "Cliquez sur 'Nouveau sujet'.",
-            "Rédigez votre titre et votre message (Gras, Italique, Listes disponibles).",
-            "Cliquez sur 'Publier'.",
-          ]}
-        />
-
-        <Text style={styles.h3}>Pièces Jointes</Text>
-        <Text style={styles.text}>
-          Vous pouvez joindre des images ou des documents directement dans l'éditeur via 
-          l'icône image. Les fichiers sont stockés de manière sécurisée (Vercel Blob).
-        </Text>
-      </View>
-    </Page>
-
-    {/* 5. COLLABORATION (PADS & SHEETS) */}
-    <Page size="A4" style={styles.page}>
-      <Header title="Collaboration" />
-      <View style={styles.content}>
-        <Text style={styles.h1}>La Suite Bureautique</Text>
-        
-        <Text style={styles.h2}>Alecia Pads (Docs)</Text>
-        <Text style={styles.text}>
-          Un traitement de texte collaboratif pour vos mémos, notes de réunion et drafts.
-        </Text>
-        <HowToCard 
-          title="Gérer un Document"
-          steps={[
-            "Menu Collaboration > Documents > Onglet 'Pads'.",
-            "Créez un Pad et donnez-lui un titre.",
-            "L'enregistrement est automatique (toutes les 10s si modifications).",
-            "Utilisez le bouton 'Export PDF' pour générer une version imprimable propre.",
-          ]}
-        />
-
-        <Text style={styles.h2}>Alecia Sheets (Tableurs)</Text>
-        <Text style={styles.text}>
-          Un outil de grille pour vos listes de données, calculs rapides et suivis.
-        </Text>
-        <UIPreview label="Grille Tableur avec outils Ligne/Colonne" />
-        
-        <HowToCard 
-          title="Travailler sur un Spreadsheet"
-          steps={[
-            "Menu Collaboration > Spreadsheets.",
-            "Ajoutez des lignes/colonnes via la barre d'outils.",
-            "Saisissez vos données.",
-            "Exportez en un clic au format Excel (.xlsx) natif.",
-          ]}
-        />
-      </View>
-    </Page>
-
-    {/* 6. INTELLIGENCE (AI) */}
-    <Page size="A4" style={styles.page}>
-      <Header title="Intelligence Artificielle" />
-      <View style={styles.content}>
-        <Text style={styles.h1}>Moteur de Recherche AI</Text>
-        <Text style={styles.text}>
-          Alecia OS combine la puissance de Groq (Vitesse) et Mistral Large (Précision) 
-          pour réaliser des études de marché autonomes.
-        </Text>
-
-        <Text style={styles.h2}>Lancer une Étude</Text>
-        <HowToCard 
-          title="Processus de Recherche"
-          steps={[
-            "Menu Intelligence > Market Research.",
-            "Cliquez sur 'Nouvelle Étude'.",
-            "Décrivez votre besoin (ex: 'Marché de la cybersécurité PME en France').",
-            "Laissez l'IA travailler (approx. 30 secondes).",
-            "Consultez le rapport généré automatiquement.",
-          ]}
-        />
-
-        <Text style={styles.h3}>Outils d'Analyse Avancés</Text>
-        <Text style={styles.text}>
-          Une fois le rapport généré, vous pouvez utiliser les "Actions AI" en haut à droite :
-        </Text>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 5, marginTop: 5 }}>
-            <Text style={styles.shortcut}> EXTRAIRE SWOT </Text>
-            <Text style={styles.text}> : Génère un tableau Forces/Faiblesses instantané.</Text>
-        </View>
-
-        <Text style={styles.h2}>Web Crawler</Text>
-        <Text style={styles.text}>
-          Besoin d'analyser un site concurrent ? Utilisez l'onglet "Web Crawler", entrez l'URL, 
-          et le système aspirera le contenu pertinent pour analyse.
-        </Text>
-      </View>
-    </Page>
-
-    {/* 7. OPERATIONS (DEALS & CRM) */}
+    {/* 4. OPERATIONS KANBAN */}
     <Page size="A4" style={styles.page}>
       <Header title="Opérations" />
       <View style={styles.content}>
-        <Text style={styles.h1}>Gestion des Mandats</Text>
+        <Text style={styles.h1}>Gestion des Transactions</Text>
 
-        <Text style={styles.h2}>Kanban des Deals</Text>
+        <Text style={styles.h2}>Kanban Interactif</Text>
         <Text style={styles.text}>
-          Visualisez l'ensemble du pipeline. Chaque carte représente une opportunité.
+          Le cœur du système pour le suivi des mandats. L'interface visuelle permet de 
+          déplacer les dossiers entre les phases (Lead, Due Diligence, Closing, Closed).
         </Text>
+
+        <Screenshot src="kanban.png" caption="Vue Kanban avec Drag & Drop et statuts dynamiques" />
+
         <HowToCard 
           title="Piloter les Deals"
           steps={[
-            "Changez le statut d'un deal en changeant le selecteur dans la carte.",
-            "Les cartes s'animent automatiquement vers la bonne colonne.",
-            "Cliquez sur le titre pour entrer dans le détail du dossier (Timeline, Infos).",
-          ]}
-        />
-
-        <Text style={styles.h2}>CRM (Contacts & Sociétés)</Text>
-        <Text style={styles.text}>
-          Annuaire centralisé enrichi.
-        </Text>
-        <UIPreview label="Liste CRM avec Filtres & Export" />
-        
-        <HowToCard 
-          title="Exports & Données"
-          steps={[
-            "Filtrez par nom ou email via la barre de recherche.",
-            "Basculez entre la vue 'Contacts' et 'Sociétés'.",
-            "Cliquez sur l'icône Excel pour télécharger la base filtrée.",
+            "Utilisez le bouton 'Nouveau Dossier' pour créer une opportunité.",
+            "Changez le statut via le sélecteur directement sur la carte.",
+            "Les cartes se réorganisent automatiquement avec une animation fluide.",
+            "Cliquez sur le titre pour accéder à la Data Room et à la Timeline du deal.",
           ]}
         />
       </View>
     </Page>
 
-    {/* 8. ADMIN & MAINTENANCE */}
+    {/* 5. CRM & DATA */}
     <Page size="A4" style={styles.page}>
-      <Header title="Système" />
+      <Header title="Base de Données" />
       <View style={styles.content}>
-        <Text style={styles.h1}>Administration Système</Text>
+        <Text style={styles.h1}>CRM Centralisé</Text>
         <Text style={styles.text}>
-          Accès réservé aux administrateurs (Sudo) pour la maintenance de l'OS.
+          Une base de données unifiée pour gérer l'ensemble de l'écosystème : 
+          Cédants, Acquéreurs, Fonds d'Investissement, et Conseils.
         </Text>
 
-        <InfoBlock text="URL d'accès : /sudo (Protégée par cookie spécifique)" />
+        <Screenshot src="crm.png" caption="Interface CRM avec filtres, recherche et export Excel" />
 
-        <Text style={styles.h2}>Maintenance Mode</Text>
+        <Text style={styles.h2}>Fonctionnalités Clés</Text>
+        <Text style={styles.bulletPoint}>• Recherche Instantanée : Filtrez par nom, email ou société.</Text>
+        <Text style={styles.bulletPoint}>• Tags Intelligents : Classification automatique (Investisseur, Cédant...).</Text>
+        <Text style={styles.bulletPoint}>• Export Excel : Générez des listes de prospection en un clic.</Text>
+        <Text style={styles.bulletPoint}>• Enrichissement : Outil intégré pour compléter les données (SIREN, CA).</Text>
+      </View>
+    </Page>
+
+    {/* 6. COMMUNICATION */}
+    <Page size="A4" style={styles.page}>
+      <Header title="Communication" />
+      <View style={styles.content}>
+        <Text style={styles.h1}>Forum & Discussions</Text>
         <Text style={styles.text}>
-          En cas de mise à jour critique, vous pouvez verrouiller l'accès à l'application 
-          pour tous les utilisateurs non-sudo.
+          Un espace dédié pour remplacer les emails internes. Organisé par thèmes 
+          (Annonces, Deals, Veille), il permet de centraliser la connaissance.
         </Text>
+
+        <Screenshot src="forum.png" caption="Éditeur de discussion riche pour les annonces et échanges" />
+
         <HowToCard 
-          title="Activer la Maintenance"
+          title="Collaborer sur le Forum"
           steps={[
-            "Connectez-vous au Sudo Panel.",
-            "Section 'System & Cache'.",
-            "Cliquez sur 'ENABLE MAINTENANCE'.",
-            "Une page d'attente s'affichera pour tous les autres utilisateurs.",
+            "Sélectionnez une catégorie (ex: Annonces Officielles).",
+            "Utilisez l'éditeur riche pour mettre en forme votre message.",
+            "Ajoutez des listes, du gras/italique pour la clarté.",
+            "Publiez pour notifier l'équipe instantanément.",
           ]}
         />
-
-        <Text style={styles.h2}>Santé du Système</Text>
-        <Text style={styles.text}>
-          Le panneau "Health Check" teste en temps réel la connexion à la base de données Neon, 
-          au stockage Vercel Blob et aux API externes.
-        </Text>
       </View>
-      
+    </Page>
+
+    {/* 7. ANALYTICS & SPREADSHEETS */}
+    <Page size="A4" style={styles.page}>
+      <Header title="Outils d'Analyse" />
+      <View style={styles.content}>
+        <Text style={styles.h1}>Suite Financière</Text>
+        
+        <Text style={styles.h2}>Alecia Sheets</Text>
+        <Text style={styles.text}>
+          Un tableur intégré pour vos modélisations rapides, listes de cibles ou 
+          calculs de valorisation, sans quitter l'interface.
+        </Text>
+
+        <Screenshot src="spreadsheet.png" caption="Éditeur de tableur avec gestion de colonnes/lignes" />
+
+        <Text style={styles.h2}>Marketing Studio</Text>
+        <Text style={styles.text}>
+          Suivez la performance des campagnes et l'engagement sur le site public.
+        </Text>
+        
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
+            <View style={{ width: '48%' }}>
+                <Image src={path.join(ASSETS_PATH, 'marketing_1.png')} style={{ width: '100%', height: 100, objectFit: 'cover', borderRadius: 4 }} />
+            </View>
+            <View style={{ width: '48%' }}>
+                <Image src={path.join(ASSETS_PATH, 'marketing_2.png')} style={{ width: '100%', height: 100, objectFit: 'cover', borderRadius: 4 }} />
+            </View>
+        </View>
+        <Text style={styles.caption}>Tableaux de bord Marketing & Analytics</Text>
+      </View>
+    </Page>
+
+    {/* 8. WEBSITE MANAGEMENT */}
+    <Page size="A4" style={styles.page}>
+      <Header title="Gestion Site Web" />
+      <View style={styles.content}>
+        <Text style={styles.h1}>CMS Intégré</Text>
+        <Text style={styles.text}>
+          Pilotez le contenu du site public (alecia.fr) directement depuis l'OS. 
+          Modifiez les actualités, l'équipe, et les pages sectorielles en temps réel.
+        </Text>
+
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', marginTop: 15 }}>
+             <View style={{ width: '30%', marginBottom: 10 }}>
+                <Image src={path.join(ASSETS_PATH, 'website_menu.png')} style={{ width: '100%', height: 'auto', borderRadius: 4, borderWidth: 1, borderColor: THEME.colors.border }} />
+                <Text style={styles.caption}>Menu CMS</Text>
+            </View>
+            <View style={{ width: '65%', marginBottom: 10 }}>
+                <Image src={path.join(ASSETS_PATH, 'website_1.png')} style={{ width: '100%', height: 'auto', borderRadius: 4, borderWidth: 1, borderColor: THEME.colors.border }} />
+                <Text style={styles.caption}>Édition de Contenu</Text>
+            </View>
+        </View>
+
+        <Text style={styles.h2}>Capacités</Text>
+        <Text style={styles.bulletPoint}>• Newsroom : Publication d'articles et communiqués.</Text>
+        <Text style={styles.bulletPoint}>• Équipe : Mise à jour des bios et photos des associés.</Text>
+        <Text style={styles.bulletPoint}>• Carrières : Gestion des offres d'emploi.</Text>
+      </View>
       <Text style={{ ...styles.coverFooter, left: 40, right: 40, textAlign: 'center' }}>
-        Alecia OS Documentation • Généré automatiquement par l'Agent
+        Alecia OS Documentation 3.0 • Généré le {new Date().toLocaleDateString('fr-FR')}
       </Text>
     </Page>
 
@@ -552,7 +472,7 @@ const outputPath = path.join(process.cwd(), 'alecia-app', 'public', 'alecia-user
 
 const main = async () => {
     try {
-        console.log("Generating Enhanced PDF...");
+        console.log("Generating Enriched PDF with Screenshots...");
         await renderToFile(<ManualPDF />, outputPath);
         console.log(`Success! Manual saved to: ${outputPath}`);
     } catch (e) {

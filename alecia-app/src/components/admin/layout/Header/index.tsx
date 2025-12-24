@@ -4,7 +4,6 @@ import DarkModeSwitcher from "./DarkModeSwitcher";
 import DropdownNotification from "./DropdownNotification";
 import DropdownUser from "./DropdownUser";
 import { Search, Menu, Command } from "lucide-react";
-import { useEffect } from "react";
 
 const Header = ({
   sidebarOpen,
@@ -34,7 +33,7 @@ const Header = ({
               e.stopPropagation();
               setSidebarOpen(!sidebarOpen);
             }}
-            className="z-99999 block rounded-sm border border-stroke bg-white p-1.5 shadow-sm dark:border-strokedark dark:bg-boxdark lg:hidden"
+            className="z-99999 block rounded-sm border border-stroke bg-white p-1.5 shadow-sm dark:border-strokedark dark:bg-boxdark lg:hidden text-black dark:text-white"
           >
              <Menu className="w-6 h-6" />
           </button>
@@ -48,11 +47,11 @@ const Header = ({
         <div className="hidden sm:block">
             <button 
                 onClick={triggerCommandPalette}
-                className="relative flex items-center w-full min-w-[300px] cursor-pointer text-left bg-transparent border border-stroke dark:border-strokedark rounded-md py-2 pl-4 pr-10 text-sm text-bodydark2 hover:border-primary transition-colors focus:outline-none"
+                className="relative flex items-center w-full min-w-[350px] cursor-pointer text-left bg-gray-50 dark:bg-meta-4/10 border border-stroke dark:border-strokedark rounded-md py-2.5 pl-4 pr-10 text-sm text-bodydark2 hover:border-primary transition-all focus:outline-none"
             >
-                <Search className="w-4 h-4 mr-2" />
-                <span className="flex-1">Search or type a command...</span>
-                <span className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 px-1.5 py-0.5 rounded bg-gray-100 dark:bg-meta-4 text-[10px] font-medium text-gray-500">
+                <Search className="w-4 h-4 mr-2 text-primary" />
+                <span className="flex-1 text-slate-600 dark:text-slate-300">Rechercher ou lancer une commande...</span>
+                <span className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 px-1.5 py-0.5 rounded bg-white dark:bg-boxdark border border-stroke dark:border-strokedark text-[10px] font-bold text-slate-500">
                     <Command className="w-3 h-3" /> K
                 </span>
             </button>
@@ -60,18 +59,11 @@ const Header = ({
 
         <div className="flex items-center gap-3 2xsm:gap-7">
           <ul className="flex items-center gap-2 2xsm:gap-4">
-            {/* <!-- Dark Mode Toggler --> */}
             <DarkModeSwitcher />
-            {/* <!-- Dark Mode Toggler --> */}
-
-            {/* <!-- Notification Menu Area --> */}
             <DropdownNotification />
-            {/* <!-- Notification Menu Area --> */}
           </ul>
 
-          {/* <!-- User Area --> */}
           <DropdownUser />
-          {/* <!-- User Area --> */}
         </div>
       </div>
     </header>
