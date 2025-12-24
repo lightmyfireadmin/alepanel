@@ -1,0 +1,22 @@
+
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+Error: Transform failed with 3 errors:
+/Users/utilisateur/Desktop/alepanel/alecia-app/src/scripts/generate-manual.tsx:261:44: ERROR: The character ">" is not valid inside a JSX element
+/Users/utilisateur/Desktop/alepanel/alecia-app/src/scripts/generate-manual.tsx:261:59: ERROR: The character ">" is not valid inside a JSX element
+/Users/utilisateur/Desktop/alepanel/alecia-app/src/scripts/generate-manual.tsx:261:77: ERROR: The character ">" is not valid inside a JSX element
+    at failureErrorWithLog (/Users/utilisateur/.npm/_npx/fd45a72a545557e9/node_modules/esbuild/lib/main.js:1467:15)
+    at /Users/utilisateur/.npm/_npx/fd45a72a545557e9/node_modules/esbuild/lib/main.js:736:50
+    at responseCallbacks.<computed> (/Users/utilisateur/.npm/_npx/fd45a72a545557e9/node_modules/esbuild/lib/main.js:603:9)
+    at handleIncomingPacket (/Users/utilisateur/.npm/_npx/fd45a72a545557e9/node_modules/esbuild/lib/main.js:658:12)
+    at Socket.readFromStdout (/Users/utilisateur/.npm/_npx/fd45a72a545557e9/node_modules/esbuild/lib/main.js:581:7)
+    at Socket.emit (node:events:524:28)
+    at addChunk (node:internal/streams/readable:561:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    at Readable.push (node:internal/streams/readable:392:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:191:23) {
+  name: 'TransformError'
+}
+
+Node.js v20.19.5
