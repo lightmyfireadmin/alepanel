@@ -4,11 +4,33 @@ import { useState } from "react";
 import { CompanyEnrichment } from "@/components/admin";
 import ExcelJS from "exceljs";
 import { 
-  Plus, Search, Building2, Users as UsersIcon, 
-  Phone, Mail, MoreVertical, Filter, FileSpreadsheet, Loader2
+  Plus, Search, Building2, 
+  Phone, Mail, MoreVertical, FileSpreadsheet
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
+
+interface Contact {
+  id: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  role: string | null;
+  tags: string[] | null;
+  companyName: string | null;
+}
+
+interface Company {
+  id: string;
+  name: string;
+  siren: string | null;
+  sector: string | null;
+  financialData: {
+    revenue?: number;
+    ebitda?: number;
+    employees?: number;
+  } | null;
+}
 
 const tagColors: Record<string, string> = {
   "Investisseur": "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/30",
@@ -17,7 +39,7 @@ const tagColors: Record<string, string> = {
   "Fonds PE": "bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/30",
 };
 
-export function CRMClient({ initialContacts, initialCompanies }: { initialContacts: any[], initialCompanies: any[] }) {
+export function CRMClient({ initialContacts, initialCompanies }: { initialContacts: Contact[], initialCompanies: Company[] }) {
   const [activeTab, setActiveTab] = useState<"contacts" | "companies">("contacts");
   const [searchQuery, setSearchQuery] = useState("");
   const { success } = useToast();

@@ -10,7 +10,6 @@ import {
   Settings,
   Users,
   Briefcase,
-  FileText,
   PieChart,
   ChevronDown,
   ArrowLeft,

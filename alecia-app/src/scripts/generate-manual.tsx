@@ -138,12 +138,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     textAlign: 'justify',
   },
-  bulletPoint: {
-    fontSize: 10,
-    color: THEME.colors.textMain,
-    lineHeight: 1.6,
-    marginBottom: 6,
-  },
   
   // COMPONENTS
   card: {
