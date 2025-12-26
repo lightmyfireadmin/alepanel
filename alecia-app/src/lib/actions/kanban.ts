@@ -71,9 +71,12 @@ export async function deleteBoard(id: string) {
     }
 }
 
-export async function moveProject(projectId: string, columnId: string) {
+export async function moveProject(projectId: string, columnId: string, boardId?: string) {
     try {
-        await db.update(projects).set({ columnId }).where(eq(projects.id, projectId));
+        await db.update(projects).set({ 
+            columnId,
+            ...(boardId ? { boardId } : {})
+        }).where(eq(projects.id, projectId));
         revalidatePath("/admin/projects");
         return { success: true };
     } catch {

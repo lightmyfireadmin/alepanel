@@ -38,11 +38,13 @@ export async function updateProjectStatus(id: string, status: string) {
     }
 }
 
-export async function createProject(title: string, clientId?: string) {
+export async function createProject(title: string, clientId?: string, boardId?: string, columnId?: string) {
     try {
         const [project] = await db.insert(projects).values({
             title,
             clientId,
+            boardId,
+            columnId,
             status: "Lead"
         }).returning();
         revalidatePath("/admin/projects");

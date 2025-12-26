@@ -118,7 +118,7 @@ export function WhiteboardEditor() {
   if (!mounted) return null;
 
   return (
-    <div className={`flex flex-col gap-4 transition-all duration-300 ${
+    <div className={`flex flex-col gap-4 overflow-hidden ${
       isFullscreen 
         ? "fixed inset-0 z-9999 bg-background p-4" 
         : "h-[calc(100vh-200px)] min-h-[600px] w-full"
@@ -151,7 +151,7 @@ export function WhiteboardEditor() {
                     <DialogHeader>
                         <DialogTitle>Mes Tableaux</DialogTitle>
                     </DialogHeader>
-                    <div className="space-y-2 py-4 max-h-[400px] overflow-y-auto">
+                    <div className="space-y-2 py-4 max-h-[400px] overflow-y-auto text-foreground">
                         {loadingList ? (
                             <div className="flex justify-center p-8"><Loader2 className="animate-spin text-primary" /></div>
                         ) : savedBoards.length === 0 ? (
@@ -193,6 +193,7 @@ export function WhiteboardEditor() {
                     value={whiteboardName}
                     onChange={(e) => setWhiteboardName(e.target.value)}
                     placeholder="ex: Structure Deal Projet X"
+                    className="text-foreground"
                     />
                 </div>
                 </div>
@@ -209,25 +210,27 @@ export function WhiteboardEditor() {
       </div>
 
       {/* CANVAS CONTAINER */}
-      <div className="flex-1 border border-border rounded-xl overflow-hidden bg-card relative isolate shadow-inner">
-         <Excalidraw
-           theme={theme === "dark" ? "dark" : "light"}
-           excalidrawAPI={(api) => setExcalidrawAPI(api)}
-           initialData={{
-             appState: {
-               viewBackgroundColor: theme === "dark" ? "#020617" : "#ffffff",
-               currentItemFontFamily: 1,
-             }
-           }}
-           UIOptions={{
-             canvasActions: {
-               saveToActiveFile: false,
-               loadScene: false,
-               export: { saveFileToDisk: true },
-               toggleTheme: false, // We control theme via next-themes
-             },
-           }}
-         />
+      <div className="flex-1 border border-border rounded-xl overflow-hidden bg-card relative isolate shadow-inner min-h-0">
+         <div className="absolute inset-0">
+            <Excalidraw
+              theme={theme === "dark" ? "dark" : "light"}
+              excalidrawAPI={(api) => setExcalidrawAPI(api)}
+              initialData={{
+                appState: {
+                  viewBackgroundColor: theme === "dark" ? "#020617" : "#ffffff",
+                  currentItemFontFamily: 1,
+                }
+              }}
+              UIOptions={{
+                canvasActions: {
+                  saveToActiveFile: false,
+                  loadScene: false,
+                  export: { saveFileToDisk: true },
+                  toggleTheme: false,
+                },
+              }}
+            />
+         </div>
       </div>
       
       <style jsx global>{`
@@ -236,7 +239,7 @@ export function WhiteboardEditor() {
             --color-primary-darker: var(--primary);
             --color-primary-darkest: var(--primary);
         }
-        /* Fix for Excalidraw in flex container */
+        /* Ensure Excalidraw fills the absolute container */
         .excalidraw-wrapper {
             height: 100% !important;
             width: 100% !important;

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import * as echarts from "echarts";
 import { 
   Plus, 
@@ -9,7 +9,8 @@ import {
   FileText, 
   ArrowUpRight,
   MessageSquare,
-  Clock
+  Clock,
+  Settings2
 } from "lucide-react";
 import Link from "next/link";
 import { 
@@ -24,6 +25,17 @@ import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
 import { EChart } from "@/components/charts/EChart";
 import { OfficeWidgets } from "@/components/admin/dashboard/OfficeWidgets";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Thread {
   id: string;
@@ -57,35 +69,131 @@ interface DashboardGridProps {
   officeData: OfficeData[];
 }
 
+interface ChartSettings {
+    type: "line" | "bar" | "pie";
+    color: string;
+    source: "internal" | "google" | "microsoft";
+}
+
+const ChartConfigDialog = ({ 
+    id, 
+    title, 
+    settings, 
+    updateSetting 
+}: { 
+    id: string, 
+    title: string, 
+    settings: Record<string, ChartSettings>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    updateSetting: (id: string, key: keyof ChartSettings, value: any) => void
+}) => (
+    <Dialog>
+        <DialogTrigger asChild>
+            <Button variant="ghost" size="icon" className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                <Settings2 className="w-4 h-4 text-muted-foreground" />
+            </Button>
+        </DialogTrigger>
+        <DialogContent>
+            <DialogHeader><DialogTitle>Configurer {title}</DialogTitle></DialogHeader>
+            <div className="space-y-4 py-4">
+                <div className="space-y-2">
+                    <Label>Type de graphique</Label>
+                    <Select value={settings[id].type} onValueChange={(v) => updateSetting(id, 'type', v)}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="line">Ligne</SelectItem>
+                            <SelectItem value="bar">Barres</SelectItem>
+                            <SelectItem value="pie">Camembert</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="space-y-2">
+                    <Label>Source de données</Label>
+                    <Select value={settings[id].source} onValueChange={(v) => updateSetting(id, 'source', v)}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="internal">Interne (DB)</SelectItem>
+                            <SelectItem value="google">Google Sheets (OAuth)</SelectItem>
+                            <SelectItem value="microsoft">Microsoft Excel (OAuth)</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="space-y-2">
+                    <Label>Couleur</Label>
+                    <div className="flex gap-2">
+                        <Input type="color" value={settings[id].color} onChange={(e) => updateSetting(id, 'color', e.target.value)} className="w-12 p-1 border-none" />
+                        <Input value={settings[id].color} onChange={(e) => updateSetting(id, 'color', e.target.value)} className="flex-1" />
+                    </div>
+                </div>
+            </div>
+            <DialogFooter>
+                <Button variant="outline">Annuler</Button>
+                <Button>Sauvegarder</Button>
+            </DialogFooter>
+        </DialogContent>
+    </Dialog>
+);
+
 export function DashboardGrid({ recentThreads, metrics, officeData }: DashboardGridProps) {
   
-  // Chart Options Helpers
-  const getLineChartOption = (title: string, value: number | string, data: number[], color: string): echarts.EChartsOption => ({
-    title: { 
-        text: title, 
-        subtext: value.toString(),
-        textStyle: { fontSize: 14, color: '#64748b' },
-        subtextStyle: { fontSize: 24, fontWeight: 'bold' as const, color: '#0f172a' } 
-    },
-    tooltip: { trigger: 'axis' },
-    grid: { left: 0, right: 0, top: 50, bottom: 0 },
-    xAxis: { show: false, type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
-    yAxis: { show: false, type: 'value' },
-    series: [{
-        data: data,
-        type: 'line',
-        smooth: true,
-        areaStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                { offset: 0, color: color },
-                { offset: 1, color: 'rgba(255, 255, 255, 0)' }
-            ]),
-            opacity: 0.2 
-        },
-        itemStyle: { color: color },
-        lineStyle: { width: 3 }
-    }]
+  const [settings, setSettings] = useState<Record<string, ChartSettings>>({
+    deals: { type: "line", color: "#3b82f6", source: "internal" },
+    pipeline: { type: "line", color: "#f59e0b", source: "internal" },
+    leads: { type: "line", color: "#10b981", source: "internal" },
+    research: { type: "line", color: "#8b5cf6", source: "internal" }
   });
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updateSetting = (id: string, key: keyof ChartSettings, value: any) => {
+    setSettings(prev => ({
+        ...prev,
+        [id]: { ...prev[id], [key]: value }
+    }));
+  };
+
+  // Chart Options Helpers
+  const getChartOption = (id: string, title: string, value: number | string, data: number[]): echarts.EChartsOption => {
+    const config = settings[id];
+    
+    if (config.type === 'pie') {
+        return {
+            title: { text: title, subtext: value.toString(), textStyle: { fontSize: 14 }, subtextStyle: { fontSize: 20, fontWeight: 'bold' } },
+            series: [{
+                type: 'pie',
+                radius: ['40%', '70%'],
+                data: data.map((v, i) => ({ value: v, name: `Day ${i+1}` })),
+                color: [config.color, '#e2e8f0', '#cbd5e1']
+            }]
+        };
+    }
+
+    return {
+        title: { 
+            text: title, 
+            subtext: value.toString(),
+            textStyle: { fontSize: 14, color: '#64748b' },
+            subtextStyle: { fontSize: 24, fontWeight: 'bold' as const, color: '#0f172a' } 
+        },
+        tooltip: { trigger: 'axis' },
+        grid: { left: 0, right: 0, top: 50, bottom: 0 },
+        xAxis: { show: false, type: 'category' },
+        yAxis: { show: false, type: 'value' },
+        series: [{
+            data: data,
+            type: config.type,
+            smooth: true,
+            areaStyle: config.type === 'line' ? {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                    { offset: 0, color: config.color },
+                    { offset: 1, color: 'rgba(255, 255, 255, 0)' }
+                ]),
+                opacity: 0.2 
+            } : undefined,
+            itemStyle: { color: config.color },
+            lineStyle: { width: 3 }
+        }]
+    };
+  };
 
   return (
     <div className="space-y-6">
@@ -96,41 +204,45 @@ export function DashboardGrid({ recentThreads, metrics, officeData }: DashboardG
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
         
         {/* METRIC 1: ACTIVE DEALS */}
-        <Card>
+        <Card className="group relative">
+            <ChartConfigDialog id="deals" title="Deals Actifs" settings={settings} updateSetting={updateSetting} />
             <CardContent className="pt-6">
                 <EChart 
                     height="120px"
-                    options={getLineChartOption("Deals Actifs", metrics.activeDeals, [5, 8, 9, 10, 12, 11, metrics.activeDeals], "#3b82f6")}
+                    options={getChartOption("deals", "Deals Actifs", metrics.activeDeals, [5, 8, 9, 10, 12, 11, metrics.activeDeals])}
                 />
             </CardContent>
         </Card>
 
         {/* METRIC 2: PIPELINE VALUE */}
-        <Card>
+        <Card className="group relative">
+            <ChartConfigDialog id="pipeline" title="Pipeline" settings={settings} updateSetting={updateSetting} />
             <CardContent className="pt-6">
                 <EChart 
                     height="120px"
-                    options={getLineChartOption("Pipeline", metrics.pipelineValue, [18, 20, 21, 22, 23, 24, parseFloat(metrics.pipelineValue.replace(/[^0-9.]/g, ''))], "#f59e0b")}
+                    options={getChartOption("pipeline", "Pipeline", metrics.pipelineValue, [18, 20, 21, 22, 23, 24, parseFloat(metrics.pipelineValue.replace(/[^0-9.]/g, ''))])}
                 />
             </CardContent>
         </Card>
 
         {/* METRIC 3: NEW LEADS */}
-        <Card>
+        <Card className="group relative">
+            <ChartConfigDialog id="leads" title="Nouveaux Leads" settings={settings} updateSetting={updateSetting} />
             <CardContent className="pt-6">
                 <EChart 
                     height="120px"
-                    options={getLineChartOption("Nouveaux Leads", metrics.newLeads, [100, 200, 150, 300, 250, 400, metrics.newLeads], "#10b981")}
+                    options={getChartOption("leads", "Nouveaux Leads", metrics.newLeads, [100, 200, 150, 300, 250, 400, metrics.newLeads])}
                 />
             </CardContent>
         </Card>
 
         {/* METRIC 4: ACTIVE RESEARCH */}
-        <Card>
+        <Card className="group relative">
+            <ChartConfigDialog id="research" title="Recherches" settings={settings} updateSetting={updateSetting} />
             <CardContent className="pt-6">
                 <EChart 
                     height="120px"
-                    options={getLineChartOption("Recherches", metrics.activeResearch, [1, 1, 2, 2, 3, 2, metrics.activeResearch], "#8b5cf6")}
+                    options={getChartOption("research", "Recherches", metrics.activeResearch, [1, 1, 2, 2, 3, 2, metrics.activeResearch])}
                 />
             </CardContent>
         </Card>

@@ -117,12 +117,11 @@ export function ProjectKanban() {
   };
 
   const handleCreateProject = async (columnId: string) => {
+    if (!currentBoardId) return;
     const title = prompt("Nom de l'opération :");
     if (!title) return;
-    const res = await createProject(title);
+    const res = await createProject(title, undefined, currentBoardId, columnId);
     if (res.success && res.data) {
-        // Move to current board/column
-        await moveProject(res.data.id, columnId);
         if (currentBoardId) loadBoardData(currentBoardId);
         success("Opération créée");
     }

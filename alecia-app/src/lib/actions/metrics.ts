@@ -1,8 +1,21 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { projects, leads, researchTasks } from "@/lib/db/schema";
+import { projects, leads, researchTasks, chartConfigs } from "@/lib/db/schema";
 import { count, eq } from "drizzle-orm";
+import { auth } from "@/lib/auth";
+
+export async function getDashboardCharts() {
+  const session = await auth();
+  if (!session?.user?.id) return { success: false, error: "Unauthorized" };
+
+  try {
+    const charts = await db.select().from(chartConfigs).where(eq(chartConfigs.userId, session.user.id));
+    return { success: true, data: charts };
+  } catch {
+    return { success: false, error: "Failed to fetch charts" };
+  }
+}
 
 export async function getDashboardMetrics() {
   try {

@@ -517,6 +517,18 @@ export const systemConfig = pgTable("system_config", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const chartConfigs = pgTable("chart_configs", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: uuid("user_id").references(() => users.id),
+  title: text("title").notNull(),
+  type: text("type").notNull().default("line"), // 'line', 'bar', 'pie'
+  dataSource: text("data_source").notNull().default("internal"), // 'internal', 'google', 'microsoft'
+  externalSourceId: text("external_source_id"), // e.g. sheet ID
+  dataConfig: jsonb("data_config"), // mapping of columns
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // =============================================================================
 // TYPE EXPORTS
 // =============================================================================
@@ -581,6 +593,7 @@ export type Spreadsheet = typeof spreadsheets.$inferSelect;
 
 export type SignRequest = typeof signRequests.$inferSelect;
 export type ResearchTask = typeof researchTasks.$inferSelect;
+export type ChartConfig = typeof chartConfigs.$inferSelect;
 
 // =============================================================================
 // ENUMS
@@ -661,6 +674,17 @@ export const projectEventRelations = relations(projectEvents, ({ one }) => ({
   project: one(projects, {
     fields: [projectEvents.projectId],
     references: [projects.id],
+  }),
+}));
+
+export const userRelations = relations(users, ({ many }) => ({
+  charts: many(chartConfigs),
+}));
+
+export const chartConfigRelations = relations(chartConfigs, ({ one }) => ({
+  user: one(users, {
+    fields: [chartConfigs.userId],
+    references: [users.id],
   }),
 }));
 

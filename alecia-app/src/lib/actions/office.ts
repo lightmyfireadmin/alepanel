@@ -28,7 +28,7 @@ export async function getOfficeDashboardData() {
         status: "À l'heure"
       },
       nextFlight: {
-        destination: "New York", // International hub
+        destination: loc.name === "Nice" ? "Paris" : (loc.name === "Paris" ? "Nice" : "Paris (CDG)"),
         time: `${Math.floor(Math.random() * 24)}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}`,
         status: "Embarquement"
       }
