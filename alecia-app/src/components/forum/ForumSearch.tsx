@@ -7,9 +7,16 @@ import { searchForum } from "@/lib/actions/forum";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 
+interface SearchResult {
+  id: string;
+  title: string;
+  categoryName: string | null;
+  authorName: string | null;
+}
+
 export function ForumSearch() {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
 
   const handleSearch = async (val: string) => {

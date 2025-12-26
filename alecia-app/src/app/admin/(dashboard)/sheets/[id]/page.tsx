@@ -30,6 +30,7 @@ export default async function SheetPage({ params }: { params: Promise<{ id: stri
       </div>
 
       <div className="flex-1 overflow-hidden rounded-xl border border-stroke dark:border-strokedark shadow-sm flex flex-col bg-[var(--card)]">
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         <SheetEditor id={sheet.id} initialData={sheet.data as any} />
       </div>
     </div>

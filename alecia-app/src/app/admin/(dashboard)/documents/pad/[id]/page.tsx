@@ -30,7 +30,7 @@ export default async function PadPage({ params }: { params: Promise<{ id: string
       </div>
 
       <div className="flex-1 overflow-hidden rounded-xl border border-stroke dark:border-strokedark shadow-sm flex flex-col bg-[var(--card)]">
-        <PadEditor id={pad.id} initialContent={pad.content || ""} initialTitle={pad.title} />
+        <PadEditor id={pad.id} initialContent={pad.content || ""} />
       </div>
     </div>
   );

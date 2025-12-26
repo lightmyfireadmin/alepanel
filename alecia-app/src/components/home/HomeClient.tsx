@@ -8,7 +8,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 // Team members - names are not translated
 // Defined outside component to avoid recreation

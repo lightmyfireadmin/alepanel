@@ -87,3 +87,34 @@ export async function generateContent({ prompt, type, context, model = "mistral"
     return { success: false, error: "Une erreur est survenue lors de la génération du contenu." };
   }
 }
+
+export async function generateImage(prompt: string, apiKey: string) {
+    if (!apiKey) return { success: false, error: "Clé API manquante" };
+    
+    try {
+        const response = await fetch("https://api.openai.com/v1/images/generations", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: "dall-e-3",
+                prompt: prompt,
+                n: 1,
+                size: "1024x1024"
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            return { success: false, error: errorData.error?.message || "Erreur API OpenAI" };
+        }
+
+        const data = await response.json();
+        return { success: true, imageUrl: data.data[0].url };
+    } catch (error) {
+        console.error("Image gen error:", error);
+        return { success: false, error: "Erreur lors de la génération d'image" };
+    }
+}

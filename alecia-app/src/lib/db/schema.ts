@@ -168,12 +168,33 @@ export const contacts = pgTable("contacts", {
 });
 
 // =============================================================================
+// KANBAN SYSTEM
+// =============================================================================
+export const kanbanBoards = pgTable("kanban_boards", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: text("name").notNull(),
+  ownerId: uuid("owner_id").references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const kanbanColumns = pgTable("kanban_columns", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  boardId: uuid("board_id").references(() => kanbanBoards.id, { onDelete: "cascade" }).notNull(),
+  name: text("name").notNull(),
+  order: integer("order").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// =============================================================================
 // PROJECTS TABLE - Interactive timeline
 // =============================================================================
 export const projects = pgTable("projects", {
   id: uuid("id").defaultRandom().primaryKey(),
   title: text("title").notNull(),
-  status: text("status").notNull().default("Lead"),
+  status: text("status").notNull().default("Lead"), // Legacy field
+  boardId: uuid("board_id").references(() => kanbanBoards.id),
+  columnId: uuid("column_id").references(() => kanbanColumns.id),
   clientId: uuid("client_id").references(() => contacts.id),
   startDate: date("start_date"),
   targetCloseDate: date("target_close_date"),
@@ -184,6 +205,7 @@ export const projects = pgTable("projects", {
 }, (table) => {
   return {
     clientIdIdx: index("projects_client_id_idx").on(table.clientId),
+    boardIdIdx: index("projects_board_id_idx").on(table.boardId),
   };
 });
 
@@ -614,7 +636,7 @@ export const CONTACT_TAGS = [
   "Fonds PE",
 ] as const;
 
-export const leadRelations = relations(leads, ({ one }) => ({
+export const leadRelations = relations(leads, () => ({
   // Define any relations if needed
 }));
 

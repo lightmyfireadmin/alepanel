@@ -48,7 +48,7 @@ export default async function ThreadPage({ params }: { params: Promise<{ id: str
 
         {/* Posts */}
         <div className="space-y-6">
-            {posts.map((post, index) => (
+            {posts.map((post) => (
                 <div key={post.id} className="flex gap-4 group">
                     <div className="shrink-0 pt-1">
                         <Avatar className="w-10 h-10 border border-[var(--border)]">

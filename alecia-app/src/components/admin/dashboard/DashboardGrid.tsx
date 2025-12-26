@@ -75,7 +75,13 @@ export function DashboardGrid({ recentThreads, metrics, officeData }: DashboardG
         data: data,
         type: 'line',
         smooth: true,
-        areaStyle: { opacity: 0.2 },
+        areaStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: color },
+                { offset: 1, color: 'rgba(255, 255, 255, 0)' }
+            ]),
+            opacity: 0.2 
+        },
         itemStyle: { color: color },
         lineStyle: { width: 3 }
     }]

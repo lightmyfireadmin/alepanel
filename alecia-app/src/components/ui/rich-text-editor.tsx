@@ -5,7 +5,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
-import { Bold, Italic, List, ListOrdered, Link as LinkIcon, Quote, Image as ImageIcon, Loader2 } from "lucide-react";
+import { Bold, Italic, List, ListOrdered, ImageIcon, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { uploadFile } from "@/lib/actions/upload";
 import { useState, useRef } from "react";

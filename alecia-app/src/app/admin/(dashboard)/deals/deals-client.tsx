@@ -66,7 +66,7 @@ const DEAL_SIZES = [
 
 export default function DealsClient({ initialDeals }: DealsClientProps) {
   const router = useRouter();
-  const { toast, success, error: errorToast } = useToast();
+  const { success, error: errorToast } = useToast();
   const [deals, setDeals] = useState<Deal[]>(initialDeals);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);

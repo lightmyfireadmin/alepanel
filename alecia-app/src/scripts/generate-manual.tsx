@@ -248,8 +248,8 @@ const HowToCard = ({ title, steps }: { title: string, steps: string[] }) => (
 
 const Screenshot = ({ src, caption }: { src: string, caption?: string }) => (
   <View style={styles.screenshotContainer}>
-    {/* @ts-ignore - Image alt not supported by react-pdf */}
-    <Image src={path.join(ASSETS_PATH, src)} style={styles.screenshot} />
+    {/* @ts-expect-error - Image alt not supported by react-pdf */}
+    <Image src={path.join(ASSETS_PATH, src)} style={styles.screenshot} alt={caption || "Screenshot"} />
     {caption && <Text style={styles.caption}>{caption}</Text>}
   </View>
 );
@@ -432,12 +432,12 @@ const ManualPDF = () => (
         
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
             <View style={{ width: '48%' }}>
-                {/* @ts-ignore */}
-                <Image src={path.join(ASSETS_PATH, 'marketing_1.png')} style={{ width: '100%', height: 100, objectFit: 'cover', borderRadius: 4 }} />
+                {/* @ts-expect-error - Image alt not supported by react-pdf */}
+                <Image src={path.join(ASSETS_PATH, 'marketing_1.png')} style={{ width: '100%', height: 100, objectFit: 'cover', borderRadius: 4 }} alt="Marketing 1" />
             </View>
             <View style={{ width: '48%' }}>
-                {/* @ts-ignore */}
-                <Image src={path.join(ASSETS_PATH, 'marketing_2.png')} style={{ width: '100%', height: 100, objectFit: 'cover', borderRadius: 4 }} />
+                {/* @ts-expect-error - Image alt not supported by react-pdf */}
+                <Image src={path.join(ASSETS_PATH, 'marketing_2.png')} style={{ width: '100%', height: 100, objectFit: 'cover', borderRadius: 4 }} alt="Marketing 2" />
             </View>
         </View>
         <Text style={styles.caption}>Tableaux de bord Marketing & Analytics</Text>
@@ -456,13 +456,13 @@ const ManualPDF = () => (
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', marginTop: 15 }}>
              <View style={{ width: '30%', marginBottom: 10 }}>
-                {/* @ts-ignore */}
-                <Image src={path.join(ASSETS_PATH, 'website_menu.png')} style={{ width: '100%', height: 'auto', borderRadius: 4, borderWidth: 1, borderColor: THEME.colors.border }} />
+                {/* @ts-expect-error - Image alt not supported by react-pdf */}
+                <Image src={path.join(ASSETS_PATH, 'website_menu.png')} style={{ width: '100%', height: 'auto', borderRadius: 4, borderWidth: 1, borderColor: THEME.colors.border }} alt="Website Menu" />
                 <Text style={styles.caption}>Menu CMS</Text>
             </View>
             <View style={{ width: '65%', marginBottom: 10 }}>
-                {/* @ts-ignore */}
-                <Image src={path.join(ASSETS_PATH, 'website_1.png')} style={{ width: '100%', height: 'auto', borderRadius: 4, borderWidth: 1, borderColor: THEME.colors.border }} />
+                {/* @ts-expect-error - Image alt not supported by react-pdf */}
+                <Image src={path.join(ASSETS_PATH, 'website_1.png')} style={{ width: '100%', height: 'auto', borderRadius: 4, borderWidth: 1, borderColor: THEME.colors.border }} alt="Website 1" />
                 <Text style={styles.caption}>Édition de Contenu</Text>
             </View>
         </View>

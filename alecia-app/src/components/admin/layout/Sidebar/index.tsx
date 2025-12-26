@@ -22,7 +22,8 @@ import {
   Building2,
   Newspaper,
   UserPlus,
-  Terminal
+  Terminal,
+  BarChart
 } from "lucide-react";
 
 interface SidebarProps {
@@ -156,7 +157,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
-                          sidebarExpanded ? handleClick() : setSidebarExpanded("true");
+                          if (sidebarExpanded) {
+                            handleClick();
+                          } else {
+                            setSidebarExpanded("true");
+                          }
                         }}
                       >
                         <Briefcase className="w-5 h-5" />
@@ -246,6 +251,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     Base CRM
                     </Link>
                 </li>
+                <li>
+                    <Link
+                    href="/admin/charts"
+                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
+                        pathname.includes("charts") ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-sidebar-foreground/80"
+                    }`}
+                    >
+                    <BarChart className="w-5 h-5" />
+                    Studio Graphique
+                    </Link>
+                </li>
                  <li>
                     <Link
                     href="/admin/marketing"
@@ -272,7 +288,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     }`}
                     onClick={(e) => {
                         e.preventDefault();
-                        sidebarExpanded ? handleClick() : setSidebarExpanded("true");
+                        if (sidebarExpanded) {
+                            handleClick();
+                        } else {
+                            setSidebarExpanded("true");
+                        }
                     }}
                     >
                     <Globe className="w-5 h-5" />

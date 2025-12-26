@@ -1,11 +1,7 @@
 "use server";
 
 import { exec } from "child_process";
-import { promisify } from "util";
-import path from "path";
 import { auth } from "@/lib/auth";
-
-const execPromise = promisify(exec);
 
 export async function triggerCrawler(domain: string) {
   const session = await auth();
@@ -24,7 +20,7 @@ export async function triggerCrawler(domain: string) {
     
     // We don't await the full completion if it's long, but for small sites it's fine.
     // Or we run it in background.
-    exec(command, (error, stdout, stderr) => {
+    exec(command, (error, stdout) => {
         if (error) {
             console.error(`Crawler error: ${error.message}`);
             return;
@@ -33,7 +29,7 @@ export async function triggerCrawler(domain: string) {
     });
 
     return { success: true, message: "Crawler started in background." };
-  } catch (error) {
+  } catch {
     return { error: "Failed to trigger crawler" };
   }
 }

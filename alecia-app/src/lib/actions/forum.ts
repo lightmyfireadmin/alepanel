@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db";
 import { forumCategories, forumThreads, forumPosts, users } from "@/lib/db/schema";
-import { eq, desc, and, sql } from "drizzle-orm";
+import { eq, desc, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
 

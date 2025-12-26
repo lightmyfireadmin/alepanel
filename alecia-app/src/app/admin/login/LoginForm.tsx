@@ -49,7 +49,7 @@ export function LoginForm({ users }: { users: UserOption[] }) {
         router.push("/admin");
         router.refresh();
       }
-    } catch (error) {
+    } catch {
       setError("Erreur de connexion.");
       setIsLoading(false);
     }

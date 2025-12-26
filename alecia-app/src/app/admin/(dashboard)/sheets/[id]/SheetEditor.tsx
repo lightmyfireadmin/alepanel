@@ -9,8 +9,7 @@ import {
   Plus, 
   Loader2, 
   CheckCircle2, 
-  Trash2,
-  Table as TableIcon
+  Trash2
 } from "lucide-react";
 import { useToast } from "@/components/ui/toast";
 import ExcelJS from "exceljs";

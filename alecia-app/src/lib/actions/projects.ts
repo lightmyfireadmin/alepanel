@@ -2,9 +2,8 @@
 
 import { db } from "@/lib/db";
 import { projects, contacts, projectEvents } from "@/lib/db/schema";
-import { eq, desc, sql } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { auth } from "@/lib/auth";
 
 export async function getProjects() {
   try {
@@ -20,8 +19,8 @@ export async function getProjects() {
     .orderBy(desc(projects.createdAt));
 
     return { success: true, data: allProjects };
-  } catch (error) {
-    console.error("Failed to fetch projects:", error);
+  } catch {
+    console.error("Failed to fetch projects");
     return { success: false, error: "Failed to fetch projects" };
   }
 }
@@ -29,11 +28,12 @@ export async function getProjects() {
 export async function updateProjectStatus(id: string, status: string) {
     try {
         await db.update(projects)
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             .set({ status: status as any })
             .where(eq(projects.id, id));
         revalidatePath("/admin/projects");
         return { success: true };
-    } catch (error) {
+    } catch {
         return { error: "Failed to update status" };
     }
 }
@@ -47,7 +47,7 @@ export async function createProject(title: string, clientId?: string) {
         }).returning();
         revalidatePath("/admin/projects");
         return { success: true, data: project };
-    } catch (error) {
+    } catch {
         return { error: "Failed to create project" };
     }
 }

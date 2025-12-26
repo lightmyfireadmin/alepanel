@@ -3,7 +3,7 @@ import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, CheckCircle2, Loader2, XCircle, Clock } from "lucide-react";
+import { ArrowLeft, Loader2, Clock } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { ResearchActions } from "@/components/research/ResearchActions";
 

@@ -22,8 +22,8 @@ export async function getResearchHistory() {
     .orderBy(desc(researchTasks.createdAt));
 
     return { success: true, data: history };
-  } catch (error) {
-    console.error("Failed to fetch research history:", error);
+  } catch {
+    console.error("Failed to fetch research history");
     return { success: false, error: "Failed to fetch history" };
   }
 }
@@ -34,7 +34,7 @@ export async function getResearchTask(id: string) {
             where: eq(researchTasks.id, id)
         });
         return { success: true, data: task };
-    } catch (error) {
+    } catch {
         return { success: false, error: "Task not found" };
     }
 }
@@ -60,7 +60,7 @@ export async function startResearch(query: string) {
 
         revalidatePath("/admin/research");
         return { success: true, taskId: task.id };
-    } catch (error) {
+    } catch {
         return { success: false, error: "Failed to start research" };
     }
 }

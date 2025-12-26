@@ -1,12 +1,11 @@
 import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
 
-export default async function AdminDashboardLayout({
+export default async function DashboardLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
-  const session = await auth();
+}>) {
+  await auth();
 
   // ⚠️ TEMPORARY BYPASS FOR TESTING PHASE ONLY ⚠️
   // TODO: Re-enable authentication check before production deployment

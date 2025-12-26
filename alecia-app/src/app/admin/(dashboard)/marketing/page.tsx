@@ -5,10 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { generateContent, ContentType } from "@/app/actions/marketing";
-import { Loader2, Copy, Check, Sparkles, Image as ImageIcon, Save } from "lucide-react";
+import { generateContent, ContentType, generateImage } from "@/app/actions/marketing";
+import { Loader2, Copy, Check, Sparkles, Image as ImageIcon, Save, Key } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import ReactMarkdown from "react-markdown";
 import { createPad } from "@/lib/actions/pads";
@@ -19,7 +19,9 @@ export default function MarketingPage() {
   const [activeTab, setActiveTab] = useState<ContentType | "visuals">("article");
   const [prompt, setPrompt] = useState("");
   const [context, setContext] = useState("");
+  const [apiKey, setApiKey] = useState("");
   const [result, setResult] = useState("");
+  const [generatedImage, setGeneratedImage] = useState("");
   const [isPending, startTransition] = useTransition();
   const [copied, setCopied] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -33,7 +35,7 @@ export default function MarketingPage() {
         setProgress((prev) => (prev < 90 ? prev + 10 : prev));
       }, 500);
     } else {
-      setProgress(100);
+      setTimeout(() => setProgress(100), 0);
     }
     return () => clearInterval(interval);
   }, [isPending]);
@@ -42,6 +44,21 @@ export default function MarketingPage() {
     if (!prompt) return;
 
     if (activeTab === "visuals") {
+        if (!apiKey) {
+            error("Clé API requise", "Veuillez entrer une clé API OpenAI valide pour générer des images.");
+            return;
+        }
+
+        setProgress(0);
+        setGeneratedImage("");
+        startTransition(async () => {
+            const response = await generateImage(prompt, apiKey);
+            if (response.success && response.imageUrl) {
+                setGeneratedImage(response.imageUrl);
+            } else {
+                error("Erreur", response.error || "Impossible de générer l'image.");
+            }
+        });
         return;
     }
 
@@ -67,6 +84,23 @@ export default function MarketingPage() {
   };
 
   const handleSave = async () => {
+    if (activeTab === "visuals") {
+        if (!generatedImage) return;
+        setSaving(true);
+        // Create a markdown pad with the image
+        const title = prompt.length > 30 ? prompt.substring(0, 30) + "..." : prompt;
+        const content = `![Generated Image](${generatedImage})\n\nPrompt: ${prompt}`;
+        
+        const res = await createPad(`IMG: ${title}`, content);
+        if (res.success) {
+            success("Image sauvegardée", "Le lien a été enregistré dans Documents.");
+        } else {
+            error("Erreur", "Impossible de sauvegarder le document.");
+        }
+        setSaving(false);
+        return;
+    }
+
     if (!result) return;
     setSaving(true);
     // Truncate prompt for title if too long
@@ -97,7 +131,7 @@ export default function MarketingPage() {
                     <CardDescription>Choisissez le type de contenu à générer</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Tabs orientation="vertical" value={activeTab} onValueChange={(v) => { setActiveTab(v as ContentType | "visuals"); setResult(""); }} className="w-full">
+                  <Tabs orientation="vertical" value={activeTab} onValueChange={(v) => { setActiveTab(v as ContentType | "visuals"); setResult(""); setGeneratedImage(""); }} className="w-full">
                     <TabsList className="flex flex-col h-auto items-start bg-transparent space-y-1 p-0 w-full">
                       {/* Standard Tabs */}
                       <TabsTrigger value="article" className="w-full justify-start px-3 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Articles de Blog</TabsTrigger>
@@ -107,10 +141,10 @@ export default function MarketingPage() {
                       <TabsTrigger value="translation" className="w-full justify-start px-3 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Traductions</TabsTrigger>
                       <TabsTrigger value="carrousel" className="w-full justify-start px-3 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Contenu Carrousel</TabsTrigger>
                       
-                      {/* Visuals Tab with Badge */}
+                      {/* Visuals Tab */}
                       <TabsTrigger value="visuals" className="w-full justify-between px-3 py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                         <span>Visuels</span>
-                        <Badge variant="secondary" className="ml-2 text-[10px] h-5 px-1.5">Bientôt</Badge>
+                        <Badge variant="outline" className="ml-2 text-[10px] h-5 px-1.5 bg-background text-foreground border-border">Nouveau</Badge>
                       </TabsTrigger>
                     </TabsList>
                   </Tabs>
@@ -128,51 +162,57 @@ export default function MarketingPage() {
               <CardDescription>
                 {activeTab === 'article' && "Rédigez des articles complets pour votre blog."}
                 {activeTab === 'email' && "Créez des emails professionnels ou des newsletters."}
-                {activeTab === 'linkedin' && "Générez des posts optimisés pour l'engagement."}
+                {activeTab === 'linkedin' && "Générez des posts optimisés pour l&apos;engagement."}
                 {activeTab === 'advice' && "Obtenez des conseils stratégiques ou des analyses."}
                 {activeTab === 'translation' && "Traduisez vos textes avec précision."}
                 {activeTab === 'carrousel' && "Structurez le contenu pour vos présentations ou carrousels."}
-                {activeTab === 'visuals' && "Génération d'images IA."}
+                {activeTab === 'visuals' && "Générez des images uniques avec DALL-E 3."}
               </CardDescription>
             </CardHeader>
             <CardContent className="flex-1 space-y-4">
               
-              {activeTab === 'visuals' ? (
-                <div className="flex flex-col items-center justify-center h-[300px] text-center space-y-4 bg-muted/20 rounded-lg border border-dashed border-border p-8">
-                    <div className="bg-primary/10 p-4 rounded-full">
-                        <ImageIcon className="w-8 h-8 text-primary" />
-                    </div>
-                    <div className="space-y-2">
-                        <h3 className="font-semibold text-lg">Génération d'images bientôt disponible</h3>
-                        <p className="text-muted-foreground text-sm max-w-md">
-                            Nous finalisons l'intégration avec les modèles de diffusion pour vous permettre de créer des visuels uniques directement depuis cette interface.
-                        </p>
-                    </div>
-                    <Button disabled variant="outline">M'avertir lors de la sortie</Button>
-                </div>
-              ) : (
-                <>
+                <div className="space-y-4">
+                    {/* API Key Input for Visuals */}
+                    {activeTab === 'visuals' && (
+                        <div className="bg-primary/5 p-4 rounded-lg border border-primary/20 space-y-2">
+                            <Label htmlFor="apiKey" className="flex items-center gap-2 text-primary font-bold">
+                                <Key className="w-4 h-4" /> Clé API OpenAI (DALL-E)
+                            </Label>
+                            <Input 
+                                id="apiKey" 
+                                type="password" 
+                                placeholder="sk-..."
+                                value={apiKey} 
+                                onChange={(e) => setApiKey(e.target.value)}
+                                className="bg-background"
+                            />
+                            <p className="text-xs text-muted-foreground">Votre clé n&apos;est pas stockée et est utilisée uniquement pour cette session.</p>
+                        </div>
+                    )}
+
                     <div className="space-y-2">
                         <Label htmlFor="prompt">Sujet / Instructions</Label>
                         <Textarea
                         id="prompt"
-                        placeholder="De quoi voulez-vous parler ?"
+                        placeholder={activeTab === 'visuals' ? "Décrivez l'image que vous souhaitez générer..." : "De quoi voulez-vous parler ?"}
                         className="min-h-[100px]"
                         value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
                         />
                     </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="context">Contexte (Optionnel)</Label>
-                        <Textarea
-                        id="context"
-                        placeholder="Informations supplémentaires, ton, cible..."
-                        className="min-h-[60px]"
-                        value={context}
-                        onChange={(e) => setContext(e.target.value)}
-                        />
-                    </div>
+                    {activeTab !== 'visuals' && (
+                        <div className="space-y-2">
+                            <Label htmlFor="context">Contexte (Optionnel)</Label>
+                            <Textarea
+                            id="context"
+                            placeholder="Informations supplémentaires, ton, cible..."
+                            className="min-h-[60px]"
+                            value={context}
+                            onChange={(e) => setContext(e.target.value)}
+                            />
+                        </div>
+                    )}
 
                     <div className="space-y-2">
                         <Button
@@ -188,14 +228,17 @@ export default function MarketingPage() {
                             ) : (
                             <>
                                 <Sparkles className="mr-2 h-4 w-4" />
-                                Générer le contenu
+                                {activeTab === 'visuals' ? "Générer l'image" : "Générer le contenu"}
                             </>
                             )}
                         </Button>
                         {isPending && <Progress value={progress} className="h-1 w-full" />}
                     </div>
 
-                    {result && (
+                    {/* RESULTS DISPLAY */}
+                    
+                    {/* Text Result */}
+                    {result && activeTab !== 'visuals' && (
                         <div className="mt-6 space-y-2 fade-in">
                             <Tabs defaultValue="preview" className="w-full">
                                 <div className="flex items-center justify-between mb-2">
@@ -224,8 +267,28 @@ export default function MarketingPage() {
                             </Tabs>
                         </div>
                     )}
-                </>
-              )}
+
+                    {/* Image Result */}
+                    {generatedImage && activeTab === 'visuals' && (
+                        <div className="mt-6 space-y-4 fade-in">
+                            <div className="relative rounded-xl overflow-hidden border border-border bg-black/5 flex items-center justify-center">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={generatedImage} alt="Generated AI" className="max-w-full h-auto max-h-[500px] rounded-lg shadow-lg" />
+                            </div>
+                            <div className="flex justify-end gap-2">
+                                <Button variant="outline" onClick={handleSave} disabled={saving}>
+                                    {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
+                                    Sauvegarder dans Documents
+                                </Button>
+                                <Button asChild>
+                                    <a href={generatedImage} target="_blank" rel="noopener noreferrer" download="generated-image.png">
+                                        <ImageIcon className="mr-2 h-4 w-4" /> Télécharger
+                                    </a>
+                                </Button>
+                            </div>
+                        </div>
+                    )}
+                </div>
             </CardContent>
           </Card>
         </div>

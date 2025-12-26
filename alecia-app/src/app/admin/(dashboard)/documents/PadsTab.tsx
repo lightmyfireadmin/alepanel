@@ -37,7 +37,10 @@ export function PadsTab() {
   }, []);
 
   useEffect(() => {
-    fetchPads();
+    const load = async () => {
+        await fetchPads();
+    };
+    load();
   }, [fetchPads]);
 
   const handleCreate = async () => {

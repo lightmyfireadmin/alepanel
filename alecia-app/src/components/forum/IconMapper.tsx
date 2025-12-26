@@ -1,6 +1,6 @@
 "use client";
 
-import { Megaphone, Briefcase, Eye, Coffee, Folder, MessageSquare, type LucideIcon } from "lucide-react";
+import { Megaphone, Briefcase, Eye, Coffee, Folder, type LucideIcon } from "lucide-react";
 
 const iconMap: Record<string, LucideIcon> = {
   "Megaphone": Megaphone,

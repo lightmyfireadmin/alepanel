@@ -19,8 +19,8 @@ export async function getPads() {
     .orderBy(desc(pads.updatedAt));
 
     return { success: true, data: allPads };
-  } catch (error) {
-    console.error("Failed to fetch pads:", error);
+  } catch {
+    console.error("Failed to fetch pads");
     return { success: false, error: "Failed to fetch documents" };
   }
 }
@@ -32,7 +32,7 @@ export async function getPad(id: string) {
         });
         if (!pad) return { success: false, error: "Pad not found" };
         return { success: true, data: pad };
-    } catch (error) {
+    } catch {
         return { success: false, error: "Failed to fetch pad" };
     }
 }
@@ -50,7 +50,7 @@ export async function createPad(title: string, initialContent: string = "") {
 
         revalidatePath("/admin/documents");
         return { success: true, data: newPad };
-    } catch (error) {
+    } catch {
         return { success: false, error: "Failed to create document" };
     }
 }
@@ -81,7 +81,7 @@ export async function updatePad(id: string, content: string, title?: string) {
 
         revalidatePath(`/admin/documents`);
         return { success: true };
-    } catch (error) {
+    } catch {
         return { success: false, error: "Failed to update document" };
     }
 }
@@ -91,7 +91,7 @@ export async function deletePad(id: string) {
         await db.delete(pads).where(eq(pads.id, id));
         revalidatePath("/admin/documents");
         return { success: true };
-    } catch (error) {
+    } catch {
         return { success: false, error: "Failed to delete document" };
     }
 }

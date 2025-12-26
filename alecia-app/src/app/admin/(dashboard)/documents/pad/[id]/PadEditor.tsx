@@ -10,10 +10,9 @@ import { useToast } from "@/components/ui/toast";
 interface PadEditorProps {
   id: string;
   initialContent: string;
-  initialTitle: string;
 }
 
-export function PadEditor({ id, initialContent, initialTitle }: PadEditorProps) {
+export function PadEditor({ id, initialContent }: PadEditorProps) {
   const [content, setContent] = useState(initialContent);
   const [saving, setSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);

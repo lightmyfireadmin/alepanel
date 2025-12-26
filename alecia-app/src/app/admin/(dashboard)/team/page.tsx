@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Breadcrumb from "@/components/admin/ui/Breadcrumb";
 import {
-  Plus, Pencil, Trash2, Users, Search, Linkedin, Mail, Phone, MoreVertical
+  Plus, Pencil, Trash2, Search, Linkedin
 } from "lucide-react";
 import { teamMembers as initialTeamMembers } from "@/lib/data";
 import {
@@ -74,18 +73,6 @@ const ROLES = [
   "Stagiaire",
 ];
 
-const SECTORS = [
-  "technologies-logiciels",
-  "distribution-services-b2b",
-  "distribution-services-b2c",
-  "sante",
-  "immobilier-construction",
-  "industries",
-  "services-financiers-assurance",
-  "agroalimentaire",
-  "energie-environnement",
-];
-
 export default function TeamAdminPage() {
   const [members, setMembers] = useState<TeamMember[]>(INITIAL_TEAM);
   const [searchQuery, setSearchQuery] = useState("");
@@ -125,15 +112,6 @@ export default function TeamAdminPage() {
     if (confirm("Supprimer ce membre ?")) {
       setMembers((prev) => prev.filter((m) => m.id !== id));
     }
-  };
-
-  const toggleSectorExpertise = (sector: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      sectorsExpertise: prev.sectorsExpertise.includes(sector)
-        ? prev.sectorsExpertise.filter((s) => s !== sector)
-        : [...prev.sectorsExpertise, sector],
-    }));
   };
 
   const generateSlug = (name: string) => {
@@ -256,6 +234,7 @@ export default function TeamAdminPage() {
                 <div className="h-14 w-14 rounded-full overflow-hidden bg-gray-200">
                      {/* Using next/image would be better but keeping simple for now, relying on src if available */}
                      {member.photo ? (
+                         /* eslint-disable-next-line @next/next/no-img-element */
                          <img src={member.photo} alt={member.name} className="h-full w-full object-cover" />
                      ) : (
                          <div className="h-full w-full flex items-center justify-center text-xl font-bold text-gray-500">

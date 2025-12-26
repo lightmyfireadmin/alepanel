@@ -19,8 +19,8 @@ export async function getSheets() {
     .orderBy(desc(spreadsheets.updatedAt));
 
     return { success: true, data: allSheets };
-  } catch (error) {
-    console.error("Failed to fetch sheets:", error);
+  } catch {
+    console.error("Failed to fetch sheets");
     return { success: false, error: "Failed to fetch spreadsheets" };
   }
 }

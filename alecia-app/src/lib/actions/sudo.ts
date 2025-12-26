@@ -237,7 +237,7 @@ export async function toggleMaintenanceMode(enabled: boolean): Promise<{ success
                 set: { value: enabled ? "true" : "false", updatedAt: new Date() }
             });
         return { success: true };
-    } catch (error) {
+    } catch {
         return { success: false };
     }
 }
@@ -248,7 +248,7 @@ export async function getMaintenanceMode(): Promise<boolean> {
             where: eq(systemConfig.key, "maintenance_mode")
         });
         return config?.value === "true";
-    } catch (error) {
+    } catch {
         return false;
     }
 }

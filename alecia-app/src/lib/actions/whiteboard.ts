@@ -15,8 +15,8 @@ export async function saveWhiteboardState(name: string, content: unknown) {
     });
     revalidatePath("/admin/whiteboard");
     return { success: true };
-  } catch (error) {
-    console.error("Failed to save whiteboard:", error);
+  } catch {
+    console.error("Failed to save whiteboard");
     return { success: false, error: "Failed to save" };
   }
 }
@@ -33,7 +33,7 @@ export async function getSavedWhiteboards() {
     .orderBy(desc(documents.updatedAt));
     
     return { success: true, data };
-  } catch (error) {
+  } catch {
     return { success: false, error: "Failed to fetch whiteboards" };
   }
 }
@@ -45,7 +45,7 @@ export async function getWhiteboardContent(id: string) {
     });
     if (!doc) return { success: false, error: "Not found" };
     return { success: true, data: doc.content };
-  } catch (error) {
+  } catch {
     return { success: false, error: "Failed to load content" };
   }
 }

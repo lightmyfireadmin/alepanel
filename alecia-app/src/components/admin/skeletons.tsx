@@ -1,6 +1,4 @@
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
 export function DashboardSkeleton() {
   return (
     <div className="space-y-8 pb-8 animate-pulse">

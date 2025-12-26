@@ -12,6 +12,26 @@ interface ProjectDetailPageProps {
   params: Promise<{ id: string }>;
 }
 
+interface ProjectEvent {
+  type: string;
+  date: string;
+}
+
+interface ProjectData {
+  id: string;
+  title: string;
+  status: string;
+  startDate: string | null;
+  targetCloseDate: string | null;
+  createdAt: Date | null;
+  description: string | null;
+  client: {
+    name: string | null;
+    sector: string | null;
+  } | null;
+  events: ProjectEvent[];
+}
+
 export default async function ProjectDetailPage({ params }: ProjectDetailPageProps) {
   const { id } = await params;
   const result = await getProject(id);
@@ -29,9 +49,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
     );
   }
 
-  // Cast to include joined relations from server action
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const project = result.data as any;
+  const project = result.data as unknown as ProjectData;
   
   const daysUntilClose = project.targetCloseDate 
     ? Math.ceil((new Date(project.targetCloseDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
@@ -44,7 +62,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
         dateFormat  YYYY-MM-DD
         section Projet
         Début :active, start, ${project.startDate || (project.createdAt instanceof Date ? project.createdAt.toISOString().split('T')[0] : "2025-01-01")}, 30d
-        ${project.events?.map((e: any) => `${e.type} : ${e.date}, 5d`).join('\n') || ""}
+        ${project.events?.map((e) => `${e.type} : ${e.date}, 5d`).join('\n') || ""}
         Closing : milestone, ${project.targetCloseDate || "2025-12-24"}, 0d
   `;
 
