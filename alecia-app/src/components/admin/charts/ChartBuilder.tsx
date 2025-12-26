@@ -1,16 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { EChart } from "@/components/charts/EChart";
-import { Loader2, Sparkles, Download } from "lucide-react";
+import { Loader2, Sparkles, Download, Upload } from "lucide-react";
 import * as echarts from "echarts";
+import ExcelJS from "exceljs";
 
 type ChartType = "line" | "bar" | "pie" | "area" | "scatter";
+type LegendPosition = "top" | "bottom" | "left" | "right";
 
 export function ChartBuilder() {
   const [dataInput, setDataInput] = useState("Mois,Ventes,Objectif\nJan,12000,10000\nFev,19000,12000\nMar,15000,14000\nAvr,22000,16000");
@@ -18,6 +22,48 @@ export function ChartBuilder() {
   const [chartOption, setChartOption] = useState<echarts.EChartsOption | null>(null);
   const [generating, setGenerating] = useState(false);
   const [format, setFormat] = useState<"csv" | "json">("csv");
+  
+  // Customization State
+  const [primaryColor, setPrimaryColor] = useState("#3b82f6");
+  const [legendPosition, setLegendPosition] = useState<LegendPosition>("top");
+  const [showLabels, setShowLabels] = useState(false);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const chartInstanceRef = useRef<echarts.ECharts | null>(null);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    if (file.name.endsWith(".csv")) {
+      reader.onload = (event) => {
+        const text = event.target?.result as string;
+        setDataInput(text);
+        setFormat("csv");
+      };
+      reader.readAsText(file);
+    } else if (file.name.endsWith(".xlsx")) {
+        const workbook = new ExcelJS.Workbook();
+        const buffer = await file.arrayBuffer();
+        await workbook.xlsx.load(buffer);
+        const worksheet = workbook.getWorksheet(1);
+        
+        if (worksheet) {
+            const rows: string[] = [];
+            worksheet.eachRow((row, _rowNumber) => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const rowValues = (row.values as any[]).slice(1).join(",");
+                rows.push(rowValues);
+            });
+            setDataInput(rows.join("\n"));
+            setFormat("csv");
+        }
+    } else {
+        alert("Format non supporté. Utilisez .csv ou .xlsx");
+    }
+  };
 
   const generateChart = () => {
     setGenerating(true);
@@ -37,9 +83,8 @@ export function ChartBuilder() {
                 const firstItem = parsed[0] as any;
                 headers = Object.keys(firstItem);
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                categories = parsed.map((item: any) => item[headers[0]]); // Assume first key is category
+                categories = parsed.map((item: any) => item[headers[0]]); 
                 
-                // For JSON, we iterate over keys skipping the first one
                 headers.slice(1).forEach(key => {
                      seriesData.push({
                         name: key,
@@ -49,11 +94,11 @@ export function ChartBuilder() {
                         smooth: true,
                         areaStyle: chartType === 'area' ? { opacity: 0.3 } : undefined,
                         itemStyle: { borderRadius: 4 },
+                        label: { show: showLabels, position: 'top' }
                      });
                 });
 
             } else {
-                // Parse CSV-like input
                 const lines = dataInput.trim().split("\n");
                 headers = lines[0].split(",");
                 const rows = lines.slice(1).map(line => line.split(","));
@@ -61,7 +106,6 @@ export function ChartBuilder() {
                 categories = rows.map(row => row[0]);
                 
                 if (chartType === 'pie') {
-                    // For Pie, we usually just take the first value column
                     const valueIndex = 1; 
                     const pieData = rows.map(row => ({
                         name: row[0],
@@ -79,8 +123,9 @@ export function ChartBuilder() {
                             borderWidth: 2
                         },
                         label: {
-                            show: false,
-                            position: 'center'
+                            show: showLabels,
+                            position: showLabels ? 'outside' : 'center',
+                            formatter: '{b}: {c} ({d}%)'
                         },
                         emphasis: {
                             label: {
@@ -90,7 +135,7 @@ export function ChartBuilder() {
                             }
                         },
                         labelLine: {
-                            show: false
+                            show: showLabels
                         },
                         data: pieData
                     }];
@@ -102,6 +147,7 @@ export function ChartBuilder() {
                         smooth: true,
                         areaStyle: chartType === 'area' ? { opacity: 0.3 } : undefined,
                         itemStyle: { borderRadius: 4 },
+                        label: { show: showLabels, position: 'top' }
                     }));
                 }
             }
@@ -123,13 +169,27 @@ export function ChartBuilder() {
             }
 
             const option: echarts.EChartsOption = {
+                color: [primaryColor, '#f59e0b', '#10b981', '#8b5cf6', '#ec4899'],
                 tooltip: { trigger: chartType === 'pie' ? 'item' : 'axis' },
-                legend: { data: chartType === 'pie' ? categories : headers.slice(1), textStyle: { color: 'var(--foreground)' } },
+                legend: { 
+                    data: chartType === 'pie' ? categories : headers.slice(1), 
+                    textStyle: { color: 'var(--foreground)' },
+                    top: legendPosition === 'top' ? 0 : 'auto',
+                    bottom: legendPosition === 'bottom' ? 0 : 'auto',
+                    left: legendPosition === 'left' ? 0 : (legendPosition === 'top' || legendPosition === 'bottom' ? 'center' : 'auto'),
+                    right: legendPosition === 'right' ? 0 : 'auto',
+                    orient: (legendPosition === 'left' || legendPosition === 'right') ? 'vertical' : 'horizontal'
+                },
                 grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
                 xAxis: xAxis,
                 yAxis: yAxis,
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                series: seriesData as any
+                series: seriesData as any,
+                toolbox: {
+                    feature: {
+                        saveAsImage: { title: "Sauvegarder", show: true }
+                    }
+                }
             };
 
             setChartOption(option);
@@ -140,12 +200,29 @@ export function ChartBuilder() {
     }, 500);
   };
 
+  const handleExport = () => {
+    // ECharts provides a built-in saveAsImage tool in toolbox, 
+    // but if we want a custom button we can trigger a download of the data or use the instance.
+    // Accessing the instance from the custom EChart wrapper might require passing a ref.
+    // For now, we enabled toolbox.saveAsImage above which appears on the chart.
+    // We can also download the CSV data.
+    const blob = new Blob([dataInput], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "chart_data.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="space-y-6">
         <Card>
             <CardHeader>
-                <CardTitle>Données</CardTitle>
+                <CardTitle>Configuration</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
@@ -163,19 +240,67 @@ export function ChartBuilder() {
                         </Select>
                     </div>
                     <div className="space-y-2">
-                        <Label>Format</Label>
-                        <Select value={format} onValueChange={(v) => setFormat(v as "csv" | "json")}>
+                        <Label>Couleur Ppal.</Label>
+                        <div className="flex gap-2">
+                            <Input 
+                                type="color" 
+                                value={primaryColor} 
+                                onChange={(e) => setPrimaryColor(e.target.value)} 
+                                className="w-12 h-10 p-1"
+                            />
+                            <Input 
+                                value={primaryColor} 
+                                onChange={(e) => setPrimaryColor(e.target.value)} 
+                                className="flex-1"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label>Légende</Label>
+                        <Select value={legendPosition} onValueChange={(v) => setLegendPosition(v as LegendPosition)}>
                             <SelectTrigger><SelectValue /></SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="csv">CSV</SelectItem>
-                                <SelectItem value="json">JSON</SelectItem>
+                                <SelectItem value="top">Haut</SelectItem>
+                                <SelectItem value="bottom">Bas</SelectItem>
+                                <SelectItem value="left">Gauche</SelectItem>
+                                <SelectItem value="right">Droite</SelectItem>
                             </SelectContent>
                         </Select>
+                    </div>
+                    <div className="space-y-2 flex flex-col justify-end pb-2">
+                        <div className="flex items-center gap-2">
+                            <Switch id="labels" checked={showLabels} onCheckedChange={setShowLabels} />
+                            <Label htmlFor="labels">Afficher Valeurs</Label>
+                        </div>
                     </div>
                 </div>
 
                 <div className="space-y-2">
-                    <Label>Données ({format.toUpperCase()})</Label>
+                    <div className="flex justify-between items-center">
+                        <Label>Données</Label>
+                        <div className="flex gap-2">
+                            <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={() => fileInputRef.current?.click()}>
+                                <Upload className="w-3 h-3 mr-1" /> Importer
+                            </Button>
+                            <input 
+                                type="file" 
+                                ref={fileInputRef} 
+                                onChange={handleFileUpload} 
+                                className="hidden" 
+                                accept=".csv,.xlsx"
+                            />
+                            <Select value={format} onValueChange={(v) => setFormat(v as "csv" | "json")}>
+                                <SelectTrigger className="h-6 w-20 text-xs"><SelectValue /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="csv">CSV</SelectItem>
+                                    <SelectItem value="json">JSON</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
                     <Textarea 
                         value={dataInput} 
                         onChange={(e) => setDataInput(e.target.value)} 
@@ -196,11 +321,16 @@ export function ChartBuilder() {
         <Card className="h-full min-h-[500px]">
             <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Aperçu</CardTitle>
-                {chartOption && (
-                    <Button variant="outline" size="sm">
-                        <Download className="mr-2 h-4 w-4" /> Exporter
+                <div className="flex gap-2">
+                    {chartOption && (
+                        <p className="text-xs text-muted-foreground self-center mr-2">
+                            💡 Utilisez le bouton de téléchargement sur le graphique
+                        </p>
+                    )}
+                    <Button variant="outline" size="sm" onClick={handleExport} disabled={!chartOption}>
+                        <Download className="mr-2 h-4 w-4" /> Export Données
                     </Button>
-                )}
+                </div>
             </CardHeader>
             <CardContent className="h-[400px] flex items-center justify-center bg-gray-50 dark:bg-meta-4/10 rounded-lg border border-dashed border-stroke dark:border-strokedark m-4">
                 {chartOption ? (
