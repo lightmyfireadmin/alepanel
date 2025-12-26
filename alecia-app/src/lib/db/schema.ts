@@ -164,6 +164,7 @@ export const contacts = pgTable("contacts", {
 }, (table) => {
   return {
     companyIdIdx: index("contacts_company_id_idx").on(table.companyId),
+    tagsIdx: index("contacts_tags_idx").using("gin", table.tags),
   };
 });
 
@@ -279,6 +280,8 @@ export const buyerCriteria = pgTable("buyer_criteria", {
   updatedAt: timestamp("updated_at").defaultNow(),
 }, (table) => ({
   contactIdIdx: index("buyer_criteria_contact_id_idx").on(table.contactId),
+  targetSectorsIdx: index("buyer_criteria_target_sectors_idx").using("gin", table.targetSectors),
+  targetRegionsIdx: index("buyer_criteria_target_regions_idx").using("gin", table.targetRegions),
 }));
 
 // =============================================================================
