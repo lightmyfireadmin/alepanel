@@ -177,10 +177,17 @@ export function WhiteboardEditor() {
         </div>
       </div>
 
-      <div className="flex-1 border border-border rounded-lg overflow-hidden bg-card relative">
+      <div className="flex-1 border border-border rounded-lg overflow-hidden bg-card relative isolate" style={{ height: "100%", width: "100%" }}>
          <Excalidraw
            theme={theme === "dark" ? "dark" : "light"}
            excalidrawAPI={(api) => setExcalidrawAPI(api)}
+           UIOptions={{
+             canvasActions: {
+               saveToActiveFile: false,
+               loadScene: false,
+               export: { saveFileToDisk: true },
+             },
+           }}
          />
       </div>
     </div>
