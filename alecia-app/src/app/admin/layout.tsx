@@ -14,22 +14,16 @@ export default function AdminLayout({
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  // Removed aggressive client check to allow SSR/improved UX
+  // If specific components need client-only rendering, handle them individually
 
   // Login page layout bypass
   if (pathname === "/admin/login") {
     return <>{children}</>;
   }
 
-  // Prevent hydration mismatch for client-only components
-  if (!isClient) return null;
-
   return (
-    <div className="dark:bg-boxdark-2 dark:text-bodydark">
+    <div className="bg-background text-foreground min-h-screen">
       {/* <!-- ===== Page Wrapper Start ===== --> */}
       <div className="flex h-screen overflow-hidden">
         {/* <!-- ===== Sidebar Start ===== --> */}
@@ -37,7 +31,7 @@ export default function AdminLayout({
         {/* <!-- ===== Sidebar End ===== --> */}
 
         {/* <!-- ===== Content Area Start ===== --> */}
-        <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+        <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden bg-muted/20 dark:bg-muted/10">
           {/* <!-- ===== Header Start ===== --> */}
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
           {/* <!-- ===== Header End ===== --> */}

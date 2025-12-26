@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Plus, FileText, Trash2, MoreVertical, ExternalLink, Loader2, Clock, User as UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getPads, createPad, deletePad } from "@/lib/actions/pads";
@@ -21,18 +21,18 @@ export function PadsTab() {
   const [creating, setCreating] = useState(false);
   const { success, error: errorToast } = useToast();
 
-  const fetchPads = async () => {
+  const fetchPads = useCallback(async () => {
     setLoading(true);
     const res = await getPads();
     if (res.success) {
       setPads(res.data || []);
     }
     setLoading(false);
-  };
+  }, []);
 
   useEffect(() => {
     fetchPads();
-  }, []);
+  }, [fetchPads]);
 
   const handleCreate = async () => {
     const title = prompt("Nom du document :", "Nouveau document");

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { User, Settings, LogOut, ChevronDown } from "lucide-react";
-// import { signOut } from "next-auth/react"; // Assuming next-auth, but we might use server action for logout
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -44,17 +43,17 @@ const DropdownUser = () => {
         href="#"
       >
         <span className="hidden text-right lg:block">
-          <span className="block text-sm font-medium text-black dark:text-white">
+          <span className="block text-sm font-medium text-foreground">
             Admin User
           </span>
-          <span className="block text-xs">Administrator</span>
+          <span className="block text-xs text-muted-foreground">Administrator</span>
         </span>
 
-        <div className="h-12 w-12 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center">
-             <User className="w-6 h-6 text-gray-500" />
+        <div className="h-12 w-12 rounded-full bg-muted overflow-hidden flex items-center justify-center border border-border">
+             <User className="w-6 h-6 text-muted-foreground" />
         </div>
 
-        <ChevronDown className="hidden sm:block" width={12} height={12} />
+        <ChevronDown className="hidden sm:block text-muted-foreground" width={12} height={12} />
       </Link>
 
       {/* <!-- Dropdown Start --> */}
@@ -62,15 +61,15 @@ const DropdownUser = () => {
         ref={dropdown}
         onFocus={() => setDropdownOpen(true)}
         onBlur={() => setDropdownOpen(false)}
-        className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark ${
+        className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-border bg-card shadow-lg z-50 ${
           dropdownOpen === true ? "block" : "hidden"
         }`}
       >
-        <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
+        <ul className="flex flex-col gap-5 border-b border-border px-6 py-7.5">
           <li>
             <Link
               href="/admin/settings"
-              className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+              className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base text-foreground"
             >
               <User className="w-5 h-5" />
               My Profile
@@ -79,14 +78,14 @@ const DropdownUser = () => {
           <li>
             <Link
               href="/admin/settings"
-              className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+              className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base text-foreground"
             >
               <Settings className="w-5 h-5" />
               Account Settings
             </Link>
           </li>
         </ul>
-        <button className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <button className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base text-foreground">
           <LogOut className="w-5 h-5" />
           Log Out
         </button>

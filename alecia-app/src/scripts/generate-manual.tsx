@@ -219,6 +219,13 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     fontSize: 9,
     color: THEME.colors.secondary,
+  },
+  bulletPoint: {
+    fontSize: 12,
+    marginBottom: 5,
+    marginLeft: 10,
+    lineHeight: 1.4,
+    color: THEME.colors.textMain,
   }
 });
 
@@ -288,14 +295,14 @@ const ManualPDF = () => (
       <View style={styles.content}>
         <Text style={styles.h1}>Bienvenue sur Alecia OS</Text>
         <Text style={styles.text}>
-          Alecia OS est la plateforme centrale pilotant l'activité de conseil M&A. 
+          Alecia OS est la plateforme centrale pilotant l&apos;activité de conseil M&A. 
           Elle unifie la gestion des deals, la recherche de marché, et la collaboration équipe 
           dans une interface unique, sécurisée et performante.
         </Text>
 
         <Text style={styles.h2}>Accès et Sécurité</Text>
         <Text style={styles.text}>
-          La sécurité est au cœur du système. L'authentification utilise une protection contre 
+          La sécurité est au cœur du système. L&apos;authentification utilise une protection contre 
           les attaques par force brute et une gestion stricte des rôles.
         </Text>
 
@@ -317,13 +324,13 @@ const ManualPDF = () => (
     <Page size="A4" style={styles.page}>
       <Header title="Tableau de Bord" />
       <View style={styles.content}>
-        <Text style={styles.h1}>Pilotage de l'Activité</Text>
+        <Text style={styles.h1}>Pilotage de l&apos;Activité</Text>
         
         <Text style={styles.h2}>Le Dashboard</Text>
         <Text style={styles.text}>
           Dès la connexion, le tableau de bord offre une vue synthétique des opérations.
           Il regroupe les indicateurs clés (Pipeline, Deals Actifs), un accès rapide aux outils 
-          courants, et un fil d'actualité des discussions récentes.
+          courants, et un fil d&apos;actualité des discussions récentes.
         </Text>
 
         <Screenshot src="dashboard.png" caption="Vue d'ensemble du Dashboard avec KPIs et Widgets" />
@@ -347,7 +354,7 @@ const ManualPDF = () => (
 
         <Text style={styles.h2}>Kanban Interactif</Text>
         <Text style={styles.text}>
-          Le cœur du système pour le suivi des mandats. L'interface visuelle permet de 
+          Le cœur du système pour le suivi des mandats. L&apos;interface visuelle permet de 
           déplacer les dossiers entre les phases (Lead, Due Diligence, Closing, Closed).
         </Text>
 
@@ -371,8 +378,8 @@ const ManualPDF = () => (
       <View style={styles.content}>
         <Text style={styles.h1}>CRM Centralisé</Text>
         <Text style={styles.text}>
-          Une base de données unifiée pour gérer l'ensemble de l'écosystème : 
-          Cédants, Acquéreurs, Fonds d'Investissement, et Conseils.
+          Une base de données unifiée pour gérer l&apos;ensemble de l&apos;écosystème : 
+          Cédants, Acquéreurs, Fonds d&apos;Investissement, et Conseils.
         </Text>
 
         <Screenshot src="crm.png" caption="Interface CRM avec filtres, recherche et export Excel" />
@@ -411,21 +418,21 @@ const ManualPDF = () => (
 
     {/* 7. ANALYTICS & SPREADSHEETS */}
     <Page size="A4" style={styles.page}>
-      <Header title="Outils d'Analyse" />
+      <Header title="Outils d&apos;Analyse" />
       <View style={styles.content}>
         <Text style={styles.h1}>Suite Financière</Text>
         
         <Text style={styles.h2}>Alecia Sheets</Text>
         <Text style={styles.text}>
           Un tableur intégré pour vos modélisations rapides, listes de cibles ou 
-          calculs de valorisation, sans quitter l'interface.
+          calculs de valorisation, sans quitter l&apos;interface.
         </Text>
 
         <Screenshot src="spreadsheet.png" caption="Éditeur de tableur avec gestion de colonnes/lignes" />
 
         <Text style={styles.h2}>Marketing Studio</Text>
         <Text style={styles.text}>
-          Suivez la performance des campagnes et l'engagement sur le site public.
+          Suivez la performance des campagnes et l&apos;engagement sur le site public.
         </Text>
         
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
@@ -446,8 +453,8 @@ const ManualPDF = () => (
       <View style={styles.content}>
         <Text style={styles.h1}>CMS Intégré</Text>
         <Text style={styles.text}>
-          Pilotez le contenu du site public (alecia.fr) directement depuis l'OS. 
-          Modifiez les actualités, l'équipe, et les pages sectorielles en temps réel.
+          Pilotez le contenu du site public (alecia.fr) directement depuis l&apos;OS. 
+          Modifiez les actualités, l&apos;équipe, et les pages sectorielles en temps réel.
         </Text>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', marginTop: 15 }}>
@@ -462,9 +469,9 @@ const ManualPDF = () => (
         </View>
 
         <Text style={styles.h2}>Capacités</Text>
-        <Text style={styles.bulletPoint}>• Newsroom : Publication d'articles et communiqués.</Text>
+        <Text style={styles.bulletPoint}>• Newsroom : Publication d&apos;articles et communiqués.</Text>
         <Text style={styles.bulletPoint}>• Équipe : Mise à jour des bios et photos des associés.</Text>
-        <Text style={styles.bulletPoint}>• Carrières : Gestion des offres d'emploi.</Text>
+        <Text style={styles.bulletPoint}>• Carrières : Gestion des offres d&apos;emploi.</Text>
       </View>
       <Text style={{ ...styles.coverFooter, left: 40, right: 40, textAlign: 'center' }}>
         Alecia OS Documentation 3.0 • Généré le {new Date().toLocaleDateString('fr-FR')}

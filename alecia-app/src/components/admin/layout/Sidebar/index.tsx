@@ -75,17 +75,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-[#1C2434] duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
+      className={`absolute left-0 top-0 z-50 flex h-screen w-72.5 flex-col overflow-y-hidden bg-sidebar text-sidebar-foreground duration-300 ease-linear border-r border-sidebar-border lg:static lg:translate-x-0 ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
       {/* <!-- SIDEBAR HEADER --> */}
       <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
         <Link href="/admin" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded bg-primary flex items-center justify-center text-white font-bold text-xl">
+            <div className="w-8 h-8 rounded bg-primary flex items-center justify-center text-primary-foreground font-bold text-xl">
                 A
             </div>
-            <span className="text-white text-xl font-semibold">Alecia OS</span>
+            <span className="text-xl font-semibold">Alecia OS</span>
         </Link>
 
         <button
@@ -93,7 +93,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           onClick={() => setSidebarOpen(!sidebarOpen)}
           aria-controls="sidebar"
           aria-expanded={sidebarOpen}
-          className="block lg:hidden text-white"
+          className="block lg:hidden text-sidebar-foreground"
         >
           <ArrowLeft className="w-6 h-6" />
         </button>
@@ -106,13 +106,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           
           {/* DASHBOARD */}
           <div>
-            <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">PRINCIPAL</h3>
+            <h3 className="mb-4 ml-4 text-sm font-semibold text-sidebar-foreground/70">PRINCIPAL</h3>
             <ul className="mb-6 flex flex-col gap-1.5">
               <li>
                 <Link
                   href="/admin"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname === "/admin" ? "bg-graydark dark:bg-meta-4 text-white" : "text-bodydark1"
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
+                    pathname === "/admin" ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-sidebar-foreground/80"
                   }`}
                 >
                   <LayoutDashboard className="w-5 h-5" />
@@ -124,13 +124,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
           {/* COMMUNICATION */}
           <div>
-            <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">COMMUNICATION</h3>
+            <h3 className="mb-4 ml-4 text-sm font-semibold text-sidebar-foreground/70">COMMUNICATION</h3>
             <ul className="mb-6 flex flex-col gap-1.5">
                 <li>
                     <Link
                     href="/admin/forum"
-                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                        pathname.includes("forum") ? "bg-graydark dark:bg-meta-4 text-white" : "text-bodydark1"
+                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
+                        pathname.includes("forum") ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-sidebar-foreground/80"
                     }`}
                     >
                     <MessageSquare className="w-5 h-5" />
@@ -142,7 +142,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
           {/* COLLABORATION */}
           <div>
-            <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">COLLABORATION</h3>
+            <h3 className="mb-4 ml-4 text-sm font-semibold text-sidebar-foreground/70">COLLABORATION</h3>
             <ul className="mb-6 flex flex-col gap-1.5">
               <SidebarLinkGroup
                 activeCondition={pathname.includes("deals") || pathname.includes("projects")}
@@ -152,8 +152,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <React.Fragment>
                       <Link
                         href="#"
-                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          (pathname.includes("deals") || pathname.includes("projects")) && "bg-graydark dark:bg-meta-4 text-white"
+                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
+                          (pathname.includes("deals") || pathname.includes("projects")) && "bg-sidebar-accent text-sidebar-accent-foreground"
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
@@ -162,17 +162,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       >
                         <Briefcase className="w-5 h-5" />
                         Transactions & Projets
-                        <ChevronDown className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && "rotate-180"}`} width={20} height={20} />
+                        <ChevronDown className={`absolute right-4 top-1/2 -translate-y-1/2 ${open && "rotate-180"}`} width={20} height={20} />
                       </Link>
                       <div className={`translate transform overflow-hidden ${!open && "hidden"}`}>
                         <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
                           <li>
-                            <Link href="/admin/deals" className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname === "/admin/deals" && "text-white"}`}>
+                            <Link href="/admin/deals" className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium duration-300 ease-in-out hover:text-sidebar-foreground ${pathname === "/admin/deals" ? "text-sidebar-foreground" : "text-sidebar-foreground/60"}`}>
                               Portefeuille (Tombstones)
                             </Link>
                           </li>
                           <li>
-                            <Link href="/admin/projects" className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname === "/admin/projects" && "text-white"}`}>
+                            <Link href="/admin/projects" className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium duration-300 ease-in-out hover:text-sidebar-foreground ${pathname === "/admin/projects" ? "text-sidebar-foreground" : "text-sidebar-foreground/60"}`}>
                               Kanban Opérationnel
                             </Link>
                           </li>
@@ -186,8 +186,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <Link
                   href="/admin/whiteboard"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("whiteboard") ? "bg-graydark dark:bg-meta-4 text-white" : "text-bodydark1"
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
+                    pathname.includes("whiteboard") ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-sidebar-foreground/80"
                   }`}
                 >
                   <PenTool className="w-5 h-5" />
@@ -198,8 +198,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <Link
                   href="/admin/sheets"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("sheets") ? "bg-graydark dark:bg-meta-4 text-white" : "text-bodydark1"
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
+                    pathname.includes("sheets") ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-sidebar-foreground/80"
                   }`}
                 >
                   <Sheet className="w-5 h-5" />
@@ -210,8 +210,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <Link
                   href="/admin/documents"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("documents") ? "bg-graydark dark:bg-meta-4 text-white" : "text-bodydark1"
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
+                    pathname.includes("documents") ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-sidebar-foreground/80"
                   }`}
                 >
                   <ScrollText className="w-5 h-5" />
@@ -223,13 +223,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
           {/* INTELLIGENCE */}
           <div>
-            <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">INTELLIGENCE</h3>
+            <h3 className="mb-4 ml-4 text-sm font-semibold text-sidebar-foreground/70">INTELLIGENCE</h3>
             <ul className="mb-6 flex flex-col gap-1.5">
                 <li>
                     <Link
                     href="/admin/research"
-                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                        pathname.includes("research") ? "bg-graydark dark:bg-meta-4 text-white" : "text-bodydark1"
+                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
+                        pathname.includes("research") ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-sidebar-foreground/80"
                     }`}
                     >
                     <Globe className="w-5 h-5" />
@@ -239,8 +239,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <li>
                     <Link
                     href="/admin/crm"
-                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                        pathname.includes("crm") ? "bg-graydark dark:bg-meta-4 text-white" : "text-bodydark1"
+                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
+                        pathname.includes("crm") ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-sidebar-foreground/80"
                     }`}
                     >
                     <Database className="w-5 h-5" />
@@ -250,8 +250,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                  <li>
                     <Link
                     href="/admin/marketing"
-                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                        pathname.includes("marketing") ? "bg-graydark dark:bg-meta-4 text-white" : "text-bodydark1"
+                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
+                        pathname.includes("marketing") ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-sidebar-foreground/80"
                     }`}
                     >
                     <PieChart className="w-5 h-5" />
@@ -268,8 +268,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <React.Fragment>
                     <Link
                     href="#"
-                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                        (pathname.includes("news") || pathname.includes("team") || pathname.includes("sectors")) && "bg-graydark dark:bg-meta-4 text-white"
+                    className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
+                        (pathname.includes("news") || pathname.includes("team") || pathname.includes("sectors")) && "bg-sidebar-accent text-sidebar-accent-foreground"
                     }`}
                     onClick={(e) => {
                         e.preventDefault();
@@ -278,14 +278,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     >
                     <Globe className="w-5 h-5" />
                     Site Web Public
-                    <ChevronDown className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && "rotate-180"}`} width={20} height={20} />
+                    <ChevronDown className={`absolute right-4 top-1/2 -translate-y-1/2 ${open && "rotate-180"}`} width={20} height={20} />
                     </Link>
                     <div className={`translate transform overflow-hidden ${!open && "hidden"}`}>
                     <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
-                        <li><Link href="/admin/news" className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-white"><Newspaper className="w-4 h-4" /> Actualités</Link></li>
-                        <li><Link href="/admin/team" className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-white"><Users className="w-4 h-4" /> Équipe</Link></li>
-                        <li><Link href="/admin/sectors" className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-white"><Building2 className="w-4 h-4" /> Secteurs</Link></li>
-                        <li><Link href="/admin/careers" className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-white"><UserPlus className="w-4 h-4" /> Carrières</Link></li>
+                        <li><Link href="/admin/news" className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-sidebar-foreground/80 hover:text-sidebar-foreground"><Newspaper className="w-4 h-4" /> Actualités</Link></li>
+                        <li><Link href="/admin/team" className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-sidebar-foreground/80 hover:text-sidebar-foreground"><Users className="w-4 h-4" /> Équipe</Link></li>
+                        <li><Link href="/admin/sectors" className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-sidebar-foreground/80 hover:text-sidebar-foreground"><Building2 className="w-4 h-4" /> Secteurs</Link></li>
+                        <li><Link href="/admin/careers" className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-sidebar-foreground/80 hover:text-sidebar-foreground"><UserPlus className="w-4 h-4" /> Carrières</Link></li>
                     </ul>
                     </div>
                 </React.Fragment>
@@ -295,13 +295,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
           {/* SYSTEM */}
           <div>
-            <h3 className="mb-4 ml-4 mt-6 text-sm font-semibold text-bodydark2">SYSTÈME</h3>
+            <h3 className="mb-4 ml-4 mt-6 text-sm font-semibold text-sidebar-foreground/70">SYSTÈME</h3>
             <ul className="mb-6 flex flex-col gap-1.5">
               <li>
                 <Link
                   href="/admin/settings"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("settings") ? "bg-graydark dark:bg-meta-4 text-white" : "text-bodydark1"
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
+                    pathname.includes("settings") ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-sidebar-foreground/80"
                   }`}
                 >
                   <Settings className="w-5 h-5" />
@@ -311,7 +311,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <Link
                   href="/sudo"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4`}
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium duration-300 ease-in-out hover:bg-sidebar-accent hover:text-sidebar-accent-foreground text-red-400`}
                 >
                   <Terminal className="w-5 h-5 text-red-400" />
                   <span className="text-red-400">Accès Sudo</span>
