@@ -15,18 +15,19 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/toast";
 import { saveWhiteboardState, getSavedWhiteboards, getWhiteboardContent } from "@/lib/actions/whiteboard";
-import { Loader2, Save, FolderOpen } from "lucide-react";
+import { Loader2, Save, FolderOpen, Maximize2, Minimize2 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
 
+// Excalidraw must be imported dynamically with SSR disabled
 const Excalidraw = dynamic(
   () => import("@excalidraw/excalidraw").then((mod) => mod.Excalidraw),
   {
     ssr: false,
     loading: () => (
-      <div className="h-full w-full flex flex-col items-center justify-center text-muted-foreground gap-2 bg-muted/10">
+      <div className="h-full w-full flex flex-col items-center justify-center text-muted-foreground gap-2 bg-muted/10 min-h-[500px]">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p>Loading Whiteboard...</p>
+        <p>Initialisation du tableau blanc...</p>
       </div>
     ),
   }
@@ -45,8 +46,9 @@ export function WhiteboardEditor() {
   const [loadingList, setLoadingList] = useState(false);
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const [loadDialogOpen, setLoadDialogOpen] = useState(false);
-  const [whiteboardName, setWhiteboardName] = useState("New Deal Structure");
+  const [whiteboardName, setWhiteboardName] = useState("Opération Sans Nom");
   const [savedBoards, setSavedBoards] = useState<SavedBoard[]>([]);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const { theme } = useTheme();
   const { success, error } = useToast();
   const [mounted, setMounted] = useState(false);
@@ -62,19 +64,20 @@ export function WhiteboardEditor() {
     try {
       const elements = excalidrawAPI.getSceneElements();
       const appState = excalidrawAPI.getAppState();
-      const content = { elements, appState };
+      const files = excalidrawAPI.getFiles();
+      const content = { elements, appState, files };
 
       const result = await saveWhiteboardState(whiteboardName, content);
 
       if (result.success) {
-        success("Whiteboard saved", "Your diagram has been saved to Documents.");
+        success("Tableau sauvegardé", "Votre diagramme a été enregistré dans Documents.");
         setSaveDialogOpen(false);
       } else {
-        error("Save failed", "Could not save the whiteboard.");
+        error("Erreur", "Impossible de sauvegarder le tableau.");
       }
     } catch (err) {
       console.error(err);
-      error("Error", "An unexpected error occurred while saving.");
+      error("Erreur", "Une erreur inattendue est survenue.");
     } finally {
       setSaving(false);
     }
@@ -98,43 +101,71 @@ export function WhiteboardEditor() {
         if (content.elements) {
             excalidrawAPI.updateScene({
                 elements: content.elements,
-                appState: content.appState
+                appState: { ...content.appState, collaborator: null },
+                files: content.files
             });
-            success("Loaded", "Whiteboard loaded successfully.");
+            success("Chargé", "Le tableau a été chargé avec succès.");
         }
     } else {
-        error("Error", "Failed to load whiteboard content.");
+        error("Erreur", "Impossible de charger le contenu.");
     }
+  };
+
+  const toggleFullscreen = () => {
+    setIsFullscreen(!isFullscreen);
   };
 
   if (!mounted) return null;
 
   return (
-    <div className="h-[calc(100vh-180px)] w-full flex flex-col gap-4">
-      <div className="flex justify-between items-center bg-card p-4 rounded-lg border border-border shadow-sm">
-        <h2 className="text-lg font-semibold text-foreground">Canvas</h2>
+    <div className={`flex flex-col gap-4 transition-all duration-300 ${
+      isFullscreen 
+        ? "fixed inset-0 z-9999 bg-background p-4" 
+        : "h-[calc(100vh-200px)] min-h-[600px] w-full"
+    }`}>
+      {/* TOOLBAR */}
+      <div className="flex justify-between items-center bg-card p-3 rounded-xl border border-border shadow-sm shrink-0">
+        <div className="flex items-center gap-3">
+            <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                <Maximize2 className="w-4 h-4" />
+            </div>
+            <div>
+                <h2 className="text-sm font-bold text-foreground leading-none">{whiteboardName}</h2>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-wider mt-1">Éditeur de structure Alecia</p>
+            </div>
+        </div>
         
         <div className="flex gap-2">
+            <Button variant="ghost" size="icon" onClick={toggleFullscreen} title={isFullscreen ? "Réduire" : "Plein écran"}>
+                {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+            </Button>
+
             <Dialog open={loadDialogOpen} onOpenChange={(open) => { setLoadDialogOpen(open); if(open) handleLoadList(); }}>
                 <DialogTrigger asChild>
-                    <Button variant="outline">
+                    <Button variant="outline" size="sm">
                         <FolderOpen className="mr-2 h-4 w-4" />
                         Ouvrir
                     </Button>
                 </DialogTrigger>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Ouvrir un tableau</DialogTitle>
+                        <DialogTitle>Mes Tableaux</DialogTitle>
                     </DialogHeader>
-                    <div className="space-y-2 py-4 max-h-[300px] overflow-y-auto">
+                    <div className="space-y-2 py-4 max-h-[400px] overflow-y-auto">
                         {loadingList ? (
-                            <div className="flex justify-center p-4"><Loader2 className="animate-spin" /></div>
+                            <div className="flex justify-center p-8"><Loader2 className="animate-spin text-primary" /></div>
                         ) : savedBoards.length === 0 ? (
-                            <p className="text-center text-muted-foreground">Aucun tableau sauvegardé.</p>
+                            <div className="text-center py-8 text-muted-foreground">
+                                <p>Aucun tableau sauvegardé.</p>
+                            </div>
                         ) : (
                             savedBoards.map(board => (
-                                <div key={board.id} className="flex justify-between items-center p-3 hover:bg-muted rounded-md cursor-pointer border border-transparent hover:border-border" onClick={() => handleLoadBoard(board.id)}>
-                                    <span className="font-medium">{board.name}</span>
+                                <div 
+                                    key={board.id} 
+                                    className="flex justify-between items-center p-4 hover:bg-primary/5 rounded-xl cursor-pointer border border-transparent hover:border-primary/20 transition-all group" 
+                                    onClick={() => handleLoadBoard(board.id)}
+                                >
+                                    <span className="font-semibold group-hover:text-primary transition-colors">{board.name}</span>
                                     <span className="text-xs text-muted-foreground">{board.updatedAt ? formatDistanceToNow(new Date(board.updatedAt), { addSuffix: true, locale: fr }) : '-'}</span>
                                 </div>
                             ))
@@ -145,31 +176,31 @@ export function WhiteboardEditor() {
 
             <Dialog open={saveDialogOpen} onOpenChange={setSaveDialogOpen}>
             <DialogTrigger asChild>
-                <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+                <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm">
                 <Save className="mr-2 h-4 w-4" />
                 Sauvegarder
                 </Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                <DialogTitle>Save Whiteboard</DialogTitle>
+                <DialogTitle>Enregistrer le tableau</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4 py-4">
                 <div className="space-y-2">
-                    <Label htmlFor="name">Name</Label>
+                    <Label htmlFor="name">Nom du diagramme</Label>
                     <Input
                     id="name"
                     value={whiteboardName}
                     onChange={(e) => setWhiteboardName(e.target.value)}
-                    placeholder="e.g. Q3 Deal Structure"
+                    placeholder="ex: Structure Deal Projet X"
                     />
                 </div>
                 </div>
                 <DialogFooter>
-                <Button variant="outline" onClick={() => setSaveDialogOpen(false)}>Cancel</Button>
+                <Button variant="outline" onClick={() => setSaveDialogOpen(false)}>Annuler</Button>
                 <Button onClick={handleSave} disabled={saving}>
                     {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    Save
+                    Enregistrer
                 </Button>
                 </DialogFooter>
             </DialogContent>
@@ -177,19 +208,40 @@ export function WhiteboardEditor() {
         </div>
       </div>
 
-      <div className="flex-1 border border-border rounded-lg overflow-hidden bg-card relative isolate" style={{ height: "100%", width: "100%" }}>
+      {/* CANVAS CONTAINER */}
+      <div className="flex-1 border border-border rounded-xl overflow-hidden bg-card relative isolate shadow-inner">
          <Excalidraw
            theme={theme === "dark" ? "dark" : "light"}
            excalidrawAPI={(api) => setExcalidrawAPI(api)}
+           initialData={{
+             appState: {
+               viewBackgroundColor: theme === "dark" ? "#020617" : "#ffffff",
+               currentItemFontFamily: 1,
+             }
+           }}
            UIOptions={{
              canvasActions: {
                saveToActiveFile: false,
                loadScene: false,
                export: { saveFileToDisk: true },
+               toggleTheme: false, // We control theme via next-themes
              },
            }}
          />
       </div>
+      
+      <style jsx global>{`
+        .excalidraw {
+            --color-primary: var(--primary);
+            --color-primary-darker: var(--primary);
+            --color-primary-darkest: var(--primary);
+        }
+        /* Fix for Excalidraw in flex container */
+        .excalidraw-wrapper {
+            height: 100% !important;
+            width: 100% !important;
+        }
+      `}</style>
     </div>
   );
 }

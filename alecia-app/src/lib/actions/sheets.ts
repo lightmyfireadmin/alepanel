@@ -32,7 +32,7 @@ export async function getSheet(id: string) {
         });
         if (!sheet) return { success: false, error: "Sheet not found" };
         return { success: true, data: sheet };
-    } catch (error) {
+    } catch {
         return { success: false, error: "Failed to fetch spreadsheet" };
     }
 }

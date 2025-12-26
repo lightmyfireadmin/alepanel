@@ -29,7 +29,6 @@ export function ChartBuilder() {
   const [showLabels, setShowLabels] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const chartInstanceRef = useRef<echarts.ECharts | null>(null);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -52,7 +51,7 @@ export function ChartBuilder() {
         
         if (worksheet) {
             const rows: string[] = [];
-            worksheet.eachRow((row, _rowNumber) => {
+            worksheet.eachRow((row) => {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const rowValues = (row.values as any[]).slice(1).join(",");
                 rows.push(rowValues);

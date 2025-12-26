@@ -254,12 +254,6 @@ const Screenshot = ({ src, caption }: { src: string, caption?: string }) => (
   </View>
 );
 
-const InfoBlock = ({ text }: { text: string }) => (
-  <View style={styles.infoBox}>
-    <Text style={styles.infoText}>💡 {text}</Text>
-  </View>
-);
-
 // ============================================================================
 // DOCUMENT STRUCTURE
 // ============================================================================
