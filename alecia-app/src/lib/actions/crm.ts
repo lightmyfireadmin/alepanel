@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { contacts, companies } from "@/lib/db/schema";
+import { contacts, companies, type NewContact, type NewCompany } from "@/lib/db/schema";
 import { eq, desc, ilike, or } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
@@ -22,7 +22,7 @@ export async function getContacts(query?: string) {
     .orderBy(desc(contacts.createdAt));
 
     return { success: true, data: allContacts };
-  } catch (error) {
+  } catch {
     return { success: false, error: "Failed to fetch contacts" };
   }
 }
@@ -34,27 +34,27 @@ export async function getCompanies(query?: string) {
             .where(query ? ilike(companies.name, `%${query}%`) : undefined)
             .orderBy(desc(companies.createdAt));
         return { success: true, data: allCompanies };
-    } catch (error) {
+    } catch {
         return { success: false, error: "Failed to fetch companies" };
     }
 }
 
-export async function createContact(data: any) {
+export async function createContact(data: NewContact) {
     try {
         const [contact] = await db.insert(contacts).values(data).returning();
         revalidatePath("/admin/crm");
         return { success: true, data: contact };
-    } catch (error) {
+    } catch {
         return { error: "Failed to create contact" };
     }
 }
 
-export async function createCompany(data: any) {
+export async function createCompany(data: NewCompany) {
     try {
         const [company] = await db.insert(companies).values(data).returning();
         revalidatePath("/admin/crm");
         return { success: true, data: company };
-    } catch (error) {
+    } catch {
         return { success: false, error: "Failed to create company" };
     }
 }

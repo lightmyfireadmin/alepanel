@@ -3,7 +3,7 @@ import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, MessageSquare, Pin, Lock, Plus } from "lucide-react";
+import { ArrowLeft, MessageSquare, Pin, Lock } from "lucide-react";
 import { NewThreadDialog } from "@/components/forum/NewThreadDialog";
 
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {

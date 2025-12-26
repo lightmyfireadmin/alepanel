@@ -15,7 +15,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function SheetsList({ initialSheets }: { initialSheets: any[] }) {
+interface Sheet {
+  id: string;
+  title: string;
+  updatedAt: string | Date | null;
+  ownerName: string | null;
+}
+
+export function SheetsList({ initialSheets }: { initialSheets: Sheet[] }) {
   const [sheets, setSheets] = useState(initialSheets);
   const [creating, setCreating] = useState(false);
   const { success, error: errorToast } = useToast();
@@ -28,7 +35,7 @@ export function SheetsList({ initialSheets }: { initialSheets: any[] }) {
     const res = await createSheet(title);
     if (res.success && res.data) {
       success("Feuille créée");
-      setSheets([res.data, ...sheets]);
+      setSheets([res.data as unknown as Sheet, ...sheets]);
     } else {
       errorToast("Erreur lors de la création");
     }
@@ -95,7 +102,7 @@ export function SheetsList({ initialSheets }: { initialSheets: any[] }) {
                 <div className="space-y-1.5">
                     <div className="flex items-center gap-2 text-[10px] uppercase font-bold text-bodydark2">
                         <Clock className="w-3 h-3" />
-                        <span>Modifié {formatDistanceToNow(new Date(sheet.updatedAt), { addSuffix: true, locale: fr })}</span>
+                        <span>Modifié {sheet.updatedAt ? formatDistanceToNow(new Date(sheet.updatedAt), { addSuffix: true, locale: fr }) : "à l'instant"}</span>
                     </div>
                     <div className="flex items-center gap-2 text-[10px] uppercase font-bold text-bodydark2">
                         <UserIcon className="w-3 h-3 text-primary" />

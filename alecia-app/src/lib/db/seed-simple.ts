@@ -1,24 +1,33 @@
 /**
  * Simple Database Seeding Script
  * 
- * Seeds the database with data from lib/data.ts
+ * Seeds the database with data using Faker for realism.
  * 
  * Run with: npx tsx src/lib/db/seed-simple.ts
  */
 
 import { db } from "./index";
 import { deals, teamMembers, users } from "./schema";
-import bcrypt from "bcryptjs";
-import { teamMembers as teamData, mockDeals } from "../data";
+import * as bcrypt from "bcryptjs";
+import { fakerFR as faker } from "@faker-js/faker";
+
+const SECTORS = [
+  "Technologies & logiciels",
+  "Distribution & services B2B",
+  "Santé",
+  "Immobilier & construction",
+  "Industries",
+  "Agroalimentaire",
+];
+
+const ROLES = ["Associé", "Directeur", "Analyste", "Manager"];
 
 // Main seed function
 async function seed() {
-  console.log("🌱 Starting database seed...\n");
+  console.log("🌱 Starting database seed with Faker...\n");
   
-  // Check if DATABASE_URL is set
   if (!process.env.DATABASE_URL) {
     console.error("❌ DATABASE_URL environment variable is not set");
-    console.error("   Please set it in .env.local file");
     process.exit(1);
   }
   
@@ -38,7 +47,6 @@ async function seed() {
         role: "admin",
       });
       console.log("✅ Admin user created: admin@alecia.fr");
-      console.log(`   Password: ${process.env.NEW_USER_PWD || "admin123"}\n`);
     } else {
       console.log("ℹ️  Admin user already exists\n");
     }
@@ -48,29 +56,25 @@ async function seed() {
     const existingDeals = await db.select().from(deals);
     
     if (existingDeals.length === 0) {
-      const dealsToInsert = mockDeals.map((deal, index) => ({
-        slug: deal.slug,
-        clientName: deal.clientName,
-        clientLogo: deal.clientLogo,
-        acquirerName: deal.acquirerName,
-        acquirerLogo: deal.acquirerLogo,
-        sector: deal.sector,
-        region: deal.region,
-        year: deal.year,
-        mandateType: deal.mandateType,
-        description: null,
-        isConfidential: false,
-        isPriorExperience: deal.isPriorExperience,
-        context: null,
-        intervention: null,
-        result: null,
-        testimonialText: null,
-        testimonialAuthor: null,
-        roleType: null,
-        dealSize: null,
-        keyMetrics: null,
-        displayOrder: index,
-      }));
+      const dealsToInsert = Array.from({ length: 15 }).map((_, index) => {
+        const sector = faker.helpers.arrayElement(SECTORS);
+        return {
+          slug: faker.helpers.slugify(faker.company.name() + "-" + index).toLowerCase(),
+          clientName: faker.company.name(),
+          clientLogo: null,
+          acquirerName: faker.datatype.boolean() ? faker.company.name() : null,
+          acquirerLogo: null,
+          sector: sector,
+          region: faker.location.state(),
+          year: faker.date.past({ years: 3 }).getFullYear(),
+          mandateType: faker.helpers.arrayElement(["Cession", "Acquisition", "LBO", "OBO"]),
+          description: faker.lorem.paragraph(),
+          isConfidential: faker.datatype.boolean(),
+          isPriorExperience: faker.datatype.boolean(),
+          dealSize: "€" + faker.number.int({ min: 5, max: 50 }) + "M",
+          displayOrder: index,
+        };
+      });
       
       await db.insert(deals).values(dealsToInsert);
       console.log(`✅ Inserted ${dealsToInsert.length} deals\n`);
@@ -83,20 +87,23 @@ async function seed() {
     const existingMembers = await db.select().from(teamMembers);
     
     if (existingMembers.length === 0) {
-      const membersToInsert = teamData.map((member, index) => ({
-        slug: member.slug,
-        name: member.name,
-        role: member.role,
-        photo: member.photo,
-        bioFr: null,
-        bioEn: null,
-        linkedinUrl: member.linkedinUrl || null,
-        email: null,
-        sectorsExpertise: null,
-        transactions: null,
-        displayOrder: index,
-        isActive: true,
-      }));
+      const membersToInsert = Array.from({ length: 8 }).map((_, index) => {
+        const firstName = faker.person.firstName();
+        const lastName = faker.person.lastName();
+        const name = `${firstName} ${lastName}`;
+        return {
+          slug: faker.helpers.slugify(name).toLowerCase(),
+          name: name,
+          role: faker.helpers.arrayElement(ROLES),
+          photo: null,
+          bioFr: faker.lorem.paragraph(),
+          bioEn: faker.lorem.paragraph(),
+          linkedinUrl: `https://linkedin.com/in/${firstName.toLowerCase()}-${lastName.toLowerCase()}`,
+          email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@alecia.fr`,
+          displayOrder: index,
+          isActive: true,
+        };
+      });
       
       await db.insert(teamMembers).values(membersToInsert);
       console.log(`✅ Inserted ${membersToInsert.length} team members\n`);
@@ -105,25 +112,13 @@ async function seed() {
     }
     
     console.log("🎉 Database seeding completed successfully!");
-    console.log("\n📝 Summary:");
-    const dealCount = await db.select().from(deals);
-    const memberCount = await db.select().from(teamMembers);
-    const userCount = await db.select().from(users);
-    console.log(`   - ${userCount.length} users`);
-    console.log(`   - ${dealCount.length} deals`);
-    console.log(`   - ${memberCount.length} team members`);
     
   } catch (error) {
     console.error("❌ Error during seeding:", error);
-    if (error instanceof Error) {
-      console.error("   Message:", error.message);
-      console.error("   Stack:", error.stack);
-    }
     throw error;
   }
 }
 
-// Run if executed directly
 seed()
   .then(() => {
     console.log("\n✨ Done!");

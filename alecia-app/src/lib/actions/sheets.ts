@@ -54,24 +54,24 @@ export async function createSheet(title: string) {
 
         revalidatePath("/admin/sheets");
         return { success: true, data: newSheet };
-    } catch (error) {
+    } catch {
         return { success: false, error: "Failed to create spreadsheet" };
     }
 }
 
-export async function updateSheet(id: string, data: any, title?: string) {
+export async function updateSheet(id: string, data: string[][], title?: string) {
     try {
         await db.update(spreadsheets)
-            .set({ 
-                data, 
+            .set({
+                data,
                 title: title ?? undefined,
-                updatedAt: new Date() 
+                updatedAt: new Date()
             })
             .where(eq(spreadsheets.id, id));
 
         revalidatePath(`/admin/sheets`);
         return { success: true };
-    } catch (error) {
+    } catch {
         return { success: false, error: "Failed to update spreadsheet" };
     }
 }
@@ -81,7 +81,7 @@ export async function deleteSheet(id: string) {
         await db.delete(spreadsheets).where(eq(spreadsheets.id, id));
         revalidatePath("/admin/sheets");
         return { success: true };
-    } catch (error) {
+    } catch {
         return { success: false, error: "Failed to delete spreadsheet" };
     }
 }

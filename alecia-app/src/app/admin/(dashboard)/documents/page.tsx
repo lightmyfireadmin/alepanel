@@ -1,12 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FileText, Files, PenTool, PencilLine } from "lucide-react";
 import { FilesTab } from "./FilesTab";
 import { PadsTab } from "./PadsTab";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 
 export default function DocumentsPage() {
   return (

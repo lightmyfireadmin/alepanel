@@ -14,8 +14,10 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/toast";
-import { saveWhiteboardState } from "@/lib/actions/whiteboard";
-import { Loader2, Save } from "lucide-react";
+import { saveWhiteboardState, getSavedWhiteboards, getWhiteboardContent } from "@/lib/actions/whiteboard";
+import { Loader2, Save, FolderOpen } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
+import { fr } from "date-fns/locale";
 
 const Excalidraw = dynamic(
   () => import("@excalidraw/excalidraw").then((mod) => mod.Excalidraw),
@@ -30,12 +32,21 @@ const Excalidraw = dynamic(
   }
 );
 
+interface SavedBoard {
+  id: string;
+  name: string;
+  updatedAt: Date | null;
+}
+
 export function WhiteboardEditor() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [excalidrawAPI, setExcalidrawAPI] = useState<any>(null);
   const [saving, setSaving] = useState(false);
+  const [loadingList, setLoadingList] = useState(false);
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
+  const [loadDialogOpen, setLoadDialogOpen] = useState(false);
   const [whiteboardName, setWhiteboardName] = useState("New Deal Structure");
+  const [savedBoards, setSavedBoards] = useState<SavedBoard[]>([]);
   const { theme } = useTheme();
   const { success, error } = useToast();
   const [mounted, setMounted] = useState(false);
@@ -69,6 +80,33 @@ export function WhiteboardEditor() {
     }
   };
 
+  const handleLoadList = async () => {
+    setLoadingList(true);
+    const res = await getSavedWhiteboards();
+    if (res.success) {
+      setSavedBoards(res.data || []);
+    }
+    setLoadingList(false);
+  };
+
+  const handleLoadBoard = async (id: string) => {
+    setLoadDialogOpen(false);
+    const res = await getWhiteboardContent(id);
+    if (res.success && res.data) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const content = res.data as any;
+        if (content.elements) {
+            excalidrawAPI.updateScene({
+                elements: content.elements,
+                appState: content.appState
+            });
+            success("Loaded", "Whiteboard loaded successfully.");
+        }
+    } else {
+        error("Error", "Failed to load whiteboard content.");
+    }
+  };
+
   if (!mounted) return null;
 
   return (
@@ -76,37 +114,67 @@ export function WhiteboardEditor() {
       <div className="flex justify-between items-center bg-card p-4 rounded-lg border border-border shadow-sm">
         <h2 className="text-lg font-semibold text-foreground">Canvas</h2>
         
-        <Dialog open={saveDialogOpen} onOpenChange={setSaveDialogOpen}>
-          <DialogTrigger asChild>
-            <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
-              <Save className="mr-2 h-4 w-4" />
-              Save to Documents
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Save Whiteboard</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Name</Label>
-                <Input
-                  id="name"
-                  value={whiteboardName}
-                  onChange={(e) => setWhiteboardName(e.target.value)}
-                  placeholder="e.g. Q3 Deal Structure"
-                />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setSaveDialogOpen(false)}>Cancel</Button>
-              <Button onClick={handleSave} disabled={saving}>
-                {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Save
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <div className="flex gap-2">
+            <Dialog open={loadDialogOpen} onOpenChange={(open) => { setLoadDialogOpen(open); if(open) handleLoadList(); }}>
+                <DialogTrigger asChild>
+                    <Button variant="outline">
+                        <FolderOpen className="mr-2 h-4 w-4" />
+                        Ouvrir
+                    </Button>
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Ouvrir un tableau</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-2 py-4 max-h-[300px] overflow-y-auto">
+                        {loadingList ? (
+                            <div className="flex justify-center p-4"><Loader2 className="animate-spin" /></div>
+                        ) : savedBoards.length === 0 ? (
+                            <p className="text-center text-muted-foreground">Aucun tableau sauvegardé.</p>
+                        ) : (
+                            savedBoards.map(board => (
+                                <div key={board.id} className="flex justify-between items-center p-3 hover:bg-muted rounded-md cursor-pointer border border-transparent hover:border-border" onClick={() => handleLoadBoard(board.id)}>
+                                    <span className="font-medium">{board.name}</span>
+                                    <span className="text-xs text-muted-foreground">{board.updatedAt ? formatDistanceToNow(new Date(board.updatedAt), { addSuffix: true, locale: fr }) : '-'}</span>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={saveDialogOpen} onOpenChange={setSaveDialogOpen}>
+            <DialogTrigger asChild>
+                <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+                <Save className="mr-2 h-4 w-4" />
+                Sauvegarder
+                </Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                <DialogTitle>Save Whiteboard</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4 py-4">
+                <div className="space-y-2">
+                    <Label htmlFor="name">Name</Label>
+                    <Input
+                    id="name"
+                    value={whiteboardName}
+                    onChange={(e) => setWhiteboardName(e.target.value)}
+                    placeholder="e.g. Q3 Deal Structure"
+                    />
+                </div>
+                </div>
+                <DialogFooter>
+                <Button variant="outline" onClick={() => setSaveDialogOpen(false)}>Cancel</Button>
+                <Button onClick={handleSave} disabled={saving}>
+                    {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    Save
+                </Button>
+                </DialogFooter>
+            </DialogContent>
+            </Dialog>
+        </div>
       </div>
 
       <div className="flex-1 border border-border rounded-lg overflow-hidden bg-card relative">

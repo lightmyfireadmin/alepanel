@@ -1,13 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
-  ArrowLeft, Calendar, User, Building2, FileText, 
-  Edit, MoreVertical, Clock, History
+  ArrowLeft, User, Building2, FileText, 
+  Edit, MoreVertical, History
 } from "lucide-react";
 import Link from "next/link";
 import { getProject } from "@/lib/actions/projects";
 import { MermaidTimeline } from "@/components/features/MermaidTimeline";
-import { PROJECT_STATUSES } from "@/lib/db/schema";
 
 interface ProjectDetailPageProps {
   params: Promise<{ id: string }>;
@@ -30,7 +29,10 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
     );
   }
 
-  const project = result.data;
+  // Cast to include joined relations from server action
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const project = result.data as any;
+  
   const daysUntilClose = project.targetCloseDate 
     ? Math.ceil((new Date(project.targetCloseDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
     : null;
@@ -41,8 +43,8 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
         title Timeline - ${project.title}
         dateFormat  YYYY-MM-DD
         section Projet
-        Début :active, start, ${project.startDate || project.createdAt?.toISOString().split('T')[0]}, 30d
-        ${project.events?.map(e => `${e.type} : ${e.date}, 5d`).join('\n') || ""}
+        Début :active, start, ${project.startDate || (project.createdAt instanceof Date ? project.createdAt.toISOString().split('T')[0] : "2025-01-01")}, 30d
+        ${project.events?.map((e: any) => `${e.type} : ${e.date}, 5d`).join('\n') || ""}
         Closing : milestone, ${project.targetCloseDate || "2025-12-24"}, 0d
   `;
 
@@ -109,14 +111,14 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
                         <div className="w-10 h-10 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)]"><User className="w-5 h-5" /></div>
                         <div>
                             <p className="text-xs text-[var(--foreground-muted)] uppercase font-bold tracking-wider">Client</p>
-                            <p className="font-semibold">{(project as any).client?.name || "N/A"}</p>
+                            <p className="font-semibold">{project.client?.name || "N/A"}</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)]"><Building2 className="w-5 h-5" /></div>
                         <div>
                             <p className="text-xs text-[var(--foreground-muted)] uppercase font-bold tracking-wider">Secteur</p>
-                            <p className="font-semibold">{(project as any).client?.sector || "Non spécifié"}</p>
+                            <p className="font-semibold">{project.client?.sector || "Non spécifié"}</p>
                         </div>
                     </div>
                 </div>

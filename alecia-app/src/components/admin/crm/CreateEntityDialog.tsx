@@ -125,7 +125,7 @@ export function CreateEntityDialog() {
 
           <TabsContent value="company" className="space-y-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="companyName">Nom de l'entreprise</Label>
+              <Label htmlFor="companyName">Nom de l&apos;entreprise</Label>
               <Input id="companyName" value={companyName} onChange={(e) => setCompanyName(e.target.value)} placeholder="Acme Corp" />
             </div>
             <div className="grid gap-2">
@@ -139,7 +139,7 @@ export function CreateEntityDialog() {
             <DialogFooter className="mt-4">
               <Button onClick={handleCreateCompany} disabled={loading}>
                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Créer l'entreprise
+                Créer l&apos;entreprise
               </Button>
             </DialogFooter>
           </TabsContent>

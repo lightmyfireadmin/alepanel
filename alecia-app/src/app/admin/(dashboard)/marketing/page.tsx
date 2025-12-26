@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { generateContent, ContentType } from "@/app/actions/marketing";
-import { Loader2, Copy, Check, Sparkles, Image as ImageIcon, Save, FileText } from "lucide-react";
+import { Loader2, Copy, Check, Sparkles, Image as ImageIcon, Save } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import ReactMarkdown from "react-markdown";
 import { createPad } from "@/lib/actions/pads";
@@ -22,7 +22,6 @@ export default function MarketingPage() {
   const [result, setResult] = useState("");
   const [isPending, startTransition] = useTransition();
   const [copied, setCopied] = useState(false);
-  const [model, setModel] = useState<"mistral" | "groq">("mistral");
   const [progress, setProgress] = useState(0);
   const [saving, setSaving] = useState(false);
   const { success, error } = useToast();
@@ -30,7 +29,6 @@ export default function MarketingPage() {
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (isPending) {
-      setProgress(0);
       interval = setInterval(() => {
         setProgress((prev) => (prev < 90 ? prev + 10 : prev));
       }, 500);
@@ -47,12 +45,12 @@ export default function MarketingPage() {
         return;
     }
 
+    setProgress(0);
     startTransition(async () => {
       const response = await generateContent({
         prompt,
         type: activeTab as ContentType,
         context,
-        model
       });
       if (response.success && response.content) {
         setResult(response.content);
@@ -87,32 +85,12 @@ export default function MarketingPage() {
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold font-[family-name:var(--font-playfair)]">Marketing Studio</h1>
         <p className="text-muted-foreground">
-          Créez du contenu engageant avec l&apos;aide de l&apos;IA (Mistral & Groq).
+          Créez du contenu engageant avec l&apos;aide de l&apos;IA (Auto-optimisé).
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-1 space-y-6">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Configuration</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                        <Label>Modèle IA</Label>
-                        <Select value={model} onValueChange={(v: "mistral" | "groq") => setModel(v)}>
-                            <SelectTrigger>
-                                <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="mistral">Mistral AI (Recommandé FR)</SelectItem>
-                                <SelectItem value="groq">Groq (Ultra-rapide)</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                </CardContent>
-            </Card>
-
             <Card>
                 <CardHeader>
                     <CardTitle>Outils</CardTitle>

@@ -15,14 +15,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+interface Pad {
+  id: string;
+  title: string;
+  updatedAt: string | Date | null;
+  ownerName: string | null;
+}
+
 export function PadsTab() {
-  const [pads, setPads] = useState<any[]>([]);
+  const [pads, setPads] = useState<Pad[]>([]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const { success, error: errorToast } = useToast();
 
   const fetchPads = useCallback(async () => {
-    setLoading(true);
     const res = await getPads();
     if (res.success) {
       setPads(res.data || []);
@@ -39,9 +45,11 @@ export function PadsTab() {
     if (!title) return;
 
     setCreating(true);
+    // Optimistic UI or wait? Let's wait.
     const res = await createPad(title);
     if (res.success) {
       success("Document créé", "Le document a été créé avec succès.");
+      setLoading(true); // Trigger loading for refresh
       fetchPads();
     } else {
       errorToast("Erreur", res.error || "Impossible de créer le document.");
@@ -51,10 +59,13 @@ export function PadsTab() {
 
   const handleDelete = async (id: string) => {
     if (!confirm("Supprimer ce document ?")) return;
+    setLoading(true);
     const res = await deletePad(id);
     if (res.success) {
       success("Document supprimé");
       fetchPads();
+    } else {
+        setLoading(false);
     }
   };
 
@@ -113,7 +124,7 @@ export function PadsTab() {
                 <div className="space-y-1.5">
                     <div className="flex items-center gap-2 text-[10px] uppercase font-bold text-bodydark2">
                         <Clock className="w-3 h-3" />
-                        <span>Modifié {formatDistanceToNow(new Date(pad.updatedAt), { addSuffix: true, locale: fr })}</span>
+                        <span>Modifié {pad.updatedAt ? formatDistanceToNow(new Date(pad.updatedAt), { addSuffix: true, locale: fr }) : "à l'instant"}</span>
                     </div>
                     <div className="flex items-center gap-2 text-[10px] uppercase font-bold text-bodydark2">
                         <UserIcon className="w-3 h-3 text-primary" />

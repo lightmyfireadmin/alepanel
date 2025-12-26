@@ -5,7 +5,7 @@ import { fr } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, User, Lock, Pin } from "lucide-react";
 import { ThreadReply } from "@/components/forum/ThreadReply";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export default async function ThreadPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;

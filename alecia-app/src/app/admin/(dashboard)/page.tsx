@@ -1,11 +1,13 @@
 import { DashboardGrid } from "@/components/admin/dashboard/DashboardGrid";
 import { getRecentThreads } from "@/lib/actions/forum";
 import { getDashboardMetrics } from "@/lib/actions/metrics";
+import { getOfficeDashboardData } from "@/lib/actions/office";
 
 export default async function AdminDashboardPage() {
   const forumResult = await getRecentThreads(5);
   const recentThreads = forumResult.success ? forumResult.data || [] : [];
   const metrics = await getDashboardMetrics();
+  const officeData = await getOfficeDashboardData();
 
   return (
     <>
@@ -24,7 +26,7 @@ export default async function AdminDashboardPage() {
           </ol>
         </nav>
       </div>
-      <DashboardGrid recentThreads={recentThreads} metrics={metrics} />
+      <DashboardGrid recentThreads={recentThreads} metrics={metrics} officeData={officeData} />
     </>
   );
 }

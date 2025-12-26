@@ -1,8 +1,8 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { projects, leads, researchTasks, forumThreads } from "@/lib/db/schema";
-import { count, eq, desc } from "drizzle-orm";
+import { projects, leads, researchTasks } from "@/lib/db/schema";
+import { count, eq } from "drizzle-orm";
 
 export async function getDashboardMetrics() {
   try {

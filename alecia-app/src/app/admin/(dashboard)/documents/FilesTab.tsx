@@ -3,10 +3,9 @@
 import { useState, useCallback } from "react";
 import { 
   Upload, FileText, Image, File, Link2, 
-  Lock, Unlock, Trash2, Check, Download, Loader2
+  Lock, Unlock, Trash2, Check, Download
 } from "lucide-react";
 import { useDropzone } from "react-dropzone";
-import { Button } from "@/components/ui/button";
 
 // Mock documents data - could be actual DB later
 const mockDocuments = [
