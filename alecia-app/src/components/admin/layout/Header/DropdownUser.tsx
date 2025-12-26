@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { User, Settings, LogOut, ChevronDown } from "lucide-react";
+import { useSession, signOut } from "next-auth/react";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { data: session } = useSession();
 
   const trigger = useRef<HTMLAnchorElement>(null);
   const dropdown = useRef<HTMLDivElement>(null);
@@ -34,6 +36,11 @@ const DropdownUser = () => {
     return () => document.removeEventListener("keydown", keyHandler);
   }, [dropdownOpen]);
 
+  const userName = session?.user?.name || "Utilisateur";
+  // Attempt to cast user to any to access role if it was added to the session type, or default to Admin
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const userRole = (session?.user as any)?.role || "Admin";
+
   return (
     <div className="relative">
       <Link
@@ -44,13 +51,18 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-foreground">
-            Admin User
+            {userName}
           </span>
-          <span className="block text-xs text-muted-foreground">Administrator</span>
+          <span className="block text-xs text-muted-foreground capitalize">{userRole}</span>
         </span>
 
         <div className="h-12 w-12 rounded-full bg-muted overflow-hidden flex items-center justify-center border border-border">
-             <User className="w-6 h-6 text-muted-foreground" />
+             {session?.user?.image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={session.user.image} alt="User" className="h-full w-full object-cover" />
+             ) : (
+                <User className="w-6 h-6 text-muted-foreground" />
+             )}
         </div>
 
         <ChevronDown className="hidden sm:block text-muted-foreground" width={12} height={12} />
@@ -72,7 +84,7 @@ const DropdownUser = () => {
               className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base text-foreground"
             >
               <User className="w-5 h-5" />
-              My Profile
+              Mon Profil
             </Link>
           </li>
           <li>
@@ -81,13 +93,16 @@ const DropdownUser = () => {
               className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base text-foreground"
             >
               <Settings className="w-5 h-5" />
-              Account Settings
+              Paramètres
             </Link>
           </li>
         </ul>
-        <button className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base text-foreground">
+        <button 
+            onClick={() => signOut({ callbackUrl: "/admin/login" })}
+            className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base text-foreground w-full text-left"
+        >
           <LogOut className="w-5 h-5" />
-          Log Out
+          Déconnexion
         </button>
       </div>
       {/* <!-- Dropdown End --> */}

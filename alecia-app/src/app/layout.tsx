@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { SkipToMain } from "@/components/layout";
 import { MobileStickyFooter, CookieBanner } from "@/components/features";
-import { ContactWidget } from "@/components/features/contact-widget";
+import { PublicWidgets } from "@/components/layout/PublicWidgets";
 import { Providers } from "@/components/Providers";
 import { getMessages, getLocale } from "next-intl/server";
 import "./globals.css";
@@ -125,7 +125,7 @@ export default async function RootLayout({
         <Providers locale={locale} messages={messages}>
           <SkipToMain />
           {children}
-          <ContactWidget />
+          <PublicWidgets />
           <MobileStickyFooter />
           <CookieBanner />
         </Providers>

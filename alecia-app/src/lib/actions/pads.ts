@@ -37,7 +37,7 @@ export async function getPad(id: string) {
     }
 }
 
-export async function createPad(title: string) {
+export async function createPad(title: string, initialContent: string = "") {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: "Unauthorized" };
 
@@ -45,7 +45,7 @@ export async function createPad(title: string) {
         const [newPad] = await db.insert(pads).values({
             title,
             ownerId: session.user.id,
-            content: ""
+            content: initialContent
         }).returning();
 
         revalidatePath("/admin/documents");

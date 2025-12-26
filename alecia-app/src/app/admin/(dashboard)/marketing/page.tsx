@@ -1,15 +1,19 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { generateContent, ContentType } from "@/app/actions/marketing";
-import { Loader2, Copy, Check, Sparkles, Image as ImageIcon, Construction } from "lucide-react";
+import { Loader2, Copy, Check, Sparkles, Image as ImageIcon, Save, FileText } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import ReactMarkdown from "react-markdown";
+import { createPad } from "@/lib/actions/pads";
+import { useToast } from "@/components/ui/toast";
+import { Progress } from "@/components/ui/progress";
 
 export default function MarketingPage() {
   const [activeTab, setActiveTab] = useState<ContentType | "visuals">("article");
@@ -19,6 +23,22 @@ export default function MarketingPage() {
   const [isPending, startTransition] = useTransition();
   const [copied, setCopied] = useState(false);
   const [model, setModel] = useState<"mistral" | "groq">("mistral");
+  const [progress, setProgress] = useState(0);
+  const [saving, setSaving] = useState(false);
+  const { success, error } = useToast();
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isPending) {
+      setProgress(0);
+      interval = setInterval(() => {
+        setProgress((prev) => (prev < 90 ? prev + 10 : prev));
+      }, 500);
+    } else {
+      setProgress(100);
+    }
+    return () => clearInterval(interval);
+  }, [isPending]);
 
   const handleGenerate = () => {
     if (!prompt) return;
@@ -46,6 +66,20 @@ export default function MarketingPage() {
     navigator.clipboard.writeText(result);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleSave = async () => {
+    if (!result) return;
+    setSaving(true);
+    // Truncate prompt for title if too long
+    const title = prompt.length > 30 ? prompt.substring(0, 30) + "..." : prompt;
+    const res = await createPad(`IA: ${title}`, result);
+    if (res.success) {
+      success("Document sauvegardé", "Le contenu a été enregistré dans Documents.");
+    } else {
+      error("Erreur", "Impossible de sauvegarder le document.");
+    }
+    setSaving(false);
   };
 
   return (
@@ -162,35 +196,54 @@ export default function MarketingPage() {
                         />
                     </div>
 
-                    <Button
-                        onClick={handleGenerate}
-                        disabled={isPending || !prompt}
-                        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
-                    >
-                        {isPending ? (
-                        <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Génération en cours...
-                        </>
-                        ) : (
-                        <>
-                            <Sparkles className="mr-2 h-4 w-4" />
-                            Générer le contenu
-                        </>
-                        )}
-                    </Button>
+                    <div className="space-y-2">
+                        <Button
+                            onClick={handleGenerate}
+                            disabled={isPending || !prompt}
+                            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                        >
+                            {isPending ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Génération en cours...
+                            </>
+                            ) : (
+                            <>
+                                <Sparkles className="mr-2 h-4 w-4" />
+                                Générer le contenu
+                            </>
+                            )}
+                        </Button>
+                        {isPending && <Progress value={progress} className="h-1 w-full" />}
+                    </div>
 
                     {result && (
                         <div className="mt-6 space-y-2 fade-in">
-                            <div className="flex items-center justify-between">
-                                <Label>Résultat</Label>
-                                <Button variant="ghost" size="sm" onClick={copyToClipboard}>
-                                {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
-                                </Button>
-                            </div>
-                            <div className="p-4 bg-muted/50 rounded-md whitespace-pre-wrap border border-border min-h-[200px] text-sm leading-relaxed text-foreground">
-                                {result}
-                            </div>
+                            <Tabs defaultValue="preview" className="w-full">
+                                <div className="flex items-center justify-between mb-2">
+                                    <TabsList>
+                                        <TabsTrigger value="preview">Aperçu</TabsTrigger>
+                                        <TabsTrigger value="raw">Markdown</TabsTrigger>
+                                    </TabsList>
+                                    <div className="flex gap-2">
+                                        <Button variant="outline" size="sm" onClick={handleSave} disabled={saving}>
+                                            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
+                                            Sauvegarder
+                                        </Button>
+                                        <Button variant="ghost" size="sm" onClick={copyToClipboard}>
+                                            {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+                                        </Button>
+                                    </div>
+                                </div>
+                                <TabsContent value="preview" className="p-4 bg-card rounded-md border border-border min-h-[200px] prose dark:prose-invert max-w-none">
+                                    <ReactMarkdown>{result}</ReactMarkdown>
+                                </TabsContent>
+                                <TabsContent value="raw">
+                                    <div className="p-4 bg-muted/50 rounded-md whitespace-pre-wrap border border-border min-h-[200px] text-sm leading-relaxed text-foreground font-mono">
+                                        {result}
+                                    </div>
+                                </TabsContent>
+                            </Tabs>
                         </div>
                     )}
                 </>

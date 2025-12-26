@@ -111,19 +111,18 @@ async function performResearch(taskId: string, query: string) {
 
                 revalidatePath(`/admin/research/${taskId}`);
         
-            } catch (error) {
-                console.error("AI processing failed:", error);
-                await db.update(researchTasks)
-                    .set({ 
-                        status: "failed", 
-                        resultSummary: "An error occurred during AI processing. Please check API keys or try again." 
-                    })
-                    .where(eq(researchTasks.id, taskId));
+                } catch (error) {
+                    console.error("AI processing failed:", error);
+                    await db.update(researchTasks)
+                        .set({ 
+                            status: "failed", 
+                            resultSummary: `An error occurred during AI processing: ${error instanceof Error ? error.message : String(error)}` 
+                        })
+                        .where(eq(researchTasks.id, taskId));
+                }
             }
-        }
-        
-        export async function generateSWOT(taskId: string) {
-            try {
+            
+            export async function generateSWOT(taskId: string) {            try {
                 const task = await db.query.researchTasks.findFirst({
                     where: eq(researchTasks.id, taskId)
                 });

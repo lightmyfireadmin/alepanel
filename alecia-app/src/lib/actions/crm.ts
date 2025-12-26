@@ -48,3 +48,13 @@ export async function createContact(data: any) {
         return { error: "Failed to create contact" };
     }
 }
+
+export async function createCompany(data: any) {
+    try {
+        const [company] = await db.insert(companies).values(data).returning();
+        revalidatePath("/admin/crm");
+        return { success: true, data: company };
+    } catch (error) {
+        return { success: false, error: "Failed to create company" };
+    }
+}

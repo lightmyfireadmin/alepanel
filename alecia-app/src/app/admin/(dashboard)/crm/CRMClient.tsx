@@ -4,11 +4,12 @@ import { useState } from "react";
 import { CompanyEnrichment } from "@/components/admin";
 import ExcelJS from "exceljs";
 import { 
-  Plus, Search, Building2, 
+  Search, Building2, 
   Phone, Mail, MoreVertical, FileSpreadsheet
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
+import { CreateEntityDialog } from "@/components/admin/crm/CreateEntityDialog";
 
 interface Contact {
   id: string;
@@ -110,9 +111,7 @@ export function CRMClient({ initialContacts, initialCompanies }: { initialContac
                     <Button variant="outline" size="icon" onClick={handleExportToExcel}>
                         <FileSpreadsheet className="w-4 h-4" />
                     </Button>
-                    <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
-                        <Plus className="w-4 h-4 mr-2" /> Nouveau
-                    </Button>
+                    <CreateEntityDialog />
                 </div>
             </div>
 

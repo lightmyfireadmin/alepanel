@@ -28,9 +28,15 @@ import { fr } from "date-fns/locale";
 
 interface DashboardGridProps {
   recentThreads: any[];
+  metrics: {
+    activeDeals: number;
+    pipelineValue: string;
+    newLeads: number;
+    activeResearch: number;
+  };
 }
 
-export function DashboardGrid({ recentThreads }: DashboardGridProps) {
+export function DashboardGrid({ recentThreads, metrics }: DashboardGridProps) {
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
       
@@ -41,9 +47,9 @@ export function DashboardGrid({ recentThreads }: DashboardGridProps) {
           <BriefcaseIcon className="h-4 w-4 text-primary" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">12</div>
+          <div className="text-2xl font-bold">{metrics.activeDeals}</div>
           <p className="text-xs text-bodydark2">
-            +2 depuis le mois dernier
+            Projets en cours
           </p>
         </CardContent>
       </Card>
@@ -55,9 +61,9 @@ export function DashboardGrid({ recentThreads }: DashboardGridProps) {
           <DollarSign className="h-4 w-4 text-primary" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">€24.5M</div>
+          <div className="text-2xl font-bold">{metrics.pipelineValue}</div>
           <p className="text-xs text-bodydark2">
-            +18% depuis le mois dernier
+            Estimation globale
           </p>
         </CardContent>
       </Card>
@@ -65,13 +71,13 @@ export function DashboardGrid({ recentThreads }: DashboardGridProps) {
       {/* METRIC 3: NEW LEADS */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Nouveaux Leads</CardTitle>
+          <CardTitle className="text-sm font-medium">Total Leads</CardTitle>
           <Users className="h-4 w-4 text-primary" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">+573</div>
+          <div className="text-2xl font-bold">{metrics.newLeads}</div>
           <p className="text-xs text-bodydark2">
-            +201 cette semaine
+            Base de prospection
           </p>
         </CardContent>
       </Card>
@@ -83,7 +89,7 @@ export function DashboardGrid({ recentThreads }: DashboardGridProps) {
           <Activity className="h-4 w-4 text-primary" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">3</div>
+          <div className="text-2xl font-bold">{metrics.activeResearch}</div>
           <p className="text-xs text-bodydark2">
             Secteurs sous surveillance
           </p>
