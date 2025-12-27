@@ -185,7 +185,9 @@ export const kanbanColumns = pgTable("kanban_columns", {
   name: text("name").notNull(),
   order: integer("order").default(0),
   createdAt: timestamp("created_at").defaultNow(),
-});
+}, (table) => ({
+  boardIdIdx: index("kanban_columns_board_id_idx").on(table.boardId),
+}));
 
 // =============================================================================
 // PROJECTS TABLE - Interactive timeline
@@ -207,6 +209,7 @@ export const projects = pgTable("projects", {
   return {
     clientIdIdx: index("projects_client_id_idx").on(table.clientId),
     boardIdIdx: index("projects_board_id_idx").on(table.boardId),
+    columnIdIdx: index("projects_column_id_idx").on(table.columnId),
   };
 });
 
@@ -419,7 +422,10 @@ export const forumThreads = pgTable("forum_threads", {
   viewCount: integer("view_count").default(0),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => ({
+  categoryIdIdx: index("forum_threads_category_id_idx").on(table.categoryId),
+  authorIdIdx: index("forum_threads_author_id_idx").on(table.authorId),
+}));
 
 export const forumPosts = pgTable("forum_posts", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -429,7 +435,10 @@ export const forumPosts = pgTable("forum_posts", {
   parentId: uuid("parent_id"), 
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => ({
+  threadIdIdx: index("forum_posts_thread_id_idx").on(table.threadId),
+  authorIdIdx: index("forum_posts_author_id_idx").on(table.authorId),
+}));
 
 // COLLAB - PADS
 export const pads = pgTable("pads", {
