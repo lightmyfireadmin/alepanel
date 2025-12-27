@@ -185,6 +185,11 @@ export const kanbanColumns = pgTable("kanban_columns", {
   name: text("name").notNull(),
   order: integer("order").default(0),
   createdAt: timestamp("created_at").defaultNow(),
+}, (table) => {
+  return {
+    // Index for fetching columns of a specific board
+    boardIdIdx: index("kanban_columns_board_id_idx").on(table.boardId),
+  };
 });
 
 // =============================================================================
@@ -207,6 +212,8 @@ export const projects = pgTable("projects", {
   return {
     clientIdIdx: index("projects_client_id_idx").on(table.clientId),
     boardIdIdx: index("projects_board_id_idx").on(table.boardId),
+    // Index for filtering projects by column (Kanban view)
+    columnIdIdx: index("projects_column_id_idx").on(table.columnId),
   };
 });
 
@@ -419,6 +426,11 @@ export const forumThreads = pgTable("forum_threads", {
   viewCount: integer("view_count").default(0),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => {
+  return {
+    // Index for filtering threads by category
+    categoryIdIdx: index("forum_threads_category_id_idx").on(table.categoryId),
+  };
 });
 
 export const forumPosts = pgTable("forum_posts", {
@@ -429,6 +441,11 @@ export const forumPosts = pgTable("forum_posts", {
   parentId: uuid("parent_id"), 
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => {
+  return {
+    // Index for fetching posts of a specific thread
+    threadIdIdx: index("forum_posts_thread_id_idx").on(table.threadId),
+  };
 });
 
 // COLLAB - PADS
