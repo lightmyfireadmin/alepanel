@@ -13,7 +13,7 @@
 
 import { db } from "@/lib/db";
 import { contacts, companies, buyerCriteria } from "@/lib/db/schema";
-import { eq, sql } from "drizzle-orm";
+import { eq, sql, or, and, gte, lte, isNotNull, arrayContains } from "drizzle-orm";
 
 export interface MatchCriteria {
   sector: string;
@@ -45,7 +45,45 @@ export interface MatchedBuyer {
  */
 export async function findMatchingBuyers(criteria: MatchCriteria): Promise<MatchedBuyer[]> {
   try {
-    // Step 1: Get all buyer criteria with contact info
+    // Step 1: Build dynamic matching conditions for the database query
+    const conditions = [];
+
+    // Sector match (using GIN index on targetSectors)
+    if (criteria.sector) {
+      conditions.push(arrayContains(buyerCriteria.targetSectors, [criteria.sector]));
+    }
+
+    // Region match (using GIN index on targetRegions)
+    if (criteria.region) {
+      conditions.push(arrayContains(buyerCriteria.targetRegions, [criteria.region]));
+    }
+
+    // Revenue match
+    if (criteria.revenue !== undefined) {
+      conditions.push(and(
+        isNotNull(buyerCriteria.minRevenue),
+        isNotNull(buyerCriteria.maxRevenue),
+        lte(buyerCriteria.minRevenue, criteria.revenue),
+        gte(buyerCriteria.maxRevenue, criteria.revenue)
+      ));
+    }
+
+    // EBITDA match
+    if (criteria.ebitda !== undefined) {
+      conditions.push(and(
+        isNotNull(buyerCriteria.minEbitda),
+        isNotNull(buyerCriteria.maxEbitda),
+        lte(buyerCriteria.minEbitda, criteria.ebitda),
+        gte(buyerCriteria.maxEbitda, criteria.ebitda)
+      ));
+    }
+
+    // If no specific criteria provided (unlikely given types), fall back to no filter
+    // But since criteria.sector is mandatory, we will always have at least one condition.
+    // We use OR because the scoring logic allows partial matches (if score > 0).
+    const whereClause = conditions.length > 0 ? or(...conditions) : undefined;
+
+    // Step 2: Get ONLY potentially matching buyer criteria from DB
     const buyerData = await db
       .select({
         contact: contacts,
@@ -54,9 +92,10 @@ export async function findMatchingBuyers(criteria: MatchCriteria): Promise<Match
       })
       .from(buyerCriteria)
       .innerJoin(contacts, eq(contacts.id, buyerCriteria.contactId))
-      .leftJoin(companies, eq(companies.id, contacts.companyId));
+      .leftJoin(companies, eq(companies.id, contacts.companyId))
+      .where(whereClause);
     
-    // Step 2: Calculate match scores in application layer
+    // Step 3: Calculate match scores in application layer
     // (More flexible than complex SQL for scoring logic)
     const matches: MatchedBuyer[] = [];
     
@@ -78,7 +117,7 @@ export async function findMatchingBuyers(criteria: MatchCriteria): Promise<Match
       }
     }
     
-    // Step 3: Sort by score descending
+    // Step 4: Sort by score descending
     return matches.sort((a, b) => b.matchScore - a.matchScore);
     
   } catch (error) {
