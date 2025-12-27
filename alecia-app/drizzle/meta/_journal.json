@@ -43,6 +43,13 @@
       "when": 1766772357700,
       "tag": "0005_greedy_blonde_phantom",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1766858584265,
+      "tag": "0006_ancient_next_avengers",
+      "breakpoints": true
     }
   ]
 }
