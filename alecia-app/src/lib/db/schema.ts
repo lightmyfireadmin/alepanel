@@ -185,6 +185,10 @@ export const kanbanColumns = pgTable("kanban_columns", {
   name: text("name").notNull(),
   order: integer("order").default(0),
   createdAt: timestamp("created_at").defaultNow(),
+}, (table) => {
+  return {
+    boardIdIdx: index("kanban_columns_board_id_idx").on(table.boardId),
+  };
 });
 
 // =============================================================================
@@ -207,6 +211,7 @@ export const projects = pgTable("projects", {
   return {
     clientIdIdx: index("projects_client_id_idx").on(table.clientId),
     boardIdIdx: index("projects_board_id_idx").on(table.boardId),
+    columnIdIdx: index("projects_column_id_idx").on(table.columnId),
   };
 });
 
