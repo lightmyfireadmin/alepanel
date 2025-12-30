@@ -24,7 +24,7 @@ import { Button } from "@/components/ui/button";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
 import { EChart } from "@/components/charts/EChart";
-import { OfficeWidgets } from "@/components/admin/dashboard/OfficeWidgets";
+import { OfficeWidgets, OfficeData } from "@/components/admin/dashboard/OfficeWidgets";
 import {
   Dialog,
   DialogContent,
@@ -43,19 +43,6 @@ interface Thread {
   categoryName: string | null;
   authorName: string | null;
   lastPostAt: string | Date | null;
-}
-
-interface OfficeData {
-  city: string;
-  weather: {
-    temp: number;
-    condition: string;
-    icon: string;
-  };
-  transport: {
-    nextTrain: { destination: string; time: string; status: string };
-    nextFlight: { destination: string; time: string; status: string };
-  };
 }
 
 interface DashboardGridProps {
