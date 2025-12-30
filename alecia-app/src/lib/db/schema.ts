@@ -177,7 +177,9 @@ export const kanbanBoards = pgTable("kanban_boards", {
   ownerId: uuid("owner_id").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => ({
+  ownerIdIdx: index("kanban_boards_owner_id_idx").on(table.ownerId),
+}));
 
 export const kanbanColumns = pgTable("kanban_columns", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -185,7 +187,9 @@ export const kanbanColumns = pgTable("kanban_columns", {
   name: text("name").notNull(),
   order: integer("order").default(0),
   createdAt: timestamp("created_at").defaultNow(),
-});
+}, (table) => ({
+  boardIdIdx: index("kanban_columns_board_id_idx").on(table.boardId),
+}));
 
 // =============================================================================
 // PROJECTS TABLE - Interactive timeline
@@ -207,6 +211,7 @@ export const projects = pgTable("projects", {
   return {
     clientIdIdx: index("projects_client_id_idx").on(table.clientId),
     boardIdIdx: index("projects_board_id_idx").on(table.boardId),
+    columnIdIdx: index("projects_column_id_idx").on(table.columnId),
   };
 });
 
@@ -374,7 +379,9 @@ export const jobOffers = pgTable("job_offers", {
   displayOrder: integer("display_order").default(0),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => ({
+  isPublishedDisplayOrderIdx: index("job_offers_is_published_display_order_idx").on(table.isPublished, table.displayOrder),
+}));
 
 // =============================================================================
 // LEADS TABLE
@@ -419,7 +426,10 @@ export const forumThreads = pgTable("forum_threads", {
   viewCount: integer("view_count").default(0),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => ({
+  categoryIdIdx: index("forum_threads_category_id_idx").on(table.categoryId),
+  authorIdIdx: index("forum_threads_author_id_idx").on(table.authorId),
+}));
 
 export const forumPosts = pgTable("forum_posts", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -429,7 +439,10 @@ export const forumPosts = pgTable("forum_posts", {
   parentId: uuid("parent_id"), 
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => ({
+  threadIdIdx: index("forum_posts_thread_id_idx").on(table.threadId),
+  authorIdIdx: index("forum_posts_author_id_idx").on(table.authorId),
+}));
 
 // COLLAB - PADS
 export const pads = pgTable("pads", {
@@ -440,7 +453,9 @@ export const pads = pgTable("pads", {
   isPublic: boolean("is_public").default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => ({
+  ownerIdIdx: index("pads_owner_id_idx").on(table.ownerId),
+}));
 
 export const padRevisions = pgTable("pad_revisions", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -460,7 +475,9 @@ export const whiteboards = pgTable("whiteboards", {
   isPublic: boolean("is_public").default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => ({
+  ownerIdIdx: index("whiteboards_owner_id_idx").on(table.ownerId),
+}));
 
 // COLLAB - SPREADSHEETS
 export const spreadsheets = pgTable("spreadsheets", {
@@ -471,7 +488,9 @@ export const spreadsheets = pgTable("spreadsheets", {
   ownerId: uuid("owner_id").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => ({
+  ownerIdIdx: index("spreadsheets_owner_id_idx").on(table.ownerId),
+}));
 
 // SIGNATURES
 export const signRequests = pgTable("sign_requests", {
@@ -484,7 +503,10 @@ export const signRequests = pgTable("sign_requests", {
   signedUrl: text("signed_url"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => ({
+  requesterIdIdx: index("sign_requests_requester_id_idx").on(table.requesterId),
+  statusIdx: index("sign_requests_status_idx").on(table.status),
+}));
 
 export const signAuditLogs = pgTable("sign_audit_logs", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -504,7 +526,9 @@ export const researchTasks = pgTable("research_tasks", {
   sources: jsonb("sources"),
   createdBy: uuid("created_by").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow(),
-});
+}, (table) => ({
+  createdByIdx: index("research_tasks_created_by_idx").on(table.createdBy),
+}));
 
 export const companyEnrichments = pgTable("company_enrichments", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -530,7 +554,9 @@ export const chartConfigs = pgTable("chart_configs", {
   dataConfig: jsonb("data_config"), // mapping of columns
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => ({
+  userIdIdx: index("chart_configs_user_id_idx").on(table.userId),
+}));
 
 // =============================================================================
 // TYPE EXPORTS
