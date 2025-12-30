@@ -399,6 +399,22 @@ export const leads = pgTable("leads", {
 });
 
 // =============================================================================
+// USER TRANSPORT PREFERENCES (Dashboard)
+// =============================================================================
+export const userTransportLocations = pgTable("user_transport_locations", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  officeName: text("office_name").notNull(), // 'Paris', 'Nice', etc.
+  label: text("label").notNull(), // e.g., 'Home', 'Client X'
+  address: text("address").notNull(),
+  latitude: text("latitude").notNull(),
+  longitude: text("longitude").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => ({
+  userIdIdx: index("user_transport_locations_user_id_idx").on(table.userId),
+}));
+
+// =============================================================================
 // BUSINESS OS TABLES (NEW)
 // =============================================================================
 
@@ -611,6 +627,9 @@ export type NewJobOffer = typeof jobOffers.$inferInsert;
 
 export type Lead = typeof leads.$inferSelect;
 export type NewLead = typeof leads.$inferInsert;
+
+export type UserTransportLocation = typeof userTransportLocations.$inferSelect;
+export type NewUserTransportLocation = typeof userTransportLocations.$inferInsert;
 
 export type ForumCategory = typeof forumCategories.$inferSelect;
 export type ForumThread = typeof forumThreads.$inferSelect;

@@ -57,6 +57,13 @@
       "when": 1767056313374,
       "tag": "0007_easy_blue_shield",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1767061247274,
+      "tag": "0008_goofy_sheva_callister",
+      "breakpoints": true
     }
   ]
 }
