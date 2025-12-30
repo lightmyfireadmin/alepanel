@@ -3,25 +3,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Cloud, Sun, CloudRain, Train, Plane, Car, CloudFog, CloudLightning, CloudSnow, CloudDrizzle } from "lucide-react";
 import Image from "next/image";
-
-export interface TransportItem {
-  type: 'car' | 'train' | 'plane';
-  destination: string;
-  time: string;
-  status?: string;
-}
-
-export interface OfficeData {
-  city: string;
-  weather: {
-    temp: number;
-    condition: string;
-    icon: string;
-  };
-  transport: {
-    items: TransportItem[];
-  };
-}
+import { AddLocationDialog } from "./AddLocationDialog";
+import { OfficeData } from "@/types/dashboard";
 
 const WeatherIcon = ({ icon }: { icon: string }) => {
   // Map OpenWeather icon codes to Lucide icons
@@ -73,7 +56,10 @@ export function OfficeWidgets({ data }: { data: OfficeData[] }) {
         <Card key={office.city} className="bg-card border-border">
           <CardHeader className="pb-2">
             <CardTitle className="flex justify-between items-center text-sm font-medium">
-              <span>{office.city}</span>
+              <div className="flex items-center gap-2">
+                <span>{office.city}</span>
+                <AddLocationDialog officeName={office.city} />
+              </div>
               <WeatherIcon icon={office.weather.icon} />
             </CardTitle>
           </CardHeader>
