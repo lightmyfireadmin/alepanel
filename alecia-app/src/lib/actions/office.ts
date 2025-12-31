@@ -6,7 +6,7 @@ import { OfficeData } from "@/types/dashboard";
 import { getRealTrainData, getRealFlightData } from "@/lib/services/real-transport";
 import { db } from "@/lib/db";
 import { userTransportLocations } from "@/lib/db/schema";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 

@@ -1,10 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { AnimatedCounter, RegionalMap, ValuationEstimator, HeroBackground, ExpertiseCard, NewsletterForm } from "@/components/features";
-import { TeamMemberModal } from "@/components/features/team-member-modal";
+import { AnimatedCounter, HeroBackground, ExpertiseCard } from "@/components/features";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -22,6 +22,23 @@ const teamMembers = [
   { name: "Louise Pini", initials: "LP", photo: "/assets/Equipe_Alecia/LP__2__-_cropped.jpg" },
   { name: "Mickael Furet", initials: "MF", photo: "/assets/Equipe_Alecia/MF_p800.jpg" },
 ];
+
+// Lazy load heavy interactive/below-fold components
+const RegionalMap = dynamic(() => import("@/components/features/regional-map").then(mod => mod.RegionalMap), {
+  loading: () => <div className="h-[500px] w-full bg-[var(--background-tertiary)] animate-pulse rounded-lg" />,
+});
+
+const ValuationEstimator = dynamic(() => import("@/components/features/valuation-estimator").then(mod => mod.ValuationEstimator), {
+  loading: () => <div className="h-[600px] w-full bg-[var(--background-tertiary)] animate-pulse rounded-lg" />,
+});
+
+const NewsletterForm = dynamic(() => import("@/components/features/newsletter-form").then(mod => mod.NewsletterForm), {
+  loading: () => <div className="h-[200px] w-full bg-[var(--background-tertiary)] animate-pulse rounded-lg" />,
+});
+
+const TeamMemberModal = dynamic(() => import("@/components/features/team-member-modal").then(mod => mod.TeamMemberModal), {
+  ssr: false,
+});
 
 export function HomeClient() {
   const t = useTranslations();
@@ -249,12 +266,14 @@ export function HomeClient() {
           </div>
         </section>
 
-        {/* Team Member Modal */}
-        <TeamMemberModal
-          isOpen={!!selectedMember}
-          onClose={() => setSelectedMember(null)}
-          member={selectedMember}
-        />
+        {/* Team Member Modal - Only loaded on interaction */}
+        {selectedMember && (
+          <TeamMemberModal
+            isOpen={!!selectedMember}
+            onClose={() => setSelectedMember(null)}
+            member={selectedMember}
+          />
+        )}
 
         {/* Expertises Section */}
         <section className="py-24 px-6">
