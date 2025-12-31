@@ -7,13 +7,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 import { addUserTransportLocation } from "@/lib/actions/office";
-import { toast } from "@/components/ui/use-toast"; // Correct path based on memory
+import { useToast } from "@/components/ui/toast";
 
 export function AddLocationDialog({ officeName }: { officeName: string }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [label, setLabel] = useState("");
   const [address, setAddress] = useState("");
+  const toast = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
