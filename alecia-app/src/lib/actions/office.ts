@@ -1,5 +1,3 @@
-"use server";
-
 import { getWeather } from "@/lib/services/weather";
 import { getDrivingTime, formatDuration } from "@/lib/services/transport";
 import { OfficeData } from "@/types/dashboard";
@@ -19,6 +17,7 @@ export const LOCATIONS = [
 ];
 
 export async function getOfficeDashboardData(): Promise<OfficeData[]> {
+  "use server";
   const session = await auth();
   const userId = session?.user?.id;
 
@@ -144,6 +143,7 @@ export async function addUserTransportLocation(data: {
   label: string;
   address: string;
 }) {
+  "use server";
   const session = await auth();
   if (!session?.user?.id) throw new Error("Unauthorized");
 
