@@ -24,7 +24,8 @@ import { Button } from "@/components/ui/button";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
 import { EChart } from "@/components/charts/EChart";
-import { OfficeWidgets, OfficeData } from "@/components/admin/dashboard/OfficeWidgets";
+import { OfficeWidgets } from "@/components/admin/dashboard/OfficeWidgets";
+import { OfficeData } from "@/types/dashboard";
 import {
   Dialog,
   DialogContent,
