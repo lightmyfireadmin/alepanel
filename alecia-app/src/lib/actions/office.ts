@@ -1,15 +1,17 @@
+"use server";
+
 import { getWeather } from "@/lib/services/weather";
 import { getDrivingTime, formatDuration } from "@/lib/services/transport";
 import { OfficeData } from "@/types/dashboard";
 import { getRealTrainData, getRealFlightData } from "@/lib/services/real-transport";
 import { db } from "@/lib/db";
 import { userTransportLocations } from "@/lib/db/schema";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 // Locations coordinates
-export const LOCATIONS = [
+const LOCATIONS = [
   { name: "Paris", lat: 48.8566, lon: 2.3522 },
   { name: "Nice", lat: 43.7102, lon: 7.2620 },
   { name: "Lyon", lat: 45.7640, lon: 4.8357 },
@@ -17,7 +19,6 @@ export const LOCATIONS = [
 ];
 
 export async function getOfficeDashboardData(): Promise<OfficeData[]> {
-  "use server";
   const session = await auth();
   const userId = session?.user?.id;
 
@@ -143,7 +144,6 @@ export async function addUserTransportLocation(data: {
   label: string;
   address: string;
 }) {
-  "use server";
   const session = await auth();
   if (!session?.user?.id) throw new Error("Unauthorized");
 

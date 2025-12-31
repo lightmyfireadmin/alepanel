@@ -7,26 +7,27 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 import { addUserTransportLocation } from "@/lib/actions/office";
-import { toast } from "@/components/ui/use-toast"; // Correct path based on memory
+import { useToast } from "@/components/ui/toast";
 
 export function AddLocationDialog({ officeName }: { officeName: string }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [label, setLabel] = useState("");
   const [address, setAddress] = useState("");
+  const { success, error } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
       await addUserTransportLocation({ officeName, label, address });
-      toast.success("Adresse ajoutée avec succès");
+      success("Adresse ajoutée avec succès");
       setOpen(false);
       setLabel("");
       setAddress("");
-    } catch (error) {
-      console.error(error);
-      toast.error("Erreur lors de l'ajout de l'adresse");
+    } catch (err) {
+      console.error(err);
+      error("Erreur lors de l'ajout de l'adresse");
     } finally {
       setLoading(false);
     }
