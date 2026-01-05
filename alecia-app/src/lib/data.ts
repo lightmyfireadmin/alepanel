@@ -6,6 +6,10 @@ export const teamMembers = [
     role: "Associé fondateur",
     photo: "/assets/Equipe_Alecia/GC_1_-_cropped_p800.jpg",
     linkedinUrl: "https://www.linkedin.com/in/gregorycolin/",
+    email: "gregory.colin@alecia.fr",
+    formation: "Audencia",
+    bureau: "Grand-Ouest",
+    bio: "Grégory est diplômé d'Audencia. Il débute sa carrière au sein du groupe Allianz où il exerce durant 7 années des fonctions d'Analyste crédit, d'Auditeur interne et de Contrôleur de gestion. Il rejoint alors les équipes transactionnelles de Deloitte où il intervient pendant 4 ans en tant que Senior Manager et conduit des missions de fusion/acquisition et de due diligence financière. Grégory crée le bureau Grand Ouest d'une banque d'affaires small cap en 2022 avant de co-fonder alecia en 2024. Grégory est par ailleurs membre du comité de sélection du fonds d'amorçage d'Audencia depuis 2022.",
   },
   {
     id: "2",
@@ -14,6 +18,10 @@ export const teamMembers = [
     role: "Associé fondateur",
     photo: "/assets/Equipe_Alecia/CB_1_-_cropped_-_alt_p800.jpg",
     linkedinUrl: "https://www.linkedin.com/in/christophe-berthon-843924118/",
+    email: "christophe.berthon@alecia.fr",
+    formation: "Etudes commerciales",
+    bureau: "Sud Est",
+    bio: "Après un diplôme de commerce, Christophe débute sa carrière au sein du Groupe Carrefour. Il y évolue pendant 15 ans, occupant successivement des postes fonctionnels notamment aux achats nationaux et régionaux, ainsi qu'opérationnels à des postes de Direction en hypermarchés. Il s'oriente ensuite vers l'entreprenariat et la prestation de services aux entreprises, en créant un groupe qui grandit progressivement à la fois en croissance organique et en croissance externe. Il expérimente alors pour son propre compte les processus de M&A et de levée de fonds en France et en Europe. Après la cession de son groupe il intègre une banque d'affaires small cap en 2019, et y cofonde le bureau de Nice. En 2024, Christophe cofonde alecia, et apporte son expertise en matière de négociation et d'accompagnement des dirigeants sur les opérations de haut de bilan.",
   },
   {
     id: "3",
@@ -22,6 +30,10 @@ export const teamMembers = [
     role: "Associé fondateur",
     photo: "/assets/Equipe_Alecia/ME_2_-_cropped_-_alt_p800.jpg",
     linkedinUrl: "https://www.linkedin.com/in/martinegasse/",
+    email: "martin.egasse@alecia.fr",
+    formation: "DECG - Université Panthéon-Sorbonne",
+    bureau: "Sud Est",
+    bio: "Martin est expert-comptable diplômé. Après un parcours académique à l'Université Paris 1 Panthéon-Sorbonne, il débute chez KPMG et intervient pendant 4 ans sur des missions d'expertise-comptable et d'audit légal auprès de TPE, PME et grands comptes. Il évolue ensuite pendant près de 15 ans au sein de différentes PME et ETI où il occupe des postes de Contrôleur de gestion, Responsable ou Directeur financier. Rompu aux situations financières tendues (factoring, procédures collectives, etc.) il accompagne la restructuration ou la cession de plusieurs PME. Martin exerce en tant que conseil en fusion-acquisition depuis plus de 7 ans et cofonde alecia en 2024.",
   },
   {
     id: "4",
@@ -30,6 +42,10 @@ export const teamMembers = [
     role: "Associé fondateur",
     photo: "/assets/Equipe_Alecia/TC_2_p800.jpg",
     linkedinUrl: "https://www.linkedin.com/in/tristan-cossec-3b5a0247/",
+    email: "tristan.cossec@alecia.fr",
+    formation: "EDHEC Business School",
+    bureau: "Sud Est",
+    bio: "Diplômé de l'EDHEC Business School, Tristan débute sa carrière en fonds d'investissement au sein d'Apax Partners. Il bascule ensuite en conseil en fusion-acquisition, au cours de 3 expériences au sein de boutiques Small & Midcap sur Paris : Eponyme Partners, Equideals et Raphaël Financial Advisory. Tristan intègre ensuite un groupe d'éducation supérieur au poste de M&A et Stratégie. Il rejoint une banque d'affaires small cap en 2022 avant de co-fonder alecia en 2024. Tristan apporte ses compétences techniques et sa maîtrise des process M&A dans des opérations de cession et de LBO/levée de fonds.",
   },
   {
     id: "5",
@@ -38,6 +54,10 @@ export const teamMembers = [
     role: "Associé fondateur",
     photo: "/assets/Equipe_Alecia/SF_2_p800.jpg",
     linkedinUrl: "https://www.linkedin.com/in/serge-de-fa%C3%BF-09713555/",
+    email: "serge.defay@alecia.fr",
+    formation: "EDHEC Business School, Faculté de Droit de Lille",
+    bureau: "Auvergne Rhône Alpes",
+    bio: "Serge est diplômé d'un MSc de l'EDHEC Business School et d'un Master 2 en Droit des affaires de l'Université de Lille. Il débute sa carrière en participant à la création de Bolden, prêteur alternatif dédié aux PME françaises. Il occupe les postes de Directeur crédit & produit jusqu'à la cession de la startup à la banque luxembourgeoise RiverBank, dont il créé le bureau français de financements structurés small cap. Serge devient ensuite conseil pour des PME et startups en croissance, avant de rejoindre une banque d'affaires small cap. Il cofonde en 2024 alecia et apporte sa double expertise en finance et direction d'entreprise.",
   },
   {
     id: "6",
@@ -46,6 +66,10 @@ export const teamMembers = [
     role: "Associé fondateur",
     photo: "/assets/Equipe_Alecia/JB_1_-_cropped_-_alt_p800.jpg",
     linkedinUrl: "https://www.linkedin.com/in/jeromeberthiau/",
+    email: "jerome.berthiau@alecia.fr",
+    formation: "EDHEC Business School",
+    bureau: "Sud Est",
+    bio: "Jérôme est diplômé d'un MSc en finance d'entreprise de l'EDHEC Business School. Après des premières expériences en fusions-acquisitions chez Clearwater puis en dette privée chez LGT, il intègre les équipes de financements structurés de la Société Générale où il participe à de nombreux LBO large-cap en France pendant 2 ans. Il intègre ensuite les équipes de dette privée de Five Arrows, groupe Rothschild & Co, où il participe pendant 6 ans à l'investissement dans une dizaine de sociétés européennes sous format unitranche, dette mezzanine ou PIK Notes. Jérôme est conseil M&A depuis 4 ans, intervenant notamment sur les secteurs tech, santé, industrie et services BtoB. Il cofonde alecia en 2024.",
   },
   {
     id: "7",
@@ -54,6 +78,10 @@ export const teamMembers = [
     role: "Analyste",
     photo: "/assets/Equipe_Alecia/LP__2__-_cropped.jpg",
     linkedinUrl: "https://www.linkedin.com/in/louise-p-184b7a160/",
+    email: "louise.pini@alecia.fr",
+    formation: "iaelyon School of Management",
+    bureau: "Sud Est",
+    bio: "Louise est diplômée du Master Ingénierie Financière et Transaction de l'iaelyon School of Management. Durant son parcours académique, elle cumule différentes expériences dans le secteur financier (coverage large cap chez ING, analyse financière à la Banque de France, audit financier et transaction services dans des cabinets lyonnais). A la fin de ses études, Louise intègre une banque d'affaires indépendante pendant deux ans, puis rejoint alecia en 2024.",
   },
   {
     id: "8",
@@ -62,6 +90,10 @@ export const teamMembers = [
     role: "Analyste",
     photo: "/assets/Equipe_Alecia/MF_p800.jpg",
     linkedinUrl: "https://www.linkedin.com/in/mickael-furet/",
+    email: "mickael.furet@alecia.fr",
+    formation: "Edhec Business School",
+    bureau: "Sud Est",
+    bio: "Mickael est étudiant du MiM et du MSc Finance d'Entreprise de l'EDHEC Business School. Il initie son parcours professionnel au CIC en tant que Chargé d'Affaires Entreprises, avant d'exercer en tant qu'Analyste M&A au sein de deux cabinets de conseil en fusions-acquisitions.",
   },
 ];
 
@@ -287,8 +319,9 @@ export const mockSectors = [
 // Enhanced team members with bios (Phase 1 - Roadmap #22)
 export const teamMembersEnhanced = teamMembers.map((member) => ({
   ...member,
-  bioFr: `${member.name} est ${member.role} chez alecia. Fort d'une expérience significative en conseil en fusion-acquisition, il accompagne les dirigeants de PME et ETI dans leurs opérations de transmission, acquisition et levée de fonds.`,
-  bioEn: `${member.name} is a ${member.role} at alecia. With significant experience in M&A advisory, they support SME and mid-cap executives in their transmission, acquisition, and fundraising operations.`,
+  bioFr: member.bio,
+  // TODO: Add English translations for team member bios
+  bioEn: member.bio, // Temporary: using French bio for English until translations are provided
   sectorsExpertise: member.id === "1" ? ["technologies-logiciels", "services-financiers-assurance"] 
     : member.id === "2" ? ["distribution-services-b2b", "agroalimentaire"]
     : member.id === "3" ? ["distribution-services-b2c", "energie-environnement"]

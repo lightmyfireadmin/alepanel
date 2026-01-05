@@ -13,6 +13,10 @@ interface Office {
   // Position as percentage of the map image dimensions
   x: number;
   y: number;
+  // Group ID for offices that should be grouped together (e.g., same region)
+  groupId?: string;
+  // Display name for grouped offices (optional, used in legend)
+  groupDisplayName?: string;
 }
 
 // City positions as percentages of the France map PNG
@@ -47,7 +51,9 @@ const offices: Office[] = [
     city: "Aix-en-Provence", 
     phone: "contact@alecia.fr", 
     x: 77,
-    y: 78
+    y: 78,
+    groupId: "sud-est",
+    groupDisplayName: "Aix-en-Provence & Nice"
   },
   { 
     id: "sud-est-nice", 
@@ -55,9 +61,23 @@ const offices: Office[] = [
     city: "Nice", 
     phone: "contact@alecia.fr", 
     x: 92,
-    y: 84
+    y: 84,
+    groupId: "sud-est",
+    groupDisplayName: "Aix-en-Provence & Nice"
   },
 ];
+
+// Get unique office groups for legend
+const getUniqueOfficeGroups = () => {
+  const seen = new Map<string, Office>();
+  offices.forEach(office => {
+    const key = office.groupId || office.id;
+    if (!seen.has(key)) {
+      seen.set(key, office);
+    }
+  });
+  return Array.from(seen.values());
+};
 
 /**
  * Regional map component using France PNG image
@@ -70,6 +90,17 @@ export function RegionalMap() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
+
+  // Check if an office should be highlighted (either directly or via group)
+  const isOfficeActive = (office: Office) => {
+    if (!activeOffice) return false;
+    if (activeOffice.id === office.id) return true;
+    // Also highlight if they share the same groupId
+    if (activeOffice.groupId && office.groupId === activeOffice.groupId) return true;
+    return false;
+  };
+
+  const uniqueGroups = getUniqueOfficeGroups();
 
   return (
     <div className="relative w-full max-w-xl mx-auto">
@@ -126,8 +157,8 @@ export function RegionalMap() {
                     marginTop: "-18px",
                   }}
                   animate={{
-                    scale: [1, 1.4, 1],
-                    opacity: [0.5, 0.1, 0.5],
+                    scale: isOfficeActive(office) ? [1.2, 1.6, 1.2] : [1, 1.4, 1],
+                    opacity: isOfficeActive(office) ? [0.8, 0.2, 0.8] : [0.5, 0.1, 0.5],
                   }}
                   transition={{
                     duration: 2,
@@ -143,7 +174,7 @@ export function RegionalMap() {
                   style={{ 
                     width: "28px", 
                     height: "28px", 
-                    opacity: 0.25,
+                    opacity: isOfficeActive(office) ? 0.4 : 0.25,
                     left: "50%",
                     top: "50%",
                     marginLeft: "-14px",
@@ -165,7 +196,7 @@ export function RegionalMap() {
                     marginTop: "-8px",
                   }}
                   initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
+                  animate={{ scale: isOfficeActive(office) ? 1.3 : 1 }}
                   transition={{ 
                     delay: index * 0.1 + 0.2, 
                     type: "spring", 
@@ -231,33 +262,43 @@ export function RegionalMap() {
       </div>
 
       {/* Legend cards */}
-      <div className="mt-8 grid grid-cols-2 md:grid-cols-5 gap-3">
-        {offices.map((office) => (
-          <motion.button
-            key={office.id}
-            onMouseEnter={() => setActiveOffice(office)}
-            onMouseLeave={() => setActiveOffice(null)}
-            onClick={() => setActiveOffice(activeOffice?.id === office.id ? null : office)}
-            whileHover={{ scale: 1.03, y: -2 }}
-            whileTap={{ scale: 0.98 }}
-            className={`flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 ${
-              activeOffice?.id === office.id
-                ? "border-[var(--accent)] bg-[var(--accent)]/10 shadow-navy-lg"
-                : "border-[var(--border)] bg-[var(--background-secondary)] hover:border-[var(--accent)]/50 hover:shadow-navy-md"
-            }`}
-          >
-            <div 
-              className={`w-3 h-3 rounded-full flex-shrink-0 transition-all duration-200 ${
-                activeOffice?.id === office.id ? "scale-125" : ""
-              }`} 
-              style={{ backgroundColor: "var(--accent)" }} 
-            />
-            <div className="text-left">
-              <p className="text-sm font-medium text-[var(--foreground)] leading-tight">{office.name}</p>
-              <p className="text-xs text-[var(--foreground-muted)] mt-0.5">{office.city}</p>
-            </div>
-          </motion.button>
-        ))}
+      <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-3">
+        {uniqueGroups.map((office) => {
+          const groupKey = office.groupId || office.id;
+          const isActive = activeOffice && (
+            activeOffice.id === office.id || 
+            (activeOffice.groupId && activeOffice.groupId === office.groupId)
+          );
+          
+          return (
+            <motion.button
+              key={groupKey}
+              onMouseEnter={() => setActiveOffice(office)}
+              onMouseLeave={() => setActiveOffice(null)}
+              onClick={() => setActiveOffice(isActive ? null : office)}
+              whileHover={{ scale: 1.03, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              className={`flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 ${
+                isActive
+                  ? "border-[var(--accent)] bg-[var(--accent)]/10 shadow-lg shadow-[var(--accent)]/10"
+                  : "border-[var(--border)] bg-[var(--background-secondary)] hover:border-[var(--accent)]/50 hover:shadow-md"
+              }`}
+            >
+              <div 
+                className={`w-3 h-3 rounded-full flex-shrink-0 transition-all duration-200 ${
+                  isActive ? "scale-125" : ""
+                }`} 
+                style={{ backgroundColor: "var(--accent)" }} 
+              />
+              <div className="text-left">
+                <p className="text-sm font-medium text-[var(--foreground)] leading-tight">{office.name}</p>
+                <p className="text-xs text-[var(--foreground-muted)] mt-0.5">
+                  {office.groupDisplayName || office.city}
+                </p>
+              </div>
+            </motion.button>
+          );
+        })}
       </div>
     </div>
   );

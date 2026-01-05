@@ -9,19 +9,16 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { teamMembers } from "@/lib/data";
 
-// Team members - names are not translated
-// Defined outside component to avoid recreation
-const teamMembers = [
-  { name: "Grégory Colin", initials: "GC", photo: "/assets/Equipe_Alecia/GC_1_-_cropped_p800.jpg", linkedin: "https://linkedin.com" },
-  { name: "Christophe Berthon", initials: "CB", photo: "/assets/Equipe_Alecia/CB_1_-_cropped_-_alt_p800.jpg" },
-  { name: "Martin Egasse", initials: "ME", photo: "/assets/Equipe_Alecia/ME_2_-_cropped_-_alt_p800.jpg" },
-  { name: "Tristan Cossec", initials: "TC", photo: "/assets/Equipe_Alecia/TC_2_p800.jpg" },
-  { name: "Serge de Faÿ", initials: "SF", photo: "/assets/Equipe_Alecia/SF_2_p800.jpg" },
-  { name: "Jérôme Berthiau", initials: "JB", photo: "/assets/Equipe_Alecia/JB_1_-_cropped_-_alt_p800.jpg" },
-  { name: "Louise Pini", initials: "LP", photo: "/assets/Equipe_Alecia/LP__2__-_cropped.jpg" },
-  { name: "Mickael Furet", initials: "MF", photo: "/assets/Equipe_Alecia/MF_p800.jpg" },
-];
+// Get initials from name
+const getInitials = (name: string) => {
+  return name
+    .split(" ")
+    .map(word => word[0])
+    .join("")
+    .toUpperCase();
+};
 
 export function HomeClient() {
   const t = useTranslations();
@@ -30,7 +27,7 @@ export function HomeClient() {
   // Fade out scroll indicator as user scrolls
   const scrollIndicatorOpacity = useTransform(scrollY, [0, 200], [1, 0]);
 
-  // Team modal state
+  // Team modal state - now with full member type
   const [selectedMember, setSelectedMember] = useState<typeof teamMembers[0] | null>(null);
 
   const expertises = [
@@ -234,7 +231,7 @@ export function HomeClient() {
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-[var(--accent)]/20 to-[var(--accent)]/5 flex items-center justify-center">
                         <span className="text-xl font-semibold text-[var(--accent)]">
-                          {member.initials}
+                          {getInitials(member.name)}
                         </span>
                       </div>
                     )}
