@@ -180,6 +180,13 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  
+  /* Custom shadow colors with #061A40 navy */
+  --shadow-navy-sm: 0 1px 2px 0 rgba(6, 26, 64, 0.05);
+  --shadow-navy-md: 0 4px 6px -1px rgba(6, 26, 64, 0.1), 0 2px 4px -1px rgba(6, 26, 64, 0.06);
+  --shadow-navy-lg: 0 10px 15px -3px rgba(6, 26, 64, 0.1), 0 4px 6px -2px rgba(6, 26, 64, 0.05);
+  --shadow-navy-xl: 0 20px 25px -5px rgba(6, 26, 64, 0.1), 0 10px 10px -5px rgba(6, 26, 64, 0.04);
+  --shadow-navy-2xl: 0 25px 50px -12px rgba(6, 26, 64, 0.25);
 }
 
 /* =============================================================================
@@ -257,12 +264,12 @@ h6 {
 
 .card-hover:hover {
   transform: translateY(-6px);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
-  border-color: rgba(245, 158, 11, 0.4);
+  box-shadow: 0 16px 48px rgba(6, 26, 64, 0.15);
+  border-color: rgba(6, 26, 64, 0.4);
 }
 
 .dark .card-hover:hover {
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 16px 48px rgba(6, 26, 64, 0.5);
 }
 
 /* Link hover effect */
@@ -284,6 +291,31 @@ h6 {
 
 .link-hover:hover::after {
   width: 100%;
+}
+
+/* Link hover effect with teal accent */
+.link-hover-teal {
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.link-hover-teal::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent-teal);
+  transition: width 0.3s ease;
+}
+
+.link-hover-teal:hover::after {
+  width: 100%;
+}
+
+.link-hover-teal:hover {
+  color: var(--accent-teal);
 }
 
 /* Focus ring improvements */
@@ -347,6 +379,46 @@ h6 {
 }
 
 /* Wave animations removed for performance */
+
+/* =============================================================================
+   CUSTOM SHADOW UTILITIES (Navy Blue #061A40)
+   ============================================================================= */
+
+.shadow-navy-sm {
+  box-shadow: 0 1px 2px 0 rgba(6, 26, 64, 0.05);
+}
+
+.shadow-navy {
+  box-shadow: 0 4px 6px -1px rgba(6, 26, 64, 0.1), 0 2px 4px -1px rgba(6, 26, 64, 0.06);
+}
+
+.shadow-navy-md {
+  box-shadow: 0 4px 6px -1px rgba(6, 26, 64, 0.1), 0 2px 4px -1px rgba(6, 26, 64, 0.06);
+}
+
+.shadow-navy-lg {
+  box-shadow: 0 10px 15px -3px rgba(6, 26, 64, 0.1), 0 4px 6px -2px rgba(6, 26, 64, 0.05);
+}
+
+.shadow-navy-xl {
+  box-shadow: 0 20px 25px -5px rgba(6, 26, 64, 0.1), 0 10px 10px -5px rgba(6, 26, 64, 0.04);
+}
+
+.shadow-navy-2xl {
+  box-shadow: 0 25px 50px -12px rgba(6, 26, 64, 0.25);
+}
+
+.hover\:shadow-navy-lg:hover {
+  box-shadow: 0 10px 15px -3px rgba(6, 26, 64, 0.1), 0 4px 6px -2px rgba(6, 26, 64, 0.05);
+}
+
+.hover\:shadow-navy-xl:hover {
+  box-shadow: 0 20px 25px -5px rgba(6, 26, 64, 0.1), 0 10px 10px -5px rgba(6, 26, 64, 0.04);
+}
+
+.hover\:shadow-navy-2xl:hover {
+  box-shadow: 0 25px 50px -12px rgba(6, 26, 64, 0.25);
+}
 
 /* =============================================================================
    SCROLLBAR STYLING
