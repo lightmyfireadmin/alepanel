@@ -320,7 +320,8 @@ export const mockSectors = [
 export const teamMembersEnhanced = teamMembers.map((member) => ({
   ...member,
   bioFr: member.bio,
-  bioEn: member.bio, // For now, use French bio for English as well
+  // TODO: Add English translations for team member bios
+  bioEn: member.bio, // Temporary: using French bio for English until translations are provided
   sectorsExpertise: member.id === "1" ? ["technologies-logiciels", "services-financiers-assurance"] 
     : member.id === "2" ? ["distribution-services-b2b", "agroalimentaire"]
     : member.id === "3" ? ["distribution-services-b2c", "energie-environnement"]

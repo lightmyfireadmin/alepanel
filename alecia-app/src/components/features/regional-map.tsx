@@ -15,6 +15,8 @@ interface Office {
   y: number;
   // Group ID for offices that should be grouped together (e.g., same region)
   groupId?: string;
+  // Display name for grouped offices (optional, used in legend)
+  groupDisplayName?: string;
 }
 
 // City positions as percentages of the France map PNG
@@ -50,7 +52,8 @@ const offices: Office[] = [
     phone: "contact@alecia.fr", 
     x: 77,
     y: 78,
-    groupId: "sud-est"
+    groupId: "sud-est",
+    groupDisplayName: "Aix-en-Provence & Nice"
   },
   { 
     id: "sud-est-nice", 
@@ -59,7 +62,8 @@ const offices: Office[] = [
     phone: "contact@alecia.fr", 
     x: 92,
     y: 84,
-    groupId: "sud-est"
+    groupId: "sud-est",
+    groupDisplayName: "Aix-en-Provence & Nice"
   },
 ];
 
@@ -289,7 +293,7 @@ export function RegionalMap() {
               <div className="text-left">
                 <p className="text-sm font-medium text-[var(--foreground)] leading-tight">{office.name}</p>
                 <p className="text-xs text-[var(--foreground-muted)] mt-0.5">
-                  {office.groupId === "sud-est" ? "Aix-en-Provence & Nice" : office.city}
+                  {office.groupDisplayName || office.city}
                 </p>
               </div>
             </motion.button>

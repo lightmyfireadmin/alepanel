@@ -58,7 +58,11 @@ export function TeamMemberModal({ isOpen, onClose, member }: TeamMemberModalProp
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-[var(--accent)]/20 to-[var(--accent)]/5 flex items-center justify-center">
                   <span className="text-4xl font-semibold text-[var(--accent)]">
-                    {member.name.charAt(0)}
+                    {member.name
+                      .split(" ")
+                      .map(word => word[0])
+                      .join("")
+                      .toUpperCase()}
                   </span>
                 </div>
               )}
