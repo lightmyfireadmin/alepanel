@@ -16,7 +16,6 @@ interface Office {
 }
 
 // City positions as percentages of the France map PNG
-// Nice is at the far southeast corner near Italian border on Mediterranean coast
 const offices: Office[] = [
   { 
     id: "idf", 
@@ -29,25 +28,32 @@ const offices: Office[] = [
   { 
     id: "ouest", 
     name: "Grand Ouest", 
-    city: "Nantes", 
+    city: "Lorient", 
     phone: "contact@alecia.fr", 
-    x: 30,
-    y: 42
+    x: 25,
+    y: 45
   },
   { 
     id: "ara", 
     name: "Auvergne Rhône-Alpes", 
-    city: "Lyon", 
+    city: "Annecy", 
     phone: "contact@alecia.fr", 
-    x: 70,
-    y: 57
+    x: 73,
+    y: 50
   },
   { 
-    id: "sud-est", 
+    id: "sud-est-aix", 
+    name: "Sud Est", 
+    city: "Aix-en-Provence", 
+    phone: "contact@alecia.fr", 
+    x: 77,
+    y: 78
+  },
+  { 
+    id: "sud-est-nice", 
     name: "Sud Est", 
     city: "Nice", 
     phone: "contact@alecia.fr", 
-    // Nice - far southeast on Mediterranean coast
     x: 92,
     y: 84
   },
@@ -225,7 +231,7 @@ export function RegionalMap() {
       </div>
 
       {/* Legend cards */}
-      <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="mt-8 grid grid-cols-2 md:grid-cols-5 gap-3">
         {offices.map((office) => (
           <motion.button
             key={office.id}

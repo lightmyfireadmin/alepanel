@@ -19,7 +19,13 @@ const offices = [
     image: "/assets/Contact_Alecia/paris_compressed.jpg",
   },
   {
-    id: "sudEst",
+    id: "sudEst1",
+    nameKey: "officesSudEst" as const,
+    city: "Aix-en-Provence",
+    image: "/assets/Contact_Alecia/nice_compressed.jpg",
+  },
+  {
+    id: "sudEst2",
     nameKey: "officesSudEst" as const,
     city: "Nice",
     image: "/assets/Contact_Alecia/nice_compressed.jpg",
@@ -27,13 +33,13 @@ const offices = [
   {
     id: "aura",
     nameKey: "officesAura" as const,
-    city: "Lyon",
+    city: "Annecy",
     image: "/assets/Contact_Alecia/lyon_compressed.jpg",
   },
   {
     id: "grandOuest",
     nameKey: "officesGrandOuest" as const,
-    city: "Nantes",
+    city: "Lorient",
     image: "/assets/Contact_Alecia/grand_ouest_compressed.jpg",
   },
 ];
@@ -113,7 +119,7 @@ export default async function ContactPage() {
         {/* Office Images */}
         <section className="py-16 px-6">
           <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
               {offices.map((office) => (
                 <div
                   key={office.id}
