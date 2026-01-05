@@ -4,15 +4,7 @@ import { MobileStickyFooter, CookieBanner } from "@/components/features";
 import { PublicWidgets } from "@/components/layout/PublicWidgets";
 import { Providers } from "@/components/Providers";
 import { getMessages, getLocale } from "next-intl/server";
-import { Outfit } from "next/font/google";
 import "./globals.css";
-
-// Using Google Font Outfit for the entire website
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-outfit",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: {
@@ -57,6 +49,11 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
+        {/* Google Font Outfit */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet" />
+        
         {/* Lordicon animated icons */}
         <script src="https://cdn.lordicon.com/lordicon.js" async />
         
@@ -121,7 +118,7 @@ export default async function RootLayout({
         />
       </head>
       <body
-        className={`${outfit.variable} antialiased bg-[var(--background)] text-[var(--foreground)]`}
+        className="antialiased bg-[var(--background)] text-[var(--foreground)]"
       >
         <Providers locale={locale} messages={messages}>
           <SkipToMain />

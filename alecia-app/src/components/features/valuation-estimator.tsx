@@ -209,8 +209,8 @@ export function ValuationEstimator() {
               </p>
               
               <p className="text-xs text-[var(--foreground-muted)] text-center italic border-t border-[var(--border)] pt-3">
-                Cette estimation est fournie à titre indicatif uniquement et n'a aucune valeur légale. 
-                Elle ne constitue pas un avis professionnel et ne saurait engager la responsabilité d'alecia.
+                Cette estimation est fournie à titre indicatif uniquement et n&apos;a aucune valeur légale. 
+                Elle ne constitue pas un avis professionnel et ne saurait engager la responsabilité d&apos;alecia.
               </p>
             </motion.form>
           )}

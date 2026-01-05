@@ -50,10 +50,10 @@
   --accent-foreground: #0f172a;
   
   /* Fonts - Outfit from Google Fonts */
-  --font-outfit: var(--font-outfit);
-  --font-geist-sans: var(--font-outfit);
+  --font-outfit: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  --font-geist-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   --font-geist-mono: 'Menlo', 'Monaco', 'Courier New', monospace;
-  --font-playfair: var(--font-outfit);
+  --font-playfair: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   
   /* Charts */
   --chart-1: oklch(0.646 0.222 41.116);
@@ -184,7 +184,7 @@
    ============================================================================= */
 
 body {
-  font-family: var(--font-outfit), Arial, Helvetica, sans-serif;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
 /* =============================================================================
@@ -197,7 +197,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-outfit), Arial, Helvetica, sans-serif;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   font-weight: 600;
   letter-spacing: -0.01em;
 }
@@ -230,14 +230,15 @@ h6 {
 /* Metallic blue button */
 .btn-gold {
   background: linear-gradient(135deg, #061A40 0%, #23375e 50%, #19354E 100%);
-  color: #ffffff;
+  color: #ffffff !important;
   font-weight: 600;
   transition: all 0.2s ease;
 }
 
 .btn-gold:hover {
-  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+  box-shadow: 0 4px 20px rgba(6, 26, 64, 0.4);
   transform: translateY(-1px);
+  color: #ffffff !important;
 }
 
 /* Card hover effect */
