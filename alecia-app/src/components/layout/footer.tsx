@@ -16,9 +16,10 @@ const footerLinks = {
   ],
   offices: [
     { label: "Île-de-France", city: "Paris" },
+    { label: "Sud Est", city: "Aix-en-Provence" },
     { label: "Sud Est", city: "Nice" },
-    { label: "Auvergne Rhône-Alpes", city: "Lyon" },
-    { label: "Grand Ouest", city: "Nantes" },
+    { label: "Auvergne Rhône-Alpes", city: "Annecy" },
+    { label: "Grand Ouest", city: "Lorient" },
   ],
 };
 
@@ -55,17 +56,8 @@ export function Footer() {
             </Link>
             <p className="text-sm text-[var(--foreground-muted)] mb-4 max-w-xs">
               Conseil en fusion-acquisition pour PME et ETI. 
-              Valorisation €5M-€50M.
+              Valorisation €5M-€100M.
             </p>
-            {/* Compliance Badges */}
-            <div className="flex items-center gap-4 text-xs text-[var(--foreground-faint)] mb-4" role="list" aria-label="Certifications">
-              <span className="px-2 py-1 border border-[var(--border)] rounded" role="listitem" title="Autorité des marchés financiers">
-                AMF
-              </span>
-              <span className="px-2 py-1 border border-[var(--border)] rounded" role="listitem" title="Organisme pour le registre des intermédiaires en assurance">
-                ORIAS
-              </span>
-            </div>
             {/* Social Links */}
             <a
               href="https://www.linkedin.com/company/alecia-conseil"

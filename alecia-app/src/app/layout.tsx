@@ -4,20 +4,15 @@ import { MobileStickyFooter, CookieBanner } from "@/components/features";
 import { PublicWidgets } from "@/components/layout/PublicWidgets";
 import { Providers } from "@/components/Providers";
 import { getMessages, getLocale } from "next-intl/server";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 
-// Using fallback fonts to avoid Google Fonts fetching issues during build
-const geistSans = {
-  variable: "--font-geist-sans",
-};
-
-const geistMono = {
-  variable: "--font-geist-mono",
-};
-
-const playfair = {
-  variable: "--font-playfair",
-};
+// Using Google Font Outfit for the entire website
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -25,7 +20,7 @@ export const metadata: Metadata = {
     template: "%s | alecia",
   },
   description:
-    "Conseil en fusion-acquisition pour PME et ETI. Cession, acquisition, levée de fonds. Valorisation €5M-€50M.",
+    "Conseil en fusion-acquisition pour PME et ETI. Cession, acquisition, levée de fonds. Valorisation €5M-€100M.",
   keywords: [
     "fusion-acquisition",
     "M&A",
@@ -73,7 +68,7 @@ export default async function RootLayout({
               "@context": "https://schema.org",
               "@type": "FinancialService",
               "name": "alecia",
-              "description": "Conseil en fusion-acquisition pour PME et ETI. Cession, acquisition, levée de fonds. Valorisation €5M-€50M.",
+              "description": "Conseil en fusion-acquisition pour PME et ETI. Cession, acquisition, levée de fonds. Valorisation €5M-€100M.",
               "url": "https://www.alecia.fr",
               "logo": "https://www.alecia.fr/assets/alecia_logo.svg",
               "areaServed": {
@@ -96,14 +91,20 @@ export default async function RootLayout({
                 },
                 {
                   "@type": "PostalAddress",
-                  "addressLocality": "Lyon",
+                  "addressLocality": "Annecy",
                   "addressRegion": "Auvergne-Rhône-Alpes",
                   "addressCountry": "FR"
                 },
                 {
                   "@type": "PostalAddress",
-                  "addressLocality": "Nantes",
-                  "addressRegion": "Pays de la Loire",
+                  "addressLocality": "Lorient",
+                  "addressRegion": "Bretagne",
+                  "addressCountry": "FR"
+                },
+                {
+                  "@type": "PostalAddress",
+                  "addressLocality": "Aix-en-Provence",
+                  "addressRegion": "Provence-Alpes-Côte d'Azur",
                   "addressCountry": "FR"
                 }
               ],
@@ -120,7 +121,7 @@ export default async function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} antialiased bg-[var(--background)] text-[var(--foreground)]`}
+        className={`${outfit.variable} antialiased bg-[var(--background)] text-[var(--foreground)]`}
       >
         <Providers locale={locale} messages={messages}>
           <SkipToMain />
