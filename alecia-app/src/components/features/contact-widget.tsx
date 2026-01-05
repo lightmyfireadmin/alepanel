@@ -27,7 +27,7 @@ export function ContactWidget() {
             <Button
               variant="outline"
               size="lg"
-              className="bg-[var(--card)] border-[var(--border)] shadow-lg gap-3 justify-start pr-6 hover:border-[var(--accent)]"
+              className="bg-[var(--card)] border-[var(--border)] shadow-lg gap-3 justify-start pr-6 hover:border-[var(--accent-teal)] hover:bg-[var(--accent-teal)]/10"
               onClick={() => {
                   // Placeholder for AI Chat
                   alert("AI Assistant Coming Soon!");
@@ -43,7 +43,7 @@ export function ContactWidget() {
             <Button
               variant="outline"
               size="lg"
-              className="bg-[var(--card)] border-[var(--border)] shadow-lg gap-3 justify-start pr-6 hover:border-[var(--accent)]"
+              className="bg-[var(--card)] border-[var(--border)] shadow-lg gap-3 justify-start pr-6 hover:border-[var(--accent-teal)] hover:bg-[var(--accent-teal)]/10"
               asChild
             >
               <a href="tel:+33123456789">
@@ -58,11 +58,11 @@ export function ContactWidget() {
             <Button
               variant="outline"
               size="lg"
-              className="bg-[var(--card)] border-[var(--border)] shadow-lg gap-3 justify-start pr-6 hover:border-[var(--accent)]"
+              className="bg-[var(--card)] border-[var(--border)] shadow-lg gap-3 justify-start pr-6 hover:border-[var(--accent-teal)] hover:bg-[var(--accent-teal)]/10"
               asChild
             >
               <Link href="/contact">
-                <div className="bg-[var(--accent)] p-2 rounded-full text-white">
+                <div className="bg-[var(--accent-teal)] p-2 rounded-full text-white">
                   <Mail className="w-4 h-4" />
                 </div>
                 <span className="font-medium">{t("emailUs")}</span>
