@@ -228,7 +228,7 @@ h6 {
 
 /* Metallic gold button */
 .btn-gold {
-  background: linear-gradient(135deg, #3E6BF7 0%, #062661 50%, #061A40 100%);
+  background: linear-gradient(135deg, #061A40 0%, #23375e 50%, #19354E 100%);
   color: #ffffff;
   font-weight: 600;
   transition: all 0.2s ease;
