@@ -697,6 +697,19 @@ export const CONTACT_TAGS = [
   "Fonds PE",
 ] as const;
 
+// =============================================================================
+// SITE SETTINGS TABLE - Centralized configuration for the showcase website
+// =============================================================================
+export const siteSettings = pgTable("site_settings", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  key: text("key").unique().notNull(),
+  value: jsonb("value"),
+  category: text("category").notNull(), // 'branding', 'contact', 'integrations', 'analytics', 'legal'
+  label: text("label").notNull(),
+  description: text("description"),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const leadRelations = relations(leads, () => ({
   // Define any relations if needed
 }));

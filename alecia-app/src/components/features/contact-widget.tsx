@@ -27,7 +27,7 @@ export function ContactWidget() {
             <Button
               variant="outline"
               size="lg"
-              className="bg-[var(--card)] border-[var(--border)] shadow-lg gap-3 justify-start pr-6 hover:border-[var(--accent)]"
+              className="bg-[var(--card)] border-[var(--border)] shadow-navy-md gap-3 justify-start pr-6 hover:border-[var(--accent-teal)] hover:bg-[var(--accent-teal)]/10 hover:shadow-navy-lg"
               onClick={() => {
                   // Placeholder for AI Chat
                   alert("AI Assistant Coming Soon!");
@@ -43,7 +43,7 @@ export function ContactWidget() {
             <Button
               variant="outline"
               size="lg"
-              className="bg-[var(--card)] border-[var(--border)] shadow-lg gap-3 justify-start pr-6 hover:border-[var(--accent)]"
+              className="bg-[var(--card)] border-[var(--border)] shadow-navy-md gap-3 justify-start pr-6 hover:border-[var(--accent-teal)] hover:bg-[var(--accent-teal)]/10 hover:shadow-navy-lg"
               asChild
             >
               <a href="tel:+33123456789">
@@ -58,11 +58,11 @@ export function ContactWidget() {
             <Button
               variant="outline"
               size="lg"
-              className="bg-[var(--card)] border-[var(--border)] shadow-lg gap-3 justify-start pr-6 hover:border-[var(--accent)]"
+              className="bg-[var(--card)] border-[var(--border)] shadow-navy-md gap-3 justify-start pr-6 hover:border-[var(--accent-teal)] hover:bg-[var(--accent-teal)]/10 hover:shadow-navy-lg"
               asChild
             >
               <Link href="/contact">
-                <div className="bg-[var(--accent)] p-2 rounded-full text-white">
+                <div className="bg-[var(--accent-teal)] p-2 rounded-full text-white">
                   <Mail className="w-4 h-4" />
                 </div>
                 <span className="font-medium">{t("emailUs")}</span>
@@ -75,7 +75,7 @@ export function ContactWidget() {
       <Button
         onClick={toggleOpen}
         size="lg"
-        className="h-14 w-14 rounded-full btn-gold shadow-xl flex items-center justify-center relative"
+        className="h-14 w-14 rounded-full btn-gold shadow-navy-xl hover:shadow-navy-2xl flex items-center justify-center relative"
         aria-label={isOpen ? t("close") : t("openContact")}
       >
         <AnimatePresence mode="wait">

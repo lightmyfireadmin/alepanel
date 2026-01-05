@@ -242,8 +242,8 @@ export function RegionalMap() {
             whileTap={{ scale: 0.98 }}
             className={`flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 ${
               activeOffice?.id === office.id
-                ? "border-[var(--accent)] bg-[var(--accent)]/10 shadow-lg shadow-[var(--accent)]/10"
-                : "border-[var(--border)] bg-[var(--background-secondary)] hover:border-[var(--accent)]/50 hover:shadow-md"
+                ? "border-[var(--accent)] bg-[var(--accent)]/10 shadow-navy-lg"
+                : "border-[var(--border)] bg-[var(--background-secondary)] hover:border-[var(--accent)]/50 hover:shadow-navy-md"
             }`}
           >
             <div 

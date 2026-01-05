@@ -56,7 +56,7 @@ export function ExpertiseCard({ id, title, description, iconType, index }: Exper
       transition={{ delay: index * 0.15, duration: 0.5 }}
     >
       <Link href={`/expertises#${id}`}>
-        <Card className="group h-full bg-[var(--card)] border-[var(--border)] hover:border-[var(--accent)]/50 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
+        <Card className="group h-full bg-[var(--card)] border-[var(--border)] hover:border-[var(--accent)]/50 hover:shadow-navy-xl transition-all duration-300 cursor-pointer overflow-hidden">
           {/* Top accent bar */}
           <div className="h-1 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-light)] transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
           
