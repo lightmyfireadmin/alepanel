@@ -69,7 +69,7 @@ export const teamMembers = [
     email: "jerome.berthiau@alecia.fr",
     formation: "EDHEC Business School",
     bureau: "Sud Est",
-    bio: "Jérôme est diplômé d'un MSc en finance d'entreprise de l'EDHEC Business School. Après des premières expériences en fusions-acquisitions chez Clearwater puis en dette privée chez LGT, il intègre les équipes de financements structurés de la Société Générale où il participe à de nombreux LBO large-cap en France pendant 2 ans. Il intègre ensuite les équipe de dette privée de Five Arrows, groupe Rothschild & Co, où il participe pendant 6 ans à l'investissement dans une dizaine de sociétés européenes sous format unitranche, dette mezzanine ou PIK Notes. Jérôme est conseil M&A depuis 4 ans, intervenant notamment su les secteurs tech, santé, industrie et services BtoB. Il cofonde alecia en 2024.",
+    bio: "Jérôme est diplômé d'un MSc en finance d'entreprise de l'EDHEC Business School. Après des premières expériences en fusions-acquisitions chez Clearwater puis en dette privée chez LGT, il intègre les équipes de financements structurés de la Société Générale où il participe à de nombreux LBO large-cap en France pendant 2 ans. Il intègre ensuite les équipes de dette privée de Five Arrows, groupe Rothschild & Co, où il participe pendant 6 ans à l'investissement dans une dizaine de sociétés européennes sous format unitranche, dette mezzanine ou PIK Notes. Jérôme est conseil M&A depuis 4 ans, intervenant notamment sur les secteurs tech, santé, industrie et services BtoB. Il cofonde alecia en 2024.",
   },
   {
     id: "7",
