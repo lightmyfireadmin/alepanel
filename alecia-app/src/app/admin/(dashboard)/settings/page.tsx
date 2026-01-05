@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,13 +8,34 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Settings, Palette, Phone, BarChart3, Scale, Puzzle, Save, Check } from "lucide-react";
+import { Settings, Palette, Phone, BarChart3, Scale, Puzzle, Save, Check, AlertCircle } from "lucide-react";
 import { DEFAULT_SETTINGS, SiteSettingsConfig } from "@/lib/db/settings-schema";
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState<SiteSettingsConfig>({ ...DEFAULT_SETTINGS });
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Load settings on mount
+  useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const response = await fetch("/api/settings");
+        if (response.ok) {
+          const data = await response.json();
+          setSettings({ ...DEFAULT_SETTINGS, ...data });
+        }
+      } catch (err) {
+        console.error("Error loading settings:", err);
+        setError("Failed to load settings");
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadSettings();
+  }, []);
 
   const updateSetting = <K extends keyof SiteSettingsConfig>(key: K, value: SiteSettingsConfig[K]) => {
     setSettings((prev) => ({ ...prev, [key]: value }));
@@ -23,15 +44,46 @@ export default function SettingsPage() {
 
   const handleSave = async () => {
     setSaving(true);
-    // In a real implementation, this would save to the database
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setSaving(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+    setError(null);
+    try {
+      const response = await fetch("/api/settings", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(settings),
+      });
+      
+      if (!response.ok) {
+        throw new Error("Failed to save settings");
+      }
+      
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    } catch (err) {
+      console.error("Error saving settings:", err);
+      setError("Failed to save settings. Please try again.");
+    } finally {
+      setSaving(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="spinner" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
+      {error && (
+        <div className="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-3 rounded-md flex items-center gap-2">
+          <AlertCircle className="w-4 h-4" />
+          <span>{error}</span>
+        </div>
+      )}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-[var(--foreground)] flex items-center gap-2">

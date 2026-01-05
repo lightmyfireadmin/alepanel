@@ -66,7 +66,7 @@ export function MobileStickyFooter({
               {/* Call Button */}
               <button
                 onClick={handleCall}
-                className="flex flex-col items-center gap-1 flex-1 py-2 text-[var(--foreground)] hover:text-[var(--accent)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] rounded-lg"
+                className="flex flex-col items-center gap-1 flex-1 py-2 text-[var(--foreground)] hover:text-[var(--accent-teal)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] rounded-lg"
                 aria-label={t("call")}
               >
                 <Phone className="w-5 h-5" aria-hidden="true" />
@@ -76,7 +76,7 @@ export function MobileStickyFooter({
               {/* Email Button */}
               <button
                 onClick={handleEmail}
-                className="flex flex-col items-center gap-1 flex-1 py-2 text-[var(--foreground)] hover:text-[var(--accent)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] rounded-lg"
+                className="flex flex-col items-center gap-1 flex-1 py-2 text-[var(--foreground)] hover:text-[var(--accent-teal)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] rounded-lg"
                 aria-label={t("email")}
               >
                 <Mail className="w-5 h-5" aria-hidden="true" />
@@ -86,7 +86,7 @@ export function MobileStickyFooter({
               {/* WhatsApp Button */}
               <button
                 onClick={handleWhatsApp}
-                className="flex flex-col items-center gap-1 flex-1 py-2 text-[var(--foreground)] hover:text-[#25D366] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] rounded-lg"
+                className="flex flex-col items-center gap-1 flex-1 py-2 text-[var(--foreground)] hover:text-[#25D366] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)] rounded-lg"
                 aria-label="WhatsApp"
               >
                 <MessageCircle className="w-5 h-5" aria-hidden="true" />

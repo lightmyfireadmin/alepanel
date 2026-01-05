@@ -629,7 +629,18 @@ function generateContext(deal: OperationData): string {
   return contexts[Math.floor(Math.random() * contexts.length)];
 }
 
-function generateIntervention(_deal: OperationData): string { // eslint-disable-line @typescript-eslint/no-unused-vars
+function generateIntervention(deal: OperationData): string {
+  if (deal.isPriorExperience) {
+    // Use passive voice for operations before alecia was founded
+    const passiveForms = [
+      "Les dirigeants furent accompagnés tout au long du processus : structuration de l'opération, valorisation, identification et approche des contreparties, négociation et coordination des due diligences jusqu'au closing.",
+      "Un accompagnement complet fut apporté durant l'ensemble du processus : de la structuration initiale à la négociation finale, en passant par la valorisation et la coordination des due diligences.",
+      "Les actionnaires bénéficièrent d'un accompagnement sur-mesure incluant la structuration, la valorisation, l'approche des contreparties et la coordination jusqu'au closing.",
+      "L'équipe dirigeante fut conseillée de bout en bout : structuration stratégique, valorisation de l'entreprise, identification des acquéreurs potentiels et négociation jusqu'à la finalisation.",
+      "Un soutien intégral fut fourni aux dirigeants, couvrant la structuration de l'opération, l'évaluation financière, l'approche des investisseurs et la coordination des due diligences.",
+    ];
+    return passiveForms[Math.floor(Math.random() * passiveForms.length)];
+  }
   return "alecia a accompagné les dirigeants tout au long du processus : structuration de l'opération, valorisation, identification et approche des contreparties, négociation et coordination des due diligences jusqu'au closing.";
 }
 

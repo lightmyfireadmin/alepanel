@@ -23,6 +23,7 @@
   --accent: #061A40; /* amber-500 */
   --accent-light: #3E6BF7; /* amber-400 */
   --accent-dark: #FFFFFF; /* amber-600 */
+  --accent-teal: #25A18E; /* New teal accent color for "pop" */
 
   /* UI colors */
   --border: #cbd5e1; /* slate-300 */
@@ -53,7 +54,7 @@
   --font-outfit: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   --font-geist-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   --font-geist-mono: 'Menlo', 'Monaco', 'Courier New', monospace;
-  --font-playfair: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  --font-playfair: 'Playfair Display', Georgia, serif;
   
   /* Charts */
   --chart-1: oklch(0.646 0.222 41.116);
@@ -89,6 +90,7 @@
   --accent: #f59e0b; /* amber-500 */
   --accent-light: #fbbf24; /* amber-400 */
   --accent-dark: #d97706; /* amber-600 */
+  --accent-teal: #25A18E; /* New teal accent color for "pop" */
 
   /* UI colors */
   --border: #334155; /* slate-700 */
@@ -163,6 +165,7 @@
   --color-destructive: var(--destructive);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
+  --color-accent-teal: var(--accent-teal);
   --color-muted-foreground: var(--muted-foreground);
   --color-muted: var(--muted);
   --color-secondary-foreground: var(--secondary-foreground);
@@ -177,6 +180,13 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  
+  /* Custom shadow colors with #061A40 navy */
+  --shadow-navy-sm: 0 1px 2px 0 rgba(6, 26, 64, 0.05);
+  --shadow-navy-md: 0 4px 6px -1px rgba(6, 26, 64, 0.1), 0 2px 4px -1px rgba(6, 26, 64, 0.06);
+  --shadow-navy-lg: 0 10px 15px -3px rgba(6, 26, 64, 0.1), 0 4px 6px -2px rgba(6, 26, 64, 0.05);
+  --shadow-navy-xl: 0 20px 25px -5px rgba(6, 26, 64, 0.1), 0 10px 10px -5px rgba(6, 26, 64, 0.04);
+  --shadow-navy-2xl: 0 25px 50px -12px rgba(6, 26, 64, 0.25);
 }
 
 /* =============================================================================
@@ -191,7 +201,13 @@ body {
    TYPOGRAPHY
    ============================================================================= */
 
-h1,
+/* Main h1 titles use Playfair Display in bold */
+h1 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
 h2,
 h3,
 h4,
@@ -248,12 +264,12 @@ h6 {
 
 .card-hover:hover {
   transform: translateY(-6px);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
-  border-color: rgba(245, 158, 11, 0.4);
+  box-shadow: 0 16px 48px rgba(6, 26, 64, 0.15);
+  border-color: rgba(6, 26, 64, 0.4);
 }
 
 .dark .card-hover:hover {
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 16px 48px rgba(6, 26, 64, 0.5);
 }
 
 /* Link hover effect */
@@ -275,6 +291,31 @@ h6 {
 
 .link-hover:hover::after {
   width: 100%;
+}
+
+/* Link hover effect with teal accent */
+.link-hover-teal {
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.link-hover-teal::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent-teal);
+  transition: width 0.3s ease;
+}
+
+.link-hover-teal:hover::after {
+  width: 100%;
+}
+
+.link-hover-teal:hover {
+  color: var(--accent-teal);
 }
 
 /* Focus ring improvements */
@@ -338,6 +379,46 @@ h6 {
 }
 
 /* Wave animations removed for performance */
+
+/* =============================================================================
+   CUSTOM SHADOW UTILITIES (Navy Blue #061A40)
+   ============================================================================= */
+
+.shadow-navy-sm {
+  box-shadow: 0 1px 2px 0 rgba(6, 26, 64, 0.05);
+}
+
+.shadow-navy {
+  box-shadow: 0 4px 6px -1px rgba(6, 26, 64, 0.1), 0 2px 4px -1px rgba(6, 26, 64, 0.06);
+}
+
+.shadow-navy-md {
+  box-shadow: 0 4px 6px -1px rgba(6, 26, 64, 0.1), 0 2px 4px -1px rgba(6, 26, 64, 0.06);
+}
+
+.shadow-navy-lg {
+  box-shadow: 0 10px 15px -3px rgba(6, 26, 64, 0.1), 0 4px 6px -2px rgba(6, 26, 64, 0.05);
+}
+
+.shadow-navy-xl {
+  box-shadow: 0 20px 25px -5px rgba(6, 26, 64, 0.1), 0 10px 10px -5px rgba(6, 26, 64, 0.04);
+}
+
+.shadow-navy-2xl {
+  box-shadow: 0 25px 50px -12px rgba(6, 26, 64, 0.25);
+}
+
+.hover\:shadow-navy-lg:hover {
+  box-shadow: 0 10px 15px -3px rgba(6, 26, 64, 0.1), 0 4px 6px -2px rgba(6, 26, 64, 0.05);
+}
+
+.hover\:shadow-navy-xl:hover {
+  box-shadow: 0 20px 25px -5px rgba(6, 26, 64, 0.1), 0 10px 10px -5px rgba(6, 26, 64, 0.04);
+}
+
+.hover\:shadow-navy-2xl:hover {
+  box-shadow: 0 25px 50px -12px rgba(6, 26, 64, 0.25);
+}
 
 /* =============================================================================
    SCROLLBAR STYLING
