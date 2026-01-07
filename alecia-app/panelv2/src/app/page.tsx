@@ -14,7 +14,11 @@ import {
   MessageSquare,
   ClipboardList,
   PenLine,
-  FileText
+  FileText,
+  TrendingUp,
+  Users,
+  Newspaper,
+  Image as ImageIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -47,6 +51,14 @@ export default function DashboardPage() {
           <NavItem href="/admin/research" icon={ClipboardList} label="Recherche" />
           <NavItem href="/admin/signatures" icon={PenLine} label="Signatures" />
           <NavItem href="/admin/blog" icon={FileText} label="Blog" />
+          
+          <div className="pt-4 pb-2">
+            <span className="px-3 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Site Web</span>
+          </div>
+          <NavItem href="/admin/transactions" icon={TrendingUp} label="Track Record" />
+          <NavItem href="/admin/team" icon={Users} label="Équipe" />
+          <NavItem href="/admin/careers" icon={Newspaper} label="Carrières" />
+          <NavItem href="/admin/tiles" icon={ImageIcon} label="Galerie" />
           
           <div className="pt-4 pb-2">
             <span className="px-3 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Système</span>
