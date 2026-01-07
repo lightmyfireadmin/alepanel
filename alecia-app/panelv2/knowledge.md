@@ -150,3 +150,30 @@ See full distilled specification in artifacts:
 | Twenty     | `_references/twenty/packages/twenty-front/src/modules/object-record/record-board/` | Kanban patterns     |
 | Monica     | `_references/monica-main/database/migrations/`                                     | Relationship schema |
 | Openblocks | `_references/openblocks-develop/client/packages/openblocks-design/`                | Icons, widgets      |
+
+## Neon → Convex Migration (2026-01-07)
+
+### Data Migrated
+| Table | Records | Source |
+|-------|---------|--------|
+| transactions | 46 | Neon deals |
+| team_members | 8 | Neon team_members |
+| marketing_tiles | 12 | Neon tiles |
+
+### Scripts Created
+- `scripts/analyze-neon.js` - Analyze Neon database structure
+- `scripts/prepare-migration.js` - Transform data for Convex import
+- `scripts/run-import.js` - Prepare JSONL files for import
+- `convex/import.ts` - Internal mutations for imports
+
+### Files Generated
+- `neon_marketing_dump.json` - Full Neon database export (507MB)
+- `convex_import_data.json` - Transformed data for Convex
+- `data/*.jsonl` - Import-ready JSONL files
+
+### Neon DB Credentials
+```
+Host: ep-fancy-rice-ag8i6qv2-pooler.c-2.eu-central-1.aws.neon.tech
+Database: neondb
+User: neondb_owner
+```

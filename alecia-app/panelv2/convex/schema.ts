@@ -286,4 +286,65 @@ export default defineSchema({
     .index("by_assigneeId", ["assigneeId"])
     .index("by_dealId", ["dealId"])
     .index("by_status", ["status"]),
+
+  // ============================================
+  // MARKETING WEBSITE CONTENT (Migrated from Neon)
+  // ============================================
+
+  // Transaction Showcase (M&A Track Record)
+  transactions: defineTable({
+    slug: v.string(),
+    clientName: v.string(),
+    clientLogo: v.optional(v.string()),
+    acquirerName: v.optional(v.string()),
+    acquirerLogo: v.optional(v.string()),
+    sector: v.string(),
+    region: v.optional(v.string()),
+    year: v.number(),
+    mandateType: v.string(), // "Sell-side", "Buy-side", etc.
+    description: v.optional(v.string()),
+    isConfidential: v.boolean(),
+    isPriorExperience: v.boolean(),
+    context: v.optional(v.string()),
+    intervention: v.optional(v.string()),
+    result: v.optional(v.string()),
+    testimonialText: v.optional(v.string()),
+    testimonialAuthor: v.optional(v.string()),
+    roleType: v.optional(v.string()),
+    dealSize: v.optional(v.string()),
+    keyMetrics: v.optional(v.any()), // JSON object
+    displayOrder: v.number(),
+  })
+    .index("by_slug", ["slug"])
+    .index("by_sector", ["sector"])
+    .index("by_year", ["year"]),
+
+  // Team Members (About Page)
+  team_members: defineTable({
+    slug: v.string(),
+    name: v.string(),
+    role: v.string(),
+    photo: v.optional(v.string()),
+    bioFr: v.optional(v.string()),
+    bioEn: v.optional(v.string()),
+    linkedinUrl: v.optional(v.string()),
+    email: v.optional(v.string()),
+    sectorsExpertise: v.array(v.string()),
+    transactionSlugs: v.array(v.string()), // References to transactions
+    displayOrder: v.number(),
+    isActive: v.boolean(),
+  })
+    .index("by_slug", ["slug"])
+    .index("by_displayOrder", ["displayOrder"]),
+
+  // Marketing Tiles (Ambiance Gallery)
+  marketing_tiles: defineTable({
+    title: v.string(),
+    description: v.optional(v.string()),
+    soundUrl: v.optional(v.string()),
+    imageUrl: v.optional(v.string()),
+    displayOrder: v.number(),
+    styleConfig: v.optional(v.any()), // JSON for custom styling
+  })
+    .index("by_displayOrder", ["displayOrder"]),
 });

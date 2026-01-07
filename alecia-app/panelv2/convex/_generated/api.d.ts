@@ -19,6 +19,7 @@ import type * as crm from "../crm.js";
 import type * as dashboard from "../dashboard.js";
 import type * as deals from "../deals.js";
 import type * as forum from "../forum.js";
+import type * as import_ from "../import.js";
 import type * as matchmaker from "../matchmaker.js";
 import type * as mutations from "../mutations.js";
 import type * as pipedrive from "../pipedrive.js";
@@ -50,6 +51,7 @@ declare const fullApi: ApiFromModules<{
   dashboard: typeof dashboard;
   deals: typeof deals;
   forum: typeof forum;
+  import: typeof import_;
   matchmaker: typeof matchmaker;
   mutations: typeof mutations;
   pipedrive: typeof pipedrive;
