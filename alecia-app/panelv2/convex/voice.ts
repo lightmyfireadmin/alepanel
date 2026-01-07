@@ -2,9 +2,14 @@ import { action, mutation } from "./_generated/server";
 import { v } from "convex/values";
 import OpenAI from "openai";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Lazy initialization - client created only when action is called
+function getOpenAIClient() {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    throw new Error("OPENAI_API_KEY environment variable is not set. Configure it in the Convex dashboard.");
+  }
+  return new OpenAI({ apiKey });
+}
 
 export const generateUploadUrl = mutation({
   args: {},
@@ -37,6 +42,7 @@ export const transcribeAction = action({
     const blob = await response.blob();
     const file = new File([blob], "recording.webm", { type: "audio/webm" });
 
+    const openai = getOpenAIClient();
     const transcription = await openai.audio.transcriptions.create({
       file: file,
       model: "whisper-1",
@@ -47,3 +53,4 @@ export const transcribeAction = action({
     return transcription.text;
   },
 });
+

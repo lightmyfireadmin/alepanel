@@ -10,7 +10,9 @@
 
 import type * as actions_finance from "../actions/finance.js";
 import type * as actions_intelligence from "../actions/intelligence.js";
+import type * as actions_microsoft from "../actions/microsoft.js";
 import type * as actions_openai from "../actions/openai.js";
+import type * as auth_utils from "../auth_utils.js";
 import type * as cms from "../cms.js";
 import type * as crm from "../crm.js";
 import type * as deals from "../deals.js";
@@ -18,6 +20,8 @@ import type * as matchmaker from "../matchmaker.js";
 import type * as mutations from "../mutations.js";
 import type * as queries from "../queries.js";
 import type * as seed from "../seed.js";
+import type * as seed_cms from "../seed_cms.js";
+import type * as voice from "../voice.js";
 
 import type {
   ApiFromModules,
@@ -28,7 +32,9 @@ import type {
 declare const fullApi: ApiFromModules<{
   "actions/finance": typeof actions_finance;
   "actions/intelligence": typeof actions_intelligence;
+  "actions/microsoft": typeof actions_microsoft;
   "actions/openai": typeof actions_openai;
+  auth_utils: typeof auth_utils;
   cms: typeof cms;
   crm: typeof crm;
   deals: typeof deals;
@@ -36,6 +42,8 @@ declare const fullApi: ApiFromModules<{
   mutations: typeof mutations;
   queries: typeof queries;
   seed: typeof seed;
+  seed_cms: typeof seed_cms;
+  voice: typeof voice;
 }>;
 
 /**
