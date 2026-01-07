@@ -58,3 +58,70 @@ Ce document détaille l'ensemble des fonctionnalités de la plateforme, structur
 *   **Smart Charts :** Composant réutilisable (`SmartChart.tsx`) basé sur `recharts`.
 *   **Dashboard Financier :** Vue dédiée (`/admin/reporting`) avec comparatifs Revenue/EBITDA et tendances.
 *   **Moteur Financier :** Backend `finance.ts` prêt pour le parsing Excel et calculs complexes.
+## 9. Pipedrive Integration (Implemented - 2026-01-07)
+**Objectif :** Migration transparente depuis Pipedrive avec synchronisation bidirectionnelle.
+
+*   **Sync Pull :** Import automatique des Organizations, Persons et Deals depuis Pipedrive (`syncFromPipedrive`).
+*   **Sync Push :** Écriture des modifications vers Pipedrive (`pushDealToPipedrive`).
+*   **UI Intégrée :** Bouton "Pipedrive" dans les pages Sociétés et Pipeline avec dialog de statut.
+*   **Mapping Automatique :** Conversion des statuts Pipedrive (open/won/lost) vers les stages M&A.
+*   **Index de Liaison :** Champ `pipedriveId` sur `companies` et `deals` pour éviter les doublons.
+
+## 10. Pipeline Configuration (Implemented - 2026-01-07)
+**Objectif :** Personnalisation avancée du pipeline M&A.
+
+*   **Colonnes Personnalisables :** Table `kanban_columns` pour définir des étapes custom.
+*   **Ordonnancement :** Réordonnancement par drag & drop (`reorderKanbanColumns`).
+*   **Couleurs :** Code couleur par étape pour identification visuelle rapide.
+
+## 11. Journal d'Activité (Implemented - 2026-01-07)
+**Objectif :** Traçabilité complète des actions sur les dossiers.
+
+*   **Types d'Événements :** status_change, note_added, document_uploaded, meeting_scheduled, email_sent, call_logged.
+*   **Timeline Enrichie :** Affichage avec nom et avatar de l'utilisateur.
+*   **Filtrage :** Par dossier, société, ou utilisateur.
+*   **Logging Automatique :** Mutation interne pour enregistrement depuis les autres actions.
+
+## 12. Forum Interne (Implemented - 2026-01-07)
+**Objectif :** Communication d'équipe structurée.
+
+*   **Threads :** Création, épinglage, verrouillage.
+*   **Posts :** Réponses hiérarchiques avec édition.
+*   **Enrichissement :** Auteur, avatar, compteur de posts, dernière activité.
+*   **UI :** `ForumThreadList.tsx` avec dialog de création.
+
+## 13. Blog CMS (Implemented - 2026-01-07)
+**Objectif :** Publication de contenu interne/externe.
+
+*   **Workflow :** Draft → Published → Archived.
+*   **SEO :** Meta title, description, keywords.
+*   **Slug :** Génération automatique avec unicité.
+*   **Tags :** Catégorisation flexible.
+
+## 14. Demandes de Signature (Implemented - 2026-01-07)
+**Objectif :** Workflow de signature électronique intégré.
+
+*   **Types :** NDA, LOI, Mandat, Contrat.
+*   **Workflow :** pending → signed/rejected/expired.
+*   **Capture :** Signature canvas HTML5.
+*   **UI :** `SignatureRequestPanel.tsx` avec tabs.
+
+## 15. Tâches de Recherche (Implemented - 2026-01-07)
+**Objectif :** Gestion des tâches d'analyse et due diligence.
+
+*   **Kanban :** todo → in_progress → review → done.
+*   **Priorité :** low/medium/high avec badges visuels.
+*   **Statistiques :** Compteurs et retards.
+*   **UI :** `ResearchTaskBoard.tsx` avec Kanban 4 colonnes.
+
+## 16. Navigation Sidebar (Updated - 2026-01-07)
+**Mise à jour :** Ajout section Collaboration dans le menu.
+
+*   **Pipeline M&A :** `/admin/deals` - Kanban des dossiers.
+*   **Intelligence :** `/admin/crm` - Sociétés et contacts.
+*   **Collaboration :**
+    - Forum (`/admin/forum`)
+    - Recherche (`/admin/research`)
+    - Signatures (`/admin/signatures`)
+    - Blog (`/admin/blog`)
+*   **Labels FR :** Toute l'interface en français.

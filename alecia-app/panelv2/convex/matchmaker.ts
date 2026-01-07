@@ -121,9 +121,25 @@ export const getEmbeddingById = internalQuery({
 });
 
 export const getContactDetails = internalQuery({
-    args: { contactId: v.id("contacts") }, // Assuming we pass ID
+    args: { contactId: v.id("contacts") },
     handler: async (ctx, args) => {
-        // ... (This is redundant if we use crm.getContact, but kept for completeness of thought)
-        return null; 
+        const contact = await ctx.db.get(args.contactId);
+        if (!contact) return null;
+
+        // Enrich with company data
+        const company = await ctx.db.get(contact.companyId);
+        
+        // Get buyer criteria if exists
+        const buyerCriteria = await ctx.db
+            .query("buyer_criteria")
+            .withIndex("by_contactId", (q) => q.eq("contactId", args.contactId))
+            .first();
+
+        return {
+            ...contact,
+            companyName: company?.name,
+            companyLogo: company?.logoUrl,
+            buyerCriteria: buyerCriteria ?? null,
+        };
     }
 });

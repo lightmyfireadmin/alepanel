@@ -70,9 +70,11 @@ export default defineSchema({
     amount: v.optional(v.number()),
     ownerId: v.id("users"),
     companyId: v.id("companies"),
+    pipedriveId: v.optional(v.number()), // Pipedrive uses numeric IDs
   })
     .index("by_ownerId", ["ownerId"])
-    .index("by_companyId", ["companyId"]),
+    .index("by_companyId", ["companyId"])
+    .index("by_pipedriveId", ["pipedriveId"]),
 
   embeddings: defineTable({
     targetId: v.string(), // ID of the deal or buyer/contact
@@ -152,4 +154,136 @@ export default defineSchema({
     formula: v.string(), // string for mathjs
     variables: v.array(v.string()),
   }),
+
+  // 6. Custom Pipeline Configuration
+  kanban_columns: defineTable({
+    boardId: v.optional(v.string()), // null = default board
+    name: v.string(),
+    color: v.optional(v.string()),
+    order: v.number(),
+    isDefault: v.optional(v.boolean()),
+  }).index("by_boardId", ["boardId"]),
+
+  // 7. Activity & Events Timeline
+  project_events: defineTable({
+    dealId: v.optional(v.id("deals")),
+    companyId: v.optional(v.id("companies")),
+    contactId: v.optional(v.id("contacts")),
+    eventType: v.union(
+      v.literal("status_change"),
+      v.literal("note_added"),
+      v.literal("document_uploaded"),
+      v.literal("meeting_scheduled"),
+      v.literal("email_sent"),
+      v.literal("call_logged")
+    ),
+    title: v.string(),
+    description: v.optional(v.string()),
+    userId: v.id("users"),
+    metadata: v.optional(v.any()), // Flexible JSON for event-specific data
+  })
+    .index("by_dealId", ["dealId"])
+    .index("by_companyId", ["companyId"])
+    .index("by_userId", ["userId"]),
+
+  // ============================================
+  // PHASE 2: Collaboration Features
+  // ============================================
+
+  // 8. Forum / Internal Discussions
+  forum_threads: defineTable({
+    title: v.string(),
+    category: v.optional(v.string()), // e.g., "General", "Deal-Specific", "Announcements"
+    dealId: v.optional(v.id("deals")), // Link to specific deal if applicable
+    authorId: v.id("users"),
+    isPinned: v.optional(v.boolean()),
+    isLocked: v.optional(v.boolean()),
+  })
+    .index("by_authorId", ["authorId"])
+    .index("by_dealId", ["dealId"])
+    .index("by_category", ["category"]),
+
+  forum_posts: defineTable({
+    threadId: v.id("forum_threads"),
+    content: v.string(), // Tiptap HTML or plain text
+    authorId: v.id("users"),
+    parentPostId: v.optional(v.id("forum_posts")), // For nested replies
+    isEdited: v.optional(v.boolean()),
+  })
+    .index("by_threadId", ["threadId"])
+    .index("by_authorId", ["authorId"]),
+
+  // 9. Blog / Content Publishing
+  blog_posts: defineTable({
+    title: v.string(),
+    slug: v.string(),
+    content: v.string(), // Tiptap JSON/HTML
+    excerpt: v.optional(v.string()),
+    featuredImage: v.optional(v.string()),
+    authorId: v.id("users"),
+    status: v.union(v.literal("draft"), v.literal("published"), v.literal("archived")),
+    publishedAt: v.optional(v.number()),
+    seo: v.optional(v.object({
+      metaTitle: v.optional(v.string()),
+      metaDescription: v.optional(v.string()),
+      keywords: v.optional(v.array(v.string())),
+    })),
+    tags: v.optional(v.array(v.string())),
+  })
+    .index("by_slug", ["slug"])
+    .index("by_authorId", ["authorId"])
+    .index("by_status", ["status"]),
+
+  // 10. Document Signing Workflow
+  sign_requests: defineTable({
+    title: v.string(),
+    documentUrl: v.optional(v.string()), // File storage reference
+    documentType: v.union(
+      v.literal("nda"),
+      v.literal("loi"),
+      v.literal("mandate"),
+      v.literal("contract"),
+      v.literal("other")
+    ),
+    dealId: v.optional(v.id("deals")),
+    requesterId: v.id("users"),
+    signerId: v.id("users"),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("signed"),
+      v.literal("rejected"),
+      v.literal("expired")
+    ),
+    signedAt: v.optional(v.number()),
+    signatureData: v.optional(v.string()), // Base64 signature image
+    expiresAt: v.optional(v.number()),
+    notes: v.optional(v.string()),
+  })
+    .index("by_dealId", ["dealId"])
+    .index("by_requesterId", ["requesterId"])
+    .index("by_signerId", ["signerId"])
+    .index("by_status", ["status"]),
+
+  // 11. Research Tasks
+  research_tasks: defineTable({
+    title: v.string(),
+    description: v.optional(v.string()),
+    dealId: v.optional(v.id("deals")),
+    companyId: v.optional(v.id("companies")),
+    assigneeId: v.optional(v.id("users")),
+    creatorId: v.id("users"),
+    priority: v.union(v.literal("low"), v.literal("medium"), v.literal("high")),
+    status: v.union(
+      v.literal("todo"),
+      v.literal("in_progress"),
+      v.literal("review"),
+      v.literal("done")
+    ),
+    dueDate: v.optional(v.number()),
+    completedAt: v.optional(v.number()),
+    tags: v.optional(v.array(v.string())),
+  })
+    .index("by_assigneeId", ["assigneeId"])
+    .index("by_dealId", ["dealId"])
+    .index("by_status", ["status"]),
 });

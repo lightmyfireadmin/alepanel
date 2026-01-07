@@ -1,24 +1,28 @@
 "use client";
 
 import { useState } from "react";
-import { useAction } from "convex/react";
+import { useAction, useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Loader2, Sparkles, Check, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
+import { Id } from "../../../../convex/_generated/dataModel";
 
 interface CompanyEnricherProps {
+  companyId: Id<"companies">;
   companyName: string;
   currentData: any; // The current company object
 }
 
-export function CompanyEnricher({ companyName, currentData }: CompanyEnricherProps) {
+export function CompanyEnricher({ companyId, companyName, currentData }: CompanyEnricherProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isApplying, setIsApplying] = useState(false);
   const [pappersResult, setPappersResult] = useState<any>(null);
   
   const searchPappers = useAction(api.actions.intelligence.searchCompanyPappers);
+  const updateCompany = useMutation(api.mutations.updateCompany);
 
   const handleEnrich = async () => {
     setIsLoading(true);
@@ -36,10 +40,30 @@ export function CompanyEnricher({ companyName, currentData }: CompanyEnricherPro
     }
   };
 
-  const applyChanges = () => {
-      // In a real app, this would call a mutation to update the company
-      toast.success("Données mises à jour (Simulation)");
+  const applyChanges = async () => {
+    if (!pappersResult) return;
+    
+    setIsApplying(true);
+    try {
+      await updateCompany({
+        id: companyId,
+        patch: {
+          siren: pappersResult.siren,
+          nafCode: pappersResult.nafCode,
+          vatNumber: pappersResult.vatNumber,
+          address: pappersResult.address,
+          financials: pappersResult.financials,
+          pappersId: pappersResult.pappersId || pappersResult.siren,
+        },
+      });
+      toast.success("Données enrichies avec succès !");
       setIsOpen(false);
+      setPappersResult(null);
+    } catch (e) {
+      toast.error("Erreur lors de la mise à jour.");
+    } finally {
+      setIsApplying(false);
+    }
   };
 
   return (

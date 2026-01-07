@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "convex/react";
-import { api } from "../../../../../convex/_generated/api";
+import { api } from "../../../../convex/_generated/api";
 import { Button } from "@/components/ui/button";
 import { AnimatedCounter } from "@/components/public/features/animated-counter";
 import { RegionalMap } from "@/components/public/features/regional-map";

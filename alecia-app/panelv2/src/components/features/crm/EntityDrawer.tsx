@@ -14,7 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ExternalLink, Edit, Building2, User } from "lucide-react";
 import { CompanyEnricher } from "./CompanyEnricher";
-import { Id } from "../../../../../convex/_generated/dataModel";
+import { Id } from "../../../../convex/_generated/dataModel";
 
 interface EntityDrawerProps {
   isOpen: boolean;
@@ -51,7 +51,7 @@ export function EntityDrawer({
                 </SheetDescription>
             </div>
             <div className="flex gap-2">
-                {type === "company" && <CompanyEnricher companyId={data._id as Id<"companies">} currentData={data} />}
+                {type === "company" && <CompanyEnricher companyId={data._id as Id<"companies">} companyName={data.name} currentData={data} />}
                 <Button size="icon" variant="ghost">
                     <Edit className="w-4 h-4" />
                 </Button>

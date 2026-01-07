@@ -10,7 +10,11 @@ import {
   Settings,
   ShieldCheck,
   Plus,
-  Search
+  Search,
+  MessageSquare,
+  ClipboardList,
+  PenLine,
+  FileText
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -31,15 +35,24 @@ export default function DashboardPage() {
         </div>
         
         <nav className="flex-1 px-4 space-y-1">
-          <NavItem href="/" icon={LayoutDashboard} label="Dashboard" active />
-          <NavItem href="/admin/deals" icon={Briefcase} label="Deal Flow" />
+          <NavItem href="/" icon={LayoutDashboard} label="Tableau de bord" active />
+          <NavItem href="/admin/deals" icon={Briefcase} label="Pipeline M&A" />
           <NavItem href="/admin/crm" icon={Building2} label="Intelligence" />
           <NavItem href="/admin/reporting" icon={PieChart} label="Reporting" />
+          
           <div className="pt-4 pb-2">
-            <span className="px-3 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">System</span>
+            <span className="px-3 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Collaboration</span>
+          </div>
+          <NavItem href="/admin/forum" icon={MessageSquare} label="Forum" />
+          <NavItem href="/admin/research" icon={ClipboardList} label="Recherche" />
+          <NavItem href="/admin/signatures" icon={PenLine} label="Signatures" />
+          <NavItem href="/admin/blog" icon={FileText} label="Blog" />
+          
+          <div className="pt-4 pb-2">
+            <span className="px-3 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Système</span>
           </div>
           <NavItem href="/sudo" icon={ShieldCheck} label="Sudo Panel" />
-          <NavItem href="/admin/settings" icon={Settings} label="Settings" />
+          <NavItem href="/admin/settings" icon={Settings} label="Paramètres" />
         </nav>
 
         <div className="p-4 border-t">

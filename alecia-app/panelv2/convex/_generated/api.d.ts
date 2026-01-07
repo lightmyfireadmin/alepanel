@@ -18,6 +18,7 @@ import type * as crm from "../crm.js";
 import type * as deals from "../deals.js";
 import type * as matchmaker from "../matchmaker.js";
 import type * as mutations from "../mutations.js";
+import type * as pipedrive from "../pipedrive.js";
 import type * as queries from "../queries.js";
 import type * as seed from "../seed.js";
 import type * as seed_cms from "../seed_cms.js";
@@ -40,6 +41,7 @@ declare const fullApi: ApiFromModules<{
   deals: typeof deals;
   matchmaker: typeof matchmaker;
   mutations: typeof mutations;
+  pipedrive: typeof pipedrive;
   queries: typeof queries;
   seed: typeof seed;
   seed_cms: typeof seed_cms;

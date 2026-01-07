@@ -21,6 +21,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { DealCard, Deal } from "@/components/features/kanban/DealCard";
+import { PipedriveSync } from "@/components/features/crm/PipedriveSync";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table/data-table"; // Reusing the list view component
 import { LayoutGrid, List, Plus } from "lucide-react";
@@ -81,6 +82,10 @@ export default function DealsPage() {
     setActiveId(event.active.id as Id<"deals">);
   };
 
+  const handleDragOver = () => {
+    // Placeholder for future cross-column reordering logic
+  };
+
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
     const activeId = active.id as Id<"deals">;
@@ -135,10 +140,11 @@ export default function DealsPage() {
     <div className="h-full flex flex-col p-6 space-y-4">
       <div className="flex justify-between items-center">
         <div>
-            <h1 className="text-2xl font-bold tracking-tight">Deal Flow</h1>
-            <p className="text-muted-foreground">Manage your pipeline from sourcing to closing.</p>
+            <h1 className="text-2xl font-bold tracking-tight">Pipeline M&A</h1>
+            <p className="text-muted-foreground">Gérez vos dossiers du sourcing au closing.</p>
         </div>
         <div className="flex gap-2">
+            <PipedriveSync />
             <div className="bg-muted p-1 rounded-md flex">
                 <Button 
                     variant={viewMode === "board" ? "secondary" : "ghost"} 
@@ -146,7 +152,7 @@ export default function DealsPage() {
                     className="h-7 px-3"
                     onClick={() => toggleView("board")}
                 >
-                    <LayoutGrid className="w-3.5 h-3.5 mr-2" /> Board
+                    <LayoutGrid className="w-3.5 h-3.5 mr-2" /> Kanban
                 </Button>
                 <Button 
                     variant={viewMode === "list" ? "secondary" : "ghost"} 
@@ -154,11 +160,11 @@ export default function DealsPage() {
                     className="h-7 px-3"
                     onClick={() => toggleView("list")}
                 >
-                    <List className="w-3.5 h-3.5 mr-2" /> List
+                    <List className="w-3.5 h-3.5 mr-2" /> Liste
                 </Button>
             </div>
             <Button size="sm" className="h-9">
-                <Plus className="w-4 h-4 mr-2" /> New Deal
+                <Plus className="w-4 h-4 mr-2" /> Nouveau dossier
             </Button>
         </div>
       </div>

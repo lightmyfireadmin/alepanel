@@ -7,8 +7,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { EntityDrawer } from "@/components/features/crm/EntityDrawer";
+import { PipedriveSync } from "@/components/features/crm/PipedriveSync";
 import { useState } from "react";
-import { Database, Globe, Loader2 } from "lucide-react";
+import { Database, Globe, Loader2, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function CompaniesPage() {
   const companies = useQuery(api.crm.getCompanies);
@@ -17,7 +19,7 @@ export default function CompaniesPage() {
   const columns: ColumnDef<any>[] = [
     {
       accessorKey: "company",
-      header: "Company",
+      header: "Société",
       cell: ({ row }) => {
         const c = row.original;
         return (
@@ -38,7 +40,7 @@ export default function CompaniesPage() {
     },
     {
       accessorKey: "financials",
-      header: "Financials",
+      header: "Financiers",
       cell: ({ row }) => {
         const f = row.original.financials;
         if (!f) return <span className="text-xs text-muted-foreground">-</span>;
@@ -52,15 +54,15 @@ export default function CompaniesPage() {
 
         return (
           <div className="flex flex-col text-xs">
-            {f.revenue && <span className="font-medium text-foreground">{formatK(f.revenue)} Rev</span>}
-            {f.ebitda && <span className="text-muted-foreground">{formatK(f.ebitda)} EBITDA</span>}
+            {f.revenue && <span className="font-medium text-foreground">{formatK(f.revenue)} CA</span>}
+            {f.ebitda && <span className="text-muted-foreground">{formatK(f.ebitda)} EBE</span>}
           </div>
         );
       },
     },
     {
       accessorKey: "tags",
-      header: "Sector / Region",
+      header: "Secteur / Région",
       cell: ({ row }) => {
         // Mock tags logic if fields not explicit in schema yet, or map from NAF
         const tags = [];
@@ -83,11 +85,18 @@ export default function CompaniesPage() {
       header: "Source",
       cell: ({ row }) => {
         const isPappers = !!row.original.pappersId;
-        return isPappers ? (
+        const isPipedrive = !!row.original.pipedriveId;
+        if (isPipedrive) return (
+            <div className="flex items-center gap-1 text-[10px] font-medium text-green-600 bg-green-50 px-1.5 py-0.5 rounded w-fit">
+                <Database className="w-3 h-3" /> Pipedrive
+            </div>
+        );
+        if (isPappers) return (
             <div className="flex items-center gap-1 text-[10px] font-medium text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded w-fit">
                 <Database className="w-3 h-3" /> Pappers
             </div>
-        ) : (
+        );
+        return (
              <div className="flex items-center gap-1 text-[10px] font-medium text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded w-fit">
                 <Globe className="w-3 h-3" /> Manual
             </div>
@@ -100,8 +109,15 @@ export default function CompaniesPage() {
     <div className="h-full flex flex-col p-6 space-y-4">
       <div className="flex justify-between items-center">
         <div>
-            <h1 className="text-2xl font-bold tracking-tight">Companies</h1>
-            <p className="text-muted-foreground">Manage your sourcing pipeline and portfolio.</p>
+            <h1 className="text-2xl font-bold tracking-tight">Sociétés</h1>
+            <p className="text-muted-foreground">Gérez votre pipeline de sourcing et portefeuille.</p>
+        </div>
+        <div className="flex gap-2">
+          <PipedriveSync />
+          <Button size="sm" className="gap-1">
+            <Plus className="w-4 h-4" />
+            Nouvelle société
+          </Button>
         </div>
       </div>
       
