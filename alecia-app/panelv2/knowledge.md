@@ -154,26 +154,74 @@ See full distilled specification in artifacts:
 ## Neon → Convex Migration (2026-01-07)
 
 ### Data Migrated
-| Table | Records | Source |
-|-------|---------|--------|
-| transactions | 46 | Neon deals |
-| team_members | 8 | Neon team_members |
-| marketing_tiles | 12 | Neon tiles |
+
+| Table           | Records | Source            |
+| --------------- | ------- | ----------------- |
+| transactions    | 46      | Neon deals        |
+| team_members    | 8       | Neon team_members |
+| marketing_tiles | 12      | Neon tiles        |
 
 ### Scripts Created
+
 - `scripts/analyze-neon.js` - Analyze Neon database structure
 - `scripts/prepare-migration.js` - Transform data for Convex import
 - `scripts/run-import.js` - Prepare JSONL files for import
 - `convex/import.ts` - Internal mutations for imports
 
 ### Files Generated
+
 - `neon_marketing_dump.json` - Full Neon database export (507MB)
 - `convex_import_data.json` - Transformed data for Convex
 - `data/*.jsonl` - Import-ready JSONL files
 
 ### Neon DB Credentials
+
 ```
 Host: ep-fancy-rice-ag8i6qv2-pooler.c-2.eu-central-1.aws.neon.tech
 Database: neondb
 User: neondb_owner
+```
+
+## 17. Marketing CMS Architecture (2026-01-07)
+
+### V2 Panel Admin Pages
+
+| Route                 | Component             | Purpose          |
+| --------------------- | --------------------- | ---------------- |
+| `/admin/transactions` | DataTable + Edit Form | Track record M&A |
+| `/admin/team`         | Grid Cards            | Team profiles    |
+| `/admin/careers`      | DataTable             | Job offers       |
+| `/admin/tiles`        | Visual Grid           | Ambiance gallery |
+
+### Convex Functions
+
+```
+convex/
+├── marketing.ts    # Public queries (no auth)
+├── transactions.ts # CRUD for deals
+├── team.ts         # CRUD for team
+├── careers.ts      # CRUD for jobs
+└── tiles.ts        # CRUD for gallery
+```
+
+### V1 Marketing Site Integration
+
+- **HTTP Client:** Direct Convex API calls via fetch
+- **Server Actions:** `src/lib/actions/convex-marketing.ts`
+- **Pages Updated:**
+  - `/operations` → `transactions` table
+  - `/equipe` → `team_members` table
+  - `/actualites` → `blog_posts` table
+  - `/nous-rejoindre` → `job_offers` table
+
+### Data Flow
+
+```
+V1 Marketing Site
+    ↓ (HTTP fetch, 60s cache)
+Convex Public Queries (marketing.ts)
+    ↓
+Convex Tables
+    ↑
+V2 Admin Panel (mutations)
 ```

@@ -57,12 +57,14 @@ Ce fichier recense les pré-requis, variables d'environnement et points de vigil
     \n- [ ] **Env Vars :** Ajouter `GROQ_API_KEY` dans le dashboard Convex.\n- [ ] **Billing :** Vérifier que le compte OpenAI n'est plus utilisé que pour les embeddings (Coût négligeable).
 
 ## Pipedrive Configuration (2026-01-07)
+
 - [ ] Obtenir clé API depuis Pipedrive Settings > API
 - [ ] Ajouter `PIPEDRIVE_API_KEY` dans le Dashboard Convex (Settings > Environment Variables)
 - [ ] Tester sync initial via bouton "Pipedrive" sur page Sociétés
 - [ ] Vérifier le mapping des stages (Lead, NDA Signed, etc.)
 
 ## Pipedrive OAuth Configuration (2026-01-07 - Updated)
+
 - [ ] Créer une app dans Pipedrive Developer Hub (https://developers.pipedrive.com/)
 - [ ] Configurer l'URL de callback : `https://votre-domaine.com/api/auth/pipedrive/callback`
 - [ ] Ajouter dans le Dashboard Convex :
@@ -72,8 +74,34 @@ Ce fichier recense les pré-requis, variables d'environnement et points de vigil
   - `NEXT_PUBLIC_APP_URL=https://votre-domaine.com`
 
 ## Audit 2026-01-07 ✅
+
 - **Dependencies:** 0 vulnerabilités
 - **TypeScript:** Corrigés - 12 chemins d'import, types explicites
 - **Convex Schema:** 18 tables, tous indices validés
 - **Security:** OAuth Pipedrive, auth checks sur mutations
 - **UI/UX:** Labels FR, composants responsive
+
+## Audit 2026-01-07 - Marketing CMS ✅
+
+- **TypeScript:** blog.ts corrigé (optional authorId)
+- **Convex Deployed:** marketing, transactions, team, careers, tiles
+- **AlertDialog:** Component créé (manquant shadcn)
+- **Dependencies:** 0 vulnerabilités (npm audit)
+- **Schema:** 23 tables total avec migrations Neon
+
+## Marketing CMS Verification
+
+- [ ] **Test `/admin/transactions`:** Liste, création, édition, suppression
+- [ ] **Test `/admin/team`:** Grille, toggle actif, édition
+- [ ] **Test `/admin/careers`:** Toggle publication
+- [ ] **Test `/admin/tiles`:** Création, preview image
+- [ ] **Test Site V1:** `/operations`, `/equipe`, `/actualites` chargent depuis Convex
+- [ ] **Cache:** Vérifier revalidation 60s
+
+## Neon Deprecation Ready ✅
+
+- [x] Toutes les données migrées vers Convex (91 records)
+- [x] Site marketing V1 refactorisé
+- [x] CMS admin fonctionnel dans V2
+- [ ] Supprimer connexion Neon de `.env.local` V1
+- [ ] Supprimer `src/lib/db` de V1

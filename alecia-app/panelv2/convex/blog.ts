@@ -39,7 +39,7 @@ export const getPosts = query({
     // Enrich with author info
     const enriched = await Promise.all(
       posts.map(async (post) => {
-        const author = await ctx.db.get(post.authorId);
+        const author = post.authorId ? await ctx.db.get(post.authorId) : null;
         return {
           ...post,
           authorName: author?.name ?? "Inconnu",
@@ -68,7 +68,7 @@ export const getPostBySlug = query({
       return null;
     }
 
-    const author = await ctx.db.get(post.authorId);
+    const author = post.authorId ? await ctx.db.get(post.authorId) : null;
     return {
       ...post,
       authorName: author?.name ?? "Inconnu",
@@ -134,7 +134,9 @@ export const updatePost = mutation({
     const post = await ctx.db.get(args.postId);
 
     if (!post) throw new Error("Article non trouvé");
-    if (post.authorId !== user._id && user.role !== "sudo") {
+    // Allow editing if user is author or sudo (imported posts have no authorId)
+    const isAuthor = post.authorId && post.authorId === user._id;
+    if (!isAuthor && user.role !== "sudo") {
       throw new Error("Permission refusée");
     }
 
