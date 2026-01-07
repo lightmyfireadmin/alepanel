@@ -1,6 +1,7 @@
 import { mutation } from "./_generated/server";
 import { v } from "convex/values";
 
+// Existing mutations...
 export const updateGlobalSettings = mutation({
   args: {
     theme: v.object({
@@ -58,4 +59,28 @@ export const updateUserRole = mutation({
 
     await ctx.db.patch(args.userId, { role: args.role });
   },
+});
+
+// New mutation for CRM enrichment
+export const updateCompany = mutation({
+  args: {
+    id: v.id("companies"),
+    patch: v.object({
+        siren: v.optional(v.string()),
+        nafCode: v.optional(v.string()),
+        vatNumber: v.optional(v.string()),
+        address: v.optional(v.any()), // Loose type for nested object patch simplicity
+        financials: v.optional(v.any()),
+        pappersId: v.optional(v.string()),
+    })
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Unauthorized");
+    
+    // Any authenticated user can enrich for now? Or restrict to Partner/Sudo?
+    // Let's assume open for team.
+    
+    await ctx.db.patch(args.id, args.patch);
+  }
 });

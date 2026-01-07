@@ -1,4 +1,4 @@
-import { query } from "./_generated/server";
+import { query, internalQuery } from "./_generated/server";
 import { v } from "convex/values";
 
 // Get all companies with their details
@@ -16,9 +16,6 @@ export const getContacts = query({
   handler: async (ctx) => {
     const contacts = await ctx.db.query("contacts").collect();
     
-    // Enrich with company name efficiently
-    // In a large scale app, we might denormalize 'companyName' onto contact or use an index join logic
-    // For now, parallel fetch is fine for <1000 items
     const enriched = await Promise.all(contacts.map(async (c) => {
         const company = await ctx.db.get(c.companyId);
         return {
@@ -30,4 +27,15 @@ export const getContacts = query({
 
     return enriched;
   },
+});
+
+export const getContact = internalQuery({
+    args: { contactId: v.id("contacts") },
+    handler: async (ctx, args) => {
+        const contact = await ctx.db.get(args.contactId);
+        if (!contact) return null;
+        
+        const company = await ctx.db.get(contact.companyId);
+        return { ...contact, companyName: company?.name };
+    }
 });

@@ -36,3 +36,7 @@ Ce fichier recense les pré-requis, variables d'environnement et points de vigil
 2.  Lancer `npm run dev`.
 3.  Se connecter et cliquer sur un bouton (à créer) ou utiliser le dashboard pour lancer le bootstrap.\n- [ ] **CRM Data :** Vérifier que les requêtes `getCompanies` et `getContacts` retournent bien les données enrichies (Logo, Nom entreprise pour contact). \n- [ ] **Drawer UX :** Tester l'ouverture du Drawer sur mobile (responsive check).
 \n- [ ] **Kanban Logic :** Vérifier que le Drag & Drop met bien à jour le stage dans la base (Mutation `moveDeal`).\n- [ ] **Optimistic UI :** Vérifier l'absence de scintillement lors du drop d'une carte.
+\n- [ ] **AI Keys :** Vérifier que `OPENAI_API_KEY` est bien configuré pour l'action `generateDealEmbedding`.\n- [ ] **Vector Index :** Vérifier que l'index `by_vector` est bien créé (déploiement précédent).
+\n- [ ] **Traduction UI :** Vérifier que tous les labels du module Intelligence sont bien en français (Dialogues, Boutons, Toasts).\n- [ ] **Matchmaker Query :** Vérifier que `api.matchmaker.findMatchingBuyers` retourne bien les scores triés.
+\n- [ ] **AI Explain :** Tester le bouton "Analyser" dans le Matchmaker et vérifier la qualité de l'explication en français.
+\n- [ ] **Env Vars :** Ajouter `GROQ_API_KEY` dans le dashboard Convex.\n- [ ] **Billing :** Vérifier que le compte OpenAI n'est plus utilisé que pour les embeddings (Coût négligeable).
