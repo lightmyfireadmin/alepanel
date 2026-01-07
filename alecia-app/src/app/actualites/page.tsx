@@ -5,8 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
-import { getAllPublishedPosts } from "@/lib/actions/posts";
-import { normalizeCoverImage, normalizeSlug } from "@/lib/posts-utils";
+import { getBlogPosts } from "@/lib/actions/convex-marketing";
 
 export const metadata: Metadata = {
   title: "Actualités | Communiqués et articles",
@@ -14,20 +13,31 @@ export const metadata: Metadata = {
     "Suivez les actualités alecia. Communiqués de presse, articles et revues de presse sur le M&A pour PME et ETI.",
 };
 
+// Helper to format date
+function formatDate(timestamp?: number): string {
+  if (!timestamp) return "";
+  return new Date(timestamp).toISOString().split('T')[0];
+}
+
+// Helper to ensure cover image is valid
+function normalizeCoverImage(url?: string): string {
+  if (!url) return "/placeholder-blog.jpg";
+  if (url.startsWith("http")) return url;
+  return url.startsWith("/") ? url : `/${url}`;
+}
+
 export default async function ActualitesPage() {
-  const posts = await getAllPublishedPosts();
+  const posts = await getBlogPosts();
   
-  const postsWithData = posts.map(post => {
-    return {
-      id: post.id,
-      slug: normalizeSlug(post.slug),
-      title: post.titleFr,
-      excerpt: post.excerpt || "",
-      coverImage: normalizeCoverImage(post.coverImage),
-      category: post.category || "Article",
-      publishedAt: post.publishedAt?.toISOString().split('T')[0] || "",
-    };
-  });
+  const postsWithData = posts.map(post => ({
+    id: post._id,
+    slug: post.slug,
+    title: post.title,
+    excerpt: post.excerpt || "",
+    coverImage: normalizeCoverImage(post.coverImage),
+    category: post.category || "Article",
+    publishedAt: formatDate(post.publishedAt),
+  }));
   return (
     <>
       <Navbar />

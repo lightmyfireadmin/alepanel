@@ -6,7 +6,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { Briefcase, MapPin, Clock, ArrowRight, Users, TrendingUp, Heart } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { getJobOffers } from "@/lib/actions/jobs";
+import { getJobOffers } from "@/lib/actions/convex-marketing";
 
 export const metadata: Metadata = {
   title: "Nous rejoindre | Carrières chez alecia",
@@ -34,7 +34,20 @@ const values = [
 
 export default async function NousRejoindrePage() {
   const t = await getTranslations("careers");
-  const openPositions = await getJobOffers();
+  const jobsData = await getJobOffers();
+  
+  // Map Convex format to expected format
+  const openPositions = jobsData.map(job => ({
+    id: job._id,
+    slug: job.slug,
+    title: job.title,
+    type: job.type,
+    location: job.location,
+    description: job.description,
+    requirements: Array.isArray(job.requirements) 
+      ? job.requirements 
+      : job.requirements ? [job.requirements] : [],
+  }));
 
   return (
     <>

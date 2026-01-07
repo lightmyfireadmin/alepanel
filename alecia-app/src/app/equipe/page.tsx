@@ -1,7 +1,7 @@
 import { Navbar, Footer } from "@/components/layout";
 import { TeamCard } from "@/components/features";
 import type { Metadata } from "next";
-import { getAllTeamMembers } from "@/lib/actions/team";
+import { getTeamMembers } from "@/lib/actions/convex-marketing";
 
 export const metadata: Metadata = {
   title: "Équipe | Nos associés et experts",
@@ -10,7 +10,17 @@ export const metadata: Metadata = {
 };
 
 export default async function EquipePage() {
-  const teamMembers = await getAllTeamMembers();
+  const teamData = await getTeamMembers();
+  
+  // Map Convex format to component expected format
+  const teamMembers = teamData.map(m => ({
+    id: m._id,
+    slug: m.slug,
+    name: m.name,
+    role: m.role,
+    photo: m.photo,
+    linkedinUrl: m.linkedinUrl,
+  }));
   return (
     <>
       <Navbar />

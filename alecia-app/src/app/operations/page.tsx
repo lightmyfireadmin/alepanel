@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { Navbar, Footer } from "@/components/layout";
 import { DealCard, DealFilter } from "@/components/features";
 import type { Metadata } from "next";
-import { getFilteredDeals, getDealFilterOptions } from "@/lib/actions/deals";
+import { getTransactions, getTransactionFilters } from "@/lib/actions/convex-marketing";
 
 export const metadata: Metadata = {
   title: "Opérations | Nos transactions",
@@ -22,22 +22,31 @@ interface OperationsPageProps {
 export default async function OperationsPage({ searchParams }: OperationsPageProps) {
   const params = await searchParams;
   
-  // Get filter options from database
-  const filterOptions = await getDealFilterOptions({
-    sector: params.sector,
-    region: params.region,
-    year: params.year ? parseInt(params.year) : undefined,
-    mandateType: params.type,
-  });
+  // Get filter options from Convex
+  const filterOptions = await getTransactionFilters();
   const { sectors: availableSectors, regions: availableRegions, years, mandateTypes: availableTypes } = filterOptions;
   
-  // Filter deals based on search params
-  const filteredDeals = await getFilteredDeals({
+  // Get filtered transactions from Convex
+  const filteredDeals = await getTransactions({
     sector: params.sector,
-    region: params.region,
     year: params.year ? parseInt(params.year) : undefined,
     mandateType: params.type,
   });
+
+  // Map Convex transaction format to component expected format
+  const deals = filteredDeals.map(t => ({
+    id: t._id,
+    slug: t.slug,
+    clientName: t.clientName,
+    clientLogo: t.clientLogo,
+    acquirerName: t.acquirerName,
+    acquirerLogo: t.acquirerLogo,
+    sector: t.sector,
+    region: t.region,
+    year: t.year,
+    mandateType: t.mandateType,
+    isPriorExperience: t.isPriorExperience,
+  }));
 
   return (
     <>
@@ -80,9 +89,9 @@ export default async function OperationsPage({ searchParams }: OperationsPagePro
         {/* Deal Grid */}
         <section className="py-8 px-6 pb-24">
           <div className="max-w-6xl mx-auto">
-            {filteredDeals.length > 0 ? (
+            {deals.length > 0 ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredDeals.map((deal) => (
+                {deals.map((deal) => (
                   <DealCard
                     key={deal.id}
                     slug={deal.slug}
@@ -108,7 +117,7 @@ export default async function OperationsPage({ searchParams }: OperationsPagePro
 
             {/* Results count */}
             <p className="text-center text-sm text-[var(--foreground-muted)] mt-8">
-              {filteredDeals.length} opération{filteredDeals.length > 1 ? "s" : ""} affichée{filteredDeals.length > 1 ? "s" : ""}
+              {deals.length} opération{deals.length > 1 ? "s" : ""} affichée{deals.length > 1 ? "s" : ""}
             </p>
           </div>
         </section>
