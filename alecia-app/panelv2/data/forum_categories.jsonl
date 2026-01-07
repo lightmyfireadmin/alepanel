@@ -1,0 +1,4 @@
+{"slug":"announcements","name":"Annonces Officielles","description":"Nouvelles importantes de l'entreprise","icon":"Megaphone","order":1,"isPrivate":false}
+{"slug":"deals-talk","name":"Discussions Deals","description":"Échanges sur les opérations en cours","icon":"Briefcase","order":2,"isPrivate":true}
+{"slug":"market-watch","name":"Veille Marché","description":"Tendances, news et concurrents","icon":"Eye","order":3,"isPrivate":false}
+{"slug":"watercooler","name":"Pause Café","description":"Discussions informelles","icon":"Coffee","order":4,"isPrivate":false}

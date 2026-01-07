@@ -1,0 +1,12 @@
+{"key":"map_tileLayerUrl","value":"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png","updatedAt":1767822719594}
+{"key":"map_centerLat","value":48.8566,"updatedAt":1767822719594}
+{"key":"map_centerLng","value":2.3522,"updatedAt":1767822719594}
+{"key":"map_zoomLevel","value":13,"updatedAt":1767822719594}
+{"key":"map_maxZoom","value":18,"updatedAt":1767822719594}
+{"key":"map_minZoom","value":10,"updatedAt":1767822719594}
+{"key":"map_attribution","value":"&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors","updatedAt":1767822719594}
+{"key":"map_backgroundTheme","value":"water","updatedAt":1767822719594}
+{"key":"map_appTitle","value":"Eau de Paris","updatedAt":1767822719594}
+{"key":"map_appSubtitle","value":"Une expérience sonore et visuelle","updatedAt":1767822719594}
+{"key":"map_primaryColor","value":"#2196f3","updatedAt":1767822719594}
+{"key":"map_secondaryColor","value":"#1565c0","updatedAt":1767822719594}

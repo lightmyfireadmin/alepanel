@@ -220,7 +220,9 @@ export default defineSchema({
     content: v.string(), // Tiptap JSON/HTML
     excerpt: v.optional(v.string()),
     featuredImage: v.optional(v.string()),
-    authorId: v.id("users"),
+    coverImage: v.optional(v.string()), // For Neon migration compatibility
+    authorId: v.optional(v.id("users")), // Optional for imported posts
+    category: v.optional(v.string()), // From Neon
     status: v.union(v.literal("draft"), v.literal("published"), v.literal("archived")),
     publishedAt: v.optional(v.number()),
     seo: v.optional(v.object({
@@ -228,6 +230,8 @@ export default defineSchema({
       metaDescription: v.optional(v.string()),
       keywords: v.optional(v.array(v.string())),
     })),
+    seoTitle: v.optional(v.string()), // Direct fields from Neon
+    seoDescription: v.optional(v.string()),
     tags: v.optional(v.array(v.string())),
   })
     .index("by_slug", ["slug"])
@@ -347,4 +351,50 @@ export default defineSchema({
     styleConfig: v.optional(v.any()), // JSON for custom styling
   })
     .index("by_displayOrder", ["displayOrder"]),
+
+  // Job Offers (Careers Page)
+  job_offers: defineTable({
+    slug: v.string(),
+    title: v.string(),
+    type: v.string(), // "CDI", "CDD", "Stage", etc.
+    location: v.string(),
+    description: v.string(),
+    requirements: v.optional(v.union(v.string(), v.array(v.string()))),
+    contactEmail: v.optional(v.string()),
+    pdfUrl: v.optional(v.string()),
+    isPublished: v.boolean(),
+    displayOrder: v.number(),
+  })
+    .index("by_slug", ["slug"])
+    .index("by_isPublished", ["isPublished"]),
+
+  // Forum Categories
+  forum_categories: defineTable({
+    slug: v.string(),
+    name: v.string(),
+    description: v.optional(v.string()),
+    icon: v.optional(v.string()),
+    order: v.number(),
+    isPrivate: v.boolean(),
+  })
+    .index("by_slug", ["slug"])
+    .index("by_order", ["order"]),
+
+  // Collaborative Pads (Rich Text Documents)
+  pads: defineTable({
+    title: v.string(),
+    content: v.string(), // HTML or Markdown
+    ownerId: v.optional(v.id("users")),
+    isPublic: v.boolean(),
+    lastEditedBy: v.optional(v.id("users")),
+  })
+    .index("by_ownerId", ["ownerId"]),
+
+  // Global App Configuration
+  global_config: defineTable({
+    key: v.string(),
+    value: v.any(),
+    updatedAt: v.number(),
+  })
+    .index("by_key", ["key"]),
 });
