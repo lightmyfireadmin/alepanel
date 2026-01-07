@@ -197,7 +197,7 @@ export function SignatureRequestPanel() {
                   <SelectValue placeholder="Sélectionner le signataire" />
                 </SelectTrigger>
                 <SelectContent>
-                  {users?.map((user) => (
+                  {users?.map((user: { _id: string; name: string }) => (
                     <SelectItem key={user._id} value={user._id}>
                       {user.name}
                     </SelectItem>
@@ -233,7 +233,7 @@ export function SignatureRequestPanel() {
               </CardContent>
             </Card>
           ) : (
-            myPending.map((req) => (
+            myPending.map((req: { _id: string; title: string; documentType: string; _creationTime: number }) => (
               <Card key={req._id}>
                 <CardContent className="p-4 flex items-center justify-between">
                   <div>
@@ -277,7 +277,7 @@ export function SignatureRequestPanel() {
               </CardContent>
             </Card>
           ) : (
-            allRequests.map((req) => {
+            allRequests.map((req: { _id: string; title: string; documentType: string; status: string; signerName: string }) => {
               const statusConfig = STATUS_CONFIG[req.status];
               return (
                 <Card key={req._id}>

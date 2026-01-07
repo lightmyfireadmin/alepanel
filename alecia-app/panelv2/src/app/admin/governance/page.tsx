@@ -31,7 +31,8 @@ export default function GovernanceDashboard() {
                </CardContent>
            </Card>
         ) : (
-            proposals.map((proposal) => (
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            proposals.map((proposal: any) => (
                 <Card key={proposal._id} className="group hover:shadow-md transition-all">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <div className="flex flex-col gap-1">

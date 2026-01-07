@@ -53,36 +53,23 @@ export const findMatchingBuyers = action({
         const results = await ctx.vectorSearch("embeddings", "by_vector", {
             vector: dealEmbedding.vector,
             limit: 5,
-            filter: (q) => q.eq(q.field("targetType"), "buyer")
+            filter: (q) => q.eq("targetType", "buyer")
         });
 
         // C. Map results to Contacts (via internal query)
         const matches = await Promise.all(results.map(async (res) => {
-            // Fetch contact details
-            // We assume targetId is the Contact ID string
-            const contact = await ctx.runQuery(internal.matchmaker.getContactDetails, { 
-                contactId: res._id // Wait, vector search result returns the embedding doc ID (_id) or the field we indexed? 
-                // It returns the embedding document. The 'targetId' field in that doc is the contact ID.
-                // But vectorSearch results contain the fields stored in the vector index? 
-                // No, usually just _id and _score unless we include metadata.
-                // We need to fetch the embedding doc first? 
-                // Ah, 'results' contains the fields if they are stored? 
-                // By default vectorSearch returns { _id, _score }. 
-                // We need to fetch the embedding doc to get 'targetId'.
-            });
-            
-            // Actually, ctx.vectorSearch returns the documents if we use it this way?
-            // "The result is an array of objects, each containing the _id and _score of a matching document."
-            // So we need to fetch the embedding doc to get the targetId.
-            
+            // Vector search returns { _id, _score } where _id is the embedding doc ID
+            // First fetch the embedding doc to get the targetId (contact ID)
             const embeddingDoc = await ctx.runQuery(internal.matchmaker.getEmbeddingById, { embeddingId: res._id });
             if (!embeddingDoc) return null;
 
+            // The targetId in the embedding doc is the contact ID (stored as string)
             const contactId = embeddingDoc.targetId;
             
-            // Now fetch contact
-            // We can reuse crm.getContact if it was exposed as internal, or create a helper here.
-            const contactData = await ctx.runQuery(internal.crm.getContact, { contactId: contactId as any });
+            // Fetch the enriched contact details
+            const contactData = await ctx.runQuery(internal.matchmaker.getContactDetails, { 
+                contactId: contactId as any 
+            });
             
             if (!contactData) return null;
 
@@ -92,7 +79,7 @@ export const findMatchingBuyers = action({
             };
         }));
 
-        return matches.filter(m => m !== null);
+        return matches.filter((m): m is NonNullable<typeof m> => m !== null);
     }
 });
 

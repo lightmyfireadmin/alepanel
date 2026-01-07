@@ -53,10 +53,6 @@ export function DiffView({ oldContent, newContent, aiSummary }: DiffViewProps) {
                     removedGutterBackground: '#ffdce0',
                     gutterBackground: '#f7f7f7',
                     gutterColor: '#212529',
-                    gutterBorderStyle: '1px solid #eee',
-                    diffViewerTitleBackground: '#fafbfc',
-                    diffViewerTitleColor: '#212529',
-                    diffViewerTitleBorderColor: '#eee',
                 }
             },
             lineNumber: {

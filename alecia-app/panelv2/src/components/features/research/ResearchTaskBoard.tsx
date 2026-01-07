@@ -153,7 +153,7 @@ export function ResearchTaskBoard() {
       {/* Kanban Board */}
       <div className="grid grid-cols-4 gap-4">
         {columns.map((col) => {
-          const columnTasks = tasks.filter((t) => t.status === col.key);
+          const columnTasks = tasks.filter((t: any) => t.status === col.key);
           return (
             <div key={col.key} className="space-y-2">
               <div className="flex items-center justify-between px-2">
@@ -165,7 +165,8 @@ export function ResearchTaskBoard() {
                 </Badge>
               </div>
               <div className="bg-muted/30 rounded-lg p-2 min-h-[200px] space-y-2">
-                {columnTasks.map((task) => (
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                {columnTasks.map((task: any) => (
                   <Card key={task._id} className="shadow-sm">
                     <CardContent className="p-3 space-y-2">
                       <div className="flex items-start justify-between gap-2">

@@ -1,8 +1,8 @@
 "use node";
-// Pipedrive Integration with OAuth Flow
-// Uses official pipedrive package with OAuth instead of API key
+// Pipedrive Integration with OAuth Flow (Node.js Runtime - Actions Only)
+// Database operations are in pipedrive_db.ts
 
-import { action, internalMutation, internalQuery, httpAction } from "./_generated/server";
+import { action } from "./_generated/server";
 import { v } from "convex/values";
 import { internal } from "./_generated/api";
 
@@ -73,8 +73,8 @@ export const exchangeCodeForToken = action({
 
     const tokens = await tokenResponse.json();
     
-    // Store tokens securely (in a real app, encrypt and store per-user)
-    await ctx.runMutation(internal.pipedrive.storeTokens, {
+    // Store tokens securely via V8 mutation
+    await ctx.runMutation(internal.pipedrive_db.storeTokens, {
       accessToken: tokens.access_token,
       refreshToken: tokens.refresh_token,
       expiresAt: Date.now() + tokens.expires_in * 1000,
@@ -92,8 +92,8 @@ export const exchangeCodeForToken = action({
 export const syncFromPipedrive = action({
   args: {},
   handler: async (ctx) => {
-    // Get stored token
-    const tokenData = await ctx.runQuery(internal.pipedrive.getStoredTokens);
+    // Get stored token from V8 query
+    const tokenData = await ctx.runQuery(internal.pipedrive_db.getStoredTokens);
     if (!tokenData) {
       throw new Error("Non connecté à Pipedrive. Veuillez vous authentifier.");
     }
@@ -101,7 +101,6 @@ export const syncFromPipedrive = action({
     // Check if token needs refresh
     let accessToken = tokenData.accessToken;
     if (Date.now() > tokenData.expiresAt - 60000) {
-      // Refresh token
       accessToken = await refreshAccessToken(ctx, tokenData.refreshToken);
     }
 
@@ -117,7 +116,7 @@ export const syncFromPipedrive = action({
       const orgsData = await orgsResponse.json();
       if (orgsData.data) {
         for (const org of orgsData.data) {
-          await ctx.runMutation(internal.pipedrive.upsertCompany, {
+          await ctx.runMutation(internal.pipedrive_db.upsertCompany, {
             pipedriveId: org.id,
             name: org.name || "Sans nom",
             address: org.address || undefined,
@@ -138,13 +137,13 @@ export const syncFromPipedrive = action({
         for (const person of personsData.data) {
           let companyId = null;
           if (person.org_id?.value) {
-            companyId = await ctx.runQuery(internal.pipedrive.getCompanyByPipedriveId, {
+            companyId = await ctx.runQuery(internal.pipedrive_db.getCompanyByPipedriveId, {
               pipedriveId: person.org_id.value,
             });
           }
           
           if (companyId) {
-            await ctx.runMutation(internal.pipedrive.upsertContact, {
+            await ctx.runMutation(internal.pipedrive_db.upsertContact, {
               companyId,
               fullName: person.name || "Sans nom",
               email: person.email?.[0]?.value,
@@ -174,13 +173,13 @@ export const syncFromPipedrive = action({
 
           let companyId = null;
           if (deal.org_id?.value) {
-            companyId = await ctx.runQuery(internal.pipedrive.getCompanyByPipedriveId, {
+            companyId = await ctx.runQuery(internal.pipedrive_db.getCompanyByPipedriveId, {
               pipedriveId: deal.org_id.value,
             });
           }
 
           if (companyId) {
-            await ctx.runMutation(internal.pipedrive.upsertDeal, {
+            await ctx.runMutation(internal.pipedrive_db.upsertDeal, {
               pipedriveId: deal.id,
               title: deal.title,
               amount: deal.value || 0,
@@ -221,7 +220,7 @@ async function refreshAccessToken(ctx: any, refreshToken: string): Promise<strin
 
   const tokens = await response.json();
   
-  await ctx.runMutation(internal.pipedrive.storeTokens, {
+  await ctx.runMutation(internal.pipedrive_db.storeTokens, {
     accessToken: tokens.access_token,
     refreshToken: tokens.refresh_token,
     expiresAt: Date.now() + tokens.expires_in * 1000,
@@ -238,7 +237,7 @@ async function refreshAccessToken(ctx: any, refreshToken: string): Promise<strin
 export const pushDealToPipedrive = action({
   args: { dealId: v.id("deals") },
   handler: async (ctx, args) => {
-    const tokenData = await ctx.runQuery(internal.pipedrive.getStoredTokens);
+    const tokenData = await ctx.runQuery(internal.pipedrive_db.getStoredTokens);
     if (!tokenData) {
       throw new Error("Non connecté à Pipedrive");
     }
@@ -248,7 +247,7 @@ export const pushDealToPipedrive = action({
       accessToken = await refreshAccessToken(ctx, tokenData.refreshToken);
     }
 
-    const deal = await ctx.runQuery(internal.pipedrive.getDealById, { dealId: args.dealId });
+    const deal = await ctx.runQuery(internal.pipedrive_db.getDealById, { dealId: args.dealId });
     if (!deal) throw new Error("Deal non trouvé");
 
     const baseUrl = `https://${tokenData.apiDomain}/v1`;
@@ -274,7 +273,7 @@ export const pushDealToPipedrive = action({
       });
       const data = await response.json();
       if (data.data?.id) {
-        await ctx.runMutation(internal.pipedrive.linkPipedriveDeal, {
+        await ctx.runMutation(internal.pipedrive_db.linkPipedriveDeal, {
           dealId: args.dealId,
           pipedriveId: data.data.id,
         });
@@ -285,160 +284,11 @@ export const pushDealToPipedrive = action({
   },
 });
 
-// ============================================
-// TOKEN STORAGE (Internal)
-// ============================================
-
-export const storeTokens = internalMutation({
-  args: {
-    accessToken: v.string(),
-    refreshToken: v.string(),
-    expiresAt: v.number(),
-    apiDomain: v.string(),
-  },
-  handler: async (ctx, args) => {
-    // Store in global_settings or a dedicated table
-    // For simplicity, using a singleton pattern
-    const existing = await ctx.db.query("global_settings").first();
-    if (existing) {
-      await ctx.db.patch(existing._id, {
-        // @ts-ignore - extending schema dynamically
-        pipedriveTokens: args,
-      });
-    }
-    // If no global_settings yet, tokens will be stored when settings are created
-  },
-});
-
-export const getStoredTokens = internalQuery({
-  args: {},
-  handler: async (ctx) => {
-    const settings = await ctx.db.query("global_settings").first();
-    // @ts-ignore
-    return settings?.pipedriveTokens as {
-      accessToken: string;
-      refreshToken: string;
-      expiresAt: number;
-      apiDomain: string;
-    } | null;
-  },
-});
-
-// ============================================
-// INTERNAL MUTATIONS (Database operations)
-// ============================================
-
-export const upsertCompany = internalMutation({
-  args: {
-    pipedriveId: v.number(),
-    name: v.string(),
-    address: v.optional(v.string()),
-  },
-  handler: async (ctx, args) => {
-    const existing = await ctx.db
-      .query("companies")
-      .withIndex("by_pipedriveId", (q) => q.eq("pipedriveId", String(args.pipedriveId)))
-      .first();
-
-    if (existing) {
-      await ctx.db.patch(existing._id, { name: args.name });
-      return existing._id;
-    } else {
-      return await ctx.db.insert("companies", {
-        name: args.name,
-        pipedriveId: String(args.pipedriveId),
-      });
-    }
-  },
-});
-
-export const upsertContact = internalMutation({
-  args: {
-    companyId: v.id("companies"),
-    fullName: v.string(),
-    email: v.optional(v.string()),
-    phone: v.optional(v.string()),
-  },
-  handler: async (ctx, args) => {
-    const existing = args.email
-      ? await ctx.db.query("contacts").filter((q) => q.eq(q.field("email"), args.email)).first()
-      : null;
-
-    if (existing) {
-      await ctx.db.patch(existing._id, { fullName: args.fullName, phone: args.phone });
-      return existing._id;
-    } else {
-      return await ctx.db.insert("contacts", {
-        companyId: args.companyId,
-        fullName: args.fullName,
-        email: args.email,
-        phone: args.phone,
-      });
-    }
-  },
-});
-
-export const upsertDeal = internalMutation({
-  args: {
-    pipedriveId: v.number(),
-    title: v.string(),
-    amount: v.number(),
-    stage: v.string(),
-    companyId: v.id("companies"),
-  },
-  handler: async (ctx, args) => {
-    const existing = await ctx.db
-      .query("deals")
-      .withIndex("by_pipedriveId", (q) => q.eq("pipedriveId", args.pipedriveId))
-      .first();
-
-    const defaultOwner = await ctx.db.query("users").first();
-    if (!defaultOwner) throw new Error("Aucun utilisateur - créez d'abord un compte");
-
-    if (existing) {
-      await ctx.db.patch(existing._id, { title: args.title, amount: args.amount, stage: args.stage });
-      return existing._id;
-    } else {
-      return await ctx.db.insert("deals", {
-        pipedriveId: args.pipedriveId,
-        title: args.title,
-        amount: args.amount,
-        stage: args.stage,
-        companyId: args.companyId,
-        ownerId: defaultOwner._id,
-      });
-    }
-  },
-});
-
-export const linkPipedriveDeal = internalMutation({
-  args: { dealId: v.id("deals"), pipedriveId: v.number() },
-  handler: async (ctx, args) => {
-    await ctx.db.patch(args.dealId, { pipedriveId: args.pipedriveId });
-  },
-});
-
-export const getCompanyByPipedriveId = internalQuery({
-  args: { pipedriveId: v.number() },
-  handler: async (ctx, args) => {
-    const company = await ctx.db
-      .query("companies")
-      .withIndex("by_pipedriveId", (q) => q.eq("pipedriveId", String(args.pipedriveId)))
-      .first();
-    return company?._id ?? null;
-  },
-});
-
-export const getDealById = internalQuery({
-  args: { dealId: v.id("deals") },
-  handler: async (ctx, args) => await ctx.db.get(args.dealId),
-});
-
 // Check if connected to Pipedrive
 export const isConnected = action({
   args: {},
   handler: async (ctx): Promise<boolean> => {
-    const tokens = await ctx.runQuery(internal.pipedrive.getStoredTokens);
+    const tokens = await ctx.runQuery(internal.pipedrive_db.getStoredTokens);
     return !!tokens && Date.now() < tokens.expiresAt;
   },
 });

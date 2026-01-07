@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useQuery, useAction, useMutation } from "convex/react";
+import { useState, useEffect } from "react";
+import { useAction } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
 import { Button } from "@/components/ui/button";
@@ -11,25 +11,51 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Sparkles, BrainCircuit, UserPlus, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
+type MatchResult = {
+  score: number;
+  contact: {
+    _id: string;
+    fullName: string;
+    email?: string;
+    companyName?: string;
+  };
+};
+
 export function DealMatchmaker({ dealId }: { dealId: Id<"deals"> }) {
-  const matches = useQuery(api.matchmaker.findMatchingBuyers, { dealId });
-  const generateEmbedding = useMutation(api.matchmaker.generateDealEmbedding); // Wait, this was internalMutation in my thought, but needs to be public OR wrapped by action
-  // Ah, the plan said: Mutation generateDealEmbedding.
-  // BUT I implemented it as 'internalMutation' in matchmaker.ts and 'action' in openai.ts.
-  // The UI should call the ACTION 'api.actions.openai.generateDealEmbedding'.
+  const [matches, setMatches] = useState<MatchResult[] | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   
+  const findMatches = useAction(api.matchmaker.findMatchingBuyers);
   const runEmbedding = useAction(api.actions.openai.generateDealEmbedding);
   const explainMatch = useAction(api.actions.openai.explainMatch);
 
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [explanations, setExplanations] = useState<Record<string, string>>({});
 
+  // Load matches on mount
+  useEffect(() => {
+    const loadMatches = async () => {
+      try {
+        const result = await findMatches({ dealId });
+        setMatches(result as MatchResult[]);
+      } catch {
+        setMatches([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadMatches();
+  }, [dealId, findMatches]);
+
   const handleAnalyze = async () => {
     setIsAnalyzing(true);
     try {
         await runEmbedding({ dealId });
+        // Reload matches after embedding
+        const result = await findMatches({ dealId });
+        setMatches(result as MatchResult[]);
         toast.success("Analyse sémantique terminée.");
-    } catch (e) {
+    } catch {
         toast.error("Erreur d'analyse.");
     } finally {
         setIsAnalyzing(false);

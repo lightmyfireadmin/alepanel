@@ -44,7 +44,7 @@ export default function DealsPage() {
     STAGES.forEach(stage => groups[stage] = []);
     
     if (dealsQuery) {
-        dealsQuery.forEach((deal) => {
+        dealsQuery.forEach((deal: Deal) => {
             if (groups[deal.stage]) {
                 groups[deal.stage].push(deal as Deal);
             } else {
@@ -103,7 +103,7 @@ export default function DealsPage() {
     if (!STAGES.includes(newStage)) {
         // Find the deal in our items to get its stage
         // This is a bit inefficient search but fine for small lists
-        const overDeal = dealsQuery?.find(d => d._id === newStage);
+        const overDeal = dealsQuery?.find((d: Deal) => d._id === newStage);
         if (overDeal) {
             newStage = overDeal.stage;
         } else {
@@ -112,7 +112,7 @@ export default function DealsPage() {
     }
 
     // Find current stage
-    const currentDeal = dealsQuery?.find(d => d._id === activeId);
+    const currentDeal = dealsQuery?.find((d: Deal) => d._id === activeId);
     if (!currentDeal) return;
 
     if (currentDeal.stage !== newStage) {
@@ -185,7 +185,7 @@ export default function DealsPage() {
                 <div className="flex gap-4 h-full min-w-[1200px]">
                     {STAGES.map((stage) => {
                         const stageDeals = items[stage] || [];
-                        const totalAmount = stageDeals.reduce((sum, d) => sum + (d.amount || 0), 0);
+                        const totalAmount = stageDeals.reduce((sum: number, d: Deal) => sum + (d.amount || 0), 0);
                         
                         return (
                             <div key={stage} className="flex flex-col w-72 bg-muted/20 rounded-lg border border-border/50 h-full">
@@ -222,7 +222,7 @@ export default function DealsPage() {
                  {activeId ? (
                      <div className="w-72 rotate-2 opacity-90 cursor-grabbing">
                         {(() => {
-                            const deal = dealsQuery?.find(d => d._id === activeId);
+                            const deal = dealsQuery?.find((d: Deal) => d._id === activeId);
                             return deal ? <DealCard deal={deal as Deal} /> : null;
                         })()}
                      </div>

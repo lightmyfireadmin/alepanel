@@ -103,7 +103,7 @@ export function DraggableDashboard({ initialLayout, onLayoutChange }: DashboardP
             <CardContent className="p-0">
               <div className="divide-y">
                 {stats?.recentDeals?.length ? (
-                  stats.recentDeals.map((deal) => (
+                  stats.recentDeals.map((deal: { id: string; title: string; stage: string }) => (
                     <div key={deal.id} className="p-3 flex justify-between items-center text-sm">
                       <span className="font-medium">{deal.title}</span>
                       <Badge variant="secondary" className="text-xs">{deal.stage}</Badge>
@@ -172,7 +172,7 @@ export function DraggableDashboard({ initialLayout, onLayoutChange }: DashboardP
         rowHeight={60}
         isDraggable={isEditing}
         isResizable={isEditing}
-        onLayoutChange={(currentLayout) => handleLayoutChange(currentLayout)}
+        onLayoutChange={(currentLayout: Array<{ i: string; x: number; y: number; w: number; h: number }>) => handleLayoutChange(currentLayout)}
         draggableHandle=".drag-handle"
       >
         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}

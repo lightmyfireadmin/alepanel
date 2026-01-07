@@ -11,7 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { ThumbsUp, ThumbsDown, GitMerge, ArrowLeft, Loader2, Users } from "lucide-react";
+import { ThumbsUp, ThumbsDown, GitMerge, ArrowLeft, Loader2, Users, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 
 export default function ProposalDetailPage() {

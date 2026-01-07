@@ -80,8 +80,8 @@ export default function BlogPage() {
     }
   };
 
-  const draftPosts = posts?.filter((p) => p.status === "draft") ?? [];
-  const publishedPosts = posts?.filter((p) => p.status === "published") ?? [];
+  const draftPosts = posts?.filter((p: { status: string }) => p.status === "draft") ?? [];
+  const publishedPosts = posts?.filter((p: { status: string }) => p.status === "published") ?? [];
 
   return (
     <div className="h-full flex flex-col p-6 space-y-4">
