@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
-import * as ReactGridLayout from "react-grid-layout";
+import dynamic from "next/dynamic";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,13 +14,18 @@ import { cn } from "@/lib/utils";
 import { VoiceNoteRecorder } from "@/components/features/productivity/VoiceNoteRecorder";
 import { Whiteboard } from "@/components/features/productivity/Whiteboard";
 
-// Make grid responsive
+// Import react-grid-layout dynamically to avoid SSR issues
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Responsive = (ReactGridLayout as any).Responsive || (ReactGridLayout as any).default?.Responsive;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const WidthProvider = (ReactGridLayout as any).WidthProvider || (ReactGridLayout as any).default?.WidthProvider;
-
-const ResponsiveGridLayout = WidthProvider(Responsive);
+let ResponsiveGridLayout: any = null;
+if (typeof window !== "undefined") {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const RGL = require("react-grid-layout");
+  const WidthProvider = RGL.WidthProvider;
+  const Responsive = RGL.Responsive;
+  if (WidthProvider && Responsive) {
+    ResponsiveGridLayout = WidthProvider(Responsive);
+  }
+}
 
 interface DashboardProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -150,6 +155,15 @@ export function DraggableDashboard({ initialLayout, onLayoutChange }: DashboardP
   };
 
   if (!mounted) return null;
+
+  // Don't render grid during SSR
+  if (!ResponsiveGridLayout) {
+    return (
+      <div className="h-96 flex items-center justify-center text-muted-foreground">
+        Chargement du tableau de bord...
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">

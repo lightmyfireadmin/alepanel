@@ -12,6 +12,9 @@ export const metadata: Metadata = {
     "Contactez alecia pour toute information sur nos services en fusion-acquisition. Bureaux en Île-de-France, Sud Est, Auvergne Rhône-Alpes et Grand Ouest.",
 };
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 const offices = [
   {
     id: "idf",

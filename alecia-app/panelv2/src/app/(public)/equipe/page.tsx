@@ -10,6 +10,9 @@ export const metadata: Metadata = {
     "Découvrez l'équipe alecia. Associés fondateurs et analystes experts en fusion-acquisition pour PME et ETI.",
 };
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export default function EquipePage() {
   // Using static data for now, but in future phases this should query Convex 'users' table
   return (

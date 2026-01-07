@@ -152,13 +152,13 @@ export function Footer() {
             >
               Politique de confidentialité
             </Link>
-            <Link
-              href="/admin/login"
+            <a
+              href={process.env.NEXT_PUBLIC_PANEL_URL || "/admin"}
               className="text-[var(--foreground-faint)] hover:text-[var(--accent)] transition-colors focus:outline-none focus-visible:underline"
               aria-label="Accès administration"
             >
               Admin
-            </Link>
+            </a>
           </nav>
         </div>
       </div>
