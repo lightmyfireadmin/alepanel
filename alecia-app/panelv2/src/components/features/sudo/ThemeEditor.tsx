@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery } from "convex/react";
-import { api } from "../../../../../convex/_generated/api";
+import { api } from "../../../../convex/_generated/api";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -10,8 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { Check, ChevronsUpDown, Paintbrush, RefreshCw } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Paintbrush, RefreshCw } from "lucide-react";
 
 // Helper to convert Hex to HSL (Space separated for Tailwind)
 function hexToHsl(hex: string) {
@@ -93,12 +92,14 @@ export function ThemeEditor() {
 
   useEffect(() => {
     if (settings?.theme) {
-      if (settings.theme.radius) setRadius(settings.theme.radius);
-      if (settings.theme.font) setFont(settings.theme.font);
-      // Note: We are defaulting primary to black if not syncable from HSL easily.
-      // In a real app we'd store Hex too or convert HSL -> Hex.
+      if (settings.theme.radius !== undefined && settings.theme.radius !== radius) {
+          setRadius(settings.theme.radius);
+      }
+      if (settings.theme.font && settings.theme.font !== font) {
+          setFont(settings.theme.font);
+      }
     }
-  }, [settings]);
+  }, [settings, radius, font]); // dependencies added to ensure correctness, though logic guards loops
 
   const handleSave = async () => {
     const hslPrimary = hexToHsl(primaryColor);

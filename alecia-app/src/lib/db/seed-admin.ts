@@ -55,8 +55,7 @@ async function seedAdmin() {
   // But standard flow is: env var is plain text password.
   const defaultPwd = process.env.NEW_USER_PWD || "alecia2024";
   
-  console.log("🔐 SETTING ADMIN PASSWORD TO:", defaultPwd);
-  console.log("   (Please use this password to log in)");
+  console.log("🔐 SETTING ADMIN PASSWORD...");
 
   const passwordHash = await bcrypt.hash(defaultPwd, 10);
 

@@ -16,7 +16,8 @@ Ce document détaille les choix techniques, l'architecture du système et la str
 ## 3. Logique Backend (Convex Actions & Mutations)
 *   **`seed.ts` (Nouveau) :**
     *   `initialSetup` : Crée les `global_settings` par défaut (Thème Slate, Quorum 50%).
-    *   `bootstrapSudo` : Mécanisme de "Claim Admin". Permet au premier utilisateur connecté de s'auto-promouvoir Sudo si la base est vide d'admins. Sécurité critique pour le premier déploiement.
+    *   `bootstrapSudo` : Mécanisme de "Claim Admin". Permet au premier utilisateur connecté de s'auto-promouvoir Sudo.
+    *   `seedTeam` : Mutation utilitaire pour promouvoir automatiquement les membres clés (Christophe, Micou) au rôle Sudo après leur inscription via Clerk.
 *   **`cms.ts` :** Gestion du contenu et des votes.
 *   **`queries.ts` / `mutations.ts` :** Gestion administrative.
 
@@ -43,10 +44,54 @@ panelv2/
     *   Pas de hardcoding des URLs, utilisation stricte de `process.env.NEXT_PUBLIC_CONVEX_URL`.
 *   **Bootstrap Pattern :**
     *   Plutôt que d'insérer manuellement des données dans la DB, on expose une mutation sécurisée (`bootstrapSudo`) appelable depuis l'application pour configurer l'accès initial.
-\n\n## 6. CRM Architecture\n*   **Backend :** `convex/crm.ts` expose les queries optimisées. Pour les contacts, on fait un enrichissement "lazy" (Promise.all) pour récupérer le nom de la société associée. Pour scale >1k, il faudra dénormaliser.\n*   **Frontend :** Architecture réutilisable `DataTable` (basée sur Shadcn) + `EntityDrawer` (Sheet). Le but est de minimiser la navigation inter-pages.
-\n\n## 7. Deal Flow Architecture\n*   **Backend :** `convex/deals.ts` gère l'enrichissement des deals (Owner/Company) pour l'affichage carte. Mutation `moveDeal` sécurisée.\n*   **Frontend :** Utilisation de `@dnd-kit/sortable` pour les colonnes et les cartes. Logique de tri vertical. Persistance de la vue (List/Board) via LocalStorage pour UX.
-\n\n## 8. Deployment Log (2026-01-07)\n*   **Convex Deploy:** Successfully pushed schema and functions to `small-spoonbill-745`. Fixed missing `use node;` directive in actions.\n*   **Dependencies:** Added `@ai-sdk/openai` manually (missing from initial install). Used `--legacy-peer-deps` for React 19 compatibility.
-\n\n## 8. Intelligence Architecture\n*   **Actions :** `convex/actions/intelligence.ts` (Pappers) et `openai.ts` (Embeddings) séparent la logique API externe du runtime Convex.\n*   **Vector Search :** Mutation interne `saveDealEmbedding` pour stocker le vecteur. Query `findMatchingBuyers` effectue la recherche de proximité sur l'index `by_vector`.
-\n\n## 9. Matchmaker Refactoring\n*   **Architecture :** Séparation de la logique de matching dans `convex/matchmaker.ts` pour isoler les vecteurs des opérations CRUD classiques (`deals.ts`).\n*   **Actions :** `generateDealEmbedding` appelle désormais une mutation interne dédiée dans le namespace `matchmaker`.
-\n\n## 9.1. OpenAI Integration Deep Dive\n*   **Actions vs Mutations :** Les actions (`openai.ts`) appellent l'API externe, puis utilisent `internalMutation` (`matchmaker.ts`) pour écrire le vecteur. Pour la lecture, elles utilisent `internalQuery` (`crm.ts`, `deals.ts`) pour construire le contexte du prompt sans exposer ces données au client public.
-\n\n## 10. AI Strategy: Price-Performance Ratio\n*   **Why Groq?** LPU Inference offers 10x speed at a fraction of GPT-4o cost. Ideal for real-time UI feedback (e.g., "Analyser" button).\n*   **Hybrid Stack:**\n    *   **Generation:** Groq SDK (`llama3-70b` as daily driver).\n    *   **Vectors:** OpenAI SDK (Standard, reliable, cheap).
+
+## 6. CRM Architecture
+*   **Backend :** `convex/crm.ts` expose les queries optimisées. Pour les contacts, on fait un enrichissement "lazy" (Promise.all) pour récupérer le nom de la société associée. Pour scale >1k, il faudra dénormaliser.
+*   **Frontend :** Architecture réutilisable `DataTable` (basée sur Shadcn) + `EntityDrawer` (Sheet). Le but est de minimiser la navigation inter-pages.
+
+## 7. Deal Flow Architecture
+*   **Backend :** `convex/deals.ts` gère l'enrichissement des deals (Owner/Company) pour l'affichage carte. Mutation `moveDeal` sécurisée.
+*   **Frontend :** Utilisation de `@dnd-kit/sortable` pour les colonnes et les cartes. Logique de tri vertical. Persistance de la vue (List/Board) via LocalStorage pour UX.
+
+## 8. Deployment Log (2026-01-07)
+*   **Convex Deploy:** Successfully pushed schema and functions to `small-spoonbill-745`. Fixed missing `use node;` directive in actions.
+*   **Dependencies:** Added `@ai-sdk/openai` manually (missing from initial install). Used `--legacy-peer-deps` for React 19 compatibility.
+
+## 8. Intelligence Architecture
+*   **Actions :** `convex/actions/intelligence.ts` (Pappers) et `openai.ts` (Embeddings) séparent la logique API externe du runtime Convex.
+*   **Vector Search :** Mutation interne `saveDealEmbedding` pour stocker le vecteur. Query `findMatchingBuyers` effectue la recherche de proximité sur l'index `by_vector`.
+
+## 9. Matchmaker Refactoring
+*   **Architecture :** Séparation de la logique de matching dans `convex/matchmaker.ts` pour isoler les vecteurs des opérations CRUD classiques (`deals.ts`).
+*   **Actions :** `generateDealEmbedding` appelle désormais une mutation interne dédiée dans le namespace `matchmaker`.
+
+## 9.1. OpenAI Integration Deep Dive
+*   **Actions vs Mutations :** Les actions (`openai.ts`) appellent l'API externe, puis utilisent `internalMutation` (`matchmaker.ts`) pour écrire le vecteur. Pour la lecture, elles utilisent `internalQuery` (`crm.ts`, `deals.ts`) pour construire le contexte du prompt sans exposer ces données au client public.
+
+## 10. AI Strategy: Price-Performance Ratio
+*   **Why Groq?** LPU Inference offers 10x speed at a fraction of GPT-4o cost. Ideal for real-time UI feedback (e.g., "Analyser" button).
+*   **Hybrid Stack:**
+    *   **Generation:** Groq SDK (`llama3-70b` as daily driver).
+    *   **Vectors:** OpenAI SDK (Standard, reliable, cheap).
+
+## 12. Dashboard Architecture
+
+*   **Grid Engine :** `react-grid-layout` gère le positionnement (x, y, w, h) des widgets.
+
+*   **Composant :** `DraggableDashboard.tsx` encapsule la logique de drag & drop et le registre des widgets disponibles.
+
+
+
+## 14. Reporting Architecture
+
+
+
+*   **Charting Library :** `recharts` (Standard industry choice) wrapper dans `SmartChart.tsx` pour une API simplifiée.
+
+
+
+*   **Data Flow :** Le composant gère son propre état de chargement et accepte des données statiques ou une URL de fetch (pour l'intégration future avec les actions Convex).
+
+
+
+

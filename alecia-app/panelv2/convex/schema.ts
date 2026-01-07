@@ -81,6 +81,7 @@ export default defineSchema({
   }).vectorIndex("by_vector", {
     vectorField: "vector",
     dimensions: 1536, // Standard OpenAI dimensions, adjust if needed
+    filterFields: ["targetType"],
   }),
 
   buyer_criteria: defineTable({

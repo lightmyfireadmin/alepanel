@@ -37,22 +37,12 @@ export default function DealsPage() {
   
   // Local state for view mode (default to board)
   const [viewMode, setViewMode] = useState<"board" | "list">("board");
-  // Optimistic state for drag and drop
-  const [items, setItems] = useState<Record<string, Deal[]>>({});
-  const [activeId, setActiveId] = useState<Id<"deals"> | null>(null);
-
-  useEffect(() => {
-    const saved = localStorage.getItem("deals_view_mode");
-    if (saved === "list" || saved === "board") {
-        setViewMode(saved);
-    }
-  }, []);
-
-  useEffect(() => {
+  // Optimistic state for drag and drop - REFACTORED to useMemo to avoid useEffect setState
+  const items = useMemo(() => {
+    const groups: Record<string, Deal[]> = {};
+    STAGES.forEach(stage => groups[stage] = []);
+    
     if (dealsQuery) {
-        // Group deals by stage
-        const groups: Record<string, Deal[]> = {};
-        STAGES.forEach(stage => groups[stage] = []);
         dealsQuery.forEach((deal) => {
             if (groups[deal.stage]) {
                 groups[deal.stage].push(deal as Deal);
@@ -61,9 +51,21 @@ export default function DealsPage() {
                 groups["Lead"]?.push(deal as Deal);
             }
         });
-        setItems(groups);
     }
+    return groups;
   }, [dealsQuery]);
+
+  const [activeId, setActiveId] = useState<Id<"deals"> | null>(null);
+
+  useEffect(() => {
+    // Check for window to be safe, though useEffect runs client-side
+    if (typeof window !== 'undefined') {
+        const saved = localStorage.getItem("deals_view_mode");
+        if (saved === "list" || saved === "board") {
+            setViewMode(saved);
+        }
+    }
+  }, []);
 
   const toggleView = (mode: "board" | "list") => {
       setViewMode(mode);
@@ -77,12 +79,6 @@ export default function DealsPage() {
 
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(event.active.id as Id<"deals">);
-  };
-
-  const handleDragOver = (event: DragOverEvent) => {
-      // For simple kanban logic (column to column), mostly handled in DragEnd
-      // But for reordering within column we might need this.
-      // Keeping it simple: we only care about dropping into a container.
   };
 
   const handleDragEnd = async (event: DragEndEvent) => {
@@ -115,22 +111,18 @@ export default function DealsPage() {
     if (!currentDeal) return;
 
     if (currentDeal.stage !== newStage) {
-        // Optimistic update locally
-        const previousStage = currentDeal.stage;
-        
         // Update Convex
         try {
             await moveDeal({ dealId: activeId, newStage });
             toast.success(`Moved to ${newStage}`);
         } catch (e) {
             toast.error("Failed to move deal");
-            // Revert would happen automatically via SWR query re-fetch on error, 
-            // but manual revert logic could go here.
         }
     }
   };
 
   // --- List View Columns ---
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const columns: ColumnDef<any>[] = [
       { accessorKey: "title", header: "Deal Name", cell: ({row}) => <span className="font-semibold">{row.original.title}</span> },
       { accessorKey: "companyName", header: "Company" },

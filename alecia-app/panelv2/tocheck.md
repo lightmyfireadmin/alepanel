@@ -18,18 +18,24 @@ Ce fichier recense les pré-requis, variables d'environnement et points de vigil
 ## 2. Installation & Build
 - [ ] **Dépendances Legacy :** `npm install --legacy-peer-deps`
 - [ ] **Déploiement Convex :**
-    - Lancer `npx convex deploy` pour pousser le schéma et les fonctions vers l'instance de production configurée.
+    - Lancer `npx convex deploy` pour pousser le schéma, les fonctions et les `auth_utils` vers l'instance de production.
 - [ ] **Initialisation des Données :**
-    - Une fois connecté dans l'app, ouvrir la console développeur du navigateur ou le dashboard Convex.
+    - Une fois connecté dans l'app, ouvrir le dashboard Convex.
     - Exécuter la mutation `seed.initialSetup` pour créer les settings globaux.
     - Exécuter la mutation `seed.bootstrapSudo` pour devenir administrateur (Sudo) automatiquement.
-
-## 3. Configuration SaaS
-- [ ] **Clerk :** Configurer les URLs de redirection vers l'instance de prod ou localhost.
+    - Exécuter la mutation `seed.seedTeam` pour promouvoir Christophe et Micou une fois inscrits.
 
 ## 4. Points de Vigilance
-- [ ] **Hardcoding :** Vérification effectuée. Les URLs et clés passent par `process.env`.
-- [ ] **Bootstrap Sécurisé :** La fonction `bootstrapSudo` se verrouille automatiquement dès qu'un admin existe. Ne pas supprimer le premier admin sans en avoir créé un autre.
+- [ ] **Sécurité RBAC :** Vérifier que les nouvelles fonctions dans `crm.ts` et `deals.ts` bloquent bien les accès non-authentifiés (Utiliser `checkRole`).
+- [ ] **Clés API :** Vérifier que `PAPPERS_API_KEY` et `GROQ_API_KEY` sont définies dans le dashboard Convex.
+- [ ] **Microsoft Auth :** Vérifier que le template JWT `microsoft_graph` est configuré dans Clerk pour l'accès OneDrive.
+
+## 5. Tests Intelligence
+- [ ] **Enrichissement Pappers :** Tester le bouton "Enrichir" sur une société test (ex: "Renault").
+## 7. Tests CMS
+- [ ] **Homepage :** Vérifier que la page d'accueil s'affiche correctement et charge le contenu depuis Convex.
+- [ ] **Pages Publiques :** Vérifier l'accès à `/equipe`, `/expertises`, `/contact`.
+- [ ] **Édition :** Modifier la page "home" dans le Sudo Panel et voir la mise à jour sur le site public.
 
 ## 5. Prochaines Étapes
 1.  Remplir les clés Clerk/OpenAI dans `.env.local`.

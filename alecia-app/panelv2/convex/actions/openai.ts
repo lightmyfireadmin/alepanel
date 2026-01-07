@@ -94,7 +94,7 @@ export const generateDealEmbedding = action({
 
 export const explainMatch = action({
     args: { dealId: v.id("deals"), contactId: v.id("contacts") },
-    handler: async (ctx, args) => {
+    handler: async (ctx, args): Promise<string> => {
         if (!process.env.GROQ_API_KEY) throw new Error("GROQ_API_KEY not configured");
         const deal = await ctx.runQuery(internal.deals.getDeal, { dealId: args.dealId });
         const contact = await ctx.runQuery(internal.crm.getContact, { contactId: args.contactId });

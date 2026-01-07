@@ -1,10 +1,12 @@
 import { query, internalQuery } from "./_generated/server";
 import { v } from "convex/values";
+import { getAuthenticatedUser } from "./auth_utils";
 
 // Get all companies with their details
 export const getCompanies = query({
   args: {},
   handler: async (ctx) => {
+    await getAuthenticatedUser(ctx); // Ensure user is logged in
     const companies = await ctx.db.query("companies").collect();
     return companies;
   },
@@ -14,6 +16,7 @@ export const getCompanies = query({
 export const getContacts = query({
   args: {},
   handler: async (ctx) => {
+    await getAuthenticatedUser(ctx); // Ensure user is logged in
     const contacts = await ctx.db.query("contacts").collect();
     
     const enriched = await Promise.all(contacts.map(async (c) => {

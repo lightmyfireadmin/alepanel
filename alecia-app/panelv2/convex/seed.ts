@@ -63,3 +63,32 @@ export const bootstrapSudo = mutation({
     }
   },
 });
+
+export const seedTeam = mutation({
+  args: {},
+  handler: async (ctx) => {
+    // List of core team members to auto-promote if found
+    const TEAM = [
+        { email: "christophe.berthon@alecia.fr", role: "sudo" as const },
+        { email: "micou@alecia.fr", role: "sudo" as const }, // Dev
+    ];
+
+    for (const member of TEAM) {
+        const user = await ctx.db
+            .query("users")
+            .withIndex("by_email", (q) => q.eq("email", member.email))
+            .first();
+        
+        if (user) {
+            if (user.role !== member.role) {
+                await ctx.db.patch(user._id, { role: member.role });
+                console.log(`Updated ${member.email} to ${member.role}`);
+            } else {
+                console.log(`${member.email} is already ${member.role}`);
+            }
+        } else {
+            console.log(`Skipping ${member.email} - User not found (Wait for sign-up)`);
+        }
+    }
+  }
+});

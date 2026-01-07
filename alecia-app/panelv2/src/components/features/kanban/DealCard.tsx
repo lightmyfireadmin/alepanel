@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
@@ -7,7 +8,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Building2, Flame, Clock } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { Id } from "../../../../../convex/_generated/dataModel";
 
 export interface Deal {
@@ -42,11 +42,14 @@ export function DealCard({ deal }: DealCardProps) {
     opacity: isDragging ? 0.5 : 1,
   };
 
-  // Logic for Tags: "Hot" if created recently (e.g. last 7 days) for demo, 
-  // or Stalled if older. Real logic would use updatedAt if available.
-  const daysSinceCreation = (Date.now() - deal._creationTime) / (1000 * 60 * 60 * 24);
-  const isHot = daysSinceCreation < 7; 
-  const isStalled = daysSinceCreation > 30;
+  const [isHot, setIsHot] = useState(false);
+  const [isStalled, setIsStalled] = useState(false);
+
+  useEffect(() => {
+    const daysSinceCreation = (Date.now() - deal._creationTime) / (1000 * 60 * 60 * 24);
+    setIsHot(daysSinceCreation < 7);
+    setIsStalled(daysSinceCreation > 30);
+  }, [deal._creationTime]);
 
   const formatAmount = (amount?: number) => {
     if (!amount) return "-";
