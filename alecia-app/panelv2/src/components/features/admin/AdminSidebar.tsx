@@ -24,7 +24,7 @@ import {
 const navItems = [
   { 
     label: "Dashboard", 
-    href: "/admin", 
+    href: "/admin/dashboard", 
     icon: Home,
     exact: true,
   },
