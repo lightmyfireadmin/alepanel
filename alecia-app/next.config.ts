@@ -18,6 +18,31 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      // Redirect V1 admin routes to V2 panel
+      {
+        source: "/admin",
+        destination: "https://panel.alecia.markets",
+        permanent: true,
+      },
+      {
+        source: "/admin/:path*",
+        destination: "https://panel.alecia.markets/admin/:path*",
+        permanent: true,
+      },
+      {
+        source: "/sudo",
+        destination: "https://panel.alecia.markets/sudo",
+        permanent: true,
+      },
+      {
+        source: "/sudo/:path*",
+        destination: "https://panel.alecia.markets/sudo/:path*",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {
