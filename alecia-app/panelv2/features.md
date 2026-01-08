@@ -172,3 +172,50 @@ Ce document détaille l'ensemble des fonctionnalités de la plateforme, structur
 - **Refactorisé :** `/operations`, `/equipe`, `/actualites`, `/nous-rejoindre`
 - **Data Source :** Convex HTTP API via `convex-marketing.ts`
 - **Cache :** Revalidation 60s pour performance
+
+---
+
+## 14. Foundation Polish (UX Enhancements) - [Implemented 2026-01-08]
+
+### Navigation
+
+- **Breadcrumbs :** Composant `<Breadcrumbs />` intégré dans admin layout
+  - Détection automatique de la route via `usePathname()`
+  - Labels français pour toutes les sections admin
+  - Icône Home + chevrons pour navigation hiérarchique
+
+### Loading States
+
+- **TableSkeleton :** Squelettes animés pour les tableaux (companies, contacts)
+- **KanbanSkeleton :** Squelettes pour la vue pipeline (deals)
+- Remplace tous les spinners `Loader2` par des skeletons content-aware
+
+### Empty States
+
+- **EmptyDeals :** État vide avec icône Briefcase + CTA "Créer un dossier"
+- **EmptyCompanies :** État vide avec icône Building + CTA "Ajouter une société"
+- **EmptyContacts :** État vide avec icône Users + CTA "Nouveau contact"
+- Chaque colonne Kanban affiche "Aucun dossier" si vide
+
+---
+
+## 15. Dynamic Theme System - [Implemented 2026-01-08]
+
+### Backend (Convex)
+
+- **`convex/theme.ts` :** Queries/mutations pour paramètres de thème
+  - `getThemeSettings` / `updateThemeSettings` / `resetThemeSettings`
+  - Stockage dans `global_config` table (singleton pattern)
+
+### Theme Engine
+
+- **Admin UI :** `/admin/settings` avec color pickers et font selectors
+- **Colors :** Primary, Secondary, Background × Light/Dark modes
+- **Typography :** Google Fonts dynamiques (Headings + Body)
+
+### CSS Variables Dynamiques
+
+- **Gradients :** `--theme-primary-grad-1/2/3` auto-générés
+- **Hover States :** `--theme-primary-hover` calculé
+- **Shadows :** `--theme-shadow-sm/md/lg/xl/2xl`
+- **Injection :** `useThemeSettings` hook + `ThemeSettingsProvider`
