@@ -5,30 +5,69 @@
 
 /* =============================================================================
    ALECIA DESIGN SYSTEM - CSS Variables
+   
+   ADMIN-EDITABLE BRAND CONFIGURATION
+   These variables control the entire site's look and feel.
+   They can be updated via the admin panel in future phases.
    ============================================================================= */
 
 :root {
-  /* Light Mode Defaults */
+  /* -------------------------------------------------------------------------
+     🎨 BRAND COLORS - Primary Brand Identity
+     Edit these to change the core brand appearance
+     ------------------------------------------------------------------------- */
+  --brand-primary: #061a40; /* Navy blue - main brand color */
+  --brand-primary-light: #23375e; /* Lighter navy for gradients */
+  --brand-secondary: #19354e; /* Secondary navy variant */
+  --brand-accent: #f59e0b; /* Gold/amber - accent color */
+  --brand-accent-light: #fbbf24; /* Light gold */
+  --brand-accent-dark: #d97706; /* Dark gold */
+  --brand-teal: #25a18e; /* Teal pop color */
+
+  /* -------------------------------------------------------------------------
+     📝 TYPOGRAPHY - Font Families
+     ------------------------------------------------------------------------- */
+  --font-heading: "Playfair Display", Georgia, serif;
+  --font-body:
+    "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    sans-serif;
+  --font-mono: "Menlo", "Monaco", "Courier New", monospace;
+
+  /* Legacy font variables for compatibility */
+  --font-outfit: var(--font-body);
+  --font-geist-sans: var(--font-body);
+  --font-geist-mono: var(--font-mono);
+  --font-playfair: var(--font-heading);
+
+  /* -------------------------------------------------------------------------
+     🔘 SPACING & RADIUS
+     ------------------------------------------------------------------------- */
+  --radius: 0.625rem;
+
+  /* -------------------------------------------------------------------------
+     ☀️ LIGHT MODE COLORS
+     ------------------------------------------------------------------------- */
   /* Background colors */
-  --background: #f8fafc; /* slate-50 */
-  --background-secondary: #f1f5f9; /* slate-100 */
-  --background-tertiary: #e2e8f0; /* slate-200 */
+  --background: #f8fafc;
+  --background-secondary: #f1f5f9;
+  --background-tertiary: #e2e8f0;
 
   /* Foreground/Text colors */
-  --foreground: #061A40; /* slate-900 */
-  --foreground-muted: #061A40; /* slate-600 */
-  --foreground-faint: #061A40; /* slate-500 */
+  --foreground: #0f172a;
+  --foreground-muted: #475569;
+  --foreground-faint: #64748b;
 
-  /* Accent colors - Gold/Copper (currently being refactored) */
-  --accent: #061A40; /* amber-500 */
-  --accent-light: #3E6BF7; /* amber-400 */
-  --accent-dark: #FFFFFF; /* amber-600 */
-  --accent-teal: #25A18E; /* New teal accent color for "pop" */
+  /* Accent - uses brand accent */
+  --accent: var(--brand-accent);
+  --accent-light: var(--brand-accent-light);
+  --accent-dark: var(--brand-accent-dark);
+  --accent-teal: var(--brand-teal);
+  --accent-foreground: #0f172a;
 
-  /* UI colors */
-  --border: #cbd5e1; /* slate-300 */
-  --input: #e2e8f0; /* slate-200 */
-  --ring: #f59e0b; /* amber-500 */
+  /* UI Element colors */
+  --border: #cbd5e1;
+  --input: #e2e8f0;
+  --ring: var(--brand-accent);
 
   /* Component colors */
   --card: #ffffff;
@@ -37,8 +76,8 @@
   --popover-foreground: #0f172a;
 
   /* Semantic colors */
-  --primary: #061A40; /* Alecia brand navy */
-  --primary-foreground: #061A40;
+  --primary: var(--brand-primary);
+  --primary-foreground: #ffffff;
   --secondary: #f1f5f9;
   --secondary-foreground: #0f172a;
   --muted: #f1f5f9;
@@ -46,23 +85,13 @@
   --destructive: #ef4444;
   --destructive-foreground: #fef2f2;
 
-  /* Radius */
-  --radius: 0.625rem;
-  --accent-foreground: #0f172a;
-  
-  /* Fonts - Outfit from Google Fonts */
-  --font-outfit: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  --font-geist-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  --font-geist-mono: 'Menlo', 'Monaco', 'Courier New', monospace;
-  --font-playfair: 'Playfair Display', Georgia, serif;
-  
   /* Charts */
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  
+
   /* Sidebar */
   --sidebar: #f8fafc;
   --sidebar-foreground: #0f172a;
@@ -71,7 +100,7 @@
   --sidebar-accent: #f1f5f9;
   --sidebar-accent-foreground: #0f172a;
   --sidebar-border: #cbd5e1;
-  --sidebar-ring: #f59e0b;
+  --sidebar-ring: var(--brand-accent);
 }
 
 /* Dark Mode */
@@ -90,7 +119,7 @@
   --accent: #f59e0b; /* amber-500 */
   --accent-light: #fbbf24; /* amber-400 */
   --accent-dark: #d97706; /* amber-600 */
-  --accent-teal: #25A18E; /* New teal accent color for "pop" */
+  --accent-teal: #25a18e; /* New teal accent color for "pop" */
 
   /* UI colors */
   --border: #334155; /* slate-700 */
@@ -114,14 +143,14 @@
   --destructive-foreground: #fef2f2;
 
   --accent-foreground: #f1f5f9;
-  
+
   /* Charts */
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  
+
   /* Sidebar */
   --sidebar: #0f172a;
   --sidebar-foreground: #f1f5f9;
@@ -180,12 +209,16 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  
+
   /* Custom shadow colors with #061A40 navy */
   --shadow-navy-sm: 0 1px 2px 0 rgba(6, 26, 64, 0.05);
-  --shadow-navy-md: 0 4px 6px -1px rgba(6, 26, 64, 0.1), 0 2px 4px -1px rgba(6, 26, 64, 0.06);
-  --shadow-navy-lg: 0 10px 15px -3px rgba(6, 26, 64, 0.1), 0 4px 6px -2px rgba(6, 26, 64, 0.05);
-  --shadow-navy-xl: 0 20px 25px -5px rgba(6, 26, 64, 0.1), 0 10px 10px -5px rgba(6, 26, 64, 0.04);
+  --shadow-navy-md:
+    0 4px 6px -1px rgba(6, 26, 64, 0.1), 0 2px 4px -1px rgba(6, 26, 64, 0.06);
+  --shadow-navy-lg:
+    0 10px 15px -3px rgba(6, 26, 64, 0.1), 0 4px 6px -2px rgba(6, 26, 64, 0.05);
+  --shadow-navy-xl:
+    0 20px 25px -5px rgba(6, 26, 64, 0.1),
+    0 10px 10px -5px rgba(6, 26, 64, 0.04);
   --shadow-navy-2xl: 0 25px 50px -12px rgba(6, 26, 64, 0.25);
 }
 
@@ -194,7 +227,13 @@
    ============================================================================= */
 
 body {
-  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-family:
+    "Outfit",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Roboto",
+    sans-serif;
 }
 
 /* =============================================================================
@@ -203,7 +242,7 @@ body {
 
 /* Main h1 titles use Playfair Display in bold */
 h1 {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: "Playfair Display", Georgia, serif;
   font-weight: 700;
   letter-spacing: -0.01em;
 }
@@ -213,7 +252,13 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-family:
+    "Outfit",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Roboto",
+    sans-serif;
   font-weight: 600;
   letter-spacing: -0.01em;
 }
@@ -237,7 +282,7 @@ h6 {
 
 /* Blue gradient for accent text */
 .text-gradient-gold {
-  background: linear-gradient(135deg, #061A40 0%, #23375e 50%, #19354E 100%);
+  background: linear-gradient(135deg, #061a40 0%, #23375e 50%, #19354e 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -245,7 +290,7 @@ h6 {
 
 /* Metallic blue button */
 .btn-gold {
-  background: linear-gradient(135deg, #061A40 0%, #23375e 50%, #19354E 100%);
+  background: linear-gradient(135deg, #061a40 0%, #23375e 50%, #19354e 100%);
   color: #ffffff !important;
   font-weight: 600;
   transition: all 0.2s ease;
@@ -321,7 +366,9 @@ h6 {
 /* Focus ring improvements */
 .focus-ring {
   outline: none;
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .focus-ring:focus-visible {
@@ -331,7 +378,9 @@ h6 {
 
 /* Input focus state */
 .input-focus {
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .input-focus:focus {
@@ -389,19 +438,27 @@ h6 {
 }
 
 .shadow-navy {
-  box-shadow: 0 4px 6px -1px rgba(6, 26, 64, 0.1), 0 2px 4px -1px rgba(6, 26, 64, 0.06);
+  box-shadow:
+    0 4px 6px -1px rgba(6, 26, 64, 0.1),
+    0 2px 4px -1px rgba(6, 26, 64, 0.06);
 }
 
 .shadow-navy-md {
-  box-shadow: 0 4px 6px -1px rgba(6, 26, 64, 0.1), 0 2px 4px -1px rgba(6, 26, 64, 0.06);
+  box-shadow:
+    0 4px 6px -1px rgba(6, 26, 64, 0.1),
+    0 2px 4px -1px rgba(6, 26, 64, 0.06);
 }
 
 .shadow-navy-lg {
-  box-shadow: 0 10px 15px -3px rgba(6, 26, 64, 0.1), 0 4px 6px -2px rgba(6, 26, 64, 0.05);
+  box-shadow:
+    0 10px 15px -3px rgba(6, 26, 64, 0.1),
+    0 4px 6px -2px rgba(6, 26, 64, 0.05);
 }
 
 .shadow-navy-xl {
-  box-shadow: 0 20px 25px -5px rgba(6, 26, 64, 0.1), 0 10px 10px -5px rgba(6, 26, 64, 0.04);
+  box-shadow:
+    0 20px 25px -5px rgba(6, 26, 64, 0.1),
+    0 10px 10px -5px rgba(6, 26, 64, 0.04);
 }
 
 .shadow-navy-2xl {
@@ -409,11 +466,15 @@ h6 {
 }
 
 .hover\:shadow-navy-lg:hover {
-  box-shadow: 0 10px 15px -3px rgba(6, 26, 64, 0.1), 0 4px 6px -2px rgba(6, 26, 64, 0.05);
+  box-shadow:
+    0 10px 15px -3px rgba(6, 26, 64, 0.1),
+    0 4px 6px -2px rgba(6, 26, 64, 0.05);
 }
 
 .hover\:shadow-navy-xl:hover {
-  box-shadow: 0 20px 25px -5px rgba(6, 26, 64, 0.1), 0 10px 10px -5px rgba(6, 26, 64, 0.04);
+  box-shadow:
+    0 20px 25px -5px rgba(6, 26, 64, 0.1),
+    0 10px 10px -5px rgba(6, 26, 64, 0.04);
 }
 
 .hover\:shadow-navy-2xl:hover {
@@ -464,8 +525,6 @@ html {
   scroll-margin-top: 100px;
 }
 
-
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -474,4 +533,3 @@ html {
     @apply bg-background text-foreground;
   }
 }
-
