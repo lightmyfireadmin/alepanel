@@ -9,6 +9,7 @@ import { ReactNode, useState, useEffect } from "react";
 import { Toaster } from "sonner";
 import { UserSync } from "@/components/auth/UserSync";
 import { CommandPalette } from "@/components/ui/command-palette";
+import { ThemeSettingsProvider } from "@/hooks/useThemeSettings";
 
 // Import both locale messages
 import frMessages from "../../messages/fr.json";
@@ -68,9 +69,11 @@ export function Providers({ children }: { children: ReactNode }) {
             // Prevent hydration mismatch by using key
             key={mounted ? locale : "fr"}
           >
-            <CommandPalette />
-            {children}
-            <Toaster position="bottom-right" richColors />
+            <ThemeSettingsProvider>
+              <CommandPalette />
+              {children}
+              <Toaster position="bottom-right" richColors />
+            </ThemeSettingsProvider>
           </NextIntlClientProvider>
         </ThemeProvider>
       </ConvexProviderWithClerk>

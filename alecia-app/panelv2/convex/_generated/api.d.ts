@@ -33,6 +33,7 @@ import type * as seed from "../seed.js";
 import type * as seed_cms from "../seed_cms.js";
 import type * as signing from "../signing.js";
 import type * as team from "../team.js";
+import type * as theme from "../theme.js";
 import type * as tiles from "../tiles.js";
 import type * as transactions from "../transactions.js";
 import type * as users from "../users.js";
@@ -70,6 +71,7 @@ declare const fullApi: ApiFromModules<{
   seed_cms: typeof seed_cms;
   signing: typeof signing;
   team: typeof team;
+  theme: typeof theme;
   tiles: typeof tiles;
   transactions: typeof transactions;
   users: typeof users;
