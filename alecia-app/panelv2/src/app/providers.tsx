@@ -4,6 +4,7 @@ import { ClerkProvider, useAuth } from "@clerk/nextjs";
 import { ConvexReactClient } from "convex/react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { NextIntlClientProvider } from "next-intl";
+import { ThemeProvider } from "next-themes";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
 import { UserSync } from "@/components/auth/UserSync";
@@ -18,10 +19,17 @@ export function Providers({ children }: { children: ReactNode }) {
     <ClerkProvider>
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
         <UserSync />
-        <NextIntlClientProvider locale="fr" messages={messages}>
-          {children}
-          <Toaster position="bottom-right" richColors />
-        </NextIntlClientProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <NextIntlClientProvider locale="fr" messages={messages}>
+            {children}
+            <Toaster position="bottom-right" richColors />
+          </NextIntlClientProvider>
+        </ThemeProvider>
       </ConvexProviderWithClerk>
     </ClerkProvider>
   );

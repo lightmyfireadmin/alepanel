@@ -25,6 +25,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { DraggableDashboard } from "@/components/features/dashboard/DraggableDashboard";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export default function DashboardPage() {
   return (
@@ -94,7 +95,8 @@ export default function DashboardPage() {
               />
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+             <ThemeToggle />
              <Button size="sm" className="bg-black text-white dark:bg-white dark:text-black hover:opacity-90 transition-opacity">
                 <Plus className="size-4 mr-2" />
                 New Deal
