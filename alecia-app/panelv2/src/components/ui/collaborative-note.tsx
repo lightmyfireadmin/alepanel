@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
+import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
-import Mention from "@tiptap/extension-mention";
 import { 
   Bold, 
   Italic, 
@@ -58,27 +57,9 @@ export function CollaborativeNote({
 
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({
-        history: {
-          depth: 50,
-        },
-      }),
+      StarterKit,
       Placeholder.configure({
         placeholder: "Commencez à écrire... Utilisez @ pour mentionner quelqu'un.",
-      }),
-      Mention.configure({
-        HTMLAttributes: {
-          class: "mention bg-primary/10 text-primary px-1 rounded",
-        },
-        suggestion: {
-          items: ({ query }: { query: string }) => {
-            // In full implementation, fetch users from Convex
-            const users = ["Jean Dupont", "Marie Martin", "Pierre Durand"];
-            return users
-              .filter((name) => name.toLowerCase().includes(query.toLowerCase()))
-              .slice(0, 5);
-          },
-        },
       }),
     ],
     content: initialContent,
@@ -316,32 +297,6 @@ export function CollaborativeNote({
               )}
             </TooltipProvider>
           </div>
-        )}
-
-        {/* Bubble menu for text selection */}
-        {editor && !readonly && (
-          <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
-            <div className="flex items-center gap-1 bg-popover border rounded-lg shadow-lg p-1">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7"
-                onClick={() => editor.chain().focus().toggleBold().run()}
-                data-active={editor.isActive("bold")}
-              >
-                <Bold className="h-3 w-3" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7"
-                onClick={() => editor.chain().focus().toggleItalic().run()}
-                data-active={editor.isActive("italic")}
-              >
-                <Italic className="h-3 w-3" />
-              </Button>
-            </div>
-          </BubbleMenu>
         )}
 
         {/* Editor content */}
