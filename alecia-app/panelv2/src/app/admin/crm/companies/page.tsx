@@ -9,8 +9,10 @@ import { Badge } from "@/components/ui/badge";
 import { EntityDrawer } from "@/components/features/crm/EntityDrawer";
 import { PipedriveSync } from "@/components/features/crm/PipedriveSync";
 import { useState } from "react";
-import { Database, Globe, Loader2, Plus } from "lucide-react";
+import { Database, Globe, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { TableSkeleton } from "@/components/ui/skeleton";
+import { EmptyCompanies } from "@/components/ui/empty-state";
 
 export default function CompaniesPage() {
   const companies = useQuery(api.crm.getCompanies);
@@ -122,7 +124,13 @@ export default function CompaniesPage() {
       </div>
       
       {companies === undefined ? (
-        <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-muted-foreground" /></div>
+        <div className="p-4 bg-card rounded-md border">
+          <TableSkeleton rows={6} columns={4} />
+        </div>
+      ) : companies.length === 0 ? (
+        <div className="bg-card rounded-md border">
+          <EmptyCompanies onAction={() => {}} />
+        </div>
       ) : (
         <DataTable 
             columns={columns} 

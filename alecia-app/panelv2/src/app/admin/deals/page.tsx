@@ -23,12 +23,14 @@ import {
 import { DealCard, Deal } from "@/components/features/kanban/DealCard";
 import { PipedriveSync } from "@/components/features/crm/PipedriveSync";
 import { Button } from "@/components/ui/button";
-import { DataTable } from "@/components/ui/data-table/data-table"; // Reusing the list view component
+import { DataTable } from "@/components/ui/data-table/data-table";
 import { LayoutGrid, List, Plus } from "lucide-react";
 import { Id } from "../../../../convex/_generated/dataModel";
 import { toast } from "sonner";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
+import { KanbanSkeleton, TableSkeleton } from "@/components/ui/skeleton";
+import { EmptyDeals } from "@/components/ui/empty-state";
 
 const STAGES = ["Lead", "NDA Signed", "Offer Received", "Due Diligence", "Closing"];
 
@@ -171,8 +173,19 @@ export default function DealsPage() {
 
       {viewMode === "list" ? (
           <div className="bg-card rounded-md border p-1">
-               <DataTable columns={columns} data={dealsQuery || []} />
+            {dealsQuery === undefined ? (
+              <div className="p-4">
+                <TableSkeleton rows={5} columns={5} />
+              </div>
+            ) : dealsQuery.length === 0 ? (
+              <EmptyDeals onAction={() => toast.info("Create deal modal coming soon")} />
+            ) : (
+              <DataTable columns={columns} data={dealsQuery} />
+            )}
           </div>
+      ) : dealsQuery === undefined ? (
+        /* Loading state for Kanban */
+        <KanbanSkeleton columns={5} />
       ) : (
         <DndContext 
             sensors={sensors} 
@@ -207,9 +220,15 @@ export default function DealsPage() {
                                     strategy={verticalListSortingStrategy}
                                 >
                                     <div className="flex-1 p-2 space-y-2 overflow-y-auto">
-                                        {stageDeals.map((deal) => (
+                                        {stageDeals.length === 0 ? (
+                                          <p className="text-xs text-muted-foreground text-center py-8">
+                                            Aucun dossier
+                                          </p>
+                                        ) : (
+                                          stageDeals.map((deal) => (
                                             <DealCard key={deal._id} deal={deal} />
-                                        ))}
+                                          ))
+                                        )}
                                     </div>
                                 </SortableContext>
                             </div>

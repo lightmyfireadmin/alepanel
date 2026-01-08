@@ -4,10 +4,13 @@ import { useQuery } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
 import { DataTable } from "@/components/ui/data-table/data-table";
 import { ColumnDef } from "@tanstack/react-table";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { EntityDrawer } from "@/components/features/crm/EntityDrawer";
 import { useState } from "react";
-import { Loader2, Mail, Phone, Building } from "lucide-react";
+import { Mail, Phone, Building, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { TableSkeleton } from "@/components/ui/skeleton";
+import { EmptyContacts } from "@/components/ui/empty-state";
 
 export default function ContactsPage() {
   const contacts = useQuery(api.crm.getContacts);
@@ -92,10 +95,20 @@ export default function ContactsPage() {
             <h1 className="text-2xl font-bold tracking-tight">Contacts</h1>
             <p className="text-muted-foreground">Directory of key stakeholders and owners.</p>
         </div>
+        <Button size="sm" className="gap-1">
+          <Plus className="w-4 h-4" />
+          Nouveau contact
+        </Button>
       </div>
       
       {contacts === undefined ? (
-        <div className="flex items-center justify-center h-64"><Loader2 className="animate-spin text-muted-foreground" /></div>
+        <div className="p-4 bg-card rounded-md border">
+          <TableSkeleton rows={6} columns={4} />
+        </div>
+      ) : contacts.length === 0 ? (
+        <div className="bg-card rounded-md border">
+          <EmptyContacts onAction={() => {}} />
+        </div>
       ) : (
         <DataTable 
             columns={columns} 
