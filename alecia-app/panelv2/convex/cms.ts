@@ -1,16 +1,15 @@
-import { mutation, query } from "./_generated/server";
+import { mutation, query, QueryCtx, MutationCtx } from "./_generated/server";
 import { v } from "convex/values";
-import { Doc, Id } from "./_generated/dataModel";
 
 // --- Helpers ---
 
-async function getAuthenticatedUser(ctx: any) {
+async function getAuthenticatedUser(ctx: QueryCtx | MutationCtx) {
   const identity = await ctx.auth.getUserIdentity();
   if (!identity) throw new Error("Unauthorized");
 
   const user = await ctx.db
     .query("users")
-    .withIndex("by_token", (q: any) => q.eq("tokenIdentifier", identity.tokenIdentifier))
+    .withIndex("by_token", (q) => q.eq("tokenIdentifier", identity.tokenIdentifier))
     .first();
 
   if (!user) throw new Error("User not found");
@@ -208,7 +207,7 @@ export const mergeProposal = mutation({
     const totalEligible = partners.length;
     const votesForCount = proposal.votesFor.length;
     
-    const participation = (votesForCount + proposal.votesAgainst.length) / totalEligible * 100;
+    // Participation calculated but not used for MVP - just tracking
     // Just checking approval threshold for now:
     const approvalRate = (votesForCount / totalEligible) * 100;
 

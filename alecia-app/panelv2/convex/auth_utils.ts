@@ -1,5 +1,4 @@
-import { QueryCtx, MutationCtx, ActionCtx } from "./_generated/server";
-import { Doc, Id } from "./_generated/dataModel";
+import { QueryCtx, MutationCtx } from "./_generated/server";
 
 export async function getAuthenticatedUser(ctx: QueryCtx | MutationCtx) {
   const identity = await ctx.auth.getUserIdentity();
