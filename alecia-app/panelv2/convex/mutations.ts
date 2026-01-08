@@ -84,3 +84,58 @@ export const updateCompany = mutation({
     await ctx.db.patch(args.id, args.patch);
   }
 });
+
+/**
+ * Ensure the current Clerk user exists in Convex database.
+ * Called on first page load / login to sync Clerk identity with Convex users table.
+ * Returns the user object.
+ */
+export const ensureUser = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      return null; // Not logged in
+    }
+
+    // Check if user exists
+    const existingUser = await ctx.db
+      .query("users")
+      .withIndex("by_token", (q) => q.eq("tokenIdentifier", identity.tokenIdentifier))
+      .first();
+
+    if (existingUser) {
+      // Update name/email/avatar if changed in Clerk
+      const updates: Record<string, string | undefined> = {};
+      if (identity.name && identity.name !== existingUser.name) {
+        updates.name = identity.name;
+      }
+      if (identity.email && identity.email !== existingUser.email) {
+        updates.email = identity.email;
+      }
+      if (identity.pictureUrl && identity.pictureUrl !== existingUser.avatarUrl) {
+        updates.avatarUrl = identity.pictureUrl;
+      }
+      
+      if (Object.keys(updates).length > 0) {
+        await ctx.db.patch(existingUser._id, updates);
+      }
+      
+      return existingUser;
+    }
+
+    // Create new user - default role is "advisor" (lowest privilege)
+    // Can be promoted via seedTeam or manually by sudo
+    const userId = await ctx.db.insert("users", {
+      tokenIdentifier: identity.tokenIdentifier,
+      name: identity.name || identity.email?.split("@")[0] || "Unknown User",
+      email: identity.email || "",
+      avatarUrl: identity.pictureUrl,
+      role: "advisor", // Default role - sudo/partner can promote
+    });
+
+    console.log(`New user created: ${identity.email} with ID ${userId}`);
+    
+    return await ctx.db.get(userId);
+  },
+});
