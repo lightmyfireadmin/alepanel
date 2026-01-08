@@ -283,3 +283,58 @@ Ce document détaille l'ensemble des fonctionnalités de la plateforme, structur
 ## 🎉 PHASE 1: FOUNDATION POLISH - 100% COMPLETE
 
 **14/14 Features Implemented** - Ready for Phase 2: Microsoft 365 Integration
+
+---
+
+## 17. Phase 2: Microsoft 365 Integration - [IN PROGRESS 2026-01-08]
+
+### OneDrive Pro (Already Implemented)
+
+- **OneDrivePicker :** Sélecteur de fichiers avec navigation dossiers
+- **DataRoomBuilder :** Création de structures M&A templées
+- **FilePreviewDialog :** Aperçu inline des documents
+- **FileUploadDialog :** Upload drag-and-drop
+- **RecentFilesWidget :** Widget des fichiers récents
+
+### Excel Integration (Already Implemented)
+
+- **ExcelFinanceImporter :** Import de données financières
+- **readExcelRange / writeExcel :** Lecture/écriture de cellules
+- **parseFinancialData :** Extraction CA, EBITDA, etc.
+
+### Calendar & Teams [Implemented 2026-01-08]
+
+- **useMicrosoftCalendar :** Hook pour calendrier et Teams
+  - `getUpcomingEvents()` - Événements à venir
+  - `createMeeting()` - Créer réunion Teams
+  - `deleteMeeting()` - Supprimer événement
+  - `getTeams()` / `getTeamChannels()` - Lister équipes et canaux
+  - `createChannel()` - Créer canal Teams
+
+- **CalendarWidget :** Widget affichant les événements à venir
+  - Formatage français des dates
+  - Badges réunions Teams
+  - Bouton "Rejoindre"
+
+- **MeetingScheduler :** Dialog de planification
+  - Sélection date/heure/durée
+  - Gestion des participants
+  - Toggle réunion Teams
+  - État de succès avec lien Teams
+
+- **TeamsChannelManager :** Gestionnaire de canaux
+  - Sélecteur d'équipe
+  - Liste des canaux (public/privé)
+  - Création de canal dédié au dossier
+
+### Phase 2 Progress
+
+| #     | Feature                   | Status          |
+| ----- | ------------------------- | --------------- |
+| 15-19 | OneDrive Pro              | ✅ Already done |
+| 20-22 | Excel Integration         | ✅ Already done |
+| 23    | Meeting Scheduler         | ✅ Done         |
+| 24    | Calendar Sync             | ✅ Done         |
+| 25    | Teams Channel Integration | ✅ Done         |
+
+**Phase 2: 11/11 Features Complete**
