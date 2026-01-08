@@ -1,8 +1,0 @@
-{
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "nextjs",
-  "buildCommand": "cd alecia-app/panelv2 && npm install --legacy-peer-deps && npm run build",
-  "outputDirectory": "alecia-app/panelv2/.next",
-  "installCommand": "cd alecia-app/panelv2 && npm install --legacy-peer-deps",
-  "devCommand": "cd alecia-app/panelv2 && npm run dev"
-}

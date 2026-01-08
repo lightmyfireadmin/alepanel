@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "buildCommand": "cd panelv2 && npm install --legacy-peer-deps && npm run build",
+  "outputDirectory": "panelv2/.next",
+  "installCommand": "cd panelv2 && npm install --legacy-peer-deps",
+  "devCommand": "cd panelv2 && npm run dev"
+}
