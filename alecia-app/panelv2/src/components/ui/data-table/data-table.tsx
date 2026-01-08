@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Download, Settings2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Download, Settings2, Trash2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -33,6 +33,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -41,6 +42,9 @@ interface DataTableProps<TData, TValue> {
   filterColumn?: string;
   filterPlaceholder?: string;
   exportFileName?: string;
+  enableBulkActions?: boolean;
+  onBulkDelete?: (rows: TData[]) => Promise<void> | void;
+  getRowId?: (row: TData) => string;
 }
 
 export function DataTable<TData, TValue>({
@@ -50,15 +54,49 @@ export function DataTable<TData, TValue>({
   filterColumn = "name",
   filterPlaceholder = "Filter...",
   exportFileName = "export",
+  enableBulkActions = false,
+  onBulkDelete,
+  getRowId,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
+  // Add select column for bulk actions
+  const allColumns = React.useMemo(() => {
+    if (!enableBulkActions) return columns;
+    
+    const selectColumn: ColumnDef<TData, TValue> = {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+          onClick={(e) => e.stopPropagation()}
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    };
+    
+    return [selectColumn, ...columns];
+  }, [columns, enableBulkActions]);
+
   const table = useReactTable({
     data,
-    columns,
+    columns: allColumns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -67,6 +105,7 @@ export function DataTable<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    getRowId: getRowId,
     state: {
       sorting,
       columnFilters,
@@ -75,8 +114,51 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const selectedRows = table.getFilteredSelectedRowModel().rows;
+  const hasSelection = selectedRows.length > 0;
+
+  const handleBulkDelete = async () => {
+    if (!onBulkDelete) return;
+    const rows = selectedRows.map(row => row.original);
+    try {
+      await onBulkDelete(rows);
+      setRowSelection({});
+      toast.success(`${rows.length} élément(s) supprimé(s)`);
+    } catch (error) {
+      toast.error("Erreur lors de la suppression");
+    }
+  };
+
   return (
     <div className="space-y-4">
+      {/* Bulk Actions Bar */}
+      {hasSelection && enableBulkActions && (
+        <div className="flex items-center gap-3 p-3 bg-primary/10 border border-primary/20 rounded-lg">
+          <span className="text-sm font-medium">
+            {selectedRows.length} sélectionné{selectedRows.length > 1 ? "s" : ""}
+          </span>
+          <div className="flex-1" />
+          {onBulkDelete && (
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={handleBulkDelete}
+              className="gap-1"
+            >
+              <Trash2 className="w-4 h-4" />
+              Supprimer
+            </Button>
+          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setRowSelection({})}
+          >
+            Annuler
+          </Button>
+        </div>
+      )}
+      
       <div className="flex items-center justify-between">
         <div className="flex items-center py-4">
           <Input

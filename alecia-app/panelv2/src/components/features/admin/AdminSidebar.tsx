@@ -1,17 +1,22 @@
 "use client";
 
-import { SignedIn, SignedOut, RedirectToSignIn } from "@clerk/nextjs";
-import { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ResponsiveSidebar } from "@/components/ui/responsive-sidebar";
-import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { cn } from "@/lib/utils";
+import { ResponsiveSidebar } from "@/components/ui/responsive-sidebar";
 import {
-  Shield,
+  Briefcase,
+  Building2,
   Users,
-  Palette,
-  Vote,
+  BarChart3,
+  MessageSquare,
+  FileSignature,
+  PenTool,
+  ClipboardCheck,
+  Award,
+  Users2,
+  BriefcaseBusiness,
+  LayoutGrid,
   Settings,
   Home,
 } from "lucide-react";
@@ -19,34 +24,82 @@ import {
 const navItems = [
   { 
     label: "Dashboard", 
-    href: "/sudo", 
+    href: "/admin", 
     icon: Home,
     exact: true,
   },
-  { type: "divider", label: "Configuration" },
+  { type: "divider", label: "M&A" },
   { 
-    label: "Utilisateurs", 
-    href: "/sudo/users", 
+    label: "Pipeline", 
+    href: "/admin/deals", 
+    icon: Briefcase,
+  },
+  { 
+    label: "Sociétés", 
+    href: "/admin/crm/companies", 
+    icon: Building2,
+  },
+  { 
+    label: "Contacts", 
+    href: "/admin/crm/contacts", 
     icon: Users,
   },
+  { type: "divider", label: "Collaboration" },
   { 
-    label: "Apparence", 
-    href: "/sudo/theme", 
-    icon: Palette,
+    label: "Forum", 
+    href: "/admin/forum", 
+    icon: MessageSquare,
   },
   { 
-    label: "Gouvernance", 
-    href: "/sudo/governance", 
-    icon: Vote,
+    label: "Signatures", 
+    href: "/admin/signatures", 
+    icon: FileSignature,
+  },
+  { 
+    label: "Recherche", 
+    href: "/admin/research", 
+    icon: ClipboardCheck,
+  },
+  { type: "divider", label: "Website" },
+  { 
+    label: "Track Record", 
+    href: "/admin/transactions", 
+    icon: Award,
+  },
+  { 
+    label: "Blog", 
+    href: "/admin/blog", 
+    icon: PenTool,
+  },
+  { 
+    label: "Équipe", 
+    href: "/admin/team", 
+    icon: Users2,
+  },
+  { 
+    label: "Carrières", 
+    href: "/admin/careers", 
+    icon: BriefcaseBusiness,
+  },
+  { 
+    label: "Galerie", 
+    href: "/admin/tiles", 
+    icon: LayoutGrid,
+  },
+  { type: "divider", label: "Système" },
+  { 
+    label: "Reporting", 
+    href: "/admin/reporting", 
+    icon: BarChart3,
   },
   { 
     label: "Paramètres", 
-    href: "/sudo/settings", 
+    href: "/admin/settings", 
     icon: Settings,
   },
 ];
 
-function SudoSidebar() {
+export function AdminSidebar() {
   const pathname = usePathname();
 
   return (
@@ -54,12 +107,12 @@ function SudoSidebar() {
       <div className="flex flex-col h-full">
         {/* Logo */}
         <div className="p-4 border-b">
-          <Link href="/sudo" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
-              <Shield className="w-4 h-4 text-white" />
+          <Link href="/admin" className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+              <span className="text-primary-foreground font-bold text-sm">A</span>
             </div>
-            <span className="font-semibold text-lg">Sudo</span>
-            <span className="text-xs text-muted-foreground ml-1">panel</span>
+            <span className="font-semibold text-lg">alecia</span>
+            <span className="text-xs text-muted-foreground ml-1">admin</span>
           </Link>
         </div>
 
@@ -88,7 +141,7 @@ function SudoSidebar() {
                 className={cn(
                   "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
                   isActive
-                    ? "bg-amber-500 text-white"
+                    ? "bg-primary text-primary-foreground"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted"
                 )}
               >
@@ -101,37 +154,9 @@ function SudoSidebar() {
 
         {/* Footer */}
         <div className="p-3 border-t text-xs text-muted-foreground text-center">
-          Super Admin
+          Panel v2.0
         </div>
       </div>
     </ResponsiveSidebar>
-  );
-}
-
-export default function SudoLayout({ children }: { children: ReactNode }) {
-  return (
-    <>
-      <SignedIn>
-        <div className="min-h-screen bg-background flex">
-          {/* Sidebar */}
-          <SudoSidebar />
-          
-          {/* Main content area */}
-          <div className="flex-1 flex flex-col min-h-screen md:ml-0">
-            {/* Breadcrumbs bar */}
-            <div className="border-b bg-amber-50/50 dark:bg-amber-950/20">
-              <div className="px-6 py-3 pl-14 md:pl-6">
-                <Breadcrumbs />
-              </div>
-            </div>
-            {/* Page content */}
-            <main className="flex-1 p-6">{children}</main>
-          </div>
-        </div>
-      </SignedIn>
-      <SignedOut>
-        <RedirectToSignIn />
-      </SignedOut>
-    </>
   );
 }
