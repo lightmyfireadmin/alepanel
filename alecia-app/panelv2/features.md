@@ -567,11 +567,34 @@ Ce document détaille l'ensemble des fonctionnalités de la plateforme, structur
 | #   | Feature             | Status  |
 | --- | ------------------- | ------- |
 | 44  | Presence Indicators | ✅ Done |
+| 44  | Presence Indicators | ✅ Done |
 | 47  | @Mentions           | ✅ Done |
 | 48  | Notification Center | ✅ Done |
 | 49  | In-App Comments     | ✅ Done |
+| 46  | Collaborative Notes | ✅ Done |
+| 50  | Activity Digest     | ✅ Done |
+| 51  | Slack Integration   | ✅ Done |
 
-**Phase 5: Collaboration Suite - 4/4 Core Features Complete** ✅
+**Phase 5: Collaboration Suite - 7/7 Features Complete** ✅
+
+### Additional Phase 5 Components (2026-01-09)
+
+- **CollaborativeNote (Tiptap):** Rich text editor with toolbar
+  - Bold, italic, headings, lists, quotes
+  - Undo/redo buttons
+  - Active editors display
+  - Auto-save support
+
+- **DigestSettings:** Email digest configuration
+  - Daily/weekly frequency
+  - Content preferences
+  - Test email button
+
+- **SlackSettings:** Slack webhook configuration
+  - Notification type toggles
+  - Test message button
+
+- **Backend:** `digest.ts`, `slack.ts` Convex modules
 
 ---
 
