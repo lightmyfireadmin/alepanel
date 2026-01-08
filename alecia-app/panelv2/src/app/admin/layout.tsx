@@ -3,7 +3,7 @@
 import { SignedIn, SignedOut, RedirectToSignIn } from "@clerk/nextjs";
 import { ReactNode } from "react";
 
-export default function SudoLayout({ children }: { children: ReactNode }) {
+export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <SignedIn>
