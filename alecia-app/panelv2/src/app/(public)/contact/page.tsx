@@ -1,4 +1,4 @@
-import { Navbar, Footer } from "@/components/layout";
+
 import { ContactForm } from "@/components/features/contact-form";
 import Image from "next/image";
 import type { Metadata } from "next";
@@ -49,7 +49,7 @@ const offices = [
 export default function ContactPage() {
   return (
     <>
-      <Navbar />
+      
       
       <main className="min-h-screen bg-[var(--background)] pt-24">
         {/* Header */}
@@ -144,7 +144,7 @@ export default function ContactPage() {
         </section>
       </main>
 
-      <Footer />
+      
     </>
   );
 }

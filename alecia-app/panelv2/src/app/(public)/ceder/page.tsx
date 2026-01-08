@@ -1,4 +1,4 @@
-import { Navbar, Footer } from "@/components/layout";
+
 import { SellerForm } from "@/components/features";
 import type { Metadata } from "next";
 
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function CederPage() {
   return (
     <>
-      <Navbar />
+      
       
       <main className="min-h-screen bg-[var(--background)] pt-24">
         {/* Header */}
@@ -73,7 +73,7 @@ export default function CederPage() {
         </section>
       </main>
 
-      <Footer />
+      
     </>
   );
 }

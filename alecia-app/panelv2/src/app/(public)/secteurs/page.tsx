@@ -1,4 +1,4 @@
-import { Navbar, Footer } from "@/components/layout";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { mockSectors } from "@/lib/data";
 import Link from "next/link";
@@ -27,7 +27,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 export default function SecteursPage() {
   return (
     <>
-      <Navbar />
+      
       
       <main className="min-h-screen bg-[var(--background)] pt-24">
         {/* Header */}
@@ -102,7 +102,7 @@ export default function SecteursPage() {
         </section>
       </main>
 
-      <Footer />
+      
     </>
   );
 }

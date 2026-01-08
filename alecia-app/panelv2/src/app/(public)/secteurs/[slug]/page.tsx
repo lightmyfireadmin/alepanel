@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { Navbar, Footer } from "@/components/layout";
+
 import { DealCard, SectorFaq } from "@/components/features";
 import { mockSectors, mockDeals, teamMembers } from "@/lib/data";
 import { Button } from "@/components/ui/button";
@@ -76,7 +76,7 @@ export default async function SectorPage({ params }: PageProps) {
 
   return (
     <>
-      <Navbar />
+      
       <main className="min-h-screen bg-[var(--background)] pt-24 pb-12">
         <div className="max-w-6xl mx-auto px-6">
           {/* Back Button */}
@@ -251,7 +251,7 @@ export default async function SectorPage({ params }: PageProps) {
           </section>
         </div>
       </main>
-      <Footer />
+      
     </>
   );
 }

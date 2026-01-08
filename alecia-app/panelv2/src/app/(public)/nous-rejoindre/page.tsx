@@ -1,4 +1,4 @@
-import { Navbar, Footer } from "@/components/layout";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -51,7 +51,7 @@ export default async function NousRejoindrePage() {
 
   return (
     <>
-      <Navbar />
+      
 
       <main className="min-h-screen bg-[var(--background)] pt-24">
         {/* Header */}
@@ -240,7 +240,7 @@ export default async function NousRejoindrePage() {
         </section>
       </main>
 
-      <Footer />
+      
     </>
   );
 }

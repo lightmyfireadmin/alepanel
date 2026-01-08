@@ -69,7 +69,7 @@ const expertises = [
 export default function ExpertisesPage() {
   return (
     <>
-      <Navbar />
+      
       
       <main className="min-h-screen bg-[var(--background)] pt-24">
         {/* Header */}
@@ -176,7 +176,7 @@ export default function ExpertisesPage() {
         </section>
       </main>
 
-      <Footer />
+      
     </>
   );
 }

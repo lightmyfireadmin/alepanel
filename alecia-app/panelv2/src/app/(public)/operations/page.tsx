@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Navbar, Footer } from "@/components/layout";
+
 import { DealCard, DealFilter } from "@/components/features";
 import type { Metadata } from "next";
 import { getTransactions, getTransactionFilters } from "@/lib/actions/convex-marketing";
@@ -50,7 +50,7 @@ export default async function OperationsPage({ searchParams }: OperationsPagePro
 
   return (
     <>
-      <Navbar />
+      
       
       <main className="min-h-screen bg-[var(--background)] pt-24">
         {/* Header */}
@@ -123,7 +123,7 @@ export default async function OperationsPage({ searchParams }: OperationsPagePro
         </section>
       </main>
 
-      <Footer />
+      
     </>
   );
 }

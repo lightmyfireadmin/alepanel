@@ -1,4 +1,4 @@
-import { Navbar, Footer } from "@/components/layout";
+
 import { BuyerForm } from "@/components/features";
 import type { Metadata } from "next";
 
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function AcquerirPage() {
   return (
     <>
-      <Navbar />
+      
       
       <main className="min-h-screen bg-[var(--background)] pt-24">
         {/* Header */}
@@ -77,7 +77,7 @@ export default function AcquerirPage() {
         </section>
       </main>
 
-      <Footer />
+      
     </>
   );
 }

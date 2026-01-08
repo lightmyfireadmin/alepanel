@@ -1,4 +1,4 @@
-import { Navbar, Footer } from "@/components/layout";
+
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function PolitiqueConfidentialitePage() {
   return (
     <>
-      <Navbar />
+      
       
       <main className="min-h-screen bg-[var(--background)] pt-24">
         <article className="py-16 px-6">
@@ -99,7 +99,7 @@ export default function PolitiqueConfidentialitePage() {
         </article>
       </main>
 
-      <Footer />
+      
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { Navbar, Footer } from "@/components/layout";
+
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import Image from "next/image";
@@ -48,7 +48,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   return (
     <>
-      <Navbar />
+      
       
       <main className="min-h-screen bg-[var(--background)] pt-24 pb-24">
         {/* Hero Section */}
@@ -126,7 +126,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         </article>
       </main>
 
-      <Footer />
+      
     </>
   );
 }

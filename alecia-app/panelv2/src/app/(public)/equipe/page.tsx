@@ -1,4 +1,4 @@
-import { Navbar, Footer } from "@/components/layout";
+
 import { TeamCard } from "@/components/features/team/team-card";
 import { teamMembers } from "@/lib/data";
 import type { Metadata } from "next";
@@ -15,7 +15,7 @@ export const dynamic = 'force-dynamic';
 export default function EquipePage() {
   return (
     <>
-      <Navbar />
+      
       
       <main className="min-h-screen bg-[var(--background)] pt-24">
         {/* Header */}
@@ -67,7 +67,7 @@ export default function EquipePage() {
         </section>
       </main>
 
-      <Footer />
+      
     </>
   );
 }

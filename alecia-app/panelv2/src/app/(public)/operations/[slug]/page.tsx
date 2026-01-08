@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
-import { Navbar, Footer } from "@/components/layout";
+
 import { RoleBadge, DealDetailLogo } from "@/components/features";
 import { getTransactionBySlug, getTransactions } from "@/lib/actions/convex-marketing";
 import { ArrowLeft, Building2, MapPin, Clock, Quote, ArrowRight } from "lucide-react";
@@ -48,7 +48,7 @@ export default async function OperationDetail({ params }: PageProps) {
 
   return (
     <>
-      <Navbar />
+      
       <main className="min-h-screen bg-[var(--background)] pt-24 pb-12">
         <div className="max-w-4xl mx-auto px-6">
           <Button asChild variant="ghost" className="mb-8 pl-0 hover:bg-transparent hover:text-[var(--accent)] text-[var(--foreground-muted)]">
@@ -237,7 +237,7 @@ export default async function OperationDetail({ params }: PageProps) {
           </div>
         </div>
       </main>
-      <Footer />
+      
     </>
   );
 }

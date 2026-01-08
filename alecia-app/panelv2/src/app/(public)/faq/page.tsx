@@ -1,4 +1,4 @@
-import { Navbar, Footer } from "@/components/layout";
+
 import { FAQClient } from "@/components/features/faq-client";
 
 export const metadata = {
@@ -9,9 +9,9 @@ export const metadata = {
 export default function FAQPage() {
   return (
     <>
-      <Navbar />
+      
       <FAQClient />
-      <Footer />
+      
     </>
   );
 }

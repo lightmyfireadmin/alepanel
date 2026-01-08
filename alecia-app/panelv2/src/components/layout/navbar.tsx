@@ -55,9 +55,10 @@ export function Navbar() {
 
   const switchLocale = () => {
     const newLocale = locale === "fr" ? "en" : "fr";
-    // Set cookie and reload to apply new locale
-    document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000`;
-    window.location.reload();
+    // Set cookie with proper path
+    document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
+    // Force hard navigation to ensure server re-renders with new locale
+    window.location.href = window.location.pathname;
   };
 
   return (
