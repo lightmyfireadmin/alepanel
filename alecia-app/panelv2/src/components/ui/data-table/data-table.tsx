@@ -13,6 +13,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import Papa from "papaparse";
 
 import {
   Table,
@@ -24,13 +25,14 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Settings2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Download, Settings2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -38,6 +40,7 @@ interface DataTableProps<TData, TValue> {
   onRowClick?: (row: TData) => void;
   filterColumn?: string;
   filterPlaceholder?: string;
+  exportFileName?: string;
 }
 
 export function DataTable<TData, TValue>({
@@ -46,6 +49,7 @@ export function DataTable<TData, TValue>({
   onRowClick,
   filterColumn = "name",
   filterPlaceholder = "Filter...",
+  exportFileName = "export",
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -109,6 +113,45 @@ export function DataTable<TData, TValue>({
               })}
           </DropdownMenuContent>
         </DropdownMenu>
+        
+        {/* CSV Export Button */}
+        <Button
+          variant="outline"
+          size="sm"
+          className="ml-2 gap-1"
+          onClick={() => {
+            // Get visible columns
+            const visibleColumns = table.getVisibleFlatColumns();
+            const headers = visibleColumns.map(col => col.id);
+            
+            // Get filtered data
+            const rows = table.getFilteredRowModel().rows.map(row => {
+              const rowData: Record<string, any> = {};
+              visibleColumns.forEach(col => {
+                const value = row.getValue(col.id);
+                rowData[col.id] = value ?? "";
+              });
+              return rowData;
+            });
+            
+            // Generate CSV
+            const csv = Papa.unparse(rows, { columns: headers });
+            
+            // Download
+            const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `${exportFileName}_${new Date().toISOString().split("T")[0]}.csv`;
+            link.click();
+            URL.revokeObjectURL(url);
+            
+            toast.success(`${rows.length} lignes exportées`);
+          }}
+        >
+          <Download className="h-4 w-4" />
+          <span className="hidden sm:inline">Export</span>
+        </Button>
       </div>
       <div className="rounded-md border bg-card">
         <Table>
