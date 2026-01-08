@@ -1,6 +1,6 @@
 import { query, mutation, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
-import { getAuthenticatedUser } from "./auth_utils";
+import { getOptionalUser, getAuthenticatedUser } from "./auth_utils";
 
 // ============================================
 // KANBAN COLUMNS
@@ -9,7 +9,8 @@ import { getAuthenticatedUser } from "./auth_utils";
 export const getKanbanColumns = query({
   args: { boardId: v.optional(v.string()) },
   handler: async (ctx, args) => {
-    await getAuthenticatedUser(ctx);
+    const user = await getOptionalUser(ctx);
+    if (!user) return []; // Not authenticated
     
     const columns = await ctx.db
       .query("kanban_columns")
@@ -81,7 +82,8 @@ export const getEvents = query({
     limit: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
-    await getAuthenticatedUser(ctx);
+    const user = await getOptionalUser(ctx);
+    if (!user) return []; // Not authenticated
     
     let events;
     

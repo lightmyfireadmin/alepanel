@@ -1,6 +1,6 @@
 import { mutation, query, internalQuery } from "./_generated/server";
 import { v } from "convex/values";
-import { getAuthenticatedUser, checkRole } from "./auth_utils";
+import { getOptionalUser, checkRole } from "./auth_utils";
 
 // Valid stages as per requirement
 const STAGES = ["Lead", "NDA Signed", "Offer Received", "Due Diligence", "Closing"];
@@ -8,14 +8,19 @@ const STAGES = ["Lead", "NDA Signed", "Offer Received", "Due Diligence", "Closin
 export const getDeals = query({
   args: {},
   handler: async (ctx) => {
-    await getAuthenticatedUser(ctx);
+    // Use optional auth - return empty array if not authenticated
+    const user = await getOptionalUser(ctx);
+    if (!user) {
+      return []; // Not authenticated, return empty
+    }
+
     const deals = await ctx.db.query("deals").collect();
 
     // Enrich with Company and Owner data
     const enrichedDeals = await Promise.all(
       deals.map(async (deal) => {
-        const company = await ctx.db.get(deal.companyId);
-        const owner = await ctx.db.get(deal.ownerId);
+        const company = deal.companyId ? await ctx.db.get(deal.companyId) : null;
+        const owner = deal.ownerId ? await ctx.db.get(deal.ownerId) : null;
         return {
           ...deal,
           companyName: company?.name || "Unknown Company",
