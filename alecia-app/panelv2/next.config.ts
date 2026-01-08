@@ -1,4 +1,7 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
+
+const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
   // Allow external images (Convex storage, company logos, etc.)
@@ -20,9 +23,18 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "**.alecia.markets",
       },
+      {
+        protocol: "https",
+        hostname: "cdn.prod.website-files.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
     ],
   },
 };
 
-export default nextConfig;
-
+export default withNextIntl(nextConfig);

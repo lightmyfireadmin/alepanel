@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { AnimatedCounter, HeroBackground, ExpertiseCard, NewsletterForm } from "@/components/features";
+import { AnimatedCounter, RegionalMap, ValuationEstimator, HeroBackground, ExpertiseCard, NewsletterForm } from "@/components/features";
 import { TeamMemberModal } from "@/components/features/team-member-modal";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
@@ -315,34 +315,46 @@ export function HomeClient() {
                 {t("regional.subtitle")}
               </p>
             </motion.div>
-            {/* Regional map placeholder - component coming soon */}
-            <div className="text-center text-[var(--foreground-muted)]">
-              Paris • Lyon • Bordeaux • Nantes
-            </div>
+            <RegionalMap />
           </div>
         </section>
 
-        {/* Valuation Estimator Section - CTA */}
+        {/* Valuation Estimator Section */}
         <section className="py-24 px-6">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
               >
                 <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl font-semibold mb-6">
                   {t("valuation.titlePart1")} <span className="text-gradient-gold">{t("valuation.titlePart2")}</span> {t("valuation.titlePart3")}
                 </h2>
-                <p className="text-[var(--foreground-muted)] text-lg mb-6 max-w-2xl mx-auto">
+                <p className="text-[var(--foreground-muted)] text-lg mb-6">
                   {t("valuation.description")}
                 </p>
-                <Button size="lg" className="btn-gold" asChild>
-                  <Link href="/contact">
-                    Demander une estimation
-                    <ArrowRight className="ml-2 w-4 h-4" />
-                  </Link>
-                </Button>
+                <ul className="space-y-3 text-[var(--foreground-muted)]">
+                  <li className="flex items-center gap-2">
+                    <span className="w-2 h-2 bg-[var(--accent)] rounded-full" />
+                    {t("valuation.benefit1")}
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-2 h-2 bg-[var(--accent)] rounded-full" />
+                    {t("valuation.benefit2")}
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-2 h-2 bg-[var(--accent)] rounded-full" />
+                    {t("valuation.benefit3")}
+                  </li>
+                </ul>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+              >
+                <ValuationEstimator />
               </motion.div>
             </div>
           </div>
