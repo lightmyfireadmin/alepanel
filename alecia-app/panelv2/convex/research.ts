@@ -1,6 +1,6 @@
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
-import { getAuthenticatedUser } from "./auth_utils";
+import { getOptionalUser, getAuthenticatedUser } from "./auth_utils";
 
 // ============================================
 // RESEARCH TASKS
@@ -18,7 +18,8 @@ export const getTasks = query({
     dealId: v.optional(v.id("deals")),
   },
   handler: async (ctx, args) => {
-    const user = await getAuthenticatedUser(ctx);
+    const user = await getOptionalUser(ctx);
+    if (!user) return []; // Not authenticated
 
     let tasks;
     if (args.status) {
@@ -69,7 +70,8 @@ export const getTasks = query({
 export const getMyTasks = query({
   args: {},
   handler: async (ctx) => {
-    const user = await getAuthenticatedUser(ctx);
+    const user = await getOptionalUser(ctx);
+    if (!user) return []; // Not authenticated
 
     const tasks = await ctx.db
       .query("research_tasks")
@@ -192,7 +194,8 @@ export const moveTask = mutation({
 export const getTaskStats = query({
   args: {},
   handler: async (ctx) => {
-    await getAuthenticatedUser(ctx);
+    const user = await getOptionalUser(ctx);
+    if (!user) return { total: 0, todo: 0, inProgress: 0, review: 0, done: 0, overdue: 0 };
 
     const tasks = await ctx.db.query("research_tasks").collect();
 

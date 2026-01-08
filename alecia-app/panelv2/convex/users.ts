@@ -1,11 +1,13 @@
 import { query } from "./_generated/server";
-import { getAuthenticatedUser } from "./auth_utils";
+import { getOptionalUser } from "./auth_utils";
 
 // Re-export for signature panel and other components
 export const getAllUsers = query({
   args: {},
   handler: async (ctx) => {
-    await getAuthenticatedUser(ctx);
+    const currentUser = await getOptionalUser(ctx);
+    if (!currentUser) return []; // Not authenticated
+    
     const users = await ctx.db.query("users").collect();
     return users.map((u) => ({
       _id: u._id,
@@ -16,3 +18,4 @@ export const getAllUsers = query({
     }));
   },
 });
+

@@ -1,6 +1,6 @@
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
-import { getAuthenticatedUser, checkRole } from "./auth_utils";
+import { getOptionalUser, getAuthenticatedUser, checkRole } from "./auth_utils";
 
 // ============================================
 // SIGN REQUESTS
@@ -18,7 +18,8 @@ export const getSignRequests = query({
     asRequester: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
-    const user = await getAuthenticatedUser(ctx);
+    const user = await getOptionalUser(ctx);
+    if (!user) return []; // Not authenticated
 
     let requests;
     if (args.status) {
@@ -72,7 +73,8 @@ export const getSignRequests = query({
 export const getMyPendingSignatures = query({
   args: {},
   handler: async (ctx) => {
-    const user = await getAuthenticatedUser(ctx);
+    const user = await getOptionalUser(ctx);
+    if (!user) return []; // Not authenticated
 
     const requests = await ctx.db
       .query("sign_requests")

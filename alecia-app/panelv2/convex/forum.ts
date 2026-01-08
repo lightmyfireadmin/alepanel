@@ -1,6 +1,6 @@
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
-import { getAuthenticatedUser } from "./auth_utils";
+import { getOptionalUser, getAuthenticatedUser } from "./auth_utils";
 
 // ============================================
 // FORUM THREADS
@@ -12,7 +12,8 @@ export const getThreads = query({
     dealId: v.optional(v.id("deals")),
   },
   handler: async (ctx, args) => {
-    await getAuthenticatedUser(ctx);
+    const user = await getOptionalUser(ctx);
+    if (!user) return []; // Not authenticated
 
     let threads;
     if (args.category) {
@@ -64,7 +65,8 @@ export const getThreads = query({
 export const getThread = query({
   args: { threadId: v.id("forum_threads") },
   handler: async (ctx, args) => {
-    await getAuthenticatedUser(ctx);
+    const user = await getOptionalUser(ctx);
+    if (!user) return null;
 
     const thread = await ctx.db.get(args.threadId);
     if (!thread) return null;
@@ -160,7 +162,8 @@ export const deleteThread = mutation({
 export const getPosts = query({
   args: { threadId: v.id("forum_threads") },
   handler: async (ctx, args) => {
-    await getAuthenticatedUser(ctx);
+    const user = await getOptionalUser(ctx);
+    if (!user) return []; // Not authenticated
 
     const posts = await ctx.db
       .query("forum_posts")
