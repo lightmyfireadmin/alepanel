@@ -1,10 +1,8 @@
-import { Navbar } from "@/components/public/layout/navbar";
-import { Footer } from "@/components/public/layout/footer";
-import { ContactForm } from "@/components/public/features/contact-form";
+import { Navbar, Footer } from "@/components/layout";
+import { ContactForm } from "@/components/features/contact-form";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { MapPin, Mail } from "lucide-react";
-import { getTranslations } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: "Contact | Nous contacter",
@@ -18,39 +16,37 @@ export const dynamic = 'force-dynamic';
 const offices = [
   {
     id: "idf",
-    nameKey: "officesIdf" as const,
+    name: "Île-de-France",
     city: "Paris",
     image: "/assets/Contact_Alecia/paris_compressed.jpg",
   },
   {
     id: "sudEst1",
-    nameKey: "officesSudEst" as const,
+    name: "Sud Est",
     city: "Aix-en-Provence",
     image: "/assets/Contact_Alecia/nice_compressed.jpg",
   },
   {
     id: "sudEst2",
-    nameKey: "officesSudEst" as const,
+    name: "Sud Est",
     city: "Nice",
     image: "/assets/Contact_Alecia/nice_compressed.jpg",
   },
   {
     id: "aura",
-    nameKey: "officesAura" as const,
+    name: "Auvergne Rhône-Alpes",
     city: "Annecy",
     image: "/assets/Contact_Alecia/lyon_compressed.jpg",
   },
   {
     id: "grandOuest",
-    nameKey: "officesGrandOuest" as const,
+    name: "Grand Ouest",
     city: "Lorient",
     image: "/assets/Contact_Alecia/grand_ouest_compressed.jpg",
   },
 ];
 
-export default async function ContactPage() {
-  const t = await getTranslations("contact");
-
+export default function ContactPage() {
   return (
     <>
       <Navbar />
@@ -60,10 +56,10 @@ export default async function ContactPage() {
         <section className="py-16 px-6">
           <div className="max-w-6xl mx-auto text-center">
             <h1 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl font-semibold mb-4">
-              {t("title")}
+              Nous contacter
             </h1>
             <p className="text-[var(--foreground-muted)] max-w-2xl mx-auto text-lg">
-              {t("subtitle")}
+              Parlons de votre projet. Nos équipes sont à votre disposition pour répondre à toutes vos questions.
             </p>
           </div>
         </section>
@@ -79,7 +75,7 @@ export default async function ContactPage() {
               <div className="space-y-8">
                 <div>
                   <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-semibold mb-4 text-[var(--foreground)]">
-                    {t("offices")}
+                    Email
                   </h2>
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
@@ -96,7 +92,7 @@ export default async function ContactPage() {
 
                 <div>
                   <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-semibold mb-4 text-[var(--foreground)]">
-                    {t("offices")}
+                    Nos bureaux
                   </h2>
                   <div className="grid grid-cols-2 gap-4">
                     {offices.map((office) => (
@@ -105,7 +101,7 @@ export default async function ContactPage() {
                         className="p-4 bg-[var(--background-secondary)] rounded-lg border border-[var(--border)]"
                       >
                         <h3 className="text-[var(--foreground)] font-semibold mb-1">
-                          {t(office.nameKey)}
+                          {office.name}
                         </h3>
                         <div className="flex items-center gap-2 text-sm text-[var(--foreground-muted)]">
                           <MapPin className="w-4 h-4" />
@@ -138,7 +134,7 @@ export default async function ContactPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <p className="text-white font-semibold">{t(office.nameKey)}</p>
+                    <p className="text-white font-semibold">{office.name}</p>
                     <p className="text-white/70 text-sm">{office.city}</p>
                   </div>
                 </div>

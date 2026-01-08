@@ -1,6 +1,5 @@
-import { Navbar } from "@/components/public/layout/navbar";
-import { Footer } from "@/components/public/layout/footer";
-import { TeamCard } from "@/components/public/features/team-card";
+import { Navbar, Footer } from "@/components/layout";
+import { TeamCard } from "@/components/features/team/team-card";
 import { teamMembers } from "@/lib/data";
 import type { Metadata } from "next";
 
@@ -14,7 +13,6 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 
 export default function EquipePage() {
-  // Using static data for now, but in future phases this should query Convex 'users' table
   return (
     <>
       <Navbar />
@@ -60,10 +58,10 @@ export default function EquipePage() {
               Rejoignez une équipe dynamique et participez à des opérations passionnantes.
             </p>
             <a
-              href="/nous-rejoindre"
+              href="/contact"
               className="inline-flex items-center gap-2 text-[var(--accent)] hover:underline"
             >
-              Voir nos offres d&apos;emploi →
+              Nous contacter →
             </a>
           </div>
         </section>
