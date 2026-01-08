@@ -247,10 +247,39 @@ Ce document détaille l'ensemble des fonctionnalités de la plateforme, structur
   - Save on beforeunload
 - **AutosaveIndicator :** Statut visuel de sauvegarde
 
-### Components Created
+### CSV Import
 
-| Fichier                                      | Description                    |
-| -------------------------------------------- | ------------------------------ |
-| `hooks/useFormAutosave.ts`                   | Hook d'autosave avec indicator |
-| `components/ui/advanced-filters.tsx`         | Filtres avancés + hook         |
-| `components/features/admin/AdminSidebar.tsx` | Sidebar admin responsive       |
+- **CSVImport :** Composant d'import CSV avec wizard 4 étapes
+  - Upload fichier avec parsing papaparse
+  - Auto-mapping des colonnes par similarité de nom
+  - Validation des champs requis et types
+  - Prévisualisation avant import
+  - Gestion des erreurs avec numéros de ligne
+
+### Undo/Redo System
+
+- **useUndoRedo :** Hook avec historique d'actions
+  - `execute()` pour actions annulables
+  - `undo()` / `redo()` manuels
+  - Historique configurable (défaut 50 actions)
+  - Toast avec bouton "Rétablir"
+- **UndoRedoProvider :** Context pour undo/redo global
+- **useUndoRedoKeyboard :** Raccourcis clavier
+  - `Cmd+Z` = Annuler
+  - `Cmd+Shift+Z` / `Cmd+Y` = Rétablir
+
+### All Components (Phase 1)
+
+| Fichier                                      | Description                         |
+| -------------------------------------------- | ----------------------------------- |
+| `hooks/useFormAutosave.ts`                   | Hook d'autosave avec indicator      |
+| `hooks/useUndoRedo.ts`                       | Hook undo/redo + context + keyboard |
+| `components/ui/advanced-filters.tsx`         | Filtres avancés + hook              |
+| `components/ui/csv-import.tsx`               | Import CSV avec wizard              |
+| `components/features/admin/AdminSidebar.tsx` | Sidebar admin responsive            |
+
+---
+
+## 🎉 PHASE 1: FOUNDATION POLISH - 100% COMPLETE
+
+**14/14 Features Implemented** - Ready for Phase 2: Microsoft 365 Integration
