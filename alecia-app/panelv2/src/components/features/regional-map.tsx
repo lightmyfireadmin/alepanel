@@ -27,31 +27,31 @@ const offices: Office[] = [
     city: "Paris", 
     phone: "contact@alecia.fr", 
     x: 55,
-    y: 25
+    y: 28
   },
   { 
     id: "ouest", 
     name: "Grand Ouest", 
     city: "Lorient", 
     phone: "contact@alecia.fr", 
-    x: 25,
-    y: 45
+    x: 18,  // More west - Brittany coast
+    y: 35   // Slightly more north
   },
   { 
     id: "ara", 
     name: "Auvergne Rhône-Alpes", 
     city: "Annecy", 
     phone: "contact@alecia.fr", 
-    x: 73,
-    y: 50
+    x: 78,  // More east towards Alps/Switzerland border
+    y: 52
   },
   { 
     id: "sud-est-aix", 
     name: "Sud Est", 
     city: "Aix-en-Provence", 
     phone: "contact@alecia.fr", 
-    x: 77,
-    y: 78,
+    x: 68,  // West of Nice, near Marseille
+    y: 80,
     groupId: "sud-est",
     groupDisplayName: "Aix-en-Provence & Nice"
   },
@@ -60,8 +60,8 @@ const offices: Office[] = [
     name: "Sud Est", 
     city: "Nice", 
     phone: "contact@alecia.fr", 
-    x: 92,
-    y: 84,
+    x: 85,  // Côte d'Azur, east
+    y: 82,
     groupId: "sud-est",
     groupDisplayName: "Aix-en-Provence & Nice"
   },
