@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 
-// Admin index redirects to deals/pipeline
+// Admin index redirects to dashboard
 export default function AdminPage() {
-  redirect("/admin/deals");
+  redirect("/admin/dashboard");
 }
+
