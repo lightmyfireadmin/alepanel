@@ -219,3 +219,38 @@ Ce document détaille l'ensemble des fonctionnalités de la plateforme, structur
 - **Hover States :** `--theme-primary-hover` calculé
 - **Shadows :** `--theme-shadow-sm/md/lg/xl/2xl`
 - **Injection :** `useThemeSettings` hook + `ThemeSettingsProvider`
+
+---
+
+## 16. Phase 1 Foundation Polish - [COMPLETE 2026-01-08]
+
+### Navigation & UX
+
+- **Responsive Sidebar :** `AdminSidebar` et `SudoSidebar` avec drawer mobile
+- **Breadcrumbs :** Navigation contextuelle sur toutes les pages admin
+- **Sticky Headers :** En-têtes de table fixes au scroll
+
+### Data Management
+
+- **CSV Export :** Bouton export dans DataTable (papaparse)
+- **Bulk Actions :** Sélection multiple + suppression en masse
+- **Advanced Filters :** Composant filtres avancés multi-critères
+  - Opérateurs : equals, contains, greaterThan, between, isEmpty...
+  - Types : text, number, date, select
+
+### Form Utilities
+
+- **useFormAutosave :** Hook de sauvegarde automatique
+  - localStorage persistence
+  - Intervalle configurable (défaut 30s)
+  - Détection dirty state
+  - Save on beforeunload
+- **AutosaveIndicator :** Statut visuel de sauvegarde
+
+### Components Created
+
+| Fichier                                      | Description                    |
+| -------------------------------------------- | ------------------------------ |
+| `hooks/useFormAutosave.ts`                   | Hook d'autosave avec indicator |
+| `components/ui/advanced-filters.tsx`         | Filtres avancés + hook         |
+| `components/features/admin/AdminSidebar.tsx` | Sidebar admin responsive       |
