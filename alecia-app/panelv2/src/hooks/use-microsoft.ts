@@ -358,10 +358,104 @@ export function useMicrosoft() {
     return result as FinancialMetrics;
   }, [parseFinancialDataAction]);
 
+  /**
+   * List recent files from OneDrive (uses Graph API /me/drive/recent)
+   */
+  const listRecentFiles = useCallback(async (): Promise<MicrosoftFile[]> => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const token = await getMicrosoftToken();
+      if (!token) throw new Error("Not connected to Microsoft");
+
+      // Use the Graph API to get recent files
+      const response = await fetch("https://graph.microsoft.com/v1.0/me/drive/recent", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch recent files");
+      }
+
+      const data = await response.json();
+      return (data.value || []).map((item: Record<string, unknown>) => ({
+        id: item.id,
+        name: item.name,
+        webUrl: item.webUrl,
+        size: (item as { size?: number }).size || 0,
+        lastModifiedDateTime: (item as { lastModifiedDateTime?: string }).lastModifiedDateTime || "",
+        file: item.file,
+        folder: item.folder,
+      }));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to list recent files");
+      return [];
+    } finally {
+      setLoading(false);
+    }
+  }, [getMicrosoftToken]);
+
+  /**
+   * Upload a file to OneDrive
+   */
+  const uploadFile = useCallback(async (
+    file: File,
+    folderId?: string
+  ): Promise<MicrosoftFile | null> => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const token = await getMicrosoftToken();
+      if (!token) throw new Error("Not connected to Microsoft");
+
+      // Build upload URL
+      let uploadUrl: string;
+      if (folderId) {
+        uploadUrl = `https://graph.microsoft.com/v1.0/me/drive/items/${folderId}:/${encodeURIComponent(file.name)}:/content`;
+      } else {
+        uploadUrl = `https://graph.microsoft.com/v1.0/me/drive/root:/${encodeURIComponent(file.name)}:/content`;
+      }
+
+      const response = await fetch(uploadUrl, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": file.type || "application/octet-stream",
+        },
+        body: file,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to upload file");
+      }
+
+      const result = await response.json();
+      return {
+        id: result.id,
+        name: result.name,
+        webUrl: result.webUrl,
+        size: result.size,
+        lastModified: result.lastModifiedDateTime,
+        type: "file",
+        mimeType: result.file?.mimeType,
+      };
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to upload file");
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [getMicrosoftToken]);
+
   return {
     // State
     isLoaded,
     isSignedIn,
+    isLoading: loading,
     loading,
     error,
     
@@ -372,10 +466,12 @@ export function useMicrosoft() {
     
     // Files
     listFiles,
+    listRecentFiles,
     searchFiles,
     openInOffice,
     createFolder,
     createShareLink,
+    uploadFile,
     
     // Excel
     readExcelRange,
