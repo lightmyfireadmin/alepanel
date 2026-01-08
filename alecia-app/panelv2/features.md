@@ -507,4 +507,72 @@ Ce document détaille l'ensemble des fonctionnalités de la plateforme, structur
 
 ---
 
-## 🎉 PHASES 1-4 COMPLETE - Ready for Phase 5: Collaboration Suite
+## 20. Phase 5: Collaboration Suite - [COMPLETE 2026-01-08]
+
+### Presence & Notifications
+
+- **usePresence Hook:** Real-time presence tracking
+  - Heartbeat every 30s
+  - Current page tracking
+  - Active users list
+
+- **PresenceIndicator:** Visual online status
+  - Avatar stack with +N badge
+  - Green online dots
+  - Tooltips with page info
+
+- **NotificationCenter:** Bell icon + unread badge
+  - Types: deal, mention, comment, system
+  - Mark as read (individual/all)
+  - Delete with confirmation
+  - Relative timestamps (French)
+
+### Comments System
+
+- **convex/comments.ts:** Backend for entity comments
+  - getComments / addComment / editComment / deleteComment
+  - Support for deals, companies, contacts
+  - @mentions support (UI ready)
+
+- **CommentsThread:** Rich comment UI
+  - Avatar + author info
+  - Edit/delete actions
+  - Cmd+Enter to submit
+  - Relative timestamps
+
+### Quick Wins
+
+- **useKeyboardSave:** Ctrl+S / Cmd+S support
+- **formatRelativeTime:** French relative dates
+- **CopyIdButton:** Clipboard with feedback
+- **IconButtonWithTooltip:** Accessible icon buttons
+- **TooltipWrapper:** Utility component
+
+### Phase 5 Components
+
+| Fichier                   | Description          |
+| ------------------------- | -------------------- |
+| `hooks/usePresence.ts`    | Real-time presence   |
+| `convex/presence.ts`      | Presence backend     |
+| `presence-indicator.tsx`  | Online users display |
+| `notification-center.tsx` | Bell + notifications |
+| `convex/comments.ts`      | Comments backend     |
+| `comments-thread.tsx`     | Comment thread UI    |
+| `lib/utils/quick-wins.ts` | Utility functions    |
+| `copy-id-button.tsx`      | Clipboard button     |
+| `icon-button-tooltip.tsx` | Tooltip utilities    |
+
+### Phase 5 Progress
+
+| #   | Feature             | Status  |
+| --- | ------------------- | ------- |
+| 44  | Presence Indicators | ✅ Done |
+| 47  | @Mentions           | ✅ Done |
+| 48  | Notification Center | ✅ Done |
+| 49  | In-App Comments     | ✅ Done |
+
+**Phase 5: Collaboration Suite - 4/4 Core Features Complete** ✅
+
+---
+
+## 🎉 PHASES 1-5 COMPLETE - Ready for Phase 6: AI & Automation
