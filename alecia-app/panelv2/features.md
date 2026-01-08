@@ -337,4 +337,100 @@ Ce document détaille l'ensemble des fonctionnalités de la plateforme, structur
 | 24    | Calendar Sync             | ✅ Done         |
 | 25    | Teams Channel Integration | ✅ Done         |
 
-**Phase 2: 11/11 Features Complete**
+**Phase 2: 11/11 Features Complete** ✅
+
+---
+
+## 18. Phase 3: CRM Intelligence - [COMPLETE 2026-01-08]
+
+### Company Intelligence
+
+- **CompanyNewsFeed :** Agrégation d'actualités avec sentiment
+  - Sources multiples (mock/API)
+  - Badge sentiment (positive/neutral/negative)
+  - Formatage date français
+
+- **OwnershipTree :** Arborescence capitalistique
+  - Actionnaires et filiales
+  - Badges UBO (Bénéficiaires Effectifs)
+  - Zoom/expand controls
+  - Tooltips détaillés
+
+- **CompetitorMapping :** Cartographie concurrentielle
+  - Tableau avec position (Leader/Challenger/Niche)
+  - Analyse IA optionnelle
+  - Ajout manuel de concurrents
+  - Tendance (hausse/baisse/stable)
+
+- **FinancialHistoryChart :** Historique financier
+  - Graphiques recharts (Area + Bar)
+  - CA/EBITDA/Résultat Net
+  - Marges en pourcentage
+  - Badges croissance YoY
+
+### Contact Intelligence
+
+- **ContactDuplicatesDetector :** Détection de doublons
+  - Algorithme Levenshtein
+  - Score de similarité
+  - Dialog de fusion
+
+- **RelationshipGraph :** Réseau de relations
+  - Groupement par société
+  - Types de relations (Collègue/Connaît/Ex-collègue)
+  - Force de relation (1-3)
+
+- **ContactEmailHistory :** Historique emails
+  - Intégration Microsoft Graph
+  - Emails envoyés/reçus
+  - Pièces jointes, dates
+
+### Enrichissement Automatique
+
+- **useAutoEnrich :** Hook d'enrichissement Pappers
+  - Enrichissement à la création
+  - Batch enrichissement
+  - Callbacks de completion
+
+### AI Features (from Phase 6)
+
+- **SmartSummary :** Synthèse IA de dossiers
+  - Forces/Faiblesses/Risques
+  - Prochaines étapes suggérées
+  - Sentiment global
+
+- **AI Summarize API :** Route API Groq
+  - Prompts spécialisés M&A
+  - Fallback mock intelligent
+
+### Phase 3 Components
+
+| Fichier                         | Description                 |
+| ------------------------------- | --------------------------- |
+| `CompanyNewsFeed.tsx`           | Fil d'actualités entreprise |
+| `OwnershipTree.tsx`             | Arbre capitalistique        |
+| `CompetitorMapping.tsx`         | Tableau concurrents         |
+| `FinancialHistoryChart.tsx`     | Graphiques financiers       |
+| `ContactDuplicatesDetector.tsx` | Détection doublons          |
+| `RelationshipGraph.tsx`         | Réseau contacts             |
+| `ContactEmailHistory.tsx`       | Historique emails           |
+| `SmartSummary.tsx`              | Synthèse IA                 |
+| `useAutoEnrich.ts`              | Hook enrichissement         |
+
+### Phase 3 Progress
+
+| #     | Feature                 | Status  |
+| ----- | ----------------------- | ------- |
+| 26    | Auto-Enrich on Creation | ✅ Done |
+| 27    | Competitor Mapping      | ✅ Done |
+| 28    | News Feed per Company   | ✅ Done |
+| 29    | Financial History Chart | ✅ Done |
+| 30    | Ownership Tree          | ✅ Done |
+| 31-33 | Contact Intelligence    | ✅ Done |
+| 34    | Contact Duplicates      | ✅ Done |
+
+**Phase 3: 9/9 Features Complete** ✅
+
+---
+
+## 🎉 PHASES 1-3 COMPLETE - Ready for Phase 4: Deal Flow Pro
