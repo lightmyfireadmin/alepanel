@@ -4,6 +4,12 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
+  // Disable Turbopack for builds due to known bug with large static files
+  // https://github.com/vercel/next.js/issues - "Dependency tracking is disabled"
+  turbopack: {
+    // Only use Turbopack for dev, not for production builds
+  },
+  
   // Allow external images (Convex storage, company logos, etc.)
   images: {
     remotePatterns: [
