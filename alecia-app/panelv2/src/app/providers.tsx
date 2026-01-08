@@ -8,6 +8,7 @@ import { ThemeProvider } from "next-themes";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
 import { UserSync } from "@/components/auth/UserSync";
+import { CommandPalette } from "@/components/ui/command-palette";
 
 const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
@@ -26,6 +27,7 @@ export function Providers({ children }: { children: ReactNode }) {
           disableTransitionOnChange
         >
           <NextIntlClientProvider locale="fr" messages={messages}>
+            <CommandPalette />
             {children}
             <Toaster position="bottom-right" richColors />
           </NextIntlClientProvider>
