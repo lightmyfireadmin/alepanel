@@ -2,7 +2,6 @@
 
 import { useState, useCallback } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
-import { BubbleMenu } from "@tiptap/extension-bubble-menu";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import Mention from "@tiptap/extension-mention";
@@ -308,31 +307,7 @@ export function CollaborativeNote({
           </div>
         )}
 
-        {/* Bubble menu for text selection */}
-        {editor && !readonly && (
-          <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
-            <div className="flex items-center gap-1 bg-popover border rounded-lg shadow-lg p-1">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7"
-                onClick={() => editor.chain().focus().toggleBold().run()}
-                data-active={editor.isActive("bold")}
-              >
-                <Bold className="h-3 w-3" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7"
-                onClick={() => editor.chain().focus().toggleItalic().run()}
-                data-active={editor.isActive("italic")}
-              >
-                <Italic className="h-3 w-3" />
-              </Button>
-            </div>
-          </BubbleMenu>
-        )}
+
 
         {/* Editor content */}
         <EditorContent editor={editor} className="border-0" />
