@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
+import { useEditor, EditorContent } from "@tiptap/react";
+import { BubbleMenu } from "@tiptap/extension-bubble-menu";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import Mention from "@tiptap/extension-mention";
