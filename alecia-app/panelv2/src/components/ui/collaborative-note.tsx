@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
+import Mention from "@tiptap/extension-mention";
 import { 
   Bold, 
   Italic, 
@@ -61,6 +62,19 @@ export function CollaborativeNote({
       Placeholder.configure({
         placeholder: "Commencez à écrire... Utilisez @ pour mentionner quelqu'un.",
       }),
+      Mention.configure({
+        HTMLAttributes: {
+          class: "mention bg-primary/10 text-primary px-1 rounded",
+        },
+        suggestion: {
+          items: ({ query }: { query: string }) => {
+            const users = ["Jean Dupont", "Marie Martin", "Pierre Durand"];
+            return users
+              .filter((name) => name.toLowerCase().includes(query.toLowerCase()))
+              .slice(0, 5);
+          },
+        },
+      }),
     ],
     content: initialContent,
     editable: !readonly,
@@ -69,6 +83,7 @@ export function CollaborativeNote({
         class: "prose prose-sm max-w-none focus:outline-none min-h-[200px] p-4",
       },
     },
+    immediatelyRender: false,
   });
 
   const handleSave = useCallback(async () => {
@@ -85,13 +100,6 @@ export function CollaborativeNote({
       setIsSaving(false);
     }
   }, [editor, onSave]);
-
-  // Auto-save every 30 seconds
-  // useEffect(() => {
-  //   if (!onSave || readonly) return;
-  //   const interval = setInterval(handleSave, 30000);
-  //   return () => clearInterval(interval);
-  // }, [handleSave, onSave, readonly]);
 
   if (!editor) {
     return (
@@ -297,6 +305,32 @@ export function CollaborativeNote({
               )}
             </TooltipProvider>
           </div>
+        )}
+
+        {/* Bubble menu for text selection */}
+        {editor && !readonly && (
+          <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
+            <div className="flex items-center gap-1 bg-popover border rounded-lg shadow-lg p-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7"
+                onClick={() => editor.chain().focus().toggleBold().run()}
+                data-active={editor.isActive("bold")}
+              >
+                <Bold className="h-3 w-3" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7"
+                onClick={() => editor.chain().focus().toggleItalic().run()}
+                data-active={editor.isActive("italic")}
+              >
+                <Italic className="h-3 w-3" />
+              </Button>
+            </div>
+          </BubbleMenu>
         )}
 
         {/* Editor content */}
