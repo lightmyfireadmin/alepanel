@@ -260,3 +260,33 @@ All V2 pages use `_2` suffix to avoid touching production site.
 - `stratema.com`: Carousels with arrows
 - `cambonpartners.com`: Tombstone flip animation
 - `albarest-partners.com`: Team grid overlays
+
+---
+
+## V3 Architecture (Planning 2026-01-10)
+
+### Route Strategy (`_3` Suffix)
+
+Comme pour V2, on isole V3 avec des suffixes pour garantir la sécurité de la prod.
+
+- `src/app/page_3.tsx`
+- `src/app/transactions_3/page.tsx` (Renommage de "operations" pour coller au C.D.C)
+- `src/app/expertises_3/page.tsx`
+- `src/app/equipe_3/page.tsx`
+- `src/app/actualites_3/page.tsx`
+- `src/app/carrieres_3/page.tsx`
+- `src/app/acces-prive_3/page.tsx`
+- `src/app/contact_3/page.tsx`
+
+### Components Strategy (`src/components/*_3/`)
+
+Architecture modulaire par fonctionnalité :
+
+- `home_3/`: `HeroVideo_3` (Video + 3 blocs expertise), `TransactionsCarousel_3`, `KPIBand_3`, `ContactSection_3`
+- `transactions_3/`: `FlipCard_3` (3D CSS pure), `DealFilter_3` (Custom routing to /transactions_3)
+- `layout_3/`: `Navbar_3`, `Footer_3` (Indépendants du layout global pour faciliter le switch)
+
+### Data Strategy
+
+Réutilisation maximale des actions Convex existantes (`convex-marketing.ts`) car les données sous-jacentes (Deals, Team, Posts) ne changent pas, seule la présentation change.
+Les "Meta-données" manquantes (ex: Passion, Citation, Études de cas spécifiques) sont pour l'instant mockées dans les composants V3 pour validation visuelle avant migration de schéma.

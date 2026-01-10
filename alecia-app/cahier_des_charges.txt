@@ -1,0 +1,93 @@
+CAHIER DES CHARGES Refonte site internet ALECIA.FR
+
+
+Police : Bierstadt
+Charte graphique : 
+
+
+Direction artistique / iconographie à la main du prestataire. Nombre d’itérations à préciser. Texte à retravailler pour être plus impactant. 
+Mentionner quelque part que « Pour l’accès aux opportunités actuellement en cours de négociations, veuillez prendre contact avec alecia : CLIC »
+
+Rubriques
+Expertises / Transactions / Equipe / Actualités / Carrières / Accès privé / Contact
+
+
+	•	Landing page
+Scroll down
+Style moderne et épuré avec utilisation de la charte graphique alecia
+	•	Vidéo 
+Format : grand visuel vidéo en fond d’écran, modèle proche de 7oceans.com ou stratema.com
+Contenu : vidéos stock avec thématiques (industries variées, bureaux modernes, réunions, moments informels type café) voire survol de villes (Paris, Marseille, Nice, Lyon)
+Message : « Votre ambition, notre engagement » au dessus de la vidéo (ton monochrome ou quasi-type 7oceans)
+
+	•	Notre métier
+Mix de l’actuel « plus qu’un simple prestataire » et « partenaire de proximité » avec un texte simple et où comprend instantanément notre métier 
+3 boîtes pour nos 3 expertises ou possibilité de cliquer dessus si on veut plus d’infos 
+
+	•	Transactions conseillées
+Format : carrousel avec flèche à droite (modèle stratema.com)
+Transactions présentées sous forme de tombstones, à lier à la page transactions
+
+	•	KPIs clés en bandeau 
+Glisser quelques KPI clés sur le métier : expertise multisectorielle, intervention sur des sociétés valorisées entre 5 et 50 m€, X opérations conseillées, nombre de bureaux 
+	•	Contact 
+Adresse bureaux / et bloc de contact par email Supprimer la FAQ 1 / Qui sommes-nous / nous connaître 
+Présentation d’alecia succincte, similaire au texte présent en première page actuellement
+
+	•	Expertises
+Accès via sur la landing page : onglet en en-tete + partie dans le scroll down
+Qu’on accède également par le landing page 
+Simplifier et ne pas aller autant dans le détail ?
+Illustrer chaque expertise avec une étude de cas ? (cf. by-cap.com)  pour rendre plus concrète chaque expertise
+
+
+	•	Transactions
+Accès via sur la landing page : onglet en en-tete + partie dans le scroll down
+	•	Page principale
+Classement des tombstones par région / type d’opération / secteur avec filtre en en-tête (idem actuel)
+3 tombstones par ligne
+Format Carré avec photo d’illustration en fond d’écran. Le format doit pouvoir être repris à l’identique sur Linkedin
+Chaque tombstone affiche : 
+	•	Logo du client
+	•	Logo de la contrepartie
+	•	Une ou 2 phrases courtes (idem by cap)
+	•	Pastille année (uniquement sur le visuel site, pas sur le visuel Linkedin)
+Format : sobre et homogène dans le style indiqué ci-dessous
+Bibliothèque d’exemples :
+ 
+
+
+Au clic, le tombstone tourne et dévoile (i) le type d’opération et (ii) un court texte précise l’opération en une phrase et l’activité du client  cf. cambonpartners.com
+Possibilité de cliquer sur « en savoir plus » et on affiche une page dédiée qui reprend le communiqué de presse
+Prévoir la reprise de tous les tombstones existants (ceux réalisés sous d’autres marques à passer avec un format légèrement différent ou astérix ?) et ceux-là ne « tourneront » pas
+
+	•	Pages communiqués : 
+Communiqué de presse qui détaille l’opération avec sur la gauche les points clés en rappel : type d’opération, mois/année, et secteur d’activité du client 
+Et tout en bas l’équipe alecia intervenue sur le deal avec photo, nom prénom et poste de chacun (cf. by-cap.com)
++ encart avis client
+	•	Cohérence graphique sur la présentation des transactions entre site / Linkedin / draft des communiqués de presse et newsletters
+	•	Equipe
+Reprise des infos de la page actuelle
+Ajouter un carrousel sur les transactions conseillées par chaque associé en bas de la fenêtre qui s’ouvre au clic.
+Exemple : https://www.albarest-partners.com/equipe/
+Sur chaque profil, détails en surbrillance + passion. Page dédiée par profil avec reprise de ce détail, citation et carrousel des opérations conseillées
+
+
+
+
+	•	Actualités
+Actualités en lien avec alecia (type article sur la présence à des événements, création de la banque d’affaires, etc.)
+Format des pages à créer identiques aux communiqués de presse
+
+	•	Carrières
+Laisser les mêmes infos que celles déjà utilisées mais passer les offres d’emploi avant « postuler » (à mettre tout à la fin) 
+
+	•	Accès privé 
+Alecia avec photo page de couverture linkedin et lien pour se connecter intégré sur la page
+Lien à fournir par prestataire de data room (en cours de finalisation du choix)
+
+	•	Contact 
+Accès via sur la landing page : onglet en en-tête + partie dans le scroll down
+Adresses des bureaux
+Et formulaire de contact
+

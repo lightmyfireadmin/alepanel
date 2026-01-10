@@ -124,3 +124,27 @@ Ce fichier recense les pré-requis, variables d'environnement et points de vigil
 - [ ] Integrate Bierstadt font files (not Google Font)
 - [ ] Replace sample data with Convex queries
 - [ ] Configure data room URL in environment
+
+---
+
+## V3 Marketing Refonte Verification (2026-01-10)
+
+### V3 Routes to Create & Verify
+
+- [x] `/page_3` (Home)
+- [x] `/transactions_3` (Transactions)
+- [x] `/expertises_3` (Expertises)
+- [x] `/equipe_3` (Team)
+- [x] `/actualites_3` (News)
+- [x] `/carrieres_3` (Careers)
+- [x] `/acces-prive_3` (Private Access)
+- [x] `/contact_3` (Contact)
+
+### V3 Functional Checks
+
+- [ ] **Video Background:** Verify loop and overlay opacity.
+- [ ] **Flip Cards (Transactions):** Verify 3D transform on click and data display (back side).
+- [ ] **Filter Router:** Verify DealFilter_3 updates URL to `/transactions_3` (not `/operations`).
+- [ ] **Expertises Layout:** Verify simplified 3-column or list layout with "Case Study" cards.
+- [ ] **Team Dialog:** Verify clicking "Voir le profil" opens the Dialog with passion/citation.
+- [ ] **Job Offers:** Verify jobs appear BEFORE the spontaneous application block.

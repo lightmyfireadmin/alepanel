@@ -671,3 +671,29 @@ Ce document détaille l'ensemble des fonctionnalités de la plateforme, structur
 - Transactions carousel with arrows (stratema.com style)
 - Animated KPI counters
 - Job offers before postuler section
+
+---
+
+## V3 Marketing Website Refonte (2026-01-10) ✅
+
+**Objectif :** Refonte totale selon Cahier des Charges "Clean.docx" (Jan 2026).
+**Méthodologie :** Isolation totale via suffixe `_3` pour garantir l'intégrité de la prod.
+
+### V3 Pages & Features (COMPLETE)
+
+| #   | Page                     | Status  | Key Changes                                        |
+| --- | ------------------------ | ------- | -------------------------------------------------- |
+| 1   | `/page_3` - Landing Page | ✅ Done | 3-blocks Expertises, Video background, KPI Band    |
+| 2   | `/transactions_3`        | ✅ Done | **Renamed from `/operations`**, Flip Cards, Filter |
+| 3   | `/expertises_3`          | ✅ Done | Simplified layout, Integrated Case Studies         |
+| 4   | `/equipe_3`              | ✅ Done | Mock "Passion" & "Deal Carousel" in Dialog         |
+| 5   | `/actualites_3`          | ✅ Done | Press Release layout with big Date badges          |
+| 6   | `/carrieres_3`           | ✅ Done | **Job Offers BEFORE generic CTA**                  |
+| 7   | `/acces-prive_3`         | ✅ Done | Auth portal entry point                            |
+| 8   | `/contact_3`             | ✅ Done | Standard form + Office details                     |
+
+### V3 Components (`src/components/*_3/`)
+
+- **Home:** `HeroVideo_3`, `TransactionsCarousel_3`, `KPIBand_3`, `ContactSection_3`
+- **Transactions:** `FlipCard_3` (3D rotation), `DealFilter_3`
+- **Layout:** `Navbar_3`, `Footer_3` (Independent navigation structure)
