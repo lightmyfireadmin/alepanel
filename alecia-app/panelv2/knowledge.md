@@ -225,3 +225,38 @@ Convex Tables
     ↑
 V2 Admin Panel (mutations)
 ```
+
+---
+
+## V2 Marketing Site Refonte (January 2026)
+
+### Safe Development Protocol
+
+All V2 pages use `_2` suffix to avoid touching production site.
+
+### New Components (`src/components/public_v2/`)
+
+- `layout/`: `Navbar_2.tsx`, `Footer_2.tsx`
+- `home/`: `HeroVideo_2.tsx`, `MetierSection_2.tsx`, `TransactionsCarousel_2.tsx`, `KPIBand_2.tsx`, `ContactSection_2.tsx`
+- `transactions/`: `TombstoneCard_2.tsx` (flip animation), `TransactionsGrid_2.tsx` (filters), `PressRelease_2.tsx`
+- `equipe/`: `TeamMemberCard_2.tsx`, `TeamGrid_2.tsx`, `MemberDeals_2.tsx`
+
+### New Routes (`src/app/(public)/`)
+
+| Route               | Description               |
+| ------------------- | ------------------------- |
+| `/page_2`           | Landing Page V2           |
+| `/operations_2`     | Transactions with filters |
+| `/equipe_2`         | Team grid                 |
+| `/expertises_2`     | Expertises + case studies |
+| `/actualites_2`     | News                      |
+| `/nous-rejoindre_2` | Careers                   |
+| `/acces-prive_2`    | Private access            |
+| `/contact_2`        | Contact form              |
+
+### Design References
+
+- `7oceans.com`: Fullscreen video hero
+- `stratema.com`: Carousels with arrows
+- `cambonpartners.com`: Tombstone flip animation
+- `albarest-partners.com`: Team grid overlays

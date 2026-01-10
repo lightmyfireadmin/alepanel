@@ -645,3 +645,29 @@ Ce document détaille l'ensemble des fonctionnalités de la plateforme, structur
 ---
 
 ## 🎉 ALL 7 PHASES COMPLETE - Platform Production Ready!
+
+---
+
+## V2 Marketing Website Refonte (2026-01-10) ✅
+
+| #   | Page                              | Status  |
+| --- | --------------------------------- | ------- |
+| 1   | `/page_2` - Landing Page          | ✅ Done |
+| 2   | `/operations_2` - Transactions    | ✅ Done |
+| 3   | `/equipe_2` - Team                | ✅ Done |
+| 4   | `/expertises_2` - Expertises      | ✅ Done |
+| 5   | `/actualites_2` - News            | ✅ Done |
+| 6   | `/nous-rejoindre_2` - Careers     | ✅ Done |
+| 7   | `/acces-prive_2` - Private Access | ✅ Done |
+| 8   | `/contact_2` - Contact            | ✅ Done |
+
+**Safe Development Protocol:** All pages use `_2` suffix - original site untouched.
+
+### Key Features
+
+- Fullscreen video hero (7oceans.com style)
+- Tombstone flip animation (cambonpartners.com style)
+- Team grid with hover overlays (albarest-partners.com style)
+- Transactions carousel with arrows (stratema.com style)
+- Animated KPI counters
+- Job offers before postuler section

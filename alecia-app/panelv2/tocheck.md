@@ -105,3 +105,22 @@ Ce fichier recense les pré-requis, variables d'environnement et points de vigil
 - [x] CMS admin fonctionnel dans V2
 - [ ] Supprimer connexion Neon de `.env.local` V1
 - [ ] Supprimer `src/lib/db` de V1
+
+## V2 Marketing Refonte Verification (2026-01-10)
+
+### Routes to Test
+
+- [ ] `/page_2` - Video hero, KPIs, carousel, contact
+- [ ] `/operations_2` - Grid with filters, tombstone flip
+- [ ] `/equipe_2` - Team grid, hover overlays
+- [ ] `/expertises_2` - Case studies links work
+- [ ] `/actualites_2` - News list and detail pages
+- [ ] `/nous-rejoindre_2` - Job offers display before apply
+- [ ] `/acces-prive_2` - Data room link placeholder
+- [ ] `/contact_2` - Form submission
+
+### Pending Items
+
+- [ ] Integrate Bierstadt font files (not Google Font)
+- [ ] Replace sample data with Convex queries
+- [ ] Configure data room URL in environment

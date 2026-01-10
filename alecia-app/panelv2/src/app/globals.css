@@ -31,6 +31,7 @@
   --font-body:
     "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
     sans-serif;
+  --font-inter: var(--font-inter, "Inter", sans-serif); /* V2 pages font */
   --font-mono: "Menlo", "Monaco", "Courier New", monospace;
 
   /* Legacy font variables for compatibility */
