@@ -1,12 +1,23 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { Providers } from "./providers";
 
-// Inter font - modern neo-grotesque, alternative to Bierstadt/Aptos
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
+// Bierstadt font - specified in cahier des charges
+const bierstadt = localFont({
+  src: [
+    {
+      path: "../components/public_v2/bierstadt.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../components/public_v2/bierstadt-bold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-bierstadt",
   display: "swap",
 });
 
@@ -21,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={bierstadt.variable}>
       <body
         className="font-sans antialiased"
       >
@@ -30,4 +41,5 @@ export default function RootLayout({
     </html>
   );
 }
+
 
