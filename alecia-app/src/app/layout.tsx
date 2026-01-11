@@ -1,10 +1,20 @@
-import type { Metadata } from "next";
-import { SkipToMain } from "@/components/layout";
-import { MobileStickyFooter, CookieBanner } from "@/components/features";
-import { PublicWidgets } from "@/components/layout/PublicWidgets";
-import { Providers } from "@/components/Providers";
-import { getMessages, getLocale } from "next-intl/server";
-import "./globals.css";
+import localFont from "next/font/local";
+
+const bierstadt = localFont({
+  src: [
+    {
+      path: "./fonts/bierstadt.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./fonts/bierstadt-bold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-playfair", // Mapping to existing variable to propagate change globally without refactoring all CSS
+});
 
 export const metadata: Metadata = {
   title: {
@@ -49,12 +59,6 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
-        {/* Google Fonts - Outfit and Playfair Display - with preload for performance */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Playfair+Display:wght@700&display=swap" />
-        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
-        
         {/* Lordicon animated icons */}
         <script src="https://cdn.lordicon.com/lordicon.js" async />
         
@@ -119,7 +123,7 @@ export default async function RootLayout({
         />
       </head>
       <body
-        className="antialiased bg-[var(--background)] text-[var(--foreground)]"
+        className={`antialiased bg-[var(--background)] text-[var(--foreground)] ${bierstadt.variable}`}
       >
         <Providers locale={locale} messages={messages}>
           <SkipToMain />
