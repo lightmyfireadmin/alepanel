@@ -2,15 +2,43 @@ import { Navbar_3 } from "@/components/layout_3/Navbar_3";
 import { Footer_3 } from "@/components/layout_3/Footer_3";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, TrendingUp, Handshake, Building2 } from "lucide-react";
+import { ArrowRight, Handshake, TrendingUp, Building2 } from "lucide-react";
 import type { Metadata } from "next";
+import { getTransactions } from "@/lib/actions/convex-marketing";
 
 export const metadata: Metadata = {
   title: "Expertises | Alecia",
   description: "Cession, Acquisition, Levée de fonds. Nos expertises M&A.",
 };
 
-export default function ExpertisesPage() {
+export default async function ExpertisesPage() {
+  // Fetch case studies (transactions flagged as such)
+  const caseStudies = await getTransactions({ isCaseStudy: true, limit: 10 });
+
+  // Helper to find a relevant case study for each section
+  const getCaseStudy = (sector: string, fallbackTitle: string) => {
+    const match = caseStudies.find(c => c.sector === sector || c.mandateType === sector) 
+                  || caseStudies[0]; // Fallback to first if no specific match
+    
+    if (match) {
+        return {
+            title: match.clientName, // Use client name as title for case study validation
+            client: match.sector,
+            result: match.result || "Opération réussie",
+            // Use background image if available, else placeholder
+            image: "/assets/expertises/cession-case.jpg" // We don't have real images yet so keep placeholder or map sector
+        };
+    }
+    
+    // Total fallback if DB is empty
+    return {
+        title: fallbackTitle,
+        client: "Client confidentiel",
+        result: "Opération finalisée",
+        image: "/assets/expertises/cession-case.jpg" 
+    };
+  };
+
   const expertises = [
     {
       id: "cession",
@@ -23,12 +51,7 @@ export default function ExpertisesPage() {
         "Identification des acquéreurs (France & International)",
         "Négociation des offres & closing"
       ],
-      caseStudy: {
-        title: "Cession Industrielle",
-        client: "Groupe industriel familial",
-        result: "Cession à un fonds d'investissement",
-        image: "/assets/expertises/cession-case.jpg" // Placeholder path
-      }
+      caseStudy: getCaseStudy("Industrie", "Cession Industrielle")
     },
     {
       id: "levee-de-fonds",
@@ -41,12 +64,7 @@ export default function ExpertisesPage() {
         "Roadshow investisseurs",
         "Négociation du Pacte d'Actionnaires"
       ],
-      caseStudy: {
-        title: "Scale-up SaaS",
-        client: "Éditeur logiciel B2B",
-        result: "Levée de 5 M€ (Série A)",
-        image: "/assets/expertises/fundraising-case.jpg" // Placeholder path
-      }
+      caseStudy: getCaseStudy("TMT", "Scale-up SaaS")
     },
     {
       id: "acquisition",
@@ -59,12 +77,7 @@ export default function ExpertisesPage() {
         "Valorisation & Offre indicative (LOI)",
         "Pilotage des Due Diligences"
       ],
-      caseStudy: {
-        title: "Build-up Stratégique",
-        client: "ETI Services",
-        result: "Acquisition d'un concurrent régional",
-        image: "/assets/expertises/acquisition-case.jpg" // Placeholder path
-      }
+      caseStudy: getCaseStudy("Services", "Build-up Stratégique")
     }
   ];
 
@@ -130,7 +143,7 @@ export default function ExpertisesPage() {
               {/* Visual / Case Study Card */}
               <div className="flex-1 w-full">
                 <div className="relative group overflow-hidden rounded-2xl bg-[var(--background-secondary)] border border-[var(--border)] shadow-lg aspect-[4/3]">
-                  {/* Decorative Gradient Background since we don't have real images yet */}
+                  {/* Decorative Gradient Background */}
                   <div className={`absolute inset-0 bg-gradient-to-br ${
                     index === 0 ? 'from-emerald-500/10 to-teal-500/5' : 
                     index === 1 ? 'from-purple-500/10 to-indigo-500/5' : 

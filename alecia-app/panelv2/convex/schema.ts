@@ -317,11 +317,14 @@ export default defineSchema({
     roleType: v.optional(v.string()),
     dealSize: v.optional(v.string()),
     keyMetrics: v.optional(v.any()), // JSON object
+    // V3 Fields
+    isCaseStudy: v.optional(v.boolean()),
     displayOrder: v.number(),
   })
     .index("by_slug", ["slug"])
     .index("by_sector", ["sector"])
-    .index("by_year", ["year"]),
+    .index("by_year", ["year"])
+    .index("by_isCaseStudy", ["isCaseStudy"]), // Added index
 
   // Team Members (About Page)
   team_members: defineTable({
@@ -331,6 +334,9 @@ export default defineSchema({
     photo: v.optional(v.string()),
     bioFr: v.optional(v.string()),
     bioEn: v.optional(v.string()),
+    // V3 Fields
+    passion: v.optional(v.string()),
+    quote: v.optional(v.string()),
     linkedinUrl: v.optional(v.string()),
     email: v.optional(v.string()),
     sectorsExpertise: v.array(v.string()),
@@ -341,16 +347,7 @@ export default defineSchema({
     .index("by_slug", ["slug"])
     .index("by_displayOrder", ["displayOrder"]),
 
-  // Marketing Tiles (Ambiance Gallery)
-  marketing_tiles: defineTable({
-    title: v.string(),
-    description: v.optional(v.string()),
-    soundUrl: v.optional(v.string()),
-    imageUrl: v.optional(v.string()),
-    displayOrder: v.number(),
-    styleConfig: v.optional(v.any()), // JSON for custom styling
-  })
-    .index("by_displayOrder", ["displayOrder"]),
+
 
   // Job Offers (Careers Page)
   job_offers: defineTable({

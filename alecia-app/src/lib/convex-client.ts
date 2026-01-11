@@ -33,6 +33,8 @@ export interface Transaction {
   roleType?: string;
   dealSize?: string;
   keyMetrics?: Record<string, unknown>;
+  // V3 Fields
+  isCaseStudy?: boolean;
   displayOrder: number;
 }
 
@@ -45,6 +47,9 @@ export interface TeamMember {
   photo?: string;
   bioFr?: string;
   bioEn?: string;
+  // V3 Fields
+  passion?: string;
+  quote?: string;
   linkedinUrl?: string;
   email?: string;
   sectorsExpertise: string[];
@@ -83,16 +88,7 @@ export interface JobOffer {
   displayOrder: number;
 }
 
-export interface MarketingTile {
-  _id: string;
-  _creationTime: number;
-  title: string;
-  description?: string;
-  soundUrl?: string;
-  imageUrl?: string;
-  displayOrder: number;
-  styleConfig?: Record<string, unknown>;
-}
+
 
 export interface TransactionFilters {
   sectors: string[];

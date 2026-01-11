@@ -1,7 +1,7 @@
 // Marketing Website Public Queries
 // No authentication required - for public website pages
 
-import { query } from "./_generated/server";
+import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 
 // ============================================
@@ -193,13 +193,7 @@ export const getJobOfferBySlug = query({
 // MARKETING TILES (Gallery)
 // ============================================
 
-export const getMarketingTiles = query({
-  args: {},
-  handler: async (ctx) => {
-    const tiles = await ctx.db.query("marketing_tiles").collect();
-    return tiles.sort((a, b) => a.displayOrder - b.displayOrder);
-  },
-});
+
 
 // ============================================
 // FORUM CATEGORIES (Public)
@@ -246,5 +240,89 @@ export const getAllConfig = query({
       result[c.key] = c.value;
     }
     return result;
+  },
+});
+
+// ============================================
+// SEED V3 DATA (One-off migration)
+// ============================================
+export const seedV3Data = mutation({
+  args: {},
+  handler: async (ctx) => {
+    // 1. UPDATE TEAM MEMBERS (Passions & Quotes)
+    const teamUpdates = [
+      {
+        slug: "christophe-berthon",
+        passion: "Amateur d'art et de design contemporain",
+        quote: "Chaque entreprise a une histoire unique, notre rôle est de la raconter au marché pour en révéler la pleine valeur."
+      },
+      {
+        slug: "rodolphe-besson",
+        passion: "Passionné de voile et de régates",
+        quote: "La réussite d'une opération se joue dans l'anticipation des détails et la maîtrise du temps."
+      },
+      {
+        slug: "stephane-villard",
+        passion: "Alpiniste chevronné",
+        quote: "L'endurance et la préparation sont les clés des sommets, en montagne comme en finance."
+      },
+      {
+        slug: "thibault-richet",
+        passion: "Marathonien",
+        quote: "Accompagner un dirigeant demande la même résilience qu'une course de fond."
+      },
+      {
+        slug: "gregoire-toulouse",
+        passion: "Tennis de compétition",
+        quote: "Le sens tactique et la réactivité font la différence dans les négociations serrées."
+      },
+      {
+        slug: "guillaume-farges",
+        passion: "Exploration culinaire",
+        quote: "Les meilleurs deals sont comme les grands plats : un équilibre subtil entre créativité et rigueur."
+      },
+      {
+        slug: "antoine-khouzami",
+        passion: "Photographie urbaine",
+        quote: "Savoir changer de perspective permet souvent de débloquer des situations complexes."
+      },
+      {
+        slug: "clement-morisot",
+        passion: "Echecs et stratégie",
+        quote: "Anticiper les coups d'après est essentiel pour sécuriser l'intérêt de nos clients."
+      }
+    ];
+
+    for (const update of teamUpdates) {
+      const member = await ctx.db
+        .query("team_members")
+        .withIndex("by_slug", (q) => q.eq("slug", update.slug))
+        .first();
+
+      if (member) {
+        await ctx.db.patch(member._id, {
+          passion: update.passion,
+          quote: update.quote
+        });
+        console.log(`Updated team member: ${update.slug}`);
+      } else {
+        console.log(`Team member not found: ${update.slug}`);
+      }
+    }
+
+    // 2. TAG TRANSACTIONS AS CASE STUDIES
+    const sectors = ["Industrie", "TMT", "Agroalimentaire", "Santé"];
+    
+    for (const sectorName of sectors) {
+         const deal = await ctx.db
+            .query("transactions")
+            .withIndex("by_sector", (q) => q.eq("sector", sectorName))
+            .first();
+            
+         if (deal) {
+             await ctx.db.patch(deal._id, { isCaseStudy: true });
+             console.log(`Marked deal as Case Study: ${deal.clientName} (${sectorName})`);
+         }
+    }
   },
 });

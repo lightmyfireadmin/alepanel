@@ -51,6 +51,7 @@ export async function getTransactions(filters?: {
   sector?: string;
   year?: number;
   mandateType?: string;
+  isCaseStudy?: boolean;
   limit?: number;
 }): Promise<Transaction[]> {
   try {
@@ -58,6 +59,7 @@ export async function getTransactions(filters?: {
       sector: filters?.sector && filters.sector !== 'all' ? filters.sector : undefined,
       year: filters?.year,
       mandateType: filters?.mandateType && filters.mandateType !== 'all' ? filters.mandateType : undefined,
+      isCaseStudy: filters?.isCaseStudy,
       limit: filters?.limit,
     });
   } catch (error) {

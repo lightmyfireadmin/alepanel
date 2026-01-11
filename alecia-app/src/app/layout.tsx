@@ -1,4 +1,12 @@
 import localFont from "next/font/local";
+import type { Metadata } from "next";
+import { getLocale, getMessages } from "next-intl/server";
+import { Providers } from "@/components/Providers";
+import { SkipToMain } from "@/components/layout/skip-to-main";
+import { PublicWidgets } from "@/components/layout/PublicWidgets";
+import { MobileStickyFooter } from "@/components/features/mobile-sticky-footer";
+import { CookieBanner } from "@/components/features/cookie-banner";
+import "./globals.css";
 
 const bierstadt = localFont({
   src: [

@@ -290,3 +290,25 @@ Architecture modulaire par fonctionnalité :
 
 Réutilisation maximale des actions Convex existantes (`convex-marketing.ts`) car les données sous-jacentes (Deals, Team, Posts) ne changent pas, seule la présentation change.
 Les "Meta-données" manquantes (ex: Passion, Citation, Études de cas spécifiques) sont pour l'instant mockées dans les composants V3 pour validation visuelle avant migration de schéma.
+
+## V3 Data Architecture (2026-01-11)
+
+### Schema Evolution
+
+Adaptation du schéma pour supporter le storytelling V3 sans casser V2.
+
+- `transactions.isCaseStudy` (Boolean indexé) : Permet des requêtes rapides pour les blocs "Étude de cas" dans Expertises.
+- `team_members.passion/quote` : Champs optionnels enrichissant le profil lors de l'ouverture de la modale.
+
+### Migration Strategy
+
+Utilisation d'une mutation "one-shot" (`seedV3Data` dans `marketing.ts`) pour peupler les données existantes.
+Ce pattern évite d'avoir à recréer manuellement les données dans le CMS.
+
+### Font Management
+
+Passage de Google Fonts (CDN) à `next/font/local` pour "Bierstadt".
+
+- Performance : Zéro CLS, pré-chargement serveur.
+- Confidentialité : Plus de requêtes tiers vers Google.
+- Fallback : Variable CSS mappée sur l'existant (`--font-playfair`) pour minimiser le refactoring CSS.

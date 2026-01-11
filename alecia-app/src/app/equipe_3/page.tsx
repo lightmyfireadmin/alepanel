@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Linkedin, Mail } from "lucide-react";
 import type { Metadata } from "next";
-import { getTeamMembers } from "@/lib/actions/convex-marketing";
+import { getTeamMembers, getTransactions } from "@/lib/actions/convex-marketing";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 
@@ -14,24 +14,37 @@ export const metadata: Metadata = {
 };
 
 export default async function EquipePage() {
-  const teamData = await getTeamMembers();
+  const [teamData, allTransactions] = await Promise.all([
+    getTeamMembers(),
+    getTransactions({ limit: 100 }) // Fetch enough transactions to hydrate
+  ]);
   
-  // Extend team data with mock "Passion" and "Citation" for V3 demo
-  const teamMembers = teamData.map(m => ({
-    id: m._id,
-    slug: m.slug,
-    name: m.name,
-    role: m.role,
-    photo: m.photo,
-    linkedinUrl: m.linkedinUrl,
-    // V3 Specific Mock Data
-    passion: "Alpinisme & Grands espaces",
-    citation: "La réussite d'une opération se joue dans les détails et la confiance.",
-    recentDeals: [
-      { id: 1, client: "Groupe Industriel", type: "Cession", year: 2024 },
-      { id: 2, client: "Tech SaaS", type: "Levée de fonds", year: 2023 }
-    ]
-  }));
+  // Extend/Map team data to match UI component needs
+  const teamMembers = teamData.map(m => {
+    // Hydrate recent deals from slugs
+    const memberDeals = m.transactionSlugs
+        .map(slug => allTransactions.find(t => t.slug === slug))
+        .filter(t => t !== undefined)
+        .slice(0, 2) // Limit to 2 for display
+        .map(t => ({
+            id: t!._id,
+            client: t!.clientName,
+            type: t!.mandateType,
+            year: t!.year
+        }));
+
+    return {
+        id: m._id,
+        slug: m.slug,
+        name: m.name,
+        role: m.role,
+        photo: m.photo,
+        linkedinUrl: m.linkedinUrl,
+        passion: m.passion || "Passionné par l'M&A", // Fallback if seeding failed
+        citation: m.quote || "Notre engagement est total.", // Map quote -> citation
+        recentDeals: memberDeals
+    };
+  });
 
   return (
     <>

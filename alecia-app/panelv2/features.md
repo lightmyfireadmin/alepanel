@@ -694,6 +694,37 @@ Ce document détaille l'ensemble des fonctionnalités de la plateforme, structur
 
 ### V3 Components (`src/components/*_3/`)
 
-- **Home:** `HeroVideo_3`, `TransactionsCarousel_3`, `KPIBand_3`, `ContactSection_3`
-- **Transactions:** `FlipCard_3` (3D rotation), `DealFilter_3`
-- **Layout:** `Navbar_3`, `Footer_3` (Independent navigation structure)
+- `home_3/`: `HeroVideo_3` (Video + 3 blocs expertise), `TransactionsCarousel_3`, `KPIBand_3`, `ContactSection_3`
+- `transactions_3/`: `FlipCard_3` (3D CSS pure), `DealFilter_3` (Custom routing to /transactions_3)
+- `layout_3/`: `Navbar_3`, `Footer_3` (Indépendants du layout global pour faciliter le switch)
+
+### Data Strategy
+
+Réutilisation maximale des actions Convex existantes (`convex-marketing.ts`) car les données sous-jacentes (Deals, Team, Posts) ne changent pas, seule la présentation change.
+Les "Meta-données" manquantes (ex: Passion, Citation, Études de cas spécifiques) sont pour l'instant mockées dans les composants V3 pour validation visuelle avant migration de schéma.
+
+## V3 Data Migration & Enrichment (2026-01-11) ✅
+
+**Objectif :** Remplacer les données mockées par des champs réels en base et nettoyer le schéma.
+
+### Schema Updates
+
+- **Transactions :** Ajout du champ `isCaseStudy: v.optional(v.boolean())` pour alimenter la section Expertises.
+- **Team Members :** Ajout des champs `passion: v.optional(v.string())` et `quote: v.optional(v.string())`.
+- **Cleanup :** Suppression de la table `marketing_tiles` (Legacy V2 sound atmosphere) non utilisée.
+
+### Data Migration
+
+- **Seed Script :** `seedV3Data` mutation (via `marketing.ts`) exécutée pour :
+  - Restituer les passions/citations de l'équipe existante.
+  - Tagger automatiquement 4 transactions phares comme Case Studies (une par secteur).
+
+### Components Update
+
+- **`equipe_3` :** Consomme désormais `passion` et `quote` depuis l'API Convex.
+- **`expertises_3` :** Affiche dynamiquement les Case Studies taggués en base.
+
+### Asset Integration
+
+- **Polices :** Intégration locale de `Bierstadt` (Regular/Bold) via `next/font/local`.
+- **Favicon :** Restauration de l'icône legacy (.ico).

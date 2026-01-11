@@ -147,4 +147,13 @@ Ce fichier recense les pré-requis, variables d'environnement et points de vigil
 - [ ] **Filter Router:** Verify DealFilter_3 updates URL to `/transactions_3` (not `/operations`).
 - [ ] **Expertises Layout:** Verify simplified 3-column or list layout with "Case Study" cards.
 - [ ] **Team Dialog:** Verify clicking "Voir le profil" opens the Dialog with passion/citation.
-- [ ] **Job Offers:** Verify jobs appear BEFORE the spontaneous application block.
+- [x] **Job Offers:** Verify jobs appear BEFORE the spontaneous application block.
+
+## V3 Data & Assets Verification (2026-01-11)
+
+- [x] **Schema Update:** Verify `passion`, `quote` on TeamMembers and `isCaseStudy` on Transactions.
+- [x] **Data Seeding:** Verify Christophe Berthon has passion populated.
+- [x] **Legacy Cleanup:** Verify `marketing_tiles` table is removed.
+- [x] **Font Loading:** Verify `Bierstadt` loads correctly (no 404s in console).
+- [x] **Favicon:** Verify the 'a' logo displays correctly in tab.
+- [x] **Build:** Verify `npm run build` passes with new types.
